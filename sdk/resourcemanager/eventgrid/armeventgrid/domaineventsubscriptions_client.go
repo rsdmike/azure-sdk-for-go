@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // DomainEventSubscriptionsClient contains the methods for the DomainEventSubscriptions group.
 // Don't use this type directly, use NewDomainEventSubscriptionsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type DomainEventSubscriptionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type DomainEventSubscriptionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDomainEventSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DomainEventSubscriptionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewDomainEventSubscriptionsClient(subscriptionID string, credential azcore.
 //
 // Asynchronously creates a new event subscription or updates an existing event subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -74,8 +76,6 @@ func (client *DomainEventSubscriptionsClient) BeginCreateOrUpdate(ctx context.Co
 //
 // Asynchronously creates a new event subscription or updates an existing event subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainEventSubscriptionsClient) createOrUpdate(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, options *DomainEventSubscriptionsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainEventSubscriptionsClient.BeginCreateOrUpdate"
@@ -91,8 +91,7 @@ func (client *DomainEventSubscriptionsClient) createOrUpdate(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -101,7 +100,7 @@ func (client *DomainEventSubscriptionsClient) createOrUpdate(ctx context.Context
 func (client *DomainEventSubscriptionsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, _ *DomainEventSubscriptionsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -121,8 +120,8 @@ func (client *DomainEventSubscriptionsClient) createOrUpdateCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, eventSubscriptionInfo); err != nil {
@@ -135,8 +134,6 @@ func (client *DomainEventSubscriptionsClient) createOrUpdateCreateRequest(ctx co
 //
 // Delete an existing event subscription for a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -163,8 +160,6 @@ func (client *DomainEventSubscriptionsClient) BeginDelete(ctx context.Context, r
 //
 // Delete an existing event subscription for a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainEventSubscriptionsClient) deleteOperation(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, options *DomainEventSubscriptionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainEventSubscriptionsClient.BeginDelete"
@@ -180,8 +175,7 @@ func (client *DomainEventSubscriptionsClient) deleteOperation(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -190,7 +184,7 @@ func (client *DomainEventSubscriptionsClient) deleteOperation(ctx context.Contex
 func (client *DomainEventSubscriptionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, _ *DomainEventSubscriptionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -210,8 +204,8 @@ func (client *DomainEventSubscriptionsClient) deleteCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -219,8 +213,6 @@ func (client *DomainEventSubscriptionsClient) deleteCreateRequest(ctx context.Co
 //
 // Get properties of an event subscription of a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -240,19 +232,14 @@ func (client *DomainEventSubscriptionsClient) Get(ctx context.Context, resourceG
 	if err != nil {
 		return DomainEventSubscriptionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainEventSubscriptionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DomainEventSubscriptionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, _ *DomainEventSubscriptionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -272,15 +259,18 @@ func (client *DomainEventSubscriptionsClient) getCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DomainEventSubscriptionsClient) getHandleResponse(resp *http.Response) (DomainEventSubscriptionsClientGetResponse, error) {
+func (client *DomainEventSubscriptionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DomainEventSubscriptionsClientGetResponse, error) {
 	result := DomainEventSubscriptionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscription); err != nil {
 		return DomainEventSubscriptionsClientGetResponse{}, err
 	}
@@ -291,8 +281,6 @@ func (client *DomainEventSubscriptionsClient) getHandleResponse(resp *http.Respo
 //
 // Get all delivery attributes for an event subscription for domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -312,19 +300,14 @@ func (client *DomainEventSubscriptionsClient) GetDeliveryAttributes(ctx context.
 	if err != nil {
 		return DomainEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
-	}
-	resp, err := client.getDeliveryAttributesHandleResponse(httpResp)
-	return resp, err
+	return client.getDeliveryAttributesHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeliveryAttributesCreateRequest creates the GetDeliveryAttributes request.
 func (client *DomainEventSubscriptionsClient) getDeliveryAttributesCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, _ *DomainEventSubscriptionsClientGetDeliveryAttributesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}/getDeliveryAttributes"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -344,15 +327,18 @@ func (client *DomainEventSubscriptionsClient) getDeliveryAttributesCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeliveryAttributesHandleResponse handles the GetDeliveryAttributes response.
-func (client *DomainEventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response) (DomainEventSubscriptionsClientGetDeliveryAttributesResponse, error) {
+func (client *DomainEventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response, successCodes ...int) (DomainEventSubscriptionsClientGetDeliveryAttributesResponse, error) {
 	result := DomainEventSubscriptionsClientGetDeliveryAttributesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeliveryAttributeListResult); err != nil {
 		return DomainEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
@@ -363,8 +349,6 @@ func (client *DomainEventSubscriptionsClient) getDeliveryAttributesHandleRespons
 //
 // Get the full endpoint URL for an event subscription for domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -384,19 +368,14 @@ func (client *DomainEventSubscriptionsClient) GetFullURL(ctx context.Context, re
 	if err != nil {
 		return DomainEventSubscriptionsClientGetFullURLResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainEventSubscriptionsClientGetFullURLResponse{}, err
-	}
-	resp, err := client.getFullURLHandleResponse(httpResp)
-	return resp, err
+	return client.getFullURLHandleResponse(httpResp, http.StatusOK)
 }
 
 // getFullURLCreateRequest creates the GetFullURL request.
 func (client *DomainEventSubscriptionsClient) getFullURLCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, _ *DomainEventSubscriptionsClientGetFullURLOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}/getFullUrl"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -416,15 +395,18 @@ func (client *DomainEventSubscriptionsClient) getFullURLCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getFullURLHandleResponse handles the GetFullURL response.
-func (client *DomainEventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response) (DomainEventSubscriptionsClientGetFullURLResponse, error) {
+func (client *DomainEventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response, successCodes ...int) (DomainEventSubscriptionsClientGetFullURLResponse, error) {
 	result := DomainEventSubscriptionsClientGetFullURLResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionFullURL); err != nil {
 		return DomainEventSubscriptionsClientGetFullURLResponse{}, err
 	}
@@ -434,8 +416,6 @@ func (client *DomainEventSubscriptionsClient) getFullURLHandleResponse(resp *htt
 // NewListPager - List all event subscriptions for a specific domain.
 //
 // List all event subscriptions that have been created for a specific topic.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainEventSubscriptionsClientListOptions contains the optional parameters for the DomainEventSubscriptionsClient.NewListPager
@@ -451,53 +431,67 @@ func (client *DomainEventSubscriptionsClient) NewListPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, domainName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, domainName, nextLink, options)
 			if err != nil {
 				return DomainEventSubscriptionsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainEventSubscriptionsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DomainEventSubscriptionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, domainName string, options *DomainEventSubscriptionsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainEventSubscriptionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, domainName string, nextLink string, options *DomainEventSubscriptionsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if domainName == "" {
+			return nil, errors.New("parameter domainName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if domainName == "" {
-		return nil, errors.New("parameter domainName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DomainEventSubscriptionsClient) listHandleResponse(resp *http.Response) (DomainEventSubscriptionsClientListResponse, error) {
+func (client *DomainEventSubscriptionsClient) listHandleResponse(resp *http.Response, successCodes ...int) (DomainEventSubscriptionsClientListResponse, error) {
 	result := DomainEventSubscriptionsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return DomainEventSubscriptionsClientListResponse{}, err
 	}
@@ -508,8 +502,6 @@ func (client *DomainEventSubscriptionsClient) listHandleResponse(resp *http.Resp
 //
 // Update an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -537,8 +529,6 @@ func (client *DomainEventSubscriptionsClient) BeginUpdate(ctx context.Context, r
 //
 // Update an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainEventSubscriptionsClient) update(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, options *DomainEventSubscriptionsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainEventSubscriptionsClient.BeginUpdate"
@@ -554,8 +544,7 @@ func (client *DomainEventSubscriptionsClient) update(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -564,7 +553,7 @@ func (client *DomainEventSubscriptionsClient) update(ctx context.Context, resour
 func (client *DomainEventSubscriptionsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, _ *DomainEventSubscriptionsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -584,8 +573,8 @@ func (client *DomainEventSubscriptionsClient) updateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, eventSubscriptionUpdateParameters); err != nil {

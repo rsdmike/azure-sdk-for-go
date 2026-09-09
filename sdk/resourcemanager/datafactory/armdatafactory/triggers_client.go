@@ -18,6 +18,8 @@ import (
 
 // TriggersClient contains the methods for the Triggers group.
 // Don't use this type directly, use NewTriggersClient() instead.
+//
+// Generated from API version 2018-06-01
 type TriggersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type TriggersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewTriggersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*TriggersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewTriggersClient(subscriptionID string, credential azcore.TokenCredential,
 
 // CreateOrUpdate - Creates or updates a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -62,19 +65,14 @@ func (client *TriggersClient) CreateOrUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return TriggersClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggersClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *TriggersClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, trigger TriggerResource, options *TriggersClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *TriggersClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
@@ -108,8 +106,11 @@ func (client *TriggersClient) createOrUpdateCreateRequest(ctx context.Context, r
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *TriggersClient) createOrUpdateHandleResponse(resp *http.Response) (TriggersClientCreateOrUpdateResponse, error) {
+func (client *TriggersClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (TriggersClientCreateOrUpdateResponse, error) {
 	result := TriggersClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerResource); err != nil {
 		return TriggersClientCreateOrUpdateResponse{}, err
 	}
@@ -118,8 +119,6 @@ func (client *TriggersClient) createOrUpdateHandleResponse(resp *http.Response) 
 
 // Delete - Deletes a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -139,8 +138,7 @@ func (client *TriggersClient) Delete(ctx context.Context, resourceGroupName stri
 		return TriggersClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggersClientDeleteResponse{}, err
+		return TriggersClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return TriggersClientDeleteResponse{}, nil
 }
@@ -149,7 +147,7 @@ func (client *TriggersClient) Delete(ctx context.Context, resourceGroupName stri
 func (client *TriggersClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -169,16 +167,13 @@ func (client *TriggersClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -197,19 +192,14 @@ func (client *TriggersClient) Get(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return TriggersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNotModified) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK, http.StatusNotModified)
 }
 
 // getCreateRequest creates the Get request.
 func (client *TriggersClient) getCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, options *TriggersClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -229,8 +219,8 @@ func (client *TriggersClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfNoneMatch != nil {
 		req.Raw().Header["if-none-match"] = []string{*options.IfNoneMatch}
@@ -239,8 +229,11 @@ func (client *TriggersClient) getCreateRequest(ctx context.Context, resourceGrou
 }
 
 // getHandleResponse handles the Get response.
-func (client *TriggersClient) getHandleResponse(resp *http.Response) (TriggersClientGetResponse, error) {
+func (client *TriggersClient) getHandleResponse(resp *http.Response, successCodes ...int) (TriggersClientGetResponse, error) {
 	result := TriggersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerResource); err != nil {
 		return TriggersClientGetResponse{}, err
 	}
@@ -249,8 +242,6 @@ func (client *TriggersClient) getHandleResponse(resp *http.Response) (TriggersCl
 
 // GetEventSubscriptionStatus - Get a trigger's event subscription status.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -270,19 +261,14 @@ func (client *TriggersClient) GetEventSubscriptionStatus(ctx context.Context, re
 	if err != nil {
 		return TriggersClientGetEventSubscriptionStatusResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggersClientGetEventSubscriptionStatusResponse{}, err
-	}
-	resp, err := client.getEventSubscriptionStatusHandleResponse(httpResp)
-	return resp, err
+	return client.getEventSubscriptionStatusHandleResponse(httpResp, http.StatusOK)
 }
 
 // getEventSubscriptionStatusCreateRequest creates the GetEventSubscriptionStatus request.
 func (client *TriggersClient) getEventSubscriptionStatusCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientGetEventSubscriptionStatusOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/getEventSubscriptionStatus"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -302,15 +288,18 @@ func (client *TriggersClient) getEventSubscriptionStatusCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getEventSubscriptionStatusHandleResponse handles the GetEventSubscriptionStatus response.
-func (client *TriggersClient) getEventSubscriptionStatusHandleResponse(resp *http.Response) (TriggersClientGetEventSubscriptionStatusResponse, error) {
+func (client *TriggersClient) getEventSubscriptionStatusHandleResponse(resp *http.Response, successCodes ...int) (TriggersClientGetEventSubscriptionStatusResponse, error) {
 	result := TriggersClientGetEventSubscriptionStatusResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerSubscriptionOperationStatus); err != nil {
 		return TriggersClientGetEventSubscriptionStatusResponse{}, err
 	}
@@ -318,8 +307,6 @@ func (client *TriggersClient) getEventSubscriptionStatusHandleResponse(resp *htt
 }
 
 // NewListByFactoryPager - Lists triggers.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - options - TriggersClientListByFactoryOptions contains the optional parameters for the TriggersClient.NewListByFactoryPager
@@ -335,47 +322,61 @@ func (client *TriggersClient) NewListByFactoryPager(resourceGroupName string, fa
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
-			}, nil)
+			req, err := client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, nextLink, options)
 			if err != nil {
 				return TriggersClientListByFactoryResponse{}, err
 			}
-			return client.listByFactoryHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return TriggersClientListByFactoryResponse{}, err
+			}
+			return client.listByFactoryHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.
-func (client *TriggersClient) listByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, _ *TriggersClientListByFactoryOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *TriggersClient) listByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, nextLink string, _ *TriggersClientListByFactoryOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if factoryName == "" {
+			return nil, errors.New("parameter factoryName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{factoryName}", url.PathEscape(factoryName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if factoryName == "" {
-		return nil, errors.New("parameter factoryName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{factoryName}", url.PathEscape(factoryName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20180601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByFactoryHandleResponse handles the ListByFactory response.
-func (client *TriggersClient) listByFactoryHandleResponse(resp *http.Response) (TriggersClientListByFactoryResponse, error) {
+func (client *TriggersClient) listByFactoryHandleResponse(resp *http.Response, successCodes ...int) (TriggersClientListByFactoryResponse, error) {
 	result := TriggersClientListByFactoryResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerListResponse); err != nil {
 		return TriggersClientListByFactoryResponse{}, err
 	}
@@ -384,8 +385,6 @@ func (client *TriggersClient) listByFactoryHandleResponse(resp *http.Response) (
 
 // QueryByFactory - Query triggers.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - filterParameters - Parameters to filter the triggers.
@@ -404,19 +403,14 @@ func (client *TriggersClient) QueryByFactory(ctx context.Context, resourceGroupN
 	if err != nil {
 		return TriggersClientQueryByFactoryResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggersClientQueryByFactoryResponse{}, err
-	}
-	resp, err := client.queryByFactoryHandleResponse(httpResp)
-	return resp, err
+	return client.queryByFactoryHandleResponse(httpResp, http.StatusOK)
 }
 
 // queryByFactoryCreateRequest creates the QueryByFactory request.
 func (client *TriggersClient) queryByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, filterParameters TriggerFilterParameters, _ *TriggersClientQueryByFactoryOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/querytriggers"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -432,8 +426,8 @@ func (client *TriggersClient) queryByFactoryCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, filterParameters); err != nil {
@@ -443,8 +437,11 @@ func (client *TriggersClient) queryByFactoryCreateRequest(ctx context.Context, r
 }
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
-func (client *TriggersClient) queryByFactoryHandleResponse(resp *http.Response) (TriggersClientQueryByFactoryResponse, error) {
+func (client *TriggersClient) queryByFactoryHandleResponse(resp *http.Response, successCodes ...int) (TriggersClientQueryByFactoryResponse, error) {
 	result := TriggersClientQueryByFactoryResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerQueryResponse); err != nil {
 		return TriggersClientQueryByFactoryResponse{}, err
 	}
@@ -453,8 +450,6 @@ func (client *TriggersClient) queryByFactoryHandleResponse(resp *http.Response) 
 
 // BeginStart - Starts a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -478,8 +473,6 @@ func (client *TriggersClient) BeginStart(ctx context.Context, resourceGroupName 
 
 // Start - Starts a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *TriggersClient) start(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, options *TriggersClientBeginStartOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TriggersClient.BeginStart"
@@ -495,8 +488,7 @@ func (client *TriggersClient) start(ctx context.Context, resourceGroupName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -505,7 +497,7 @@ func (client *TriggersClient) start(ctx context.Context, resourceGroupName strin
 func (client *TriggersClient) startCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientBeginStartOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/start"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -525,16 +517,13 @@ func (client *TriggersClient) startCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginStop - Stops a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -558,8 +547,6 @@ func (client *TriggersClient) BeginStop(ctx context.Context, resourceGroupName s
 
 // Stop - Stops a trigger.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *TriggersClient) stop(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, options *TriggersClientBeginStopOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TriggersClient.BeginStop"
@@ -575,8 +562,7 @@ func (client *TriggersClient) stop(ctx context.Context, resourceGroupName string
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -585,7 +571,7 @@ func (client *TriggersClient) stop(ctx context.Context, resourceGroupName string
 func (client *TriggersClient) stopCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientBeginStopOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/stop"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -605,16 +591,13 @@ func (client *TriggersClient) stopCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginSubscribeToEvents - Subscribe event trigger to events.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -639,8 +622,6 @@ func (client *TriggersClient) BeginSubscribeToEvents(ctx context.Context, resour
 
 // SubscribeToEvents - Subscribe event trigger to events.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *TriggersClient) subscribeToEvents(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, options *TriggersClientBeginSubscribeToEventsOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TriggersClient.BeginSubscribeToEvents"
@@ -656,8 +637,7 @@ func (client *TriggersClient) subscribeToEvents(ctx context.Context, resourceGro
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -666,7 +646,7 @@ func (client *TriggersClient) subscribeToEvents(ctx context.Context, resourceGro
 func (client *TriggersClient) subscribeToEventsCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientBeginSubscribeToEventsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/subscribeToEvents"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -686,16 +666,14 @@ func (client *TriggersClient) subscribeToEventsCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // BeginUnsubscribeFromEvents - Unsubscribe event trigger from events.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - triggerName - The trigger name.
@@ -720,8 +698,6 @@ func (client *TriggersClient) BeginUnsubscribeFromEvents(ctx context.Context, re
 
 // UnsubscribeFromEvents - Unsubscribe event trigger from events.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *TriggersClient) unsubscribeFromEvents(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, options *TriggersClientBeginUnsubscribeFromEventsOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TriggersClient.BeginUnsubscribeFromEvents"
@@ -737,8 +713,7 @@ func (client *TriggersClient) unsubscribeFromEvents(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -747,7 +722,7 @@ func (client *TriggersClient) unsubscribeFromEvents(ctx context.Context, resourc
 func (client *TriggersClient) unsubscribeFromEventsCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, _ *TriggersClientBeginUnsubscribeFromEventsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/unsubscribeFromEvents"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -767,8 +742,8 @@ func (client *TriggersClient) unsubscribeFromEventsCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

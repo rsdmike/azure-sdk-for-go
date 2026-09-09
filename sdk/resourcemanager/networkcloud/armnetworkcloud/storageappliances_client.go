@@ -19,6 +19,8 @@ import (
 
 // StorageAppliancesClient contains the methods for the StorageAppliances group.
 // Don't use this type directly, use NewStorageAppliancesClient() instead.
+//
+// Generated from API version 2026-07-01
 type StorageAppliancesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type StorageAppliancesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewStorageAppliancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*StorageAppliancesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewStorageAppliancesClient(subscriptionID string, credential azcore.TokenCr
 // BeginCreateOrUpdate - Create a new storage appliance or update the properties of the existing one. All customer initiated
 // requests will be rejected as the life cycle of this resource is managed by the system.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - storageApplianceParameters - The request body.
@@ -70,8 +73,6 @@ func (client *StorageAppliancesClient) BeginCreateOrUpdate(ctx context.Context, 
 // CreateOrUpdate - Create a new storage appliance or update the properties of the existing one. All customer initiated requests
 // will be rejected as the life cycle of this resource is managed by the system.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) createOrUpdate(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceParameters StorageAppliance, options *StorageAppliancesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginCreateOrUpdate"
@@ -87,8 +88,7 @@ func (client *StorageAppliancesClient) createOrUpdate(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -97,7 +97,7 @@ func (client *StorageAppliancesClient) createOrUpdate(ctx context.Context, resou
 func (client *StorageAppliancesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceParameters StorageAppliance, options *StorageAppliancesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -113,8 +113,8 @@ func (client *StorageAppliancesClient) createOrUpdateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -132,8 +132,6 @@ func (client *StorageAppliancesClient) createOrUpdateCreateRequest(ctx context.C
 // BeginDelete - Delete the provided storage appliance. All customer initiated requests will be rejected as the life cycle
 // of this resource is managed by the system.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - options - StorageAppliancesClientBeginDeleteOptions contains the optional parameters for the StorageAppliancesClient.BeginDelete
@@ -158,8 +156,6 @@ func (client *StorageAppliancesClient) BeginDelete(ctx context.Context, resource
 // Delete - Delete the provided storage appliance. All customer initiated requests will be rejected as the life cycle of this
 // resource is managed by the system.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) deleteOperation(ctx context.Context, resourceGroupName string, storageApplianceName string, options *StorageAppliancesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginDelete"
@@ -175,8 +171,7 @@ func (client *StorageAppliancesClient) deleteOperation(ctx context.Context, reso
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -185,7 +180,7 @@ func (client *StorageAppliancesClient) deleteOperation(ctx context.Context, reso
 func (client *StorageAppliancesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, options *StorageAppliancesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -201,8 +196,8 @@ func (client *StorageAppliancesClient) deleteCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -214,8 +209,6 @@ func (client *StorageAppliancesClient) deleteCreateRequest(ctx context.Context, 
 
 // BeginDisableRemoteVendorManagement - Disable remote vendor management of the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - options - StorageAppliancesClientBeginDisableRemoteVendorManagementOptions contains the optional parameters for the StorageAppliancesClient.BeginDisableRemoteVendorManagement
@@ -239,8 +232,6 @@ func (client *StorageAppliancesClient) BeginDisableRemoteVendorManagement(ctx co
 
 // DisableRemoteVendorManagement - Disable remote vendor management of the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) disableRemoteVendorManagement(ctx context.Context, resourceGroupName string, storageApplianceName string, options *StorageAppliancesClientBeginDisableRemoteVendorManagementOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginDisableRemoteVendorManagement"
@@ -256,8 +247,7 @@ func (client *StorageAppliancesClient) disableRemoteVendorManagement(ctx context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -266,7 +256,7 @@ func (client *StorageAppliancesClient) disableRemoteVendorManagement(ctx context
 func (client *StorageAppliancesClient) disableRemoteVendorManagementCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, _ *StorageAppliancesClientBeginDisableRemoteVendorManagementOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}/disableRemoteVendorManagement"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -282,15 +272,13 @@ func (client *StorageAppliancesClient) disableRemoteVendorManagementCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginEnableRemoteVendorManagement - Enable remote vendor management of the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - options - StorageAppliancesClientBeginEnableRemoteVendorManagementOptions contains the optional parameters for the StorageAppliancesClient.BeginEnableRemoteVendorManagement
@@ -314,8 +302,6 @@ func (client *StorageAppliancesClient) BeginEnableRemoteVendorManagement(ctx con
 
 // EnableRemoteVendorManagement - Enable remote vendor management of the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) enableRemoteVendorManagement(ctx context.Context, resourceGroupName string, storageApplianceName string, options *StorageAppliancesClientBeginEnableRemoteVendorManagementOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginEnableRemoteVendorManagement"
@@ -331,8 +317,7 @@ func (client *StorageAppliancesClient) enableRemoteVendorManagement(ctx context.
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -341,7 +326,7 @@ func (client *StorageAppliancesClient) enableRemoteVendorManagement(ctx context.
 func (client *StorageAppliancesClient) enableRemoteVendorManagementCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, options *StorageAppliancesClientBeginEnableRemoteVendorManagementOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}/enableRemoteVendorManagement"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -357,8 +342,8 @@ func (client *StorageAppliancesClient) enableRemoteVendorManagementCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.StorageApplianceEnableRemoteVendorManagementParameters != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
 		if err := runtime.MarshalAsJSON(req, *options.StorageApplianceEnableRemoteVendorManagementParameters); err != nil {
@@ -371,8 +356,6 @@ func (client *StorageAppliancesClient) enableRemoteVendorManagementCreateRequest
 
 // Get - Get properties of the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - options - StorageAppliancesClientGetOptions contains the optional parameters for the StorageAppliancesClient.Get method.
@@ -390,19 +373,14 @@ func (client *StorageAppliancesClient) Get(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return StorageAppliancesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StorageAppliancesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *StorageAppliancesClient) getCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, _ *StorageAppliancesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -418,15 +396,18 @@ func (client *StorageAppliancesClient) getCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *StorageAppliancesClient) getHandleResponse(resp *http.Response) (StorageAppliancesClientGetResponse, error) {
+func (client *StorageAppliancesClient) getHandleResponse(resp *http.Response, successCodes ...int) (StorageAppliancesClientGetResponse, error) {
 	result := StorageAppliancesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageAppliance); err != nil {
 		return StorageAppliancesClientGetResponse{}, err
 	}
@@ -434,8 +415,6 @@ func (client *StorageAppliancesClient) getHandleResponse(resp *http.Response) (S
 }
 
 // NewListByResourceGroupPager - Get a list of storage appliances in the provided resource group.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - StorageAppliancesClientListByResourceGroupOptions contains the optional parameters for the StorageAppliancesClient.NewListByResourceGroupPager
 //     method.
@@ -450,49 +429,63 @@ func (client *StorageAppliancesClient) NewListByResourceGroupPager(resourceGroup
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return StorageAppliancesClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StorageAppliancesClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *StorageAppliancesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *StorageAppliancesClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StorageAppliancesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *StorageAppliancesClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *StorageAppliancesClient) listByResourceGroupHandleResponse(resp *http.Response) (StorageAppliancesClientListByResourceGroupResponse, error) {
+func (client *StorageAppliancesClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (StorageAppliancesClientListByResourceGroupResponse, error) {
 	result := StorageAppliancesClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageApplianceList); err != nil {
 		return StorageAppliancesClientListByResourceGroupResponse{}, err
 	}
@@ -500,8 +493,6 @@ func (client *StorageAppliancesClient) listByResourceGroupHandleResponse(resp *h
 }
 
 // NewListBySubscriptionPager - Get a list of storage appliances in the provided subscription.
-//
-// Generated from API version 2025-09-01
 //   - options - StorageAppliancesClientListBySubscriptionOptions contains the optional parameters for the StorageAppliancesClient.NewListBySubscriptionPager
 //     method.
 func (client *StorageAppliancesClient) NewListBySubscriptionPager(options *StorageAppliancesClientListBySubscriptionOptions) *runtime.Pager[StorageAppliancesClientListBySubscriptionResponse] {
@@ -515,45 +506,59 @@ func (client *StorageAppliancesClient) NewListBySubscriptionPager(options *Stora
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return StorageAppliancesClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StorageAppliancesClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *StorageAppliancesClient) listBySubscriptionCreateRequest(ctx context.Context, options *StorageAppliancesClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/storageAppliances"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StorageAppliancesClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *StorageAppliancesClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/storageAppliances"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *StorageAppliancesClient) listBySubscriptionHandleResponse(resp *http.Response) (StorageAppliancesClientListBySubscriptionResponse, error) {
+func (client *StorageAppliancesClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (StorageAppliancesClientListBySubscriptionResponse, error) {
 	result := StorageAppliancesClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StorageApplianceList); err != nil {
 		return StorageAppliancesClientListBySubscriptionResponse{}, err
 	}
@@ -562,8 +567,6 @@ func (client *StorageAppliancesClient) listBySubscriptionHandleResponse(resp *ht
 
 // BeginRunReadCommands - Run one or more read-only commands on the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - storageApplianceRunReadCommandsParameters - The request body.
@@ -588,8 +591,6 @@ func (client *StorageAppliancesClient) BeginRunReadCommands(ctx context.Context,
 
 // RunReadCommands - Run one or more read-only commands on the provided storage appliance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) runReadCommands(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceRunReadCommandsParameters StorageApplianceRunReadCommandsParameters, options *StorageAppliancesClientBeginRunReadCommandsOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginRunReadCommands"
@@ -605,8 +606,7 @@ func (client *StorageAppliancesClient) runReadCommands(ctx context.Context, reso
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -615,7 +615,7 @@ func (client *StorageAppliancesClient) runReadCommands(ctx context.Context, reso
 func (client *StorageAppliancesClient) runReadCommandsCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceRunReadCommandsParameters StorageApplianceRunReadCommandsParameters, _ *StorageAppliancesClientBeginRunReadCommandsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}/runReadCommands"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -631,8 +631,8 @@ func (client *StorageAppliancesClient) runReadCommandsCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, storageApplianceRunReadCommandsParameters); err != nil {
 		return nil, err
@@ -643,8 +643,6 @@ func (client *StorageAppliancesClient) runReadCommandsCreateRequest(ctx context.
 // BeginUpdate - Update properties of the provided storage appliance, or update tags associated with the storage appliance
 // Properties and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageApplianceName - The name of the storage appliance.
 //   - storageApplianceUpdateParameters - The request body.
@@ -670,8 +668,6 @@ func (client *StorageAppliancesClient) BeginUpdate(ctx context.Context, resource
 // Update - Update properties of the provided storage appliance, or update tags associated with the storage appliance Properties
 // and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *StorageAppliancesClient) update(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceUpdateParameters StorageAppliancePatchParameters, options *StorageAppliancesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StorageAppliancesClient.BeginUpdate"
@@ -687,8 +683,7 @@ func (client *StorageAppliancesClient) update(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -697,7 +692,7 @@ func (client *StorageAppliancesClient) update(ctx context.Context, resourceGroup
 func (client *StorageAppliancesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, storageApplianceName string, storageApplianceUpdateParameters StorageAppliancePatchParameters, options *StorageAppliancesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/storageAppliances/{storageApplianceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -713,8 +708,8 @@ func (client *StorageAppliancesClient) updateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}

@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // ClusterRecoveryPointsClient contains the methods for the ClusterRecoveryPoints group.
 // Don't use this type directly, use NewClusterRecoveryPointsClient() instead.
+//
+// Generated from API version 2025-08-01
 type ClusterRecoveryPointsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type ClusterRecoveryPointsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewClusterRecoveryPointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ClusterRecoveryPointsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +47,6 @@ func NewClusterRecoveryPointsClient(subscriptionID string, credential azcore.Tok
 // NewListByReplicationProtectionClusterPager - Gets the list of cluster recovery points.
 //
 // The list of cluster recovery points.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the recovery services vault.
 //   - fabricName - Fabric name.
@@ -63,59 +65,73 @@ func (client *ClusterRecoveryPointsClient) NewListByReplicationProtectionCluster
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByReplicationProtectionClusterCreateRequest(ctx, resourceGroupName, resourceName, fabricName, protectionContainerName, replicationProtectionClusterName, options)
-			}, nil)
+			req, err := client.listByReplicationProtectionClusterCreateRequest(ctx, resourceGroupName, resourceName, fabricName, protectionContainerName, replicationProtectionClusterName, nextLink, options)
 			if err != nil {
 				return ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse{}, err
 			}
-			return client.listByReplicationProtectionClusterHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse{}, err
+			}
+			return client.listByReplicationProtectionClusterHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByReplicationProtectionClusterCreateRequest creates the ListByReplicationProtectionCluster request.
-func (client *ClusterRecoveryPointsClient) listByReplicationProtectionClusterCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, protectionContainerName string, replicationProtectionClusterName string, _ *ClusterRecoveryPointsClientListByReplicationProtectionClusterOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationProtectionContainers/{protectionContainerName}/replicationProtectionClusters/{replicationProtectionClusterName}/recoveryPoints"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ClusterRecoveryPointsClient) listByReplicationProtectionClusterCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, protectionContainerName string, replicationProtectionClusterName string, nextLink string, _ *ClusterRecoveryPointsClientListByReplicationProtectionClusterOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationProtectionContainers/{protectionContainerName}/replicationProtectionClusters/{replicationProtectionClusterName}/recoveryPoints"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		if fabricName == "" {
+			return nil, errors.New("parameter fabricName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{fabricName}", url.PathEscape(fabricName))
+		if protectionContainerName == "" {
+			return nil, errors.New("parameter protectionContainerName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{protectionContainerName}", url.PathEscape(protectionContainerName))
+		if replicationProtectionClusterName == "" {
+			return nil, errors.New("parameter replicationProtectionClusterName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{replicationProtectionClusterName}", url.PathEscape(replicationProtectionClusterName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	if fabricName == "" {
-		return nil, errors.New("parameter fabricName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{fabricName}", url.PathEscape(fabricName))
-	if protectionContainerName == "" {
-		return nil, errors.New("parameter protectionContainerName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{protectionContainerName}", url.PathEscape(protectionContainerName))
-	if replicationProtectionClusterName == "" {
-		return nil, errors.New("parameter replicationProtectionClusterName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{replicationProtectionClusterName}", url.PathEscape(replicationProtectionClusterName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByReplicationProtectionClusterHandleResponse handles the ListByReplicationProtectionCluster response.
-func (client *ClusterRecoveryPointsClient) listByReplicationProtectionClusterHandleResponse(resp *http.Response) (ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse, error) {
+func (client *ClusterRecoveryPointsClient) listByReplicationProtectionClusterHandleResponse(resp *http.Response, successCodes ...int) (ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse, error) {
 	result := ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterRecoveryPointCollection); err != nil {
 		return ClusterRecoveryPointsClientListByReplicationProtectionClusterResponse{}, err
 	}

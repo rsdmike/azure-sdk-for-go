@@ -37,9 +37,9 @@ type CertificateProfilesServer struct {
 	// HTTP status codes to indicate success: http.StatusOK
 	NewListByCodeSigningAccountPager func(resourceGroupName string, accountName string, options *armartifactsigning.CertificateProfilesClientListByCodeSigningAccountOptions) (resp azfake.PagerResponder[armartifactsigning.CertificateProfilesClientListByCodeSigningAccountResponse])
 
-	// RevokeCertificate is the fake for method CertificateProfilesClient.RevokeCertificate
+	// RevokeCertificates is the fake for method CertificateProfilesClient.RevokeCertificates
 	// HTTP status codes to indicate success: http.StatusNoContent
-	RevokeCertificate func(ctx context.Context, resourceGroupName string, accountName string, profileName string, body armartifactsigning.RevokeCertificate, options *armartifactsigning.CertificateProfilesClientRevokeCertificateOptions) (resp azfake.Responder[armartifactsigning.CertificateProfilesClientRevokeCertificateResponse], errResp azfake.ErrorResponder)
+	RevokeCertificates func(ctx context.Context, resourceGroupName string, accountName string, profileName string, body armartifactsigning.RevokeCertificateList, options *armartifactsigning.CertificateProfilesClientRevokeCertificatesOptions) (resp azfake.Responder[armartifactsigning.CertificateProfilesClientRevokeCertificatesResponse], errResp azfake.ErrorResponder)
 }
 
 // NewCertificateProfilesServerTransport creates a new instance of CertificateProfilesServerTransport with the provided implementation.
@@ -92,8 +92,8 @@ func (c *CertificateProfilesServerTransport) dispatchToMethodFake(req *http.Requ
 				res.resp, res.err = c.dispatchGet(req)
 			case "CertificateProfilesClient.NewListByCodeSigningAccountPager":
 				res.resp, res.err = c.dispatchNewListByCodeSigningAccountPager(req)
-			case "CertificateProfilesClient.RevokeCertificate":
-				res.resp, res.err = c.dispatchRevokeCertificate(req)
+			case "CertificateProfilesClient.RevokeCertificates":
+				res.resp, res.err = c.dispatchRevokeCertificates(req)
 			default:
 				res.err = fmt.Errorf("unhandled API %s", method)
 			}
@@ -116,7 +116,7 @@ func (c *CertificateProfilesServerTransport) dispatchBeginCreate(req *http.Reque
 	}
 	beginCreate := c.beginCreate.get(req)
 	if beginCreate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/certificateProfiles/(?P<profileName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/certificateProfiles/(?P<profileName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -168,7 +168,7 @@ func (c *CertificateProfilesServerTransport) dispatchBeginDelete(req *http.Reque
 	}
 	beginDelete := c.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/certificateProfiles/(?P<profileName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/certificateProfiles/(?P<profileName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -214,7 +214,7 @@ func (c *CertificateProfilesServerTransport) dispatchGet(req *http.Request) (*ht
 	if c.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/certificateProfiles/(?P<profileName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/certificateProfiles/(?P<profileName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -253,7 +253,7 @@ func (c *CertificateProfilesServerTransport) dispatchNewListByCodeSigningAccount
 	}
 	newListByCodeSigningAccountPager := c.newListByCodeSigningAccountPager.get(req)
 	if newListByCodeSigningAccountPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/certificateProfiles`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/certificateProfiles`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -288,17 +288,17 @@ func (c *CertificateProfilesServerTransport) dispatchNewListByCodeSigningAccount
 	return resp, nil
 }
 
-func (c *CertificateProfilesServerTransport) dispatchRevokeCertificate(req *http.Request) (*http.Response, error) {
-	if c.srv.RevokeCertificate == nil {
-		return nil, &nonRetriableError{errors.New("fake for method RevokeCertificate not implemented")}
+func (c *CertificateProfilesServerTransport) dispatchRevokeCertificates(req *http.Request) (*http.Response, error) {
+	if c.srv.RevokeCertificates == nil {
+		return nil, &nonRetriableError{errors.New("fake for method RevokeCertificates not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/certificateProfiles/(?P<profileName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/revokeCertificate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.CodeSigning/codeSigningAccounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/certificateProfiles/(?P<profileName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/revokeCertificates`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armartifactsigning.RevokeCertificate](req)
+	body, err := server.UnmarshalRequestAsJSON[armartifactsigning.RevokeCertificateList](req)
 	if err != nil {
 		return nil, err
 	}
@@ -314,7 +314,7 @@ func (c *CertificateProfilesServerTransport) dispatchRevokeCertificate(req *http
 	if err != nil {
 		return nil, err
 	}
-	respr, errRespr := c.srv.RevokeCertificate(req.Context(), resourceGroupNameParam, accountNameParam, profileNameParam, body, nil)
+	respr, errRespr := c.srv.RevokeCertificates(req.Context(), resourceGroupNameParam, accountNameParam, profileNameParam, body, nil)
 	if respErr := server.GetError(errRespr, req); respErr != nil {
 		return nil, respErr
 	}

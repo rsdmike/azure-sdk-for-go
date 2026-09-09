@@ -6,11 +6,10 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/ReplicationJobs_Cancel.json
@@ -30,13 +29,13 @@ func ExampleReplicationJobsClient_BeginCancel() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationJobsClientCancelResponse{
-	// 	Job: &armrecoveryservicessiterecovery.Job{
+	// 	Job: armrecoveryservicessiterecovery.Job{
 	// 		Name: to.Ptr("2653c648-fc72-4316-86f3-fdf8eaa0066b"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/2653c648-fc72-4316-86f3-fdf8eaa0066b"),
 	// 		Properties: &armrecoveryservicessiterecovery.JobProperties{
@@ -67,7 +66,7 @@ func ExampleReplicationJobsClient_BeginCancel() {
 	// 			},
 	// 			FriendlyName: to.Ptr("Planned failover"),
 	// 			ScenarioName: to.Ptr("PlannedFailover"),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-03T06:16:06.3235186Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.May, 3, 6, 16, 6, 323518600, time.UTC)),
 	// 			State: to.Ptr("Cancelling"),
 	// 			StateDescription: to.Ptr("Cancelling"),
 	// 			TargetInstanceType: to.Ptr("ProtectionEntity"),
@@ -102,13 +101,13 @@ func ExampleReplicationJobsClient_BeginExport() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationJobsClientExportResponse{
-	// 	Job: &armrecoveryservicessiterecovery.Job{
+	// 	Job: armrecoveryservicessiterecovery.Job{
 	// 		Name: to.Ptr("37e0fc2b-13f2-4817-aafa-0cd807d46842"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/37e0fc2b-13f2-4817-aafa-0cd807d46842"),
 	// 		Properties: &armrecoveryservicessiterecovery.JobProperties{
@@ -122,11 +121,11 @@ func ExampleReplicationJobsClient_BeginExport() {
 	// 				InstanceType: to.Ptr("ExportJobDetails"),
 	// 				SasToken: to.Ptr("<sasToken>"),
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-04T14:33:43Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.May, 4, 14, 33, 43, 0, time.UTC)),
 	// 			Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 	// 			},
 	// 			ScenarioName: to.Ptr("ExportJobs"),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-04T14:33:42.2765562Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.May, 4, 14, 33, 42, 276556200, time.UTC)),
 	// 			State: to.Ptr("Succeeded"),
 	// 			StateDescription: to.Ptr("Completed"),
 	// 			TargetInstanceType: to.Ptr("Other"),
@@ -158,7 +157,7 @@ func ExampleReplicationJobsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationJobsClientGetResponse{
-	// 	Job: &armrecoveryservicessiterecovery.Job{
+	// 	Job: armrecoveryservicessiterecovery.Job{
 	// 		Name: to.Ptr("32ea4b9e-de62-49a1-b062-7864d5c3b897"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/32ea4b9e-de62-49a1-b062-7864d5c3b897"),
 	// 		Properties: &armrecoveryservicessiterecovery.JobProperties{
@@ -175,12 +174,12 @@ func ExampleReplicationJobsClient_Get() {
 	// 				},
 	// 				InstanceType: to.Ptr("AsrJobDetails"),
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T11:25:57Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.April, 27, 11, 25, 57, 0, time.UTC)),
 	// 			Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 	// 			},
 	// 			FriendlyName: to.Ptr("Delete a recovery plan"),
 	// 			ScenarioName: to.Ptr("DeleteRecoveryPlan"),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T11:25:56.800358Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.April, 27, 11, 25, 56, 800358000, time.UTC)),
 	// 			State: to.Ptr("Succeeded"),
 	// 			StateDescription: to.Ptr("Completed"),
 	// 			TargetInstanceType: to.Ptr("RecoveryPlan"),
@@ -194,11 +193,11 @@ func ExampleReplicationJobsClient_Get() {
 	// 					CustomDetails: &armrecoveryservicessiterecovery.ManualActionTaskDetails{
 	// 						InstanceType: to.Ptr("ManualActionTaskDetails"),
 	// 					},
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T11:25:57.318574Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.April, 27, 11, 25, 57, 318574000, time.UTC)),
 	// 					Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 	// 					},
 	// 					FriendlyName: to.Ptr("Delete a recovery plan task"),
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T11:25:57.3029434Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.April, 27, 11, 25, 57, 302943400, time.UTC)),
 	// 					State: to.Ptr("Succeeded"),
 	// 					StateDescription: to.Ptr("Completed"),
 	// 					TaskID: to.Ptr("763326a2-01c9-4257-b2a1-0aac56465014"),
@@ -241,12 +240,12 @@ func ExampleReplicationJobsClient_NewListPager() {
 		// 				Properties: &armrecoveryservicessiterecovery.JobProperties{
 		// 					AllowedActions: []*string{
 		// 					},
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T12:46:11Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2017, time.April, 27, 12, 46, 11, 0, time.UTC)),
 		// 					Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 		// 					},
 		// 					FriendlyName: to.Ptr("Create replication policy"),
 		// 					ScenarioName: to.Ptr("AddProtectionProfile"),
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T12:46:04.641851Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2017, time.April, 27, 12, 46, 4, 641851000, time.UTC)),
 		// 					State: to.Ptr("Succeeded"),
 		// 					StateDescription: to.Ptr("Completed"),
 		// 					TargetInstanceType: to.Ptr("ProtectionProfile"),
@@ -262,12 +261,12 @@ func ExampleReplicationJobsClient_NewListPager() {
 		// 				Properties: &armrecoveryservicessiterecovery.JobProperties{
 		// 					AllowedActions: []*string{
 		// 					},
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-02T14:07:21Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2017, time.May, 2, 14, 7, 21, 0, time.UTC)),
 		// 					Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 		// 					},
 		// 					FriendlyName: to.Ptr("Register the Azure Site Recovery Provider"),
 		// 					ScenarioName: to.Ptr("RegisterDra"),
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-02T14:07:19.2784338Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2017, time.May, 2, 14, 7, 19, 278433800, time.UTC)),
 		// 					State: to.Ptr("Succeeded"),
 		// 					StateDescription: to.Ptr("Completed"),
 		// 					TargetInstanceType: to.Ptr("Server"),
@@ -283,12 +282,12 @@ func ExampleReplicationJobsClient_NewListPager() {
 		// 				Properties: &armrecoveryservicessiterecovery.JobProperties{
 		// 					AllowedActions: []*string{
 		// 					},
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-02T05:56:16Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2017, time.May, 2, 5, 56, 16, 0, time.UTC)),
 		// 					Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 		// 					},
 		// 					FriendlyName: to.Ptr("Create a site"),
 		// 					ScenarioName: to.Ptr("CreateSite"),
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-02T05:56:14.569095Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2017, time.May, 2, 5, 56, 14, 569095000, time.UTC)),
 		// 					State: to.Ptr("Succeeded"),
 		// 					StateDescription: to.Ptr("Completed"),
 		// 					TargetInstanceType: to.Ptr("Server"),
@@ -321,13 +320,13 @@ func ExampleReplicationJobsClient_BeginRestart() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationJobsClientRestartResponse{
-	// 	Job: &armrecoveryservicessiterecovery.Job{
+	// 	Job: armrecoveryservicessiterecovery.Job{
 	// 		Name: to.Ptr("42c7d13b-790c-4609-8e0b-0936f1c5e5fb"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/42c7d13b-790c-4609-8e0b-0936f1c5e5fb"),
 	// 		Properties: &armrecoveryservicessiterecovery.JobProperties{
@@ -339,12 +338,12 @@ func ExampleReplicationJobsClient_BeginRestart() {
 	// 				},
 	// 				InstanceType: to.Ptr("AsrJobDetails"),
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-03T10:45:14Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.May, 3, 10, 45, 14, 0, time.UTC)),
 	// 			Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 	// 			},
 	// 			FriendlyName: to.Ptr("Restart job"),
 	// 			ScenarioName: to.Ptr("RestartJob"),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-03T10:45:12.1320757Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.May, 3, 10, 45, 12, 132075700, time.UTC)),
 	// 			State: to.Ptr("Succeeded"),
 	// 			StateDescription: to.Ptr("Completed"),
 	// 			TargetInstanceType: to.Ptr("ProtectionEntity"),
@@ -358,11 +357,11 @@ func ExampleReplicationJobsClient_BeginRestart() {
 	// 					CustomDetails: &armrecoveryservicessiterecovery.ManualActionTaskDetails{
 	// 						InstanceType: to.Ptr("ManualActionTaskDetails"),
 	// 					},
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-03T10:45:13.6458467Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.May, 3, 10, 45, 13, 645846700, time.UTC)),
 	// 					Errors: []*armrecoveryservicessiterecovery.JobErrorDetails{
 	// 					},
 	// 					FriendlyName: to.Ptr("Restarting job"),
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-05-03T10:45:13.5677237Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.May, 3, 10, 45, 13, 567723700, time.UTC)),
 	// 					State: to.Ptr("Succeeded"),
 	// 					StateDescription: to.Ptr("Completed"),
 	// 					TaskID: to.Ptr("RemediateWfTask"),
@@ -395,13 +394,13 @@ func ExampleReplicationJobsClient_BeginResume() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationJobsClientResumeResponse{
-	// 	Job: &armrecoveryservicessiterecovery.Job{
+	// 	Job: armrecoveryservicessiterecovery.Job{
 	// 		Name: to.Ptr("58776d0b-3141-48b2-a377-9ad863eb160d"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/58776d0b-3141-48b2-a377-9ad863eb160d"),
 	// 		Properties: &armrecoveryservicessiterecovery.JobProperties{
@@ -450,7 +449,7 @@ func ExampleReplicationJobsClient_BeginResume() {
 	// 			},
 	// 			FriendlyName: to.Ptr("Test failover"),
 	// 			ScenarioName: to.Ptr("TestFailover"),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			State: to.Ptr("Suspended"),
 	// 			StateDescription: to.Ptr("WaitingForStopTestFailover"),
 	// 			TargetInstanceType: to.Ptr("ProtectionEntity"),

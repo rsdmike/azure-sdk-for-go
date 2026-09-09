@@ -34,7 +34,7 @@ func ExampleDomainsClient_CheckAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientCheckAvailabilityResponse{
-	// 	DomainAvailabilityCheckResult: &armdomainregistration.DomainAvailabilityCheckResult{
+	// 	DomainAvailabilityCheckResult: armdomainregistration.DomainAvailabilityCheckResult{
 	// 		Name: to.Ptr("abcd.com"),
 	// 		Available: to.Ptr(true),
 	// 		DomainType: to.Ptr(armdomainregistration.DomainTypeRegular),
@@ -59,7 +59,7 @@ func ExampleDomainsClient_BeginCreateOrUpdate() {
 			AuthCode:  to.Ptr("exampleAuthCode"),
 			AutoRenew: to.Ptr(true),
 			Consent: &armdomainregistration.DomainPurchaseConsent{
-				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t }()),
+				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 				AgreedBy: to.Ptr("192.0.2.1"),
 				AgreementKeys: []*string{
 					to.Ptr("agreementKey1"),
@@ -143,13 +143,13 @@ func ExampleDomainsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientCreateOrUpdateResponse{
-	// 	Domain: &armdomainregistration.Domain{
+	// 	Domain: armdomainregistration.Domain{
 	// 		Name: to.Ptr("example.com"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com"),
@@ -158,7 +158,7 @@ func ExampleDomainsClient_BeginCreateOrUpdate() {
 	// 			AuthCode: to.Ptr("exampleAuthCode"),
 	// 			AutoRenew: to.Ptr(true),
 	// 			Consent: &armdomainregistration.DomainPurchaseConsent{
-	// 				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 				AgreedBy: to.Ptr("192.0.2.1"),
 	// 				AgreementKeys: []*string{
 	// 					to.Ptr("agreementKey1"),
@@ -232,12 +232,12 @@ func ExampleDomainsClient_BeginCreateOrUpdate() {
 	// 				Organization: to.Ptr("Microsoft Inc."),
 	// 				Phone: to.Ptr("1-245-534-2242"),
 	// 			},
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 	// 			DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 	// 				to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 	// 			},
-	// 			ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+	// 			ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			ManagedHostNames: []*armdomainregistration.HostName{
 	// 			},
 	// 			NameServers: []*string{
@@ -278,7 +278,7 @@ func ExampleDomainsClient_CreateOrUpdateOwnershipIdentifier() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientCreateOrUpdateOwnershipIdentifierResponse{
-	// 	DomainOwnershipIdentifier: &armdomainregistration.DomainOwnershipIdentifier{
+	// 	DomainOwnershipIdentifier: armdomainregistration.DomainOwnershipIdentifier{
 	// 		Name: to.Ptr("SampleOwnershipId"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains/domainownershipidentifiers"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com/domainownershipidentifiers/SampleOwnershipId"),
@@ -353,7 +353,7 @@ func ExampleDomainsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientGetResponse{
-	// 	Domain: &armdomainregistration.Domain{
+	// 	Domain: armdomainregistration.Domain{
 	// 		Name: to.Ptr("example.com"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com"),
@@ -362,7 +362,7 @@ func ExampleDomainsClient_Get() {
 	// 			AuthCode: to.Ptr("exampleAuthCode"),
 	// 			AutoRenew: to.Ptr(true),
 	// 			Consent: &armdomainregistration.DomainPurchaseConsent{
-	// 				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 				AgreedBy: to.Ptr("192.0.2.1"),
 	// 				AgreementKeys: []*string{
 	// 					to.Ptr("agreementKey1"),
@@ -436,12 +436,12 @@ func ExampleDomainsClient_Get() {
 	// 				Organization: to.Ptr("Microsoft Inc."),
 	// 				Phone: to.Ptr("1-245-534-2242"),
 	// 			},
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 	// 			DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 	// 				to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 	// 			},
-	// 			ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+	// 			ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			ManagedHostNames: []*armdomainregistration.HostName{
 	// 			},
 	// 			NameServers: []*string{
@@ -478,7 +478,7 @@ func ExampleDomainsClient_GetControlCenterSsoRequest() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientGetControlCenterSsoRequestResponse{
-	// 	DomainControlCenterSsoRequest: &armdomainregistration.DomainControlCenterSsoRequest{
+	// 	DomainControlCenterSsoRequest: armdomainregistration.DomainControlCenterSsoRequest{
 	// 		PostParameterKey: to.Ptr("saml"),
 	// 		PostParameterValue: to.Ptr("1242sds|k1340"),
 	// 		URL: to.Ptr("https://Reseller.provider.com/?xRequestId=sdsdsds&app=dcc"),
@@ -505,7 +505,7 @@ func ExampleDomainsClient_GetOwnershipIdentifier() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientGetOwnershipIdentifierResponse{
-	// 	DomainOwnershipIdentifier: &armdomainregistration.DomainOwnershipIdentifier{
+	// 	DomainOwnershipIdentifier: armdomainregistration.DomainOwnershipIdentifier{
 	// 		Name: to.Ptr("SampleOwnershipId"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains/domainownershipidentifiers"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com/domainownershipidentifiers/SampleOwnershipId"),
@@ -550,7 +550,7 @@ func ExampleDomainsClient_NewListPager() {
 		// 					AuthCode: to.Ptr("exampleAuthCode"),
 		// 					AutoRenew: to.Ptr(true),
 		// 					Consent: &armdomainregistration.DomainPurchaseConsent{
-		// 						AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+		// 						AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 						AgreedBy: to.Ptr("192.0.2.1"),
 		// 						AgreementKeys: []*string{
 		// 							to.Ptr("agreementKey1"),
@@ -624,12 +624,12 @@ func ExampleDomainsClient_NewListPager() {
 		// 						Organization: to.Ptr("Microsoft Inc."),
 		// 						Phone: to.Ptr("1-245-534-2242"),
 		// 					},
-		// 					CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+		// 					CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 					DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 		// 					DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 		// 						to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 		// 					},
-		// 					ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+		// 					ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 					ManagedHostNames: []*armdomainregistration.HostName{
 		// 					},
 		// 					NameServers: []*string{
@@ -684,7 +684,7 @@ func ExampleDomainsClient_NewListByResourceGroupPager() {
 		// 					AuthCode: to.Ptr("exampleAuthCode"),
 		// 					AutoRenew: to.Ptr(true),
 		// 					Consent: &armdomainregistration.DomainPurchaseConsent{
-		// 						AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+		// 						AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 						AgreedBy: to.Ptr("192.0.2.1"),
 		// 						AgreementKeys: []*string{
 		// 							to.Ptr("agreementKey1"),
@@ -758,12 +758,12 @@ func ExampleDomainsClient_NewListByResourceGroupPager() {
 		// 						Organization: to.Ptr("Microsoft Inc."),
 		// 						Phone: to.Ptr("1-245-534-2242"),
 		// 					},
-		// 					CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+		// 					CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 					DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 		// 					DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 		// 						to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 		// 					},
-		// 					ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+		// 					ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 		// 					ManagedHostNames: []*armdomainregistration.HostName{
 		// 					},
 		// 					NameServers: []*string{
@@ -907,7 +907,7 @@ func ExampleDomainsClient_TransferOut() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientTransferOutResponse{
-	// 	Domain: &armdomainregistration.Domain{
+	// 	Domain: armdomainregistration.Domain{
 	// 		Name: to.Ptr("example.com"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com"),
@@ -916,7 +916,7 @@ func ExampleDomainsClient_TransferOut() {
 	// 			AuthCode: to.Ptr("exampleAuthCode"),
 	// 			AutoRenew: to.Ptr(true),
 	// 			Consent: &armdomainregistration.DomainPurchaseConsent{
-	// 				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 				AgreedBy: to.Ptr("192.0.2.1"),
 	// 				AgreementKeys: []*string{
 	// 					to.Ptr("agreementKey1"),
@@ -990,12 +990,12 @@ func ExampleDomainsClient_TransferOut() {
 	// 				Organization: to.Ptr("Microsoft Inc."),
 	// 				Phone: to.Ptr("1-245-534-2242"),
 	// 			},
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 	// 			DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 	// 				to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 	// 			},
-	// 			ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+	// 			ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			ManagedHostNames: []*armdomainregistration.HostName{
 	// 			},
 	// 			NameServers: []*string{
@@ -1029,7 +1029,7 @@ func ExampleDomainsClient_Update() {
 			AuthCode:  to.Ptr("exampleAuthCode"),
 			AutoRenew: to.Ptr(true),
 			Consent: &armdomainregistration.DomainPurchaseConsent{
-				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t }()),
+				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 				AgreedBy: to.Ptr("192.0.2.1"),
 				AgreementKeys: []*string{
 					to.Ptr("agreementKey1"),
@@ -1114,7 +1114,7 @@ func ExampleDomainsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientUpdateResponse{
-	// 	Domain: &armdomainregistration.Domain{
+	// 	Domain: armdomainregistration.Domain{
 	// 		Name: to.Ptr("example.com"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com"),
@@ -1123,7 +1123,7 @@ func ExampleDomainsClient_Update() {
 	// 			AuthCode: to.Ptr("exampleAuthCode"),
 	// 			AutoRenew: to.Ptr(true),
 	// 			Consent: &armdomainregistration.DomainPurchaseConsent{
-	// 				AgreedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 				AgreedAt: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 				AgreedBy: to.Ptr("192.0.2.1"),
 	// 				AgreementKeys: []*string{
 	// 					to.Ptr("agreementKey1"),
@@ -1197,12 +1197,12 @@ func ExampleDomainsClient_Update() {
 	// 				Organization: to.Ptr("Microsoft Inc."),
 	// 				Phone: to.Ptr("1-245-534-2242"),
 	// 			},
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-10T19:30:53Z"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2021, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			DNSType: to.Ptr(armdomainregistration.DNSTypeDefaultDomainRegistrarDNS),
 	// 			DomainNotRenewableReasons: []*armdomainregistration.ResourceNotRenewableReason{
 	// 				to.Ptr(armdomainregistration.ResourceNotRenewableReasonExpirationNotInRenewalTimeRange),
 	// 			},
-	// 			ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-10T19:30:53Z"); return t}()),
+	// 			ExpirationTime: to.Ptr(time.Date(2022, time.September, 10, 19, 30, 53, 0, time.UTC)),
 	// 			ManagedHostNames: []*armdomainregistration.HostName{
 	// 			},
 	// 			NameServers: []*string{
@@ -1243,7 +1243,7 @@ func ExampleDomainsClient_UpdateOwnershipIdentifier() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdomainregistration.DomainsClientUpdateOwnershipIdentifierResponse{
-	// 	DomainOwnershipIdentifier: &armdomainregistration.DomainOwnershipIdentifier{
+	// 	DomainOwnershipIdentifier: armdomainregistration.DomainOwnershipIdentifier{
 	// 		Name: to.Ptr("SampleOwnershipId"),
 	// 		Type: to.Ptr("Microsoft.DomainRegistration/domains/domainownershipidentifiers"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testrg123/providers/Microsoft.DomainRegistration/domains/example.com/domainownershipidentifiers/SampleOwnershipId"),

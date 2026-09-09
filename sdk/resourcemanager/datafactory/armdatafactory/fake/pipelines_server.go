@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -72,9 +73,7 @@ func (p *PipelinesServerTransport) Do(req *http.Request) (*http.Response, error)
 }
 
 func (p *PipelinesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -98,10 +97,7 @@ func (p *PipelinesServerTransport) dispatchToMethodFake(req *http.Request, metho
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -116,7 +112,7 @@ func (p *PipelinesServerTransport) dispatchCreateOrUpdate(req *http.Request) (*h
 	if p.srv.CreateOrUpdate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/pipelines/(?P<pipelineName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/pipelines/(?P<pipelineName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -150,7 +146,7 @@ func (p *PipelinesServerTransport) dispatchCreateOrUpdate(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PipelineResource, req)
@@ -164,7 +160,7 @@ func (p *PipelinesServerTransport) dispatchCreateRun(req *http.Request) (*http.R
 	if p.srv.CreateRun == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateRun not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/pipelines/(?P<pipelineName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/createRun`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/pipelines/(?P<pipelineName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/createRun`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -187,29 +183,13 @@ func (p *PipelinesServerTransport) dispatchCreateRun(req *http.Request) (*http.R
 	if err != nil {
 		return nil, err
 	}
-	referencePipelineRunIDUnescaped, err := url.QueryUnescape(qp.Get("referencePipelineRunId"))
+	referencePipelineRunIDParam := getOptional(qp.Get("referencePipelineRunId"))
+	isRecoveryParam, err := parseOptional(qp.Get("isRecovery"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
-	referencePipelineRunIDParam := getOptional(referencePipelineRunIDUnescaped)
-	isRecoveryUnescaped, err := url.QueryUnescape(qp.Get("isRecovery"))
-	if err != nil {
-		return nil, err
-	}
-	isRecoveryParam, err := parseOptional(isRecoveryUnescaped, strconv.ParseBool)
-	if err != nil {
-		return nil, err
-	}
-	startActivityNameUnescaped, err := url.QueryUnescape(qp.Get("startActivityName"))
-	if err != nil {
-		return nil, err
-	}
-	startActivityNameParam := getOptional(startActivityNameUnescaped)
-	startFromFailureUnescaped, err := url.QueryUnescape(qp.Get("startFromFailure"))
-	if err != nil {
-		return nil, err
-	}
-	startFromFailureParam, err := parseOptional(startFromFailureUnescaped, strconv.ParseBool)
+	startActivityNameParam := getOptional(qp.Get("startActivityName"))
+	startFromFailureParam, err := parseOptional(qp.Get("startFromFailure"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +208,7 @@ func (p *PipelinesServerTransport) dispatchCreateRun(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CreateRunResponse, req)
@@ -242,7 +222,7 @@ func (p *PipelinesServerTransport) dispatchDelete(req *http.Request) (*http.Resp
 	if p.srv.Delete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Delete not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/pipelines/(?P<pipelineName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/pipelines/(?P<pipelineName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -265,7 +245,7 @@ func (p *PipelinesServerTransport) dispatchDelete(req *http.Request) (*http.Resp
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -279,7 +259,7 @@ func (p *PipelinesServerTransport) dispatchGet(req *http.Request) (*http.Respons
 	if p.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/pipelines/(?P<pipelineName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/pipelines/(?P<pipelineName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -309,7 +289,7 @@ func (p *PipelinesServerTransport) dispatchGet(req *http.Request) (*http.Respons
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNotModified}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNotModified}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNotModified", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PipelineResource, req)
@@ -325,7 +305,7 @@ func (p *PipelinesServerTransport) dispatchNewListByFactoryPager(req *http.Reque
 	}
 	newListByFactoryPager := p.newListByFactoryPager.get(req)
 	if newListByFactoryPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/pipelines`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataFactory/factories/(?P<factoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/pipelines`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -350,7 +330,7 @@ func (p *PipelinesServerTransport) dispatchNewListByFactoryPager(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		p.newListByFactoryPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

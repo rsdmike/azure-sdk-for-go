@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-const defaultAvailableBalancesClientVersion string = "2024-04-01"
-
 // AvailableBalancesClient contains the methods for the AvailableBalances group.
 // Don't use this type directly, use NewAvailableBalancesClient() instead.
 //
@@ -62,12 +60,7 @@ func (client *AvailableBalancesClient) GetByBillingAccount(ctx context.Context, 
 	if err != nil {
 		return AvailableBalancesClientGetByBillingAccountResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AvailableBalancesClientGetByBillingAccountResponse{}, err
-	}
-	resp, err := client.getByBillingAccountHandleResponse(httpResp)
-	return resp, err
+	return client.getByBillingAccountHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByBillingAccountCreateRequest creates the GetByBillingAccount request.
@@ -82,15 +75,18 @@ func (client *AvailableBalancesClient) getByBillingAccountCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultAvailableBalancesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByBillingAccountHandleResponse handles the GetByBillingAccount response.
-func (client *AvailableBalancesClient) getByBillingAccountHandleResponse(resp *http.Response) (AvailableBalancesClientGetByBillingAccountResponse, error) {
+func (client *AvailableBalancesClient) getByBillingAccountHandleResponse(resp *http.Response, successCodes ...int) (AvailableBalancesClientGetByBillingAccountResponse, error) {
 	result := AvailableBalancesClientGetByBillingAccountResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailableBalance); err != nil {
 		return AvailableBalancesClientGetByBillingAccountResponse{}, err
 	}
@@ -119,12 +115,7 @@ func (client *AvailableBalancesClient) GetByBillingProfile(ctx context.Context, 
 	if err != nil {
 		return AvailableBalancesClientGetByBillingProfileResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AvailableBalancesClientGetByBillingProfileResponse{}, err
-	}
-	resp, err := client.getByBillingProfileHandleResponse(httpResp)
-	return resp, err
+	return client.getByBillingProfileHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByBillingProfileCreateRequest creates the GetByBillingProfile request.
@@ -143,15 +134,18 @@ func (client *AvailableBalancesClient) getByBillingProfileCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultAvailableBalancesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByBillingProfileHandleResponse handles the GetByBillingProfile response.
-func (client *AvailableBalancesClient) getByBillingProfileHandleResponse(resp *http.Response) (AvailableBalancesClientGetByBillingProfileResponse, error) {
+func (client *AvailableBalancesClient) getByBillingProfileHandleResponse(resp *http.Response, successCodes ...int) (AvailableBalancesClientGetByBillingProfileResponse, error) {
 	result := AvailableBalancesClientGetByBillingProfileResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AvailableBalance); err != nil {
 		return AvailableBalancesClientGetByBillingProfileResponse{}, err
 	}

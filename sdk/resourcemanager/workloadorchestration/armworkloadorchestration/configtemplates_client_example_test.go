@@ -37,13 +37,13 @@ func ExampleConfigTemplatesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ConfigTemplatesClientCreateOrUpdateResponse{
-	// 	ConfigTemplate: &armworkloadorchestration.ConfigTemplate{
+	// 	ConfigTemplate: armworkloadorchestration.ConfigTemplate{
 	// 		Properties: &armworkloadorchestration.ConfigTemplateProperties{
 	// 			Description: to.Ptr("ccdyggozwmhyvemlcwlsnhijwg"),
 	// 			LatestVersion: to.Ptr("pgyyzmatjjmfpoywcmvxmnykjsjpnq"),
@@ -60,10 +60,10 @@ func ExampleConfigTemplatesClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -94,13 +94,13 @@ func ExampleConfigTemplatesClient_BeginCreateVersion() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ConfigTemplatesClientCreateVersionResponse{
-	// 	ConfigTemplateVersion: &armworkloadorchestration.ConfigTemplateVersion{
+	// 	ConfigTemplateVersion: armworkloadorchestration.ConfigTemplateVersion{
 	// 		Properties: &armworkloadorchestration.ConfigTemplateVersionProperties{
 	// 			Configurations: to.Ptr("rgricnhvcbqykc"),
 	// 			ProvisioningState: to.Ptr(armworkloadorchestration.ProvisioningStateSucceeded),
@@ -112,10 +112,10 @@ func ExampleConfigTemplatesClient_BeginCreateVersion() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -138,7 +138,7 @@ func ExampleConfigTemplatesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -161,7 +161,7 @@ func ExampleConfigTemplatesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ConfigTemplatesClientGetResponse{
-	// 	ConfigTemplate: &armworkloadorchestration.ConfigTemplate{
+	// 	ConfigTemplate: armworkloadorchestration.ConfigTemplate{
 	// 		Properties: &armworkloadorchestration.ConfigTemplateProperties{
 	// 			Description: to.Ptr("ccdyggozwmhyvemlcwlsnhijwg"),
 	// 			LatestVersion: to.Ptr("pgyyzmatjjmfpoywcmvxmnykjsjpnq"),
@@ -178,10 +178,10 @@ func ExampleConfigTemplatesClient_Get() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -229,10 +229,10 @@ func ExampleConfigTemplatesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("nvjczgdguyvllp"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -284,10 +284,10 @@ func ExampleConfigTemplatesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("nvjczgdguyvllp"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -318,7 +318,7 @@ func ExampleConfigTemplatesClient_RemoveVersion() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ConfigTemplatesClientRemoveVersionResponse{
-	// 	RemoveVersionResponse: &armworkloadorchestration.RemoveVersionResponse{
+	// 	RemoveVersionResponse: armworkloadorchestration.RemoveVersionResponse{
 	// 		Status: to.Ptr("fymylelaohqtwdoqw"),
 	// 	},
 	// }
@@ -350,7 +350,7 @@ func ExampleConfigTemplatesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ConfigTemplatesClientUpdateResponse{
-	// 	ConfigTemplate: &armworkloadorchestration.ConfigTemplate{
+	// 	ConfigTemplate: armworkloadorchestration.ConfigTemplate{
 	// 		Properties: &armworkloadorchestration.ConfigTemplateProperties{
 	// 			Description: to.Ptr("ccdyggozwmhyvemlcwlsnhijwg"),
 	// 			LatestVersion: to.Ptr("pgyyzmatjjmfpoywcmvxmnykjsjpnq"),
@@ -367,10 +367,10 @@ func ExampleConfigTemplatesClient_Update() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

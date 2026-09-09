@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 )
 
 // DeploymentWafPoliciesServer is a fake server for instances of the armnginx.DeploymentWafPoliciesClient type.
@@ -50,9 +51,7 @@ func (d *DeploymentWafPoliciesServerTransport) Do(req *http.Request) (*http.Resp
 }
 
 func (d *DeploymentWafPoliciesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -68,10 +67,7 @@ func (d *DeploymentWafPoliciesServerTransport) dispatchToMethodFake(req *http.Re
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -86,7 +82,7 @@ func (d *DeploymentWafPoliciesServerTransport) dispatchAnalysis(req *http.Reques
 	if d.srv.Analysis == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Analysis not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Nginx\.NginxPlus/nginxDeployments/(?P<deploymentName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/wafPolicies/(?P<wafPolicyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/analyzeWafPolicy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Nginx\.NginxPlus/nginxDeployments/(?P<deploymentName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/wafPolicies/(?P<wafPolicyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/analyzeWafPolicy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -119,7 +115,7 @@ func (d *DeploymentWafPoliciesServerTransport) dispatchAnalysis(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DeploymentWafPolicyAnalysisResponse, req)

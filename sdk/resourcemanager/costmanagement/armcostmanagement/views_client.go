@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-const defaultViewsClientVersion string = "2025-03-01"
-
 // ViewsClient contains the methods for the Views group.
 // Don't use this type directly, use NewViewsClient() instead.
 //
@@ -60,12 +58,7 @@ func (client *ViewsClient) CreateOrUpdate(ctx context.Context, viewName string, 
 	if err != nil {
 		return ViewsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -80,7 +73,7 @@ func (client *ViewsClient) createOrUpdateCreateRequest(ctx context.Context, view
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -91,8 +84,11 @@ func (client *ViewsClient) createOrUpdateCreateRequest(ctx context.Context, view
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ViewsClient) createOrUpdateHandleResponse(resp *http.Response) (ViewsClientCreateOrUpdateResponse, error) {
+func (client *ViewsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientCreateOrUpdateResponse, error) {
 	result := ViewsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientCreateOrUpdateResponse{}, err
 	}
@@ -121,12 +117,7 @@ func (client *ViewsClient) CreateOrUpdateByScope(ctx context.Context, scope stri
 	if err != nil {
 		return ViewsClientCreateOrUpdateByScopeResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientCreateOrUpdateByScopeResponse{}, err
-	}
-	resp, err := client.createOrUpdateByScopeHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateByScopeHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateByScopeCreateRequest creates the CreateOrUpdateByScope request.
@@ -145,7 +136,7 @@ func (client *ViewsClient) createOrUpdateByScopeCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -156,8 +147,11 @@ func (client *ViewsClient) createOrUpdateByScopeCreateRequest(ctx context.Contex
 }
 
 // createOrUpdateByScopeHandleResponse handles the CreateOrUpdateByScope response.
-func (client *ViewsClient) createOrUpdateByScopeHandleResponse(resp *http.Response) (ViewsClientCreateOrUpdateByScopeResponse, error) {
+func (client *ViewsClient) createOrUpdateByScopeHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientCreateOrUpdateByScopeResponse, error) {
 	result := ViewsClientCreateOrUpdateByScopeResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientCreateOrUpdateByScopeResponse{}, err
 	}
@@ -183,8 +177,7 @@ func (client *ViewsClient) Delete(ctx context.Context, viewName string, options 
 		return ViewsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientDeleteResponse{}, err
+		return ViewsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ViewsClientDeleteResponse{}, nil
 }
@@ -201,7 +194,7 @@ func (client *ViewsClient) deleteCreateRequest(ctx context.Context, viewName str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
@@ -226,8 +219,7 @@ func (client *ViewsClient) DeleteByScope(ctx context.Context, scope string, view
 		return ViewsClientDeleteByScopeResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientDeleteByScopeResponse{}, err
+		return ViewsClientDeleteByScopeResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ViewsClientDeleteByScopeResponse{}, nil
 }
@@ -248,7 +240,7 @@ func (client *ViewsClient) deleteByScopeCreateRequest(ctx context.Context, scope
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
@@ -271,12 +263,7 @@ func (client *ViewsClient) Get(ctx context.Context, viewName string, options *Vi
 	if err != nil {
 		return ViewsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -291,15 +278,18 @@ func (client *ViewsClient) getCreateRequest(ctx context.Context, viewName string
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ViewsClient) getHandleResponse(resp *http.Response) (ViewsClientGetResponse, error) {
+func (client *ViewsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientGetResponse, error) {
 	result := ViewsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientGetResponse{}, err
 	}
@@ -325,12 +315,7 @@ func (client *ViewsClient) GetByScope(ctx context.Context, scope string, viewNam
 	if err != nil {
 		return ViewsClientGetByScopeResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ViewsClientGetByScopeResponse{}, err
-	}
-	resp, err := client.getByScopeHandleResponse(httpResp)
-	return resp, err
+	return client.getByScopeHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByScopeCreateRequest creates the GetByScope request.
@@ -349,15 +334,18 @@ func (client *ViewsClient) getByScopeCreateRequest(ctx context.Context, scope st
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByScopeHandleResponse handles the GetByScope response.
-func (client *ViewsClient) getByScopeHandleResponse(resp *http.Response) (ViewsClientGetByScopeResponse, error) {
+func (client *ViewsClient) getByScopeHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientGetByScopeResponse, error) {
 	result := ViewsClientGetByScopeResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.View); err != nil {
 		return ViewsClientGetByScopeResponse{}, err
 	}
@@ -377,35 +365,49 @@ func (client *ViewsClient) NewListPager(options *ViewsClientListOptions) *runtim
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ViewsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ViewsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ViewsClient) listCreateRequest(ctx context.Context, _ *ViewsClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.CostManagement/views"
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+func (client *ViewsClient) listCreateRequest(ctx context.Context, nextLink string, _ *ViewsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.CostManagement/views"
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
+	}
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250301)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ViewsClient) listHandleResponse(resp *http.Response) (ViewsClientListResponse, error) {
+func (client *ViewsClient) listHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientListResponse, error) {
 	result := ViewsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ViewListResult); err != nil {
 		return ViewsClientListResponse{}, err
 	}
@@ -426,39 +428,53 @@ func (client *ViewsClient) NewListByScopePager(scope string, options *ViewsClien
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByScopeCreateRequest(ctx, scope, options)
-			}, nil)
+			req, err := client.listByScopeCreateRequest(ctx, scope, nextLink, options)
 			if err != nil {
 				return ViewsClientListByScopeResponse{}, err
 			}
-			return client.listByScopeHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ViewsClientListByScopeResponse{}, err
+			}
+			return client.listByScopeHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByScopeCreateRequest creates the ListByScope request.
-func (client *ViewsClient) listByScopeCreateRequest(ctx context.Context, scope string, _ *ViewsClientListByScopeOptions) (*policy.Request, error) {
-	urlPath := "/{scope}/providers/Microsoft.CostManagement/views"
-	if scope == "" {
-		return nil, errors.New("parameter scope cannot be empty")
+func (client *ViewsClient) listByScopeCreateRequest(ctx context.Context, scope string, nextLink string, _ *ViewsClientListByScopeOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{scope}/providers/Microsoft.CostManagement/views"
+		if scope == "" {
+			return nil, errors.New("parameter scope cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{scope}", url.PathEscape(scope))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{scope}", url.PathEscape(scope))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultViewsClientVersion)
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250301)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByScopeHandleResponse handles the ListByScope response.
-func (client *ViewsClient) listByScopeHandleResponse(resp *http.Response) (ViewsClientListByScopeResponse, error) {
+func (client *ViewsClient) listByScopeHandleResponse(resp *http.Response, successCodes ...int) (ViewsClientListByScopeResponse, error) {
 	result := ViewsClientListByScopeResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ViewListResult); err != nil {
 		return ViewsClientListByScopeResponse{}, err
 	}

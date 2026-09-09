@@ -11,10 +11,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
+	"strings"
 )
 
 // PrivateDNSZoneSuffixClient contains the methods for the PrivateDNSZoneSuffix group.
 // Don't use this type directly, use NewPrivateDNSZoneSuffixClient() instead.
+//
+// Generated from API version 2026-04-01-preview
 type PrivateDNSZoneSuffixClient struct {
 	internal *arm.Client
 }
@@ -35,8 +38,6 @@ func NewPrivateDNSZoneSuffixClient(credential azcore.TokenCredential, options *a
 
 // Get - Gets the private DNS zone suffix.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - options - PrivateDNSZoneSuffixClientGetOptions contains the optional parameters for the PrivateDNSZoneSuffixClient.Get
 //     method.
 func (client *PrivateDNSZoneSuffixClient) Get(ctx context.Context, options *PrivateDNSZoneSuffixClientGetOptions) (PrivateDNSZoneSuffixClientGetResponse, error) {
@@ -53,12 +54,7 @@ func (client *PrivateDNSZoneSuffixClient) Get(ctx context.Context, options *Priv
 	if err != nil {
 		return PrivateDNSZoneSuffixClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PrivateDNSZoneSuffixClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -69,15 +65,18 @@ func (client *PrivateDNSZoneSuffixClient) getCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PrivateDNSZoneSuffixClient) getHandleResponse(resp *http.Response) (PrivateDNSZoneSuffixClientGetResponse, error) {
+func (client *PrivateDNSZoneSuffixClient) getHandleResponse(resp *http.Response, successCodes ...int) (PrivateDNSZoneSuffixClientGetResponse, error) {
 	result := PrivateDNSZoneSuffixClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return PrivateDNSZoneSuffixClientGetResponse{}, err
 	}

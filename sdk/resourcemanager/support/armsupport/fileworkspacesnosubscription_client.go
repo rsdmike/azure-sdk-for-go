@@ -18,6 +18,8 @@ import (
 
 // FileWorkspacesNoSubscriptionClient contains the methods for the FileWorkspacesNoSubscription group.
 // Don't use this type directly, use NewFileWorkspacesNoSubscriptionClient() instead.
+//
+// Generated from API version 2024-04-01
 type FileWorkspacesNoSubscriptionClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewFileWorkspacesNoSubscriptionClient(credential azcore.TokenCredential, op
 
 // Create - Creates a new file workspace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - options - FileWorkspacesNoSubscriptionClientCreateOptions contains the optional parameters for the FileWorkspacesNoSubscriptionClient.Create
 //     method.
@@ -57,12 +57,7 @@ func (client *FileWorkspacesNoSubscriptionClient) Create(ctx context.Context, fi
 	if err != nil {
 		return FileWorkspacesNoSubscriptionClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return FileWorkspacesNoSubscriptionClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusCreated)
 }
 
 // createCreateRequest creates the Create request.
@@ -77,15 +72,18 @@ func (client *FileWorkspacesNoSubscriptionClient) createCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // createHandleResponse handles the Create response.
-func (client *FileWorkspacesNoSubscriptionClient) createHandleResponse(resp *http.Response) (FileWorkspacesNoSubscriptionClientCreateResponse, error) {
+func (client *FileWorkspacesNoSubscriptionClient) createHandleResponse(resp *http.Response, successCodes ...int) (FileWorkspacesNoSubscriptionClientCreateResponse, error) {
 	result := FileWorkspacesNoSubscriptionClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileWorkspaceDetails); err != nil {
 		return FileWorkspacesNoSubscriptionClientCreateResponse{}, err
 	}
@@ -94,8 +92,6 @@ func (client *FileWorkspacesNoSubscriptionClient) createHandleResponse(resp *htt
 
 // Get - Gets details for a specific file workspace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - options - FileWorkspacesNoSubscriptionClientGetOptions contains the optional parameters for the FileWorkspacesNoSubscriptionClient.Get
 //     method.
@@ -113,12 +109,7 @@ func (client *FileWorkspacesNoSubscriptionClient) Get(ctx context.Context, fileW
 	if err != nil {
 		return FileWorkspacesNoSubscriptionClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FileWorkspacesNoSubscriptionClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -133,15 +124,18 @@ func (client *FileWorkspacesNoSubscriptionClient) getCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *FileWorkspacesNoSubscriptionClient) getHandleResponse(resp *http.Response) (FileWorkspacesNoSubscriptionClientGetResponse, error) {
+func (client *FileWorkspacesNoSubscriptionClient) getHandleResponse(resp *http.Response, successCodes ...int) (FileWorkspacesNoSubscriptionClientGetResponse, error) {
 	result := FileWorkspacesNoSubscriptionClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileWorkspaceDetails); err != nil {
 		return FileWorkspacesNoSubscriptionClientGetResponse{}, err
 	}

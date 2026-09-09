@@ -18,6 +18,8 @@ import (
 
 // CloudHsmClustersClient contains the methods for the CloudHsmClusters group.
 // Don't use this type directly, use NewCloudHsmClustersClient() instead.
+//
+// Generated from API version 2025-12-01-preview
 type CloudHsmClustersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CloudHsmClustersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCloudHsmClustersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CloudHsmClustersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewCloudHsmClustersClient(subscriptionID string, credential azcore.TokenCre
 
 // BeginBackup - Create a backup of the Cloud HSM Cluster in the specified subscription
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -67,8 +70,6 @@ func (client *CloudHsmClustersClient) BeginBackup(ctx context.Context, resourceG
 
 // Backup - Create a backup of the Cloud HSM Cluster in the specified subscription
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) backup(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginBackupOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginBackup"
@@ -84,8 +85,7 @@ func (client *CloudHsmClustersClient) backup(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -94,7 +94,7 @@ func (client *CloudHsmClustersClient) backup(ctx context.Context, resourceGroupN
 func (client *CloudHsmClustersClient) backupCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginBackupOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/backup"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -110,8 +110,8 @@ func (client *CloudHsmClustersClient) backupCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.BackupRequestProperties != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -125,8 +125,6 @@ func (client *CloudHsmClustersClient) backupCreateRequest(ctx context.Context, r
 
 // BeginCreateOrUpdate - Create or Update a Cloud HSM Cluster in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -153,8 +151,6 @@ func (client *CloudHsmClustersClient) BeginCreateOrUpdate(ctx context.Context, r
 
 // CreateOrUpdate - Create or Update a Cloud HSM Cluster in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) createOrUpdate(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, body CloudHsmCluster, options *CloudHsmClustersClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginCreateOrUpdate"
@@ -170,8 +166,7 @@ func (client *CloudHsmClustersClient) createOrUpdate(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *CloudHsmClustersClient) createOrUpdate(ctx context.Context, resour
 func (client *CloudHsmClustersClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, body CloudHsmCluster, _ *CloudHsmClustersClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -196,8 +191,8 @@ func (client *CloudHsmClustersClient) createOrUpdateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -208,8 +203,6 @@ func (client *CloudHsmClustersClient) createOrUpdateCreateRequest(ctx context.Co
 
 // BeginDelete - Deletes the specified Cloud HSM Cluster
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -234,8 +227,6 @@ func (client *CloudHsmClustersClient) BeginDelete(ctx context.Context, resourceG
 
 // Delete - Deletes the specified Cloud HSM Cluster
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) deleteOperation(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginDelete"
@@ -251,8 +242,7 @@ func (client *CloudHsmClustersClient) deleteOperation(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -261,7 +251,7 @@ func (client *CloudHsmClustersClient) deleteOperation(ctx context.Context, resou
 func (client *CloudHsmClustersClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, _ *CloudHsmClustersClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -277,15 +267,13 @@ func (client *CloudHsmClustersClient) deleteCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the specified Cloud HSM Cluster
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -304,19 +292,14 @@ func (client *CloudHsmClustersClient) Get(ctx context.Context, resourceGroupName
 	if err != nil {
 		return CloudHsmClustersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CloudHsmClustersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CloudHsmClustersClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, _ *CloudHsmClustersClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -332,15 +315,18 @@ func (client *CloudHsmClustersClient) getCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CloudHsmClustersClient) getHandleResponse(resp *http.Response) (CloudHsmClustersClientGetResponse, error) {
+func (client *CloudHsmClustersClient) getHandleResponse(resp *http.Response, successCodes ...int) (CloudHsmClustersClientGetResponse, error) {
 	result := CloudHsmClustersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudHsmCluster); err != nil {
 		return CloudHsmClustersClientGetResponse{}, err
 	}
@@ -349,8 +335,6 @@ func (client *CloudHsmClustersClient) getHandleResponse(resp *http.Response) (Cl
 
 // NewListByResourceGroupPager - The List operation gets information about the Cloud HSM Clusters associated with the subscription
 // and within the specified resource group.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - CloudHsmClustersClientListByResourceGroupOptions contains the optional parameters for the CloudHsmClustersClient.NewListByResourceGroupPager
 //     method.
@@ -365,46 +349,60 @@ func (client *CloudHsmClustersClient) NewListByResourceGroupPager(resourceGroupN
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return CloudHsmClustersClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudHsmClustersClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *CloudHsmClustersClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *CloudHsmClustersClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudHsmClustersClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *CloudHsmClustersClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Skiptoken != nil {
-		reqQP.Set("$skiptoken", *options.Skiptoken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Skiptoken != nil {
+			reqQP.Set("$skiptoken", *options.Skiptoken)
+		}
+		reqQP.Set("api-version", version20251201Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *CloudHsmClustersClient) listByResourceGroupHandleResponse(resp *http.Response) (CloudHsmClustersClientListByResourceGroupResponse, error) {
+func (client *CloudHsmClustersClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (CloudHsmClustersClientListByResourceGroupResponse, error) {
 	result := CloudHsmClustersClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudHsmClusterListResult); err != nil {
 		return CloudHsmClustersClientListByResourceGroupResponse{}, err
 	}
@@ -412,8 +410,6 @@ func (client *CloudHsmClustersClient) listByResourceGroupHandleResponse(resp *ht
 }
 
 // NewListBySubscriptionPager - The List operation gets information about the Cloud HSM Clusters associated with the subscription.
-//
-// Generated from API version 2025-03-31
 //   - options - CloudHsmClustersClientListBySubscriptionOptions contains the optional parameters for the CloudHsmClustersClient.NewListBySubscriptionPager
 //     method.
 func (client *CloudHsmClustersClient) NewListBySubscriptionPager(options *CloudHsmClustersClientListBySubscriptionOptions) *runtime.Pager[CloudHsmClustersClientListBySubscriptionResponse] {
@@ -427,42 +423,56 @@ func (client *CloudHsmClustersClient) NewListBySubscriptionPager(options *CloudH
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return CloudHsmClustersClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudHsmClustersClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *CloudHsmClustersClient) listBySubscriptionCreateRequest(ctx context.Context, options *CloudHsmClustersClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudHsmClustersClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *CloudHsmClustersClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Skiptoken != nil {
-		reqQP.Set("$skiptoken", *options.Skiptoken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Skiptoken != nil {
+			reqQP.Set("$skiptoken", *options.Skiptoken)
+		}
+		reqQP.Set("api-version", version20251201Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *CloudHsmClustersClient) listBySubscriptionHandleResponse(resp *http.Response) (CloudHsmClustersClientListBySubscriptionResponse, error) {
+func (client *CloudHsmClustersClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (CloudHsmClustersClientListBySubscriptionResponse, error) {
 	result := CloudHsmClustersClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudHsmClusterListResult); err != nil {
 		return CloudHsmClustersClientListBySubscriptionResponse{}, err
 	}
@@ -471,8 +481,6 @@ func (client *CloudHsmClustersClient) listBySubscriptionHandleResponse(resp *htt
 
 // BeginRestore - Restores all key materials of a specified Cloud HSM Cluster
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -498,8 +506,6 @@ func (client *CloudHsmClustersClient) BeginRestore(ctx context.Context, resource
 
 // Restore - Restores all key materials of a specified Cloud HSM Cluster
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) restore(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, restoreRequestProperties RestoreRequestProperties, options *CloudHsmClustersClientBeginRestoreOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginRestore"
@@ -515,8 +521,7 @@ func (client *CloudHsmClustersClient) restore(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -525,7 +530,7 @@ func (client *CloudHsmClustersClient) restore(ctx context.Context, resourceGroup
 func (client *CloudHsmClustersClient) restoreCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, restoreRequestProperties RestoreRequestProperties, _ *CloudHsmClustersClientBeginRestoreOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/restore"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -541,8 +546,8 @@ func (client *CloudHsmClustersClient) restoreCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, restoreRequestProperties); err != nil {
@@ -553,8 +558,6 @@ func (client *CloudHsmClustersClient) restoreCreateRequest(ctx context.Context, 
 
 // BeginUpdate - Update a Cloud HSM Cluster in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -580,8 +583,6 @@ func (client *CloudHsmClustersClient) BeginUpdate(ctx context.Context, resourceG
 
 // Update - Update a Cloud HSM Cluster in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) update(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, body CloudHsmClusterPatchParameters, options *CloudHsmClustersClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginUpdate"
@@ -597,8 +598,7 @@ func (client *CloudHsmClustersClient) update(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -607,7 +607,7 @@ func (client *CloudHsmClustersClient) update(ctx context.Context, resourceGroupN
 func (client *CloudHsmClustersClient) updateCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, body CloudHsmClusterPatchParameters, _ *CloudHsmClustersClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -623,8 +623,8 @@ func (client *CloudHsmClustersClient) updateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -636,8 +636,6 @@ func (client *CloudHsmClustersClient) updateCreateRequest(ctx context.Context, r
 // BeginValidateBackupProperties - Pre Backup operation to validate whether the customer can perform a backup on the Cloud
 // HSM Cluster resource in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -663,8 +661,6 @@ func (client *CloudHsmClustersClient) BeginValidateBackupProperties(ctx context.
 // ValidateBackupProperties - Pre Backup operation to validate whether the customer can perform a backup on the Cloud HSM
 // Cluster resource in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) validateBackupProperties(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginValidateBackupPropertiesOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginValidateBackupProperties"
@@ -680,8 +676,7 @@ func (client *CloudHsmClustersClient) validateBackupProperties(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -690,7 +685,7 @@ func (client *CloudHsmClustersClient) validateBackupProperties(ctx context.Conte
 func (client *CloudHsmClustersClient) validateBackupPropertiesCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginValidateBackupPropertiesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/validateBackupProperties"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -706,8 +701,8 @@ func (client *CloudHsmClustersClient) validateBackupPropertiesCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.BackupRequestProperties != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -721,8 +716,6 @@ func (client *CloudHsmClustersClient) validateBackupPropertiesCreateRequest(ctx 
 
 // BeginValidateRestoreProperties - Queued validating pre restore operation
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -747,8 +740,6 @@ func (client *CloudHsmClustersClient) BeginValidateRestoreProperties(ctx context
 
 // ValidateRestoreProperties - Queued validating pre restore operation
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClustersClient) validateRestoreProperties(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginValidateRestorePropertiesOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClustersClient.BeginValidateRestoreProperties"
@@ -764,8 +755,7 @@ func (client *CloudHsmClustersClient) validateRestoreProperties(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -774,7 +764,7 @@ func (client *CloudHsmClustersClient) validateRestoreProperties(ctx context.Cont
 func (client *CloudHsmClustersClient) validateRestorePropertiesCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, options *CloudHsmClustersClientBeginValidateRestorePropertiesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/validateRestoreProperties"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -790,8 +780,8 @@ func (client *CloudHsmClustersClient) validateRestorePropertiesCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.RestoreRequestProperties != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}

@@ -8,14 +8,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
-	"net/url"
-	"regexp"
-
 	azfake "github.com/Azure/azure-sdk-for-go/sdk/azcore/fake"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/fake/server"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/purview/armpurview/v2"
+	"net/http"
+	"net/url"
+	"regexp"
+	"slices"
 )
 
 // FeaturesServer is a fake server for instances of the armpurview.FeaturesClient type.
@@ -54,9 +54,7 @@ func (f *FeaturesServerTransport) Do(req *http.Request) (*http.Response, error) 
 }
 
 func (f *FeaturesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -74,10 +72,7 @@ func (f *FeaturesServerTransport) dispatchToMethodFake(req *http.Request, method
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -92,7 +87,7 @@ func (f *FeaturesServerTransport) dispatchAccountGet(req *http.Request) (*http.R
 	if f.srv.AccountGet == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AccountGet not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Purview/accounts/(?P<accountName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listFeatures`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Purview/accounts/(?P<accountName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listFeatures`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -115,7 +110,7 @@ func (f *FeaturesServerTransport) dispatchAccountGet(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BatchFeatureStatus, req)
@@ -129,7 +124,7 @@ func (f *FeaturesServerTransport) dispatchSubscriptionGet(req *http.Request) (*h
 	if f.srv.SubscriptionGet == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SubscriptionGet not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Purview/locations/(?P<locations>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listFeatures`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Purview/locations/(?P<locations>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listFeatures`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -148,7 +143,7 @@ func (f *FeaturesServerTransport) dispatchSubscriptionGet(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BatchFeatureStatus, req)

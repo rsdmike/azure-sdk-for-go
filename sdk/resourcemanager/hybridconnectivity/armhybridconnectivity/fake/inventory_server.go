@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // InventoryServer is a fake server for instances of the armhybridconnectivity.InventoryClient type.
@@ -58,9 +59,7 @@ func (i *InventoryServerTransport) Do(req *http.Request) (*http.Response, error)
 }
 
 func (i *InventoryServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (i *InventoryServerTransport) dispatchToMethodFake(req *http.Request, metho
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (i *InventoryServerTransport) dispatchGet(req *http.Request) (*http.Respons
 	if i.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/solutionConfigurations/(?P<solutionConfiguration>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/inventory/(?P<inventoryId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/solutionConfigurations/(?P<solutionConfiguration>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/inventory/(?P<inventoryId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -119,7 +115,7 @@ func (i *InventoryServerTransport) dispatchGet(req *http.Request) (*http.Respons
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).InventoryResource, req)
@@ -135,7 +131,7 @@ func (i *InventoryServerTransport) dispatchNewListBySolutionConfigurationPager(r
 	}
 	newListBySolutionConfigurationPager := i.newListBySolutionConfigurationPager.get(req)
 	if newListBySolutionConfigurationPager == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/solutionConfigurations/(?P<solutionConfiguration>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/inventory`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/solutionConfigurations/(?P<solutionConfiguration>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/inventory`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -160,7 +156,7 @@ func (i *InventoryServerTransport) dispatchNewListBySolutionConfigurationPager(r
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		i.newListBySolutionConfigurationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

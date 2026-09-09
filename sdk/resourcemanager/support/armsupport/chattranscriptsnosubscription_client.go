@@ -18,6 +18,8 @@ import (
 
 // ChatTranscriptsNoSubscriptionClient contains the methods for the ChatTranscriptsNoSubscription group.
 // Don't use this type directly, use NewChatTranscriptsNoSubscriptionClient() instead.
+//
+// Generated from API version 2024-04-01
 type ChatTranscriptsNoSubscriptionClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewChatTranscriptsNoSubscriptionClient(credential azcore.TokenCredential, o
 
 // Get - Returns chatTranscript details for a no subscription support ticket.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - supportTicketName - The name of the SupportTicketDetails
 //   - chatTranscriptName - The name of the ChatTranscriptDetails
 //   - options - ChatTranscriptsNoSubscriptionClientGetOptions contains the optional parameters for the ChatTranscriptsNoSubscriptionClient.Get
@@ -58,12 +58,7 @@ func (client *ChatTranscriptsNoSubscriptionClient) Get(ctx context.Context, supp
 	if err != nil {
 		return ChatTranscriptsNoSubscriptionClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChatTranscriptsNoSubscriptionClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -82,15 +77,18 @@ func (client *ChatTranscriptsNoSubscriptionClient) getCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ChatTranscriptsNoSubscriptionClient) getHandleResponse(resp *http.Response) (ChatTranscriptsNoSubscriptionClientGetResponse, error) {
+func (client *ChatTranscriptsNoSubscriptionClient) getHandleResponse(resp *http.Response, successCodes ...int) (ChatTranscriptsNoSubscriptionClientGetResponse, error) {
 	result := ChatTranscriptsNoSubscriptionClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChatTranscriptDetails); err != nil {
 		return ChatTranscriptsNoSubscriptionClientGetResponse{}, err
 	}
@@ -98,8 +96,6 @@ func (client *ChatTranscriptsNoSubscriptionClient) getHandleResponse(resp *http.
 }
 
 // NewListPager - Lists all chat transcripts for a support ticket
-//
-// Generated from API version 2024-04-01
 //   - supportTicketName - The name of the SupportTicketDetails
 //   - options - ChatTranscriptsNoSubscriptionClientListOptions contains the optional parameters for the ChatTranscriptsNoSubscriptionClient.NewListPager
 //     method.
@@ -114,39 +110,53 @@ func (client *ChatTranscriptsNoSubscriptionClient) NewListPager(supportTicketNam
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, supportTicketName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, supportTicketName, nextLink, options)
 			if err != nil {
 				return ChatTranscriptsNoSubscriptionClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ChatTranscriptsNoSubscriptionClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ChatTranscriptsNoSubscriptionClient) listCreateRequest(ctx context.Context, supportTicketName string, _ *ChatTranscriptsNoSubscriptionClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Support/supportTickets/{supportTicketName}/chatTranscripts"
-	if supportTicketName == "" {
-		return nil, errors.New("parameter supportTicketName cannot be empty")
+func (client *ChatTranscriptsNoSubscriptionClient) listCreateRequest(ctx context.Context, supportTicketName string, nextLink string, _ *ChatTranscriptsNoSubscriptionClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Support/supportTickets/{supportTicketName}/chatTranscripts"
+		if supportTicketName == "" {
+			return nil, errors.New("parameter supportTicketName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{supportTicketName}", url.PathEscape(supportTicketName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{supportTicketName}", url.PathEscape(supportTicketName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ChatTranscriptsNoSubscriptionClient) listHandleResponse(resp *http.Response) (ChatTranscriptsNoSubscriptionClientListResponse, error) {
+func (client *ChatTranscriptsNoSubscriptionClient) listHandleResponse(resp *http.Response, successCodes ...int) (ChatTranscriptsNoSubscriptionClientListResponse, error) {
 	result := ChatTranscriptsNoSubscriptionClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChatTranscriptsListResult); err != nil {
 		return ChatTranscriptsNoSubscriptionClientListResponse{}, err
 	}

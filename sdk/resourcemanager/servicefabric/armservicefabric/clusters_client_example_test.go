@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2023-11-01-preview/ClusterPutOperation_example_max.json
+// Generated from example definition: 2026-03-01-preview/ClusterPutOperation_example_max.json
 func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMaximumParameters() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -205,8 +205,8 @@ func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMaximumParameters(
 				UpgradeTimeout:                to.Ptr("01:00:00"),
 			},
 			UpgradeMode:                   to.Ptr(armservicefabric.UpgradeModeManual),
-			UpgradePauseEndTimestampUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-25T22:00:00Z"); return t }()),
-			UpgradePauseStartTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-21T22:00:00Z"); return t }()),
+			UpgradePauseEndTimestampUTC:   to.Ptr(time.Date(2021, time.June, 25, 22, 0, 0, 0, time.UTC)),
+			UpgradePauseStartTimestampUTC: to.Ptr(time.Date(2021, time.June, 21, 22, 0, 0, 0, time.UTC)),
 			UpgradeWave:                   to.Ptr(armservicefabric.ClusterUpgradeCadenceWave1),
 			VMImage:                       to.Ptr("Windows"),
 			VmssZonalUpgradeMode:          to.Ptr(armservicefabric.VmssZonalUpgradeModeParallel),
@@ -420,8 +420,8 @@ func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMaximumParameters(
 	// 				UpgradeTimeout: to.Ptr("00:15:00"),
 	// 			},
 	// 			UpgradeMode: to.Ptr(armservicefabric.UpgradeModeManual),
-	// 			UpgradePauseEndTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-25T22:00:00Z"); return t}()),
-	// 			UpgradePauseStartTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-21T22:00:00Z"); return t}()),
+	// 			UpgradePauseEndTimestampUTC: to.Ptr(time.Date(2021, time.June, 25, 22, 0, 0, 0, time.UTC)),
+	// 			UpgradePauseStartTimestampUTC: to.Ptr(time.Date(2021, time.June, 21, 22, 0, 0, 0, time.UTC)),
 	// 			UpgradeWave: to.Ptr(armservicefabric.ClusterUpgradeCadenceWave1),
 	// 			VMImage: to.Ptr("Windows"),
 	// 			VmssZonalUpgradeMode: to.Ptr(armservicefabric.VmssZonalUpgradeModeParallel),
@@ -432,7 +432,7 @@ func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMaximumParameters(
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterPutOperation_example_min.json
+// Generated from example definition: 2026-03-01-preview/ClusterPutOperation_example_min.json
 func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMinimumParameters() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -586,7 +586,7 @@ func ExampleClustersClient_BeginCreateOrUpdate_putAClusterWithMinimumParameters(
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterDeleteOperation_example.json
+// Generated from example definition: 2026-03-01-preview/ClusterDeleteOperation_example.json
 func ExampleClustersClient_Delete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -608,7 +608,7 @@ func ExampleClustersClient_Delete() {
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterGetOperation_example.json
+// Generated from example definition: 2026-03-01-preview/ClusterGetOperation_example.json
 func ExampleClustersClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -777,7 +777,7 @@ func ExampleClustersClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterListOperation_example.json
+// Generated from example definition: 2026-03-01-preview/ClusterListOperation_example.json
 func ExampleClustersClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1044,7 +1044,7 @@ func ExampleClustersClient_NewListPager() {
 	}
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterListByResourceGroupOperation_example.json
+// Generated from example definition: 2026-03-01-preview/ClusterListByResourceGroupOperation_example.json
 func ExampleClustersClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1311,7 +1311,7 @@ func ExampleClustersClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2023-11-01-preview/ListUpgradableVersionsMinMax_example.json
+// Generated from example definition: 2026-03-01-preview/ListUpgradableVersionsMinMax_example.json
 func ExampleClustersClient_ListUpgradableVersions_getMinimumAndMaximumCodeVersions() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1339,7 +1339,7 @@ func ExampleClustersClient_ListUpgradableVersions_getMinimumAndMaximumCodeVersio
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ListUpgradableVersionsPath_example.json
+// Generated from example definition: 2026-03-01-preview/ListUpgradableVersionsPath_example.json
 func ExampleClustersClient_ListUpgradableVersions_getUpgradePath() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1372,7 +1372,7 @@ func ExampleClustersClient_ListUpgradableVersions_getUpgradePath() {
 	// }
 }
 
-// Generated from example definition: 2023-11-01-preview/ClusterPatchOperation_example.json
+// Generated from example definition: 2026-03-01-preview/ClusterPatchOperation_example.json
 func ExampleClustersClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1425,8 +1425,8 @@ func ExampleClustersClient_BeginUpdate() {
 			},
 			ReliabilityLevel:              to.Ptr(armservicefabric.ReliabilityLevelBronze),
 			UpgradeMode:                   to.Ptr(armservicefabric.UpgradeModeAutomatic),
-			UpgradePauseEndTimestampUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-25T22:00:00Z"); return t }()),
-			UpgradePauseStartTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-21T22:00:00Z"); return t }()),
+			UpgradePauseEndTimestampUTC:   to.Ptr(time.Date(2021, time.June, 25, 22, 0, 0, 0, time.UTC)),
+			UpgradePauseStartTimestampUTC: to.Ptr(time.Date(2021, time.June, 21, 22, 0, 0, 0, time.UTC)),
 			UpgradeWave:                   to.Ptr(armservicefabric.ClusterUpgradeCadence("Wave")),
 		},
 		Tags: map[string]*string{
@@ -1597,8 +1597,8 @@ func ExampleClustersClient_BeginUpdate() {
 	// 				UpgradeTimeout: to.Ptr("01:00:00"),
 	// 			},
 	// 			UpgradeMode: to.Ptr(armservicefabric.UpgradeModeAutomatic),
-	// 			UpgradePauseEndTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-25T22:00:00Z"); return t}()),
-	// 			UpgradePauseStartTimestampUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-21T22:00:00Z"); return t}()),
+	// 			UpgradePauseEndTimestampUTC: to.Ptr(time.Date(2021, time.June, 25, 22, 0, 0, 0, time.UTC)),
+	// 			UpgradePauseStartTimestampUTC: to.Ptr(time.Date(2021, time.June, 21, 22, 0, 0, 0, time.UTC)),
 	// 			UpgradeWave: to.Ptr(armservicefabric.ClusterUpgradeCadenceWave2),
 	// 		},
 	// 		Tags: map[string]*string{

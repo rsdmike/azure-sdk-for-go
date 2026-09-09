@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2025-02-01-preview/DPSCertificateCreateOrUpdate.json
+// Generated from example definition: 2026-08-31/DPSCertificateCreateOrUpdate.json
 func ExampleDpsCertificateClient_CreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -35,25 +35,25 @@ func ExampleDpsCertificateClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceprovisioningservices.DpsCertificateClientCreateOrUpdateResponse{
-	// 	CertificateResponse: &armdeviceprovisioningservices.CertificateResponse{
+	// 	CertificateResponse: armdeviceprovisioningservices.CertificateResponse{
 	// 		Name: to.Ptr("cert"),
 	// 		Type: to.Ptr("Microsoft.Devices/ProvisioningServices/Certificates"),
 	// 		Etag: to.Ptr("AAAAAAExpNs="),
 	// 		ID: to.Ptr("/subscriptions/91d12660-3dec-467a-be2a-213b5544ddc0/resourceGroups/myResourceGroup/providers/Microsoft.Devices/ProvisioningServives/myFirstProvisioningService/certificates/cert"),
 	// 		Properties: &armdeviceprovisioningservices.CertificateProperties{
 	// 			Certificate: []byte("MA=="),
-	// 			Created: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
-	// 			Expiry: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Sat, 31 Dec 2039 23:59:59 GMT"); return t}()),
+	// 			Created: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
+	// 			Expiry: to.Ptr(time.Date(2039, time.December, 31, 23, 59, 59, 0, time.UTC)),
 	// 			IsVerified: to.Ptr(false),
 	// 			Subject: to.Ptr("CN=testdevice1"),
 	// 			Thumbprint: to.Ptr("97388663832D0393C9246CAB4FBA2C8677185A25"),
-	// 			Updated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
+	// 			Updated: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-02-01-preview/DPSDeleteCertificate.json
+// Generated from example definition: 2026-08-31/DPSDeleteCertificate.json
 func ExampleDpsCertificateClient_Delete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -75,7 +75,7 @@ func ExampleDpsCertificateClient_Delete() {
 	// }
 }
 
-// Generated from example definition: 2025-02-01-preview/DPSGenerateVerificationCode.json
+// Generated from example definition: 2026-08-31/DPSGenerateVerificationCode.json
 func ExampleDpsCertificateClient_GenerateVerificationCode() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -94,7 +94,7 @@ func ExampleDpsCertificateClient_GenerateVerificationCode() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceprovisioningservices.DpsCertificateClientGenerateVerificationCodeResponse{
-	// 	VerificationCodeResponse: &armdeviceprovisioningservices.VerificationCodeResponse{
+	// 	VerificationCodeResponse: armdeviceprovisioningservices.VerificationCodeResponse{
 	// 		Name: to.Ptr("cert"),
 	// 		Properties: &armdeviceprovisioningservices.VerificationCodeResponseProperties{
 	// 			Certificate: []byte("MA=="),
@@ -110,7 +110,7 @@ func ExampleDpsCertificateClient_GenerateVerificationCode() {
 	// }
 }
 
-// Generated from example definition: 2025-02-01-preview/DPSGetCertificate.json
+// Generated from example definition: 2026-08-31/DPSGetCertificate.json
 func ExampleDpsCertificateClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -129,25 +129,25 @@ func ExampleDpsCertificateClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceprovisioningservices.DpsCertificateClientGetResponse{
-	// 	CertificateResponse: &armdeviceprovisioningservices.CertificateResponse{
+	// 	CertificateResponse: armdeviceprovisioningservices.CertificateResponse{
 	// 		Name: to.Ptr("cert"),
 	// 		Type: to.Ptr("Microsoft.Devices/ProvisioningServices/Certificates"),
 	// 		Etag: to.Ptr("AAAAAAExpNs="),
 	// 		ID: to.Ptr("/subscriptions/91d12660-3dec-467a-be2a-213b5544ddc0/resourceGroups/myResourceGroup/providers/Microsoft.Devices/IotHubs/andbuc-hub/certificates/cert"),
 	// 		Properties: &armdeviceprovisioningservices.CertificateProperties{
 	// 			Certificate: []byte("MA=="),
-	// 			Created: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
-	// 			Expiry: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Sat, 31 Dec 2039 23:59:59 GMT"); return t}()),
+	// 			Created: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
+	// 			Expiry: to.Ptr(time.Date(2039, time.December, 31, 23, 59, 59, 0, time.UTC)),
 	// 			IsVerified: to.Ptr(false),
 	// 			Subject: to.Ptr("CN=testdevice1"),
 	// 			Thumbprint: to.Ptr("97388663832D0393C9246CAB4FBA2C8677185A25"),
-	// 			Updated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
+	// 			Updated: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-02-01-preview/DPSGetCertificates.json
+// Generated from example definition: 2026-08-31/DPSGetCertificates.json
 func ExampleDpsCertificateClient_List() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -166,7 +166,7 @@ func ExampleDpsCertificateClient_List() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceprovisioningservices.DpsCertificateClientListResponse{
-	// 	CertificateListDescription: &armdeviceprovisioningservices.CertificateListDescription{
+	// 	CertificateListDescription: armdeviceprovisioningservices.CertificateListDescription{
 	// 		Value: []*armdeviceprovisioningservices.CertificateResponse{
 	// 			{
 	// 				Name: to.Ptr("cert"),
@@ -175,12 +175,12 @@ func ExampleDpsCertificateClient_List() {
 	// 				ID: to.Ptr("/subscriptions/91d12660-3dec-467a-be2a-213b5544ddc0/resourceGroups/myResourceGroup/providers/Microsoft.Devices/IotHubs/andbuc-hub/certificates/cert"),
 	// 				Properties: &armdeviceprovisioningservices.CertificateProperties{
 	// 					Certificate: []byte("MA=="),
-	// 					Created: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
-	// 					Expiry: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Sat, 31 Dec 2039 23:59:59 GMT"); return t}()),
+	// 					Created: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
+	// 					Expiry: to.Ptr(time.Date(2039, time.December, 31, 23, 59, 59, 0, time.UTC)),
 	// 					IsVerified: to.Ptr(false),
 	// 					Subject: to.Ptr("CN=testdevice1"),
 	// 					Thumbprint: to.Ptr("97388663832D0393C9246CAB4FBA2C8677185A25"),
-	// 					Updated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
+	// 					Updated: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
 	// 				},
 	// 			},
 	// 		},
@@ -188,7 +188,7 @@ func ExampleDpsCertificateClient_List() {
 	// }
 }
 
-// Generated from example definition: 2025-02-01-preview/DPSVerifyCertificate.json
+// Generated from example definition: 2026-08-31/DPSVerifyCertificate.json
 func ExampleDpsCertificateClient_VerifyCertificate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -209,19 +209,19 @@ func ExampleDpsCertificateClient_VerifyCertificate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceprovisioningservices.DpsCertificateClientVerifyCertificateResponse{
-	// 	CertificateResponse: &armdeviceprovisioningservices.CertificateResponse{
+	// 	CertificateResponse: armdeviceprovisioningservices.CertificateResponse{
 	// 		Name: to.Ptr("cert"),
 	// 		Type: to.Ptr("Microsoft.Devices/ProvisioningServices/Certificates"),
 	// 		Etag: to.Ptr("AAAAAAExpTQ="),
 	// 		ID: to.Ptr("/subscriptions/91d12660-3dec-467a-be2a-213b5544ddc0/resourceGroups/myResourceGroup/providers/Microsoft.Devices/ProvisioningServices/myFirstProvisioningService/certificates/cert"),
 	// 		Properties: &armdeviceprovisioningservices.CertificateProperties{
 	// 			Certificate: []byte("MA=="),
-	// 			Created: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:23:50 GMT"); return t}()),
-	// 			Expiry: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Sat, 31 Dec 2039 23:59:59 GMT"); return t}()),
+	// 			Created: to.Ptr(time.Date(2017, time.October, 12, 19, 23, 50, 0, time.UTC)),
+	// 			Expiry: to.Ptr(time.Date(2039, time.December, 31, 23, 59, 59, 0, time.UTC)),
 	// 			IsVerified: to.Ptr(true),
 	// 			Subject: to.Ptr("CN=andbucdevice1"),
 	// 			Thumbprint: to.Ptr("97388663832D0393C9246CAB4FBA2C8677185A25"),
-	// 			Updated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC1123, "Thu, 12 Oct 2017 19:26:56 GMT"); return t}()),
+	// 			Updated: to.Ptr(time.Date(2017, time.October, 12, 19, 26, 56, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }

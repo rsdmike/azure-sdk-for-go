@@ -1,6 +1,18 @@
 # Release History
 
-## 2.0.0-beta.1 (2026-05-20)
+## 2.1.0 (2026-08-13)
+### Features Added
+
+- New enum type `ServerEndpointSyncSessionWarningType` with values `ServerEndpointSyncSessionWarningTypeBlockedByLargeFile`, `ServerEndpointSyncSessionWarningTypeNoWarning`
+- New function `*CloudEndpointsClient.BeginUpdate(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, cloudEndpointName string, properties CloudEndpointUpdateParameters, options *CloudEndpointsClientBeginUpdateOptions) (*runtime.Poller[CloudEndpointsClientUpdateResponse], error)`
+- New struct `CloudEndpointUpdateParameters`
+- New struct `CloudEndpointUpdateProperties`
+- New field `ChangeEnumerationIntervalDays` in struct `CloudEndpointCreateParametersProperties`
+- New field `ChangeEnumerationIntervalDays` in struct `CloudEndpointProperties`
+- New field `InProgressLargeFilePath`, `InProgressLargeFilePercentComplete`, `InProgressLargeFileSizeBytes`, `IsRemainingFinal`, `RecentItemsPerSecond`, `RecentMegabytesPerSecond`, `RemainingDeleteCount`, `RemainingDirectoryCount`, `RemainingFileCount`, `RemainingLogicalSizeBytes`, `Warning` in struct `ServerEndpointSyncActivityStatus`
+
+
+## 2.0.0 (2026-06-24)
 ### Breaking Changes
 
 - Function `*ServerEndpointsClient.BeginUpdate` parameter(s) have been changed from `(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, options *ServerEndpointsClientBeginUpdateOptions)` to `(ctx context.Context, resourceGroupName string, storageSyncServiceName string, syncGroupName string, serverEndpointName string, parameters ServerEndpointUpdateParameters, options *ServerEndpointsClientBeginUpdateOptions)`

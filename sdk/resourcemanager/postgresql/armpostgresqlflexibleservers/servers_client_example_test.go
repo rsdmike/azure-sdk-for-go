@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2026-01-01-preview/ServersClusterCreate.json
+// Generated from example definition: 2026-04-01-preview/ServersClusterCreate.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewElasticCluster() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -61,11 +61,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewElasticCluster() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateGeoRestoreWithDataEncryptionEnabled.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateGeoRestoreWithDataEncryptionEnabled.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGeographicallyRedundantBackupOfAnExistingServerWithDataEncryptionBasedOnCustomerManagedKey() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -94,7 +94,7 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGe
 				PrimaryKeyURI:                   to.Ptr("https://exampleprimarykeyvault.vault.azure.net/keys/examplekey/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 				PrimaryUserAssignedIdentityID:   to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/exampleprimaryidentity"),
 			},
-			PointInTimeUTC:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t }()),
+			PointInTimeUTC:         to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/examplesourceserver"),
 		},
 	}, nil)
@@ -103,11 +103,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGe
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateGeoRestoreWithDataEncryptionEnabledAutoUpdate.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateGeoRestoreWithDataEncryptionEnabledAutoUpdate.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGeographicallyRedundantBackupOfAnExistingServerWithDataEncryptionBasedOnCustomerManagedKeyWithAutomaticKeyVersionUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -136,7 +136,7 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGe
 				PrimaryKeyURI:                   to.Ptr("https://exampleprimarykeyvault.vault.azure.net/keys/examplekey"),
 				PrimaryUserAssignedIdentityID:   to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/exampleprimaryidentity"),
 			},
-			PointInTimeUTC:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t }()),
+			PointInTimeUTC:         to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/examplesourceserver"),
 		},
 	}, nil)
@@ -145,11 +145,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingARestoreOfAGe
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateInMicrosoftOwnedVirtualNetworkWithZoneRedundantHighAvailability.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateInMicrosoftOwnedVirtualNetworkWithZoneRedundantHighAvailability.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerInMicrosoftOwnedVirtualNetworkWithZoneRedundantHighAvailability() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -198,11 +198,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerInMicrosoftOwnedVi
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateInYourOwnVirtualNetworkWithSameZoneHighAvailability.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateInYourOwnVirtualNetworkWithSameZoneHighAvailability.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerInYourOwnVirtualNetworkWithSameZoneHighAvailability() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -252,11 +252,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerInYourOwnVirtualNe
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreatePointInTimeRestore.json
+// Generated from example definition: 2026-04-01-preview/ServersCreatePointInTimeRestore.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingAPointInTimeRestoreOfABackupOfAnExistingServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -271,7 +271,7 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingAPointInTimeR
 		Location: to.Ptr("eastus"),
 		Properties: &armpostgresqlflexibleservers.ServerProperties{
 			CreateMode:             to.Ptr(armpostgresqlflexibleservers.CreateModePointInTimeRestore),
-			PointInTimeUTC:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t }()),
+			PointInTimeUTC:         to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/examplesourceserver"),
 		},
 	}, nil)
@@ -280,11 +280,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingAPointInTimeR
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateReplica.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateReplica.json
 func ExampleServersClient_BeginCreateOrUpdate_createAReadReplicaOfAnExistingServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -312,7 +312,6 @@ func ExampleServersClient_BeginCreateOrUpdate_createAReadReplicaOfAnExistingServ
 				PrimaryKeyURI:                   to.Ptr("https://exampleprimarykeyvault.vault.azure.net/keys/examplekey/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 				PrimaryUserAssignedIdentityID:   to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/exampleprimaryidentity"),
 			},
-			PointInTimeUTC:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t }()),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/examplesourceserver"),
 		},
 	}, nil)
@@ -321,11 +320,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createAReadReplicaOfAnExistingServ
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateReviveDropped.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateReviveDropped.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingABackupOfAServerThatWasDeletedOrDroppedRecently() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -340,7 +339,7 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingABackupOfASer
 		Location: to.Ptr("eastus"),
 		Properties: &armpostgresqlflexibleservers.ServerProperties{
 			CreateMode:             to.Ptr(armpostgresqlflexibleservers.CreateModeReviveDropped),
-			PointInTimeUTC:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:30:22.123456Z"); return t }()),
+			PointInTimeUTC:         to.Ptr(time.Date(2025, time.June, 1, 18, 30, 22, 123456000, time.UTC)),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/exampledeletedserver"),
 		},
 	}, nil)
@@ -349,11 +348,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerUsingABackupOfASer
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateWithDataEncryptionEnabled.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateWithDataEncryptionEnabled.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithDataEncryptionBasedOnCustomerManagedKey() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -412,11 +411,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithDataEncryption
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateWithDataEncryptionEnabledAutoUpdate.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateWithDataEncryptionEnabledAutoUpdate.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithDataEncryptionBasedOnCustomerManagedKeyWithAutomaticKeyVersionUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -475,11 +474,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithDataEncryption
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersCreateWithMicrosoftEntraEnabledInYourOwnVirtualNetworkWithoutHighAvailability.json
+// Generated from example definition: 2026-04-01-preview/ServersCreateWithMicrosoftEntraEnabledInYourOwnVirtualNetworkWithoutHighAvailability.json
 func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithMicrosoftEntraAuthenticationEnabledInYourOwnVirtualNetworkAndWithoutHighAvailability() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -533,11 +532,11 @@ func ExampleServersClient_BeginCreateOrUpdate_createANewServerWithMicrosoftEntra
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersDelete.json
+// Generated from example definition: 2026-04-01-preview/ServersDelete.json
 func ExampleServersClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -554,11 +553,11 @@ func ExampleServersClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersGet.json
+// Generated from example definition: 2026-04-01-preview/ServersGet.json
 func ExampleServersClient_Get_getInformationAboutAnExistingServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -577,7 +576,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServer() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlflexibleservers.ServersClientGetResponse{
-	// 	Server: &armpostgresqlflexibleservers.Server{
+	// 	Server: armpostgresqlflexibleservers.Server{
 	// 		Name: to.Ptr("exampleserver"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/exampleserver"),
@@ -591,7 +590,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServer() {
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armpostgresqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupEnabled),
 	// 			},
 	// 			DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -635,13 +634,13 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServer() {
 	// 			Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 	// 		},
 	// 		SystemData: &armpostgresqlflexibleservers.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:30:22.123456Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 18, 30, 22, 123456000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersGetWithPrivateEndpoints.json
+// Generated from example definition: 2026-04-01-preview/ServersGetWithPrivateEndpoints.json
 func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsnTIntegratedIntoAVirtualNetworkProvidedByCustomerAndHasPrivateEndpointConnections() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -660,7 +659,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsnTIntegra
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlflexibleservers.ServersClientGetResponse{
-	// 	Server: &armpostgresqlflexibleservers.Server{
+	// 	Server: armpostgresqlflexibleservers.Server{
 	// 		Name: to.Ptr("exampleserver"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/exampleserver"),
@@ -674,7 +673,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsnTIntegra
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armpostgresqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupDisabled),
 	// 			},
 	// 			FullyQualifiedDomainName: to.Ptr("exampleserver.postgres.database.azure.com"),
@@ -730,7 +729,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsnTIntegra
 	// }
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersGetWithVnet.json
+// Generated from example definition: 2026-04-01-preview/ServersGetWithVnet.json
 func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsIntegratedIntoAVirtualNetworkProvidedByCustomer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -749,7 +748,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsIntegrate
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlflexibleservers.ServersClientGetResponse{
-	// 	Server: &armpostgresqlflexibleservers.Server{
+	// 	Server: armpostgresqlflexibleservers.Server{
 	// 		Name: to.Ptr("exampleserver"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers/exampleserver"),
@@ -763,7 +762,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsIntegrate
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armpostgresqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupEnabled),
 	// 			},
 	// 			DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -808,7 +807,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsIntegrate
 	// 			Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 	// 		},
 	// 		SystemData: &armpostgresqlflexibleservers.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:30:22.123456Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 18, 30, 22, 123456000, time.UTC)),
 	// 		},
 	// 		Tags: map[string]*string{
 	// 			"VnetServer": to.Ptr("1"),
@@ -817,7 +816,7 @@ func ExampleServersClient_Get_getInformationAboutAnExistingServerThatIsIntegrate
 	// }
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersListByResourceGroup.json
+// Generated from example definition: 2026-04-01-preview/ServersListByResourceGroup.json
 func ExampleServersClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -841,7 +840,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// If the HTTP response code is 200 as defined in example definition, your page structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 		// page = armpostgresqlflexibleservers.ServersClientListByResourceGroupResponse{
 		// 	ServerList: armpostgresqlflexibleservers.ServerList{
-		// 		NextLink: to.Ptr("https://management.azure.com/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers?api-version=2025-06-01-preview&$skiptoken=skiptoken"),
+		// 		NextLink: to.Ptr("https://management.azure.com/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.DBforPostgreSQL/flexibleServers?api-version=2026-04-01-preview&$skiptoken=skiptoken"),
 		// 		Value: []*armpostgresqlflexibleservers.Server{
 		// 			{
 		// 				Name: to.Ptr("exampleserver1"),
@@ -858,7 +857,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					AvailabilityZone: to.Ptr("1"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupEnabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -903,7 +902,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 18, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 					"VnetServer": to.Ptr("1"),
@@ -935,7 +934,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					AvailabilityZone: to.Ptr("1"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T19:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 19, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupDisabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -982,7 +981,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T19:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 19, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -993,7 +992,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersListBySubscription.json
+// Generated from example definition: 2026-04-01-preview/ServersListBySubscription.json
 func ExampleServersClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1017,7 +1016,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// If the HTTP response code is 200 as defined in example definition, your page structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 		// page = armpostgresqlflexibleservers.ServersClientListBySubscriptionResponse{
 		// 	ServerList: armpostgresqlflexibleservers.ServerList{
-		// 		NextLink: to.Ptr("https://management.azure.com/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/providers/Microsoft.DBforPostgreSQL/flexibleServers?api-version=2025-06-01-preview&$skiptoken=skiptoken"),
+		// 		NextLink: to.Ptr("https://management.azure.com/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/providers/Microsoft.DBforPostgreSQL/flexibleServers?api-version=2026-04-01-preview&$skiptoken=skiptoken"),
 		// 		Value: []*armpostgresqlflexibleservers.Server{
 		// 			{
 		// 				Name: to.Ptr("exampleserver1"),
@@ -1034,7 +1033,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					AvailabilityZone: to.Ptr("1"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 18, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupEnabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -1079,7 +1078,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T18:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 18, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 					"VnetServer": to.Ptr("1"),
@@ -1100,7 +1099,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					AvailabilityZone: to.Ptr("2"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T19:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 19, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupEnabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -1145,7 +1144,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T19:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 19, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -1176,7 +1175,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					AvailabilityZone: to.Ptr("1"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T20:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 20, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupDisabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -1223,7 +1222,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T20:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 20, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -1242,7 +1241,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					AvailabilityZone: to.Ptr("2"),
 		// 					Backup: &armpostgresqlflexibleservers.Backup{
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T21:35:22.123456Z"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2025, time.June, 1, 21, 35, 22, 123456000, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armpostgresqlflexibleservers.GeographicallyRedundantBackupDisabled),
 		// 					},
 		// 					DataEncryption: &armpostgresqlflexibleservers.DataEncryption{
@@ -1286,7 +1285,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 		// 					Tier: to.Ptr(armpostgresqlflexibleservers.SKUTierGeneralPurpose),
 		// 				},
 		// 				SystemData: &armpostgresqlflexibleservers.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-01T21:30:22.123456Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 1, 21, 30, 22, 123456000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -1297,7 +1296,7 @@ func ExampleServersClient_NewListBySubscriptionPager() {
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersMigrateNetworkMode.json
+// Generated from example definition: 2026-04-01-preview/ServersMigrateNetworkMode.json
 func ExampleServersClient_BeginMigrateNetworkMode() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1314,13 +1313,13 @@ func ExampleServersClient_BeginMigrateNetworkMode() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlflexibleservers.ServersClientMigrateNetworkModeResponse{
-	// 	MigrateNetworkStatus: &armpostgresqlflexibleservers.MigrateNetworkStatus{
+	// 	MigrateNetworkStatus: armpostgresqlflexibleservers.MigrateNetworkStatus{
 	// 		SubscriptionID: to.Ptr("ffffffff-ffff-ffff-ffff-ffffffffffff"),
 	// 		ResourceGroupName: to.Ptr("exampleresourcegroup"),
 	// 		ServerName: to.Ptr("exampleserver"),
@@ -1328,7 +1327,7 @@ func ExampleServersClient_BeginMigrateNetworkMode() {
 	// }
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersRestart.json
+// Generated from example definition: 2026-04-01-preview/ServersRestart.json
 func ExampleServersClient_BeginRestart_restartPostgreSqlDatabaseEngineInAServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1345,11 +1344,11 @@ func ExampleServersClient_BeginRestart_restartPostgreSqlDatabaseEngineInAServer(
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersRestartWithFailover.json
+// Generated from example definition: 2026-04-01-preview/ServersRestartWithFailover.json
 func ExampleServersClient_BeginRestart_restartPostgreSqlDatabaseEngineInAServerWithAForcedFailoverToStandbyServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1370,11 +1369,11 @@ func ExampleServersClient_BeginRestart_restartPostgreSqlDatabaseEngineInAServerW
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersStart.json
+// Generated from example definition: 2026-04-01-preview/ServersStart.json
 func ExampleServersClient_BeginStart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1391,11 +1390,44 @@ func ExampleServersClient_BeginStart() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersStop.json
+// Generated from example definition: 2026-04-01-preview/ServersStartMajorVersionUpgradePrecheck.json
+func ExampleServersClient_BeginStartMajorVersionUpgradePrecheck() {
+	cred, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		log.Fatalf("failed to obtain a credential: %v", err)
+	}
+	ctx := context.Background()
+	clientFactory, err := armpostgresqlflexibleservers.NewClientFactory("ffffffff-ffff-ffff-ffff-ffffffffffff", cred, nil)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	poller, err := clientFactory.NewServersClient().BeginStartMajorVersionUpgradePrecheck(ctx, "exampleresourcegroup", "exampleserver", armpostgresqlflexibleservers.StartMajorVersionUpgradePrecheckRequest{
+		TargetVersion: to.Ptr(armpostgresqlflexibleservers.PostgresMajorVersionEighteen),
+	}, nil)
+	if err != nil {
+		log.Fatalf("failed to finish the request: %v", err)
+	}
+	res, err := poller.PollUntilDone(ctx, nil)
+	if err != nil {
+		log.Fatalf("failed to poll the result: %v", err)
+	}
+	// You could use response here. We use blank identifier for just demo purposes.
+	_ = res
+	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
+	// res = armpostgresqlflexibleservers.ServersClientStartMajorVersionUpgradePrecheckResponse{
+	// 	StartMajorVersionUpgradePrecheckResponse: armpostgresqlflexibleservers.StartMajorVersionUpgradePrecheckResponse{
+	// 		Name: to.Ptr("pppppppp-pppp-pppp-pppp-pppppppppppp"),
+	// 		CreateTime: to.Ptr(time.Date(2026, time.April, 15, 10, 0, 0, 0, time.UTC)),
+	// 		Status: to.Ptr(armpostgresqlflexibleservers.MajorVersionUpgradePrecheckStatusSucceeded),
+	// 	},
+	// }
+}
+
+// Generated from example definition: 2026-04-01-preview/ServersStop.json
 func ExampleServersClient_BeginStop() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1412,11 +1444,11 @@ func ExampleServersClient_BeginStop() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersPromoteReplicaAsForcedStandaloneServer.json
+// Generated from example definition: 2026-04-01-preview/ServersPromoteReplicaAsForcedStandaloneServer.json
 func ExampleServersClient_BeginUpdate_promoteAReadReplicaToAStandaloneServerWithForcedDataSynchronizationMeaningThatItDoesnTWaitForDataInTheReadReplicaToBeSynchronizedWithItsSourceServerBeforeItInitiatesThePromotionToAStandaloneServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1440,11 +1472,11 @@ func ExampleServersClient_BeginUpdate_promoteAReadReplicaToAStandaloneServerWith
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersPromoteReplicaAsForcedSwitchover.json
+// Generated from example definition: 2026-04-01-preview/ServersPromoteReplicaAsForcedSwitchover.json
 func ExampleServersClient_BeginUpdate_switchOverAReadReplicaToPrimaryServerWithForcedDataSynchronizationMeaningThatItDoesnTWaitForDataInTheReadReplicaToBeSynchronizedWithItsSourceServerBeforeItInitiatesTheSwitchingOfRolesBetweenTheReadReplicaAndThePrimaryServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1468,11 +1500,11 @@ func ExampleServersClient_BeginUpdate_switchOverAReadReplicaToPrimaryServerWithF
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersPromoteReplicaAsPlannedStandaloneServer.json
+// Generated from example definition: 2026-04-01-preview/ServersPromoteReplicaAsPlannedStandaloneServer.json
 func ExampleServersClient_BeginUpdate_promoteAReadReplicaToAStandaloneServerWithPlannedDataSynchronizationMeaningThatItWaitsForDataInTheReadReplicaToBeFullySynchronizedWithItsSourceServerBeforeItInitiatesThePromotionToAStandaloneServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1496,11 +1528,11 @@ func ExampleServersClient_BeginUpdate_promoteAReadReplicaToAStandaloneServerWith
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersPromoteReplicaAsPlannedSwitchover.json
+// Generated from example definition: 2026-04-01-preview/ServersPromoteReplicaAsPlannedSwitchover.json
 func ExampleServersClient_BeginUpdate_switchOverAReadReplicaToPrimaryServerWithPlannedDataSynchronizationMeaningThatItWaitsForDataInTheReadReplicaToBeFullySynchronizedWithItsSourceServerBeforeItInitiatesTheSwitchingOfRolesBetweenTheReadReplicaAndThePrimaryServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1524,11 +1556,11 @@ func ExampleServersClient_BeginUpdate_switchOverAReadReplicaToPrimaryServerWithP
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdate.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdate.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1562,11 +1594,11 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServer() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdateWithCustomMaintenanceWindow.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdateWithCustomMaintenanceWindow.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServerWithCustomMaintenanceWindow() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1593,11 +1625,11 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServerWithCustomMaintenanc
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdateWithDataEncryptionEnabled.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdateWithDataEncryptionEnabled.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServerWithDataEncryptionBasedOnCustomerManagedKey() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1640,11 +1672,11 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServerWithDataEncryptionBa
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdateWithDataEncryptionEnabledAutoUpdate.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdateWithDataEncryptionEnabledAutoUpdate.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServerWithDataEncryptionBasedOnCustomerManagedKeyWithAutomaticKeyVersionUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1687,11 +1719,11 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServerWithDataEncryptionBa
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdateWithMajorVersionUpgrade.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdateWithMajorVersionUpgrade.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServerToUpgradeTheMajorVersionOfPostgreSqlDatabaseEngine() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1713,11 +1745,11 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServerToUpgradeTheMajorVer
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-01-preview/ServersUpdateWithMicrosoftEntraEnabled.json
+// Generated from example definition: 2026-04-01-preview/ServersUpdateWithMicrosoftEntraEnabled.json
 func ExampleServersClient_BeginUpdate_updateAnExistingServerWithMicrosoftEntraAuthenticationEnabled() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1756,6 +1788,6 @@ func ExampleServersClient_BeginUpdate_updateAnExistingServerWithMicrosoftEntraAu
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }

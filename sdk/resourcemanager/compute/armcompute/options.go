@@ -788,6 +788,46 @@ type ImagesClientListOptions struct {
 	// placeholder for future optional parameters
 }
 
+// InterconnectBlocksClientBeginCreateOrUpdateOptions contains the optional parameters for the InterconnectBlocksClient.BeginCreateOrUpdate
+// method.
+type InterconnectBlocksClientBeginCreateOrUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// InterconnectBlocksClientBeginDeleteOptions contains the optional parameters for the InterconnectBlocksClient.BeginDelete
+// method.
+type InterconnectBlocksClientBeginDeleteOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// InterconnectBlocksClientBeginUpdateOptions contains the optional parameters for the InterconnectBlocksClient.BeginUpdate
+// method.
+type InterconnectBlocksClientBeginUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// InterconnectBlocksClientGetOptions contains the optional parameters for the InterconnectBlocksClient.Get method.
+type InterconnectBlocksClientGetOptions struct {
+	// The expand expression to apply on the operation. 'instanceView' retrieves a snapshot of the runtime properties of the Interconnect
+	// Block that is managed by the platform and can change outside of control plane operations.
+	Expand *InterconnectBlockExpandTypes
+}
+
+// InterconnectBlocksClientListByResourceGroupOptions contains the optional parameters for the InterconnectBlocksClient.NewListByResourceGroupPager
+// method.
+type InterconnectBlocksClientListByResourceGroupOptions struct {
+	// placeholder for future optional parameters
+}
+
+// InterconnectBlocksClientListBySubscriptionOptions contains the optional parameters for the InterconnectBlocksClient.NewListBySubscriptionPager
+// method.
+type InterconnectBlocksClientListBySubscriptionOptions struct {
+	// placeholder for future optional parameters
+}
+
 // LogAnalyticsClientBeginExportRequestRateByIntervalOptions contains the optional parameters for the LogAnalyticsClient.BeginExportRequestRateByInterval
 // method.
 type LogAnalyticsClientBeginExportRequestRateByIntervalOptions struct {
@@ -983,6 +1023,20 @@ type SharedGalleryImagesClientListOptions struct {
 	SharedTo *SharedToValues
 }
 
+// SharedGalleryInvitesClientBeginGallerySharingAcceptOptions contains the optional parameters for the SharedGalleryInvitesClient.BeginGallerySharingAccept
+// method.
+type SharedGalleryInvitesClientBeginGallerySharingAcceptOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// SharedGalleryInvitesClientBeginGallerySharingRejectOptions contains the optional parameters for the SharedGalleryInvitesClient.BeginGallerySharingReject
+// method.
+type SharedGalleryInvitesClientBeginGallerySharingRejectOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
 // SnapshotsClientBeginCreateOrUpdateOptions contains the optional parameters for the SnapshotsClient.BeginCreateOrUpdate
 // method.
 type SnapshotsClientBeginCreateOrUpdateOptions struct {
@@ -1004,6 +1058,20 @@ type SnapshotsClientBeginGrantAccessOptions struct {
 
 // SnapshotsClientBeginRevokeAccessOptions contains the optional parameters for the SnapshotsClient.BeginRevokeAccess method.
 type SnapshotsClientBeginRevokeAccessOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// SnapshotsClientBeginUpdateImmutabilityPolicyLockOptions contains the optional parameters for the SnapshotsClient.BeginUpdateImmutabilityPolicyLock
+// method.
+type SnapshotsClientBeginUpdateImmutabilityPolicyLockOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// SnapshotsClientBeginUpdateImmutabilityPolicyOptions contains the optional parameters for the SnapshotsClient.BeginUpdateImmutabilityPolicy
+// method.
+type SnapshotsClientBeginUpdateImmutabilityPolicyOptions struct {
 	// Resumes the long-running operation from the provided token.
 	ResumeToken string
 }
@@ -1036,9 +1104,58 @@ type SoftDeletedResourceClientListByArtifactNameOptions struct {
 	// placeholder for future optional parameters
 }
 
+// TenantLevelSharedGalleryInvitesClientBeginTenantLevelGallerySharingAcceptOptions contains the optional parameters for the
+// TenantLevelSharedGalleryInvitesClient.BeginTenantLevelGallerySharingAccept method.
+type TenantLevelSharedGalleryInvitesClientBeginTenantLevelGallerySharingAcceptOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// TenantLevelSharedGalleryInvitesClientBeginTenantLevelGallerySharingRejectOptions contains the optional parameters for the
+// TenantLevelSharedGalleryInvitesClient.BeginTenantLevelGallerySharingReject method.
+type TenantLevelSharedGalleryInvitesClientBeginTenantLevelGallerySharingRejectOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
 // UsageClientListOptions contains the optional parameters for the UsageClient.NewListPager method.
 type UsageClientListOptions struct {
 	// placeholder for future optional parameters
+}
+
+// VirtualMachineDiagnosticRunCommandsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachineDiagnosticRunCommandsClient.BeginCreateOrUpdate
+// method.
+type VirtualMachineDiagnosticRunCommandsClientBeginCreateOrUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineDiagnosticRunCommandsClientBeginDeleteOptions contains the optional parameters for the VirtualMachineDiagnosticRunCommandsClient.BeginDelete
+// method.
+type VirtualMachineDiagnosticRunCommandsClientBeginDeleteOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineDiagnosticRunCommandsClientBeginUpdateOptions contains the optional parameters for the VirtualMachineDiagnosticRunCommandsClient.BeginUpdate
+// method.
+type VirtualMachineDiagnosticRunCommandsClientBeginUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineDiagnosticRunCommandsClientDiagnosticListByVirtualMachineOptions contains the optional parameters for the
+// VirtualMachineDiagnosticRunCommandsClient.NewDiagnosticListByVirtualMachinePager method.
+type VirtualMachineDiagnosticRunCommandsClientDiagnosticListByVirtualMachineOptions struct {
+	// The expand expression to apply on the operation.
+	Expand *string
+}
+
+// VirtualMachineDiagnosticRunCommandsClientGetByVirtualMachineOptions contains the optional parameters for the VirtualMachineDiagnosticRunCommandsClient.GetByVirtualMachine
+// method.
+type VirtualMachineDiagnosticRunCommandsClientGetByVirtualMachineOptions struct {
+	// The expand expression to apply on the operation.
+	Expand *string
 }
 
 // VirtualMachineExtensionImagesClientGetOptions contains the optional parameters for the VirtualMachineExtensionImagesClient.Get
@@ -1056,6 +1173,10 @@ type VirtualMachineExtensionImagesClientListTypesOptions struct {
 // VirtualMachineExtensionImagesClientListVersionsOptions contains the optional parameters for the VirtualMachineExtensionImagesClient.ListVersions
 // method.
 type VirtualMachineExtensionImagesClientListVersionsOptions struct {
+	// Expand the response to include additional read-only metadata. Allowed values: `properties` — returns extended metadata
+	// (`releaseCategory`, `urgencyLevel`, `runProfile`).
+	Expand *ListVersionsExpandOptions
+
 	// The filter to apply on the operation.
 	Filter  *string
 	Orderby *string
@@ -1301,6 +1422,41 @@ type VirtualMachineScaleSetRollingUpgradesClientBeginStartOSUpgradeOptions struc
 // method.
 type VirtualMachineScaleSetRollingUpgradesClientGetLatestOptions struct {
 	// placeholder for future optional parameters
+}
+
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginCreateOrUpdateOptions contains the optional parameters for the
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClient.BeginCreateOrUpdate method.
+type VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginCreateOrUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginDeleteOptions contains the optional parameters for the VirtualMachineScaleSetVMDiagnosticRunCommandsClient.BeginDelete
+// method.
+type VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginDeleteOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginUpdateOptions contains the optional parameters for the VirtualMachineScaleSetVMDiagnosticRunCommandsClient.BeginUpdate
+// method.
+type VirtualMachineScaleSetVMDiagnosticRunCommandsClientBeginUpdateOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClientDiagnosticListOptions contains the optional parameters for the VirtualMachineScaleSetVMDiagnosticRunCommandsClient.NewDiagnosticListPager
+// method.
+type VirtualMachineScaleSetVMDiagnosticRunCommandsClientDiagnosticListOptions struct {
+	// The expand expression to apply on the operation.
+	Expand *string
+}
+
+// VirtualMachineScaleSetVMDiagnosticRunCommandsClientGetOptions contains the optional parameters for the VirtualMachineScaleSetVMDiagnosticRunCommandsClient.Get
+// method.
+type VirtualMachineScaleSetVMDiagnosticRunCommandsClientGetOptions struct {
+	// The expand expression to apply on the operation.
+	Expand *string
 }
 
 // VirtualMachineScaleSetVMExtensionsClientBeginCreateOrUpdateOptions contains the optional parameters for the VirtualMachineScaleSetVMExtensionsClient.BeginCreateOrUpdate
@@ -1579,6 +1735,13 @@ type VirtualMachineScaleSetsClientBeginDeleteOptions struct {
 	// Optional parameter to force delete a VM scale set. (Feature in Preview)
 	ForceDeletion *bool
 
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// VirtualMachineScaleSetsClientBeginMigrateVMAvailabilityZoneOptions contains the optional parameters for the VirtualMachineScaleSetsClient.BeginMigrateVMAvailabilityZone
+// method.
+type VirtualMachineScaleSetsClientBeginMigrateVMAvailabilityZoneOptions struct {
 	// Resumes the long-running operation from the provided token.
 	ResumeToken string
 }

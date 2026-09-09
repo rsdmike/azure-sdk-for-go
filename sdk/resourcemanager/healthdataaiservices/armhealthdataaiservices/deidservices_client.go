@@ -18,6 +18,8 @@ import (
 
 // DeidServicesClient contains the methods for the DeidServices group.
 // Don't use this type directly, use NewDeidServicesClient() instead.
+//
+// Generated from API version 2024-09-20
 type DeidServicesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DeidServicesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDeidServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DeidServicesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewDeidServicesClient(subscriptionID string, credential azcore.TokenCredent
 
 // BeginCreate - Create a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deidServiceName - The name of the deid service
 //   - resource - Resource create parameters.
@@ -67,8 +70,6 @@ func (client *DeidServicesClient) BeginCreate(ctx context.Context, resourceGroup
 
 // Create - Create a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 func (client *DeidServicesClient) create(ctx context.Context, resourceGroupName string, deidServiceName string, resource DeidService, options *DeidServicesClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DeidServicesClient.BeginCreate"
@@ -84,8 +85,7 @@ func (client *DeidServicesClient) create(ctx context.Context, resourceGroupName 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -94,7 +94,7 @@ func (client *DeidServicesClient) create(ctx context.Context, resourceGroupName 
 func (client *DeidServicesClient) createCreateRequest(ctx context.Context, resourceGroupName string, deidServiceName string, resource DeidService, _ *DeidServicesClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices/{deidServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -110,8 +110,8 @@ func (client *DeidServicesClient) createCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240920)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -122,8 +122,6 @@ func (client *DeidServicesClient) createCreateRequest(ctx context.Context, resou
 
 // BeginDelete - Delete a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deidServiceName - The name of the deid service
 //   - options - DeidServicesClientBeginDeleteOptions contains the optional parameters for the DeidServicesClient.BeginDelete
@@ -147,8 +145,6 @@ func (client *DeidServicesClient) BeginDelete(ctx context.Context, resourceGroup
 
 // Delete - Delete a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 func (client *DeidServicesClient) deleteOperation(ctx context.Context, resourceGroupName string, deidServiceName string, options *DeidServicesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DeidServicesClient.BeginDelete"
@@ -164,8 +160,7 @@ func (client *DeidServicesClient) deleteOperation(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -174,7 +169,7 @@ func (client *DeidServicesClient) deleteOperation(ctx context.Context, resourceG
 func (client *DeidServicesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, deidServiceName string, _ *DeidServicesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices/{deidServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -190,15 +185,13 @@ func (client *DeidServicesClient) deleteCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240920)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deidServiceName - The name of the deid service
 //   - options - DeidServicesClientGetOptions contains the optional parameters for the DeidServicesClient.Get method.
@@ -216,19 +209,14 @@ func (client *DeidServicesClient) Get(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return DeidServicesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DeidServicesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DeidServicesClient) getCreateRequest(ctx context.Context, resourceGroupName string, deidServiceName string, _ *DeidServicesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices/{deidServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -244,15 +232,18 @@ func (client *DeidServicesClient) getCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240920)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DeidServicesClient) getHandleResponse(resp *http.Response) (DeidServicesClientGetResponse, error) {
+func (client *DeidServicesClient) getHandleResponse(resp *http.Response, successCodes ...int) (DeidServicesClientGetResponse, error) {
 	result := DeidServicesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeidService); err != nil {
 		return DeidServicesClientGetResponse{}, err
 	}
@@ -260,8 +251,6 @@ func (client *DeidServicesClient) getHandleResponse(resp *http.Response) (DeidSe
 }
 
 // NewListByResourceGroupPager - List DeidService resources by resource group
-//
-// Generated from API version 2024-09-20
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DeidServicesClientListByResourceGroupOptions contains the optional parameters for the DeidServicesClient.NewListByResourceGroupPager
 //     method.
@@ -276,43 +265,57 @@ func (client *DeidServicesClient) NewListByResourceGroupPager(resourceGroupName 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return DeidServicesClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DeidServicesClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *DeidServicesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *DeidServicesClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DeidServicesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *DeidServicesClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240920)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *DeidServicesClient) listByResourceGroupHandleResponse(resp *http.Response) (DeidServicesClientListByResourceGroupResponse, error) {
+func (client *DeidServicesClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (DeidServicesClientListByResourceGroupResponse, error) {
 	result := DeidServicesClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeidServiceListResult); err != nil {
 		return DeidServicesClientListByResourceGroupResponse{}, err
 	}
@@ -320,8 +323,6 @@ func (client *DeidServicesClient) listByResourceGroupHandleResponse(resp *http.R
 }
 
 // NewListBySubscriptionPager - List DeidService resources by subscription ID
-//
-// Generated from API version 2024-09-20
 //   - options - DeidServicesClientListBySubscriptionOptions contains the optional parameters for the DeidServicesClient.NewListBySubscriptionPager
 //     method.
 func (client *DeidServicesClient) NewListBySubscriptionPager(options *DeidServicesClientListBySubscriptionOptions) *runtime.Pager[DeidServicesClientListBySubscriptionResponse] {
@@ -335,39 +336,53 @@ func (client *DeidServicesClient) NewListBySubscriptionPager(options *DeidServic
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DeidServicesClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DeidServicesClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *DeidServicesClient) listBySubscriptionCreateRequest(ctx context.Context, _ *DeidServicesClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.HealthDataAIServices/deidServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DeidServicesClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *DeidServicesClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.HealthDataAIServices/deidServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240920)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *DeidServicesClient) listBySubscriptionHandleResponse(resp *http.Response) (DeidServicesClientListBySubscriptionResponse, error) {
+func (client *DeidServicesClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (DeidServicesClientListBySubscriptionResponse, error) {
 	result := DeidServicesClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeidServiceListResult); err != nil {
 		return DeidServicesClientListBySubscriptionResponse{}, err
 	}
@@ -376,8 +391,6 @@ func (client *DeidServicesClient) listBySubscriptionHandleResponse(resp *http.Re
 
 // BeginUpdate - Update a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deidServiceName - The name of the deid service
 //   - properties - The resource properties to be updated.
@@ -402,8 +415,6 @@ func (client *DeidServicesClient) BeginUpdate(ctx context.Context, resourceGroup
 
 // Update - Update a DeidService
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-20
 func (client *DeidServicesClient) update(ctx context.Context, resourceGroupName string, deidServiceName string, properties DeidUpdate, options *DeidServicesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DeidServicesClient.BeginUpdate"
@@ -419,8 +430,7 @@ func (client *DeidServicesClient) update(ctx context.Context, resourceGroupName 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -429,7 +439,7 @@ func (client *DeidServicesClient) update(ctx context.Context, resourceGroupName 
 func (client *DeidServicesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, deidServiceName string, properties DeidUpdate, _ *DeidServicesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HealthDataAIServices/deidServices/{deidServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -445,8 +455,8 @@ func (client *DeidServicesClient) updateCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-20")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240920)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {

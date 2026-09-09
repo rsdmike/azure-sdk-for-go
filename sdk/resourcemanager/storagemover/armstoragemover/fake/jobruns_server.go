@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // JobRunsServer is a fake server for instances of the armstoragemover.JobRunsClient type.
@@ -58,9 +59,7 @@ func (j *JobRunsServerTransport) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (j *JobRunsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (j *JobRunsServerTransport) dispatchToMethodFake(req *http.Request, method 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (j *JobRunsServerTransport) dispatchGet(req *http.Request) (*http.Response,
 	if j.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.StorageMover/storageMovers/(?P<storageMoverName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/projects/(?P<projectName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobDefinitions/(?P<jobDefinitionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobRuns/(?P<jobRunName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.StorageMover/storageMovers/(?P<storageMoverName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/projects/(?P<projectName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobDefinitions/(?P<jobDefinitionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobRuns/(?P<jobRunName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -127,7 +123,7 @@ func (j *JobRunsServerTransport) dispatchGet(req *http.Request) (*http.Response,
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).JobRun, req)
@@ -143,7 +139,7 @@ func (j *JobRunsServerTransport) dispatchNewListPager(req *http.Request) (*http.
 	}
 	newListPager := j.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.StorageMover/storageMovers/(?P<storageMoverName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/projects/(?P<projectName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobDefinitions/(?P<jobDefinitionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobRuns`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.StorageMover/storageMovers/(?P<storageMoverName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/projects/(?P<projectName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobDefinitions/(?P<jobDefinitionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobRuns`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -176,7 +172,7 @@ func (j *JobRunsServerTransport) dispatchNewListPager(req *http.Request) (*http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		j.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

@@ -58,6 +58,26 @@ type CapabilityTypesClientListOptions struct {
 	ContinuationToken *string
 }
 
+// ConnectionsClientCreateOrUpdateOptions contains the optional parameters for the ConnectionsClient.CreateOrUpdate method.
+type ConnectionsClientCreateOrUpdateOptions struct {
+	// placeholder for future optional parameters
+}
+
+// ConnectionsClientDeleteOptions contains the optional parameters for the ConnectionsClient.Delete method.
+type ConnectionsClientDeleteOptions struct {
+	// placeholder for future optional parameters
+}
+
+// ConnectionsClientGetOptions contains the optional parameters for the ConnectionsClient.Get method.
+type ConnectionsClientGetOptions struct {
+	// placeholder for future optional parameters
+}
+
+// ConnectionsClientListAllOptions contains the optional parameters for the ConnectionsClient.NewListAllPager method.
+type ConnectionsClientListAllOptions struct {
+	// placeholder for future optional parameters
+}
+
 // DiscoveredResourcesClientGetOptions contains the optional parameters for the DiscoveredResourcesClient.Get method.
 type DiscoveredResourcesClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -226,6 +246,13 @@ type ScenarioConfigurationsClientBeginDeleteOptions struct {
 	ResumeToken string
 }
 
+// ScenarioConfigurationsClientBeginExecuteOptions contains the optional parameters for the ScenarioConfigurationsClient.BeginExecute
+// method.
+type ScenarioConfigurationsClientBeginExecuteOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
 // ScenarioConfigurationsClientBeginFixResourcePermissionsOptions contains the optional parameters for the ScenarioConfigurationsClient.BeginFixResourcePermissions
 // method.
 type ScenarioConfigurationsClientBeginFixResourcePermissionsOptions struct {
@@ -242,12 +269,6 @@ type ScenarioConfigurationsClientBeginValidateOptions struct {
 	ResumeToken string
 }
 
-// ScenarioConfigurationsClientExecuteOptions contains the optional parameters for the ScenarioConfigurationsClient.Execute
-// method.
-type ScenarioConfigurationsClientExecuteOptions struct {
-	// placeholder for future optional parameters
-}
-
 // ScenarioConfigurationsClientGetOptions contains the optional parameters for the ScenarioConfigurationsClient.Get method.
 type ScenarioConfigurationsClientGetOptions struct {
 	// placeholder for future optional parameters
@@ -259,9 +280,10 @@ type ScenarioConfigurationsClientListAllOptions struct {
 	// placeholder for future optional parameters
 }
 
-// ScenarioRunsClientCancelOptions contains the optional parameters for the ScenarioRunsClient.Cancel method.
-type ScenarioRunsClientCancelOptions struct {
-	// placeholder for future optional parameters
+// ScenarioRunsClientBeginCancelOptions contains the optional parameters for the ScenarioRunsClient.BeginCancel method.
+type ScenarioRunsClientBeginCancelOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
 }
 
 // ScenarioRunsClientGetOptions contains the optional parameters for the ScenarioRunsClient.Get method.
@@ -339,9 +361,14 @@ type WorkspacesClientBeginDeleteOptions struct {
 	ResumeToken string
 }
 
-// WorkspacesClientBeginRefreshRecommendationsOptions contains the optional parameters for the WorkspacesClient.BeginRefreshRecommendations
-// method.
-type WorkspacesClientBeginRefreshRecommendationsOptions struct {
+// WorkspacesClientBeginDiscoverOptions contains the optional parameters for the WorkspacesClient.BeginDiscover method.
+type WorkspacesClientBeginDiscoverOptions struct {
+	// Resumes the long-running operation from the provided token.
+	ResumeToken string
+}
+
+// WorkspacesClientBeginEvaluateOptions contains the optional parameters for the WorkspacesClient.BeginEvaluate method.
+type WorkspacesClientBeginEvaluateOptions struct {
 	// Resumes the long-running operation from the provided token.
 	ResumeToken string
 }

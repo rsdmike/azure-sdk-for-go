@@ -37,13 +37,13 @@ func ExampleSharedPrivateLinkResourcesClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatabasewatcher.SharedPrivateLinkResourcesClientCreateResponse{
-	// 	SharedPrivateLinkResource: &armdatabasewatcher.SharedPrivateLinkResource{
+	// 	SharedPrivateLinkResource: armdatabasewatcher.SharedPrivateLinkResource{
 	// 		Properties: &armdatabasewatcher.SharedPrivateLinkResourceProperties{
 	// 			PrivateLinkResourceID: to.Ptr("/subscriptions/49e0fbd3-75e8-44e7-96fd-5b64d9ad818d/resourceGroups/apiTest-ddat4p/providers/Microsoft.KeyVault/vaults/kvmo3ej9ih"),
 	// 			GroupID: to.Ptr("vault"),
@@ -58,10 +58,10 @@ func ExampleSharedPrivateLinkResourcesClient_BeginCreate() {
 	// 		SystemData: &armdatabasewatcher.SystemData{
 	// 			CreatedBy: to.Ptr("enbpvlpqbwd"),
 	// 			CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("mxp"),
 	// 			LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -84,7 +84,7 @@ func ExampleSharedPrivateLinkResourcesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -107,7 +107,7 @@ func ExampleSharedPrivateLinkResourcesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatabasewatcher.SharedPrivateLinkResourcesClientGetResponse{
-	// 	SharedPrivateLinkResource: &armdatabasewatcher.SharedPrivateLinkResource{
+	// 	SharedPrivateLinkResource: armdatabasewatcher.SharedPrivateLinkResource{
 	// 		Properties: &armdatabasewatcher.SharedPrivateLinkResourceProperties{
 	// 			PrivateLinkResourceID: to.Ptr("/subscriptions/49e0fbd3-75e8-44e7-96fd-5b64d9ad818d/resourceGroups/apiTest-ddat4p/providers/Microsoft.KeyVault/vaults/kvmo3ej9ih"),
 	// 			GroupID: to.Ptr("vault"),
@@ -122,10 +122,10 @@ func ExampleSharedPrivateLinkResourcesClient_Get() {
 	// 		SystemData: &armdatabasewatcher.SystemData{
 	// 			CreatedBy: to.Ptr("enbpvlpqbwd"),
 	// 			CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("mxp"),
 	// 			LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -171,10 +171,10 @@ func ExampleSharedPrivateLinkResourcesClient_NewListByWatcherPager() {
 		// 				SystemData: &armdatabasewatcher.SystemData{
 		// 					CreatedBy: to.Ptr("enbpvlpqbwd"),
 		// 					CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("mxp"),
 		// 					LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

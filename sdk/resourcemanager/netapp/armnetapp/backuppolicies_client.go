@@ -18,6 +18,8 @@ import (
 
 // BackupPoliciesClient contains the methods for the BackupPolicies group.
 // Don't use this type directly, use NewBackupPoliciesClient() instead.
+//
+// Generated from API version 2026-06-15-preview
 type BackupPoliciesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type BackupPoliciesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*BackupPoliciesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewBackupPoliciesClient(subscriptionID string, credential azcore.TokenCrede
 
 // BeginCreate - Create a backup policy for Netapp Account
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - backupPolicyName - Backup policy Name which uniquely identify backup policy.
@@ -69,8 +72,6 @@ func (client *BackupPoliciesClient) BeginCreate(ctx context.Context, resourceGro
 
 // Create - Create a backup policy for Netapp Account
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *BackupPoliciesClient) create(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicy, options *BackupPoliciesClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BackupPoliciesClient.BeginCreate"
@@ -86,8 +87,7 @@ func (client *BackupPoliciesClient) create(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *BackupPoliciesClient) create(ctx context.Context, resourceGroupNam
 func (client *BackupPoliciesClient) createCreateRequest(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicy, _ *BackupPoliciesClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies/{backupPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *BackupPoliciesClient) createCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -128,8 +128,6 @@ func (client *BackupPoliciesClient) createCreateRequest(ctx context.Context, res
 
 // BeginDelete - Delete backup policy
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - backupPolicyName - Backup policy Name which uniquely identify backup policy.
@@ -154,8 +152,6 @@ func (client *BackupPoliciesClient) BeginDelete(ctx context.Context, resourceGro
 
 // Delete - Delete backup policy
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *BackupPoliciesClient) deleteOperation(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, options *BackupPoliciesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BackupPoliciesClient.BeginDelete"
@@ -171,8 +167,7 @@ func (client *BackupPoliciesClient) deleteOperation(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -181,7 +176,7 @@ func (client *BackupPoliciesClient) deleteOperation(ctx context.Context, resourc
 func (client *BackupPoliciesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, _ *BackupPoliciesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies/{backupPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -201,15 +196,13 @@ func (client *BackupPoliciesClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a particular backup Policy
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - backupPolicyName - Backup policy Name which uniquely identify backup policy.
@@ -228,19 +221,14 @@ func (client *BackupPoliciesClient) Get(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return BackupPoliciesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return BackupPoliciesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *BackupPoliciesClient) getCreateRequest(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, _ *BackupPoliciesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies/{backupPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -260,15 +248,18 @@ func (client *BackupPoliciesClient) getCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (BackupPoliciesClientGetResponse, error) {
+func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response, successCodes ...int) (BackupPoliciesClientGetResponse, error) {
 	result := BackupPoliciesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupPolicy); err != nil {
 		return BackupPoliciesClientGetResponse{}, err
 	}
@@ -276,8 +267,6 @@ func (client *BackupPoliciesClient) getHandleResponse(resp *http.Response) (Back
 }
 
 // NewListPager - List backup policies for Netapp Account
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - options - BackupPoliciesClientListOptions contains the optional parameters for the BackupPoliciesClient.NewListPager method.
@@ -292,47 +281,61 @@ func (client *BackupPoliciesClient) NewListPager(resourceGroupName string, accou
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, nextLink, options)
 			if err != nil {
 				return BackupPoliciesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return BackupPoliciesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *BackupPoliciesClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *BackupPoliciesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *BackupPoliciesClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, nextLink string, _ *BackupPoliciesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if accountName == "" {
+			return nil, errors.New("parameter accountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if accountName == "" {
-		return nil, errors.New("parameter accountName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260615Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response) (BackupPoliciesClientListResponse, error) {
+func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response, successCodes ...int) (BackupPoliciesClientListResponse, error) {
 	result := BackupPoliciesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BackupPoliciesList); err != nil {
 		return BackupPoliciesClientListResponse{}, err
 	}
@@ -341,8 +344,6 @@ func (client *BackupPoliciesClient) listHandleResponse(resp *http.Response) (Bac
 
 // BeginUpdate - Patch a backup policy for Netapp Account
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - backupPolicyName - Backup policy Name which uniquely identify backup policy.
@@ -368,8 +369,6 @@ func (client *BackupPoliciesClient) BeginUpdate(ctx context.Context, resourceGro
 
 // Update - Patch a backup policy for Netapp Account
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *BackupPoliciesClient) update(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicyPatch, options *BackupPoliciesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BackupPoliciesClient.BeginUpdate"
@@ -385,8 +384,7 @@ func (client *BackupPoliciesClient) update(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -395,7 +393,7 @@ func (client *BackupPoliciesClient) update(ctx context.Context, resourceGroupNam
 func (client *BackupPoliciesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, backupPolicyName string, body BackupPolicyPatch, _ *BackupPoliciesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupPolicies/{backupPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -415,8 +413,8 @@ func (client *BackupPoliciesClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {

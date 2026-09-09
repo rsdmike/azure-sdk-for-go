@@ -18,6 +18,8 @@ import (
 
 // JobsClient contains the methods for the Jobs group.
 // Don't use this type directly, use NewJobsClient() instead.
+//
+// Generated from API version 2025-06-01
 type JobsClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewJobsClient(credential azcore.TokenCredential, options *arm.ClientOptions
 
 // Get - Get a Job resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - jobName - The name of the Job
 //   - options - JobsClientGetOptions contains the optional parameters for the JobsClient.Get method.
@@ -57,12 +57,7 @@ func (client *JobsClient) Get(ctx context.Context, resourceURI string, jobName s
 	if err != nil {
 		return JobsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return JobsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -81,15 +76,18 @@ func (client *JobsClient) getCreateRequest(ctx context.Context, resourceURI stri
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetResponse, error) {
+func (client *JobsClient) getHandleResponse(resp *http.Response, successCodes ...int) (JobsClientGetResponse, error) {
 	result := JobsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Job); err != nil {
 		return JobsClientGetResponse{}, err
 	}
@@ -97,8 +95,6 @@ func (client *JobsClient) getHandleResponse(resp *http.Response) (JobsClientGetR
 }
 
 // NewListByTargetPager - List Jobs by parent resource
-//
-// Generated from API version 2025-06-01
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - JobsClientListByTargetOptions contains the optional parameters for the JobsClient.NewListByTargetPager method.
 func (client *JobsClient) NewListByTargetPager(resourceURI string, options *JobsClientListByTargetOptions) *runtime.Pager[JobsClientListByTargetResponse] {
@@ -112,39 +108,53 @@ func (client *JobsClient) NewListByTargetPager(resourceURI string, options *Jobs
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByTargetCreateRequest(ctx, resourceURI, options)
-			}, nil)
+			req, err := client.listByTargetCreateRequest(ctx, resourceURI, nextLink, options)
 			if err != nil {
 				return JobsClientListByTargetResponse{}, err
 			}
-			return client.listByTargetHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return JobsClientListByTargetResponse{}, err
+			}
+			return client.listByTargetHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByTargetCreateRequest creates the ListByTarget request.
-func (client *JobsClient) listByTargetCreateRequest(ctx context.Context, resourceURI string, _ *JobsClientListByTargetOptions) (*policy.Request, error) {
-	urlPath := "/{resourceUri}/providers/Microsoft.Edge/jobs"
-	if resourceURI == "" {
-		return nil, errors.New("parameter resourceURI cannot be empty")
+func (client *JobsClient) listByTargetCreateRequest(ctx context.Context, resourceURI string, nextLink string, _ *JobsClientListByTargetOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{resourceUri}/providers/Microsoft.Edge/jobs"
+		if resourceURI == "" {
+			return nil, errors.New("parameter resourceURI cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByTargetHandleResponse handles the ListByTarget response.
-func (client *JobsClient) listByTargetHandleResponse(resp *http.Response) (JobsClientListByTargetResponse, error) {
+func (client *JobsClient) listByTargetHandleResponse(resp *http.Response, successCodes ...int) (JobsClientListByTargetResponse, error) {
 	result := JobsClientListByTargetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.JobListResult); err != nil {
 		return JobsClientListByTargetResponse{}, err
 	}

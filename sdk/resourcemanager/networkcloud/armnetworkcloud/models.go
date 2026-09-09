@@ -12,6 +12,132 @@ type AADConfiguration struct {
 	AdminGroupObjectIDs []*string
 }
 
+// AccessBridge represents a managed access bridge resource.
+type AccessBridge struct {
+	// REQUIRED; The extended location of the resource. This property is required when creating the resource.
+	ExtendedLocation *ExtendedLocation
+
+	// REQUIRED; The geo-location where the resource lives
+	Location *string
+
+	// REQUIRED; The list of the resource properties.
+	Properties *AccessBridgeProperties
+
+	// Resource tags.
+	Tags map[string]*string
+
+	// READ-ONLY; "If etag is provided in the response body, it may also be provided as a header per the normal etag convention.
+	// Entity tags are used for comparing two or more entities from the same requested resource. HTTP/1.1 uses entity tags in
+	// the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range (section 14.27) header
+	// fields.")
+	Etag *string
+
+	// READ-ONLY; Fully qualified resource ID for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string
+
+	// READ-ONLY; The name of the resource
+	Name *string
+
+	// READ-ONLY; Azure Resource Manager metadata containing createdBy and modifiedBy information.
+	SystemData *SystemData
+
+	// READ-ONLY; The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or "Microsoft.Storage/storageAccounts"
+	Type *string
+}
+
+// AccessBridgeEndpoint describes a single advertised service endpoint.
+type AccessBridgeEndpoint struct {
+	// READ-ONLY; The fully qualified domain name used to describe the certificate name for the endpoint.
+	Fqdn *string
+
+	// READ-ONLY; The IPv4 address associated with the endpoint.
+	IPv4Address *string
+
+	// READ-ONLY; The IPv6 address associated with the endpoint.
+	IPv6Address *string
+
+	// READ-ONLY; The name that identifies the type of endpoint (for example VIP or host).
+	Name *string
+}
+
+// AccessBridgeList represents a paged list of access bridges.
+type AccessBridgeList struct {
+	// REQUIRED; The AccessBridge items on this page
+	Value []*AccessBridge
+
+	// The link to the next page of items
+	NextLink *string
+}
+
+// AccessBridgePatchParameters represents the payload for a PATCH request to an access bridge.
+type AccessBridgePatchParameters struct {
+	// The list of the resource properties.
+	Properties *AccessBridgePatchProperties
+
+	// Resource tags.
+	Tags map[string]*string
+}
+
+// AccessBridgePatchProperties identifies the mutable properties for patch operations.
+type AccessBridgePatchProperties struct {
+	// The list of security rules enforced by the access bridge.
+	SecurityRules []*AccessBridgeSecurityRule
+}
+
+// AccessBridgeProperties captures the input and status for an access bridge.
+type AccessBridgeProperties struct {
+	// REQUIRED; The resource ID of the internal network in a layer 3 isolation domain containing the IP subnets to use.
+	NetworkID *string
+
+	// The IPv4 subnet from which the access bridge allocates an address. This subnet must be part of the internal network specified
+	// by networkId.
+	IPv4ConnectedPrefix *string
+
+	// The IPv6 subnet from which the access bridge allocates an address. This subnet must be part of the internal network specified
+	// by networkId.
+	IPv6ConnectedPrefix *string
+
+	// The list of security rules enforced by the access bridge.
+	SecurityRules []*AccessBridgeSecurityRule
+
+	// READ-ONLY; The detailed status reported by the access bridge.
+	DetailedStatus *AccessBridgeDetailedStatus
+
+	// READ-ONLY; The descriptive message that accompanies the detailed status.
+	DetailedStatusMessage *string
+
+	// READ-ONLY; The observed endpoints that clients should use to reach the access bridge.
+	Endpoints []*AccessBridgeEndpoint
+
+	// READ-ONLY; The protocol advertised by the access bridge endpoints.
+	Protocol *TransportProtocol
+
+	// READ-ONLY; The provisioning state of the access bridge.
+	ProvisioningState *AccessBridgeProvisioningState
+}
+
+// AccessBridgeSecurityRule captures an individual access rule enforced by the bridge.
+type AccessBridgeSecurityRule struct {
+	// REQUIRED; The direction of allowed network traffic based on the rule.
+	Direction *SecurityRuleDirection
+
+	// REQUIRED; The source or destination port or port range. Example 24562 or 24562-24570.
+	Port *string
+
+	// The user provided value describing this rule.
+	Description *string
+
+	// The set of IPv4 addresses permitted as the source or destination of the security rule. For as single address, utilize a
+	// /32 (CIDR notation). One or both Ipv4Addresses and Ipv6Addresses must be specified. Example formats: 10.10.10.10-10.10.10.20
+	// or 10.10.10.10/24.
+	IPv4Addresses []*string
+
+	// The set of IPv6 addresses permitted as the source or destination of the security rule. For as single address, utilize a
+	// /128 (CIDR notation). One or both Ipv4Addresses and Ipv6Addresses must be specified. Example formats: 2001:db8:abcd::1-2001:db8:abcd::ff
+	// or 2001:db8:abcd::1/64.
+	IPv6Addresses []*string
+}
+
 // ActionState represents the state of an action taken against a resource. This can be used to represent both explicitly and
 // implicitly defined action types.
 type ActionState struct {
@@ -48,6 +174,15 @@ type AdministrativeCredentials struct {
 	Username *string
 }
 
+// AdministrativeCredentialsPatch represents the admin credentials for the device requiring password-based authentication.
+type AdministrativeCredentialsPatch struct {
+	// The password of the administrator of the device used during initialization.
+	Password *string
+
+	// The username of the administrator of the device used during initialization.
+	Username *string
+}
+
 // AdministratorConfiguration represents the administrative credentials that will be applied to the control plane and agent
 // pool nodes in Kubernetes clusters.
 type AdministratorConfiguration struct {
@@ -81,7 +216,9 @@ type AgentPool struct {
 	Location *string
 
 	// REQUIRED; The list of the resource properties.
-	Properties       *AgentPoolProperties
+	Properties *AgentPoolProperties
+
+	// The extended location of the resource.
 	ExtendedLocation *ExtendedLocation
 
 	// Resource tags.
@@ -306,6 +443,36 @@ type BareMetalMachineConfigurationData struct {
 	BmcConnectionString *string
 }
 
+// BareMetalMachineConfigurationDataPatch represents configuration for the bare metal machine for patch operations.
+type BareMetalMachineConfigurationDataPatch struct {
+	// The credentials of the baseboard management controller on this bare metal machine. The password field is expected to be
+	// an Azure Key Vault key URL. Until the cluster is converted to utilize managed identity by setting the secret archive settings,
+	// the actual password value should be provided instead.
+	BmcCredentials *AdministrativeCredentialsPatch
+
+	// The MAC address of the BMC for this machine.
+	BmcMacAddress *string
+
+	// The MAC address associated with the PXE NIC card.
+	BootMacAddress *string
+
+	// The free-form additional information about the machine, e.g. an asset tag.
+	MachineDetails *string
+
+	// The user-provided name for the bare metal machine created from this specification. If not provided, the machine name will
+	// be generated programmatically.
+	MachineName *string
+
+	// The slot the physical machine is in the rack based on the BOM configuration.
+	RackSlot *int64
+
+	// The serial number of the machine. Hardware suppliers may use an alternate value. For example, service tag.
+	SerialNumber *string
+
+	// READ-ONLY; The connection string for the baseboard management controller including IP address and protocol.
+	BmcConnectionString *string
+}
+
 // BareMetalMachineCordonParameters represents the body of the request to evacuate workloads from node on a bare metal machine.
 type BareMetalMachineCordonParameters struct {
 	// The indicator of whether to evacuate the node workload when the bare metal machine is cordoned.
@@ -425,6 +592,15 @@ type BareMetalMachineList struct {
 	NextLink *string
 }
 
+// BareMetalMachineMonitoringConfigurationStatus represents the monitoring configuration status of the bare metal machine.
+type BareMetalMachineMonitoringConfigurationStatus struct {
+	// The log level for the monitoring configuration status of the bare metal machine.
+	LogLevel *BareMetalMachineMonitoringConfigurationStatusLogLevel
+
+	// The metrics level for the monitoring configuration status of the bare metal machine.
+	MetricsLevel *BareMetalMachineMonitoringConfigurationStatusMetricsLevel
+}
+
 // BareMetalMachinePatchParameters represents the body of the request to patch bare metal machine properties.
 type BareMetalMachinePatchParameters struct {
 	// The list of the resource properties.
@@ -490,6 +666,12 @@ type BareMetalMachineProperties struct {
 	// READ-ONLY; The list of resource IDs for the other Microsoft.NetworkCloud resources that have attached this network.
 	AssociatedResourceIDs []*string
 
+	// READ-ONLY; The IPv4 address of the BMC interface for the bare metal machine.
+	BmcIPv4Address *string
+
+	// READ-ONLY; The IPv6 address of the BMC interface for the bare metal machine.
+	BmcIPv6Address *string
+
 	// READ-ONLY; The CA certificate information issued by the platform for connecting to TLS interfaces for the bare metal machine.
 	// Callers add this certificate to the trusted CA store on the Kubernetes control plane nodes to allow secure communication
 	// with the bare metal machine.
@@ -526,6 +708,9 @@ type BareMetalMachineProperties struct {
 	// READ-ONLY; The list of roles that are assigned to the cluster node running on this machine.
 	MachineRoles []*string
 
+	// READ-ONLY; The monitoring configuration status of the bare metal machine.
+	MonitoringConfigurationStatus *BareMetalMachineMonitoringConfigurationStatus
+
 	// READ-ONLY; The image that is currently provisioned to the OS disk.
 	OSImage *string
 
@@ -556,6 +741,13 @@ type BareMetalMachineProperties struct {
 	// READ-ONLY; Field Deprecated. These fields will be empty/omitted. The list of the resource IDs for the VirtualMachines that
 	// are hosted on this bare metal machine.
 	VirtualMachinesAssociatedIDs []*string
+}
+
+// BareMetalMachineReimageParameters represents the body of the request to reimage a bare metal machine.
+type BareMetalMachineReimageParameters struct {
+	// The safeguard mode to use for the reimage action, where None indicates to bypass safeguards and All indicates to utilize
+	// all safeguards. If not specified, the default is All.
+	SafeguardMode *BareMetalMachineReimageSafeguardMode
 }
 
 // BareMetalMachineReplaceParameters represents the body of the request to physically swap a bare metal machine for another.
@@ -921,6 +1113,10 @@ type Cluster struct {
 	// The managed service identities assigned to this resource.
 	Identity *ManagedServiceIdentity
 
+	// The type (kind) of the cluster. When specified, the value must exactly match the kind configured on the cluster manager
+	// that manages the cluster. If omitted, the service will default the value to the kind value of the cluster manager.
+	Kind *DeploymentType
+
 	// Resource tags.
 	Tags map[string]*string
 
@@ -1004,12 +1200,27 @@ type ClusterCapacity struct {
 type ClusterContinueUpdateVersionParameters struct {
 	// The mode by which the cluster will target the next grouping of servers to continue the update.
 	MachineGroupTargetingMode *ClusterContinueUpdateVersionMachineGroupTargetingMode
+
+	// Specifies how safeguards are applied during the continue update version operation. Use All to run all pre‑operation validation
+	// checks. Use None to bypass safeguards. If not specified, the default is All.
+	SafeguardMode *ClusterContinueUpdateVersionSafeguardMode
 }
 
 // ClusterDeployParameters represents the body of the request to deploy cluster.
 type ClusterDeployParameters struct {
 	// The names of bare metal machines in the cluster that should be skipped during environment validation.
 	SkipValidationsForMachines []*string
+}
+
+// ClusterInspectParameters represents the body of the request to inspect the cluster.
+type ClusterInspectParameters struct {
+	// Additional actions supplement the default non-disruptive cluster inspection. Additional actions may be disallowed if the
+	// cluster is in a deployed and running state.
+	AdditionalActions []*ClusterInspectAdditionalAction
+
+	// Indicates which devices are included in the inspection. By default, all devices that can be targeted will be included in
+	// the inspection.
+	FilterDevices *FilterDevices
 }
 
 // ClusterList represents a list of clusters.
@@ -1031,6 +1242,9 @@ type ClusterManager struct {
 
 	// The managed service identities assigned to this resource.
 	Identity *ManagedServiceIdentity
+
+	// The kind of the cluster manager.
+	Kind *DeploymentType
 
 	// Resource tags.
 	Tags map[string]*string
@@ -1105,6 +1319,28 @@ type ClusterManagerProperties struct {
 
 	// READ-ONLY; The provisioning state of the cluster manager.
 	ProvisioningState *ClusterManagerProvisioningState
+
+	// READ-ONLY; The relay configuration for the cluster manager.
+	RelayConfiguration *ClusterManagerRelayConfiguration
+}
+
+// ClusterManagerRelayConfiguration represents the relay configuration for the cluster manager.
+type ClusterManagerRelayConfiguration struct {
+	// The resource ID of the Azure relay namespace managed by the cluster manager.
+	RelayNamespaceID *string
+}
+
+// ClusterManagerUpdateRelayPrivateEndpointConnectionParameters represents the body of the request to approve or reject the
+// relay private endpoint connection for the private relay managed by a cluster manager.
+type ClusterManagerUpdateRelayPrivateEndpointConnectionParameters struct {
+	// REQUIRED; The state to set for the private endpoint connection.
+	ConnectionState *RelayPrivateEndpointConnectionState
+
+	// REQUIRED; The resource ID of private endpoint to be permitted or denied connection to the relay namespace.
+	PrivateEndpointResourceID *string
+
+	// The description to associate with the private endpoint connection.
+	Description *string
 }
 
 // ClusterMetricsConfiguration represents the metrics configuration of an on-premises Network Cloud cluster.
@@ -1204,7 +1440,7 @@ type ClusterPatchParameters struct {
 type ClusterPatchProperties struct {
 	// The rack definition that is intended to reflect only a single rack in a single rack cluster, or an aggregator rack in a
 	// multi-rack cluster.
-	AggregatorOrSingleRackDefinition *RackDefinition
+	AggregatorOrSingleRackDefinition *RackDefinitionPatch
 
 	// The settings for the log analytics workspace used for output of logs from this cluster.
 	AnalyticsOutputSettings *AnalyticsOutputSettings
@@ -1214,28 +1450,28 @@ type ClusterPatchProperties struct {
 
 	// Field Deprecated: Use managed identity to provide cluster privileges. The service principal to be used by the cluster during
 	// Arc Appliance installation.
-	ClusterServicePrincipal *ServicePrincipalInformation
+	ClusterServicePrincipal *ServicePrincipalInformationPatch
 
 	// The settings for commands run in this cluster, such as bare metal machine run read only commands and data extracts.
 	CommandOutputSettings *CommandOutputSettings
 
 	// The validation threshold indicating the allowable failures of compute machines during environment validation and deployment.
-	ComputeDeploymentThreshold *ValidationThreshold
+	ComputeDeploymentThreshold *ValidationThresholdPatch
 
 	// The list of rack definitions for the compute racks in a multi-rack cluster, or an empty list in a single-rack cluster.
-	ComputeRackDefinitions []*RackDefinition
+	ComputeRackDefinitions []*RackDefinitionPatch
 
 	// The settings for cluster runtime protection.
-	RuntimeProtectionConfiguration *RuntimeProtectionConfiguration
+	RuntimeProtectionConfiguration *RuntimeProtectionConfigurationPatch
 
 	// The configuration for use of a key vault to store secrets for later retrieval by the operator.
-	SecretArchive *ClusterSecretArchive
+	SecretArchive *ClusterSecretArchivePatch
 
 	// The settings for the secret archive used to hold credentials for the cluster.
 	SecretArchiveSettings *SecretArchiveSettings
 
 	// The strategy for updating the cluster.
-	UpdateStrategy *ClusterUpdateStrategy
+	UpdateStrategy *ClusterUpdateStrategyPatch
 
 	// The settings for how security vulnerability scanning is applied to the cluster.
 	VulnerabilityScanningSettings *VulnerabilityScanningSettingsPatch
@@ -1331,6 +1567,12 @@ type ClusterProperties struct {
 	// (Hybrid AKS clusters).
 	HybridAksExtendedLocation *ExtendedLocation
 
+	// READ-ONLY; The date and time of the end of the last successful version update for the cluster.
+	LastSuccessfulVersionUpdateTime *time.Time
+
+	// READ-ONLY; The list of credentials that are managed for the cluster and can be rotated on-demand.
+	ManagedCredentials []*string
+
 	// READ-ONLY; The count of Manual Action Taken (MAT) events that have not been validated.
 	ManualActionCount *int64
 
@@ -1344,6 +1586,12 @@ type ClusterProperties struct {
 	WorkloadResourceIDs []*string
 }
 
+// ClusterRotateCredentialParameters represents the body of the request to rotate cluster credentials.
+type ClusterRotateCredentialParameters struct {
+	// REQUIRED; The list of credential names for the credentials to rotate.
+	Credentials []*string
+}
+
 // ClusterScanRuntimeParameters defines the parameters for the cluster scan runtime operation.
 type ClusterScanRuntimeParameters struct {
 	// The choice of if the scan operation should run the scan.
@@ -1353,6 +1601,16 @@ type ClusterScanRuntimeParameters struct {
 // ClusterSecretArchive configures the key vault to archive the secrets of the cluster for later retrieval.
 type ClusterSecretArchive struct {
 	// REQUIRED; The resource ID of the key vault to archive the secrets of the cluster.
+	KeyVaultID *string
+
+	// The indicator if the specified key vault should be used to archive the secrets of the cluster.
+	UseKeyVault *ClusterSecretArchiveEnabled
+}
+
+// ClusterSecretArchivePatch configures the key vault to archive the secrets of the cluster for later retrieval for patch
+// operations.
+type ClusterSecretArchivePatch struct {
+	// The resource ID of the key vault to archive the secrets of the cluster.
 	KeyVaultID *string
 
 	// The indicator if the specified key vault should be used to archive the secrets of the cluster.
@@ -1378,10 +1636,33 @@ type ClusterUpdateStrategy struct {
 	WaitTimeMinutes *int64
 }
 
+// ClusterUpdateStrategyPatch represents the strategy for updating the cluster for patch operations.
+type ClusterUpdateStrategyPatch struct {
+	// The maximum number of worker nodes that can be offline within the increment of update, e.g., rack-by-rack. Limited by the
+	// maximum number of machines in the increment. Defaults to the whole increment size.
+	MaxUnavailable *int64
+
+	// The mode of operation for runtime protection.
+	StrategyType *ClusterUpdateStrategyType
+
+	// Selection of how the threshold should be evaluated.
+	ThresholdType *ValidationThresholdType
+
+	// The numeric threshold value.
+	ThresholdValue *int64
+
+	// The time to wait between the increments of update defined by the strategy.
+	WaitTimeMinutes *int64
+}
+
 // ClusterUpdateVersionParameters represents the body of the request to update cluster version.
 type ClusterUpdateVersionParameters struct {
 	// REQUIRED; The version to be applied to the cluster during update.
 	TargetClusterVersion *string
+
+	// Specifies how safeguards are applied during the update version operation. Use All to run all pre‑operation validation checks.
+	// Use None to bypass safeguards. If not specified, the default is All.
+	SafeguardMode *ClusterUpdateVersionSafeguardMode
 }
 
 // CommandOutputOverride represents an overridden value for the command output settings.
@@ -1473,7 +1754,7 @@ type ConsolePatchProperties struct {
 
 	// The SSH public key that will be provisioned for user access. The user is expected to have the corresponding SSH private
 	// key for logging in.
-	SSHPublicKey *SSHPublicKey
+	SSHPublicKey *SSHPublicKeyPatch
 }
 
 // ConsoleProperties represents the properties of the virtual machine console.
@@ -1601,6 +1882,15 @@ type FeatureStatus struct {
 	Version *string
 }
 
+// FilterDevices defines the filtered target of the inspection.
+type FilterDevices struct {
+	// The list of bare metal machine names to include in the inspection.
+	BareMetalMachineNames []*string
+
+	// The list of rack names to include in the inspection.
+	RackNames []*string
+}
+
 // HardwareInventory represents the hardware configuration of this machine as exposed to the customer, including information
 // acquired from the model/sku information and from the ironic inspector.
 type HardwareInventory struct {
@@ -1677,6 +1967,18 @@ type ImageRepositoryCredentials struct {
 	RegistryURL *string
 
 	// REQUIRED; The username used to access an image in the target repository.
+	Username *string
+}
+
+// ImageRepositoryCredentialsPatch represents the credentials used to login to the image repository for patch operations.
+type ImageRepositoryCredentialsPatch struct {
+	// The password or token used to access an image in the target repository.
+	Password *string
+
+	// The URL of the authentication server used to validate the repository credentials.
+	RegistryURL *string
+
+	// The username used to access an image in the target repository.
 	Username *string
 }
 
@@ -2020,6 +2322,72 @@ type KubernetesLabel struct {
 
 	// REQUIRED; The value of the label or taint.
 	Value *string
+}
+
+// KubernetesVersion represents the available Kubernetes versions for a cluster.
+type KubernetesVersion struct {
+	// REQUIRED; The extended location of the resource. This property is required when creating the resource.
+	ExtendedLocation *ExtendedLocation
+
+	// REQUIRED; The geo-location where the resource lives
+	Location *string
+
+	// REQUIRED; The list of the resource properties.
+	Properties *KubernetesVersionProperties
+
+	// Resource tags.
+	Tags map[string]*string
+
+	// READ-ONLY; "If etag is provided in the response body, it may also be provided as a header per the normal etag convention.
+	// Entity tags are used for comparing two or more entities from the same requested resource. HTTP/1.1 uses entity tags in
+	// the etag (section 14.19), If-Match (section 14.24), If-None-Match (section 14.26), and If-Range (section 14.27) header
+	// fields.")
+	Etag *string
+
+	// READ-ONLY; Fully qualified resource ID for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string
+
+	// READ-ONLY; The name of the resource
+	Name *string
+
+	// READ-ONLY; Azure Resource Manager metadata containing createdBy and modifiedBy information.
+	SystemData *SystemData
+
+	// READ-ONLY; The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or "Microsoft.Storage/storageAccounts"
+	Type *string
+}
+
+// KubernetesVersionList represents a list of Kubernetes version resources.
+type KubernetesVersionList struct {
+	// REQUIRED; The KubernetesVersion items on this page
+	Value []*KubernetesVersion
+
+	// The link to the next page of items
+	NextLink *string
+}
+
+// KubernetesVersionPatchParameters represents the body of the request to patch Kubernetes version tags.
+type KubernetesVersionPatchParameters struct {
+	// Resource tags.
+	Tags map[string]*string
+}
+
+// KubernetesVersionProperties contains the read-only properties describing available versions.
+type KubernetesVersionProperties struct {
+	// READ-ONLY; The provisioning state of the Kubernetes version resource.
+	ProvisioningState *KubernetesVersionProvisioningState
+
+	// READ-ONLY; The list of available Kubernetes versions.
+	Values []*KubernetesVersionValue
+}
+
+// KubernetesVersionValue describes a specific Kubernetes version that can be deployed.
+type KubernetesVersionValue struct {
+	// READ-ONLY; Additional description for the Kubernetes version.
+	Description *string
+
+	// READ-ONLY; The Kubernetes version identifier.
+	Version *string
 }
 
 // L2Network represents a network that utilizes a single isolation domain set up for layer-2 resources.
@@ -2611,6 +2979,31 @@ type RackDefinition struct {
 	StorageApplianceConfigurationData []*StorageApplianceConfigurationData
 }
 
+// RackDefinitionPatch represents details regarding the rack for patch operations.
+type RackDefinitionPatch struct {
+	// The zone name used for this rack when created. Availability zones are used for workload placement.
+	AvailabilityZone *string
+
+	// The unordered list of bare metal machine configuration.
+	BareMetalMachineConfigurationData []*BareMetalMachineConfigurationDataPatch
+
+	// The resource ID of the network rack that matches this rack definition.
+	NetworkRackID *string
+
+	// The free-form description of the rack's location.
+	RackLocation *string
+
+	// The resource ID of the sku for the rack being added.
+	RackSKUID *string
+
+	// The unique identifier for the rack within Network Cloud cluster. An alternate unique alphanumeric value other than a serial
+	// number may be provided if desired.
+	RackSerialNumber *string
+
+	// The list of storage appliance configuration data for this rack.
+	StorageApplianceConfigurationData []*StorageApplianceConfigurationDataPatch
+}
+
 // RackList represents a list of racks.
 type RackList struct {
 	// REQUIRED; The Rack items on this page
@@ -2694,6 +3087,9 @@ type RackSKUProperties struct {
 	// READ-ONLY; The list of machine SKUs and associated rack slot for the control-plane dedicated machines in this rack model.
 	ControllerMachines []*MachineSKUSlot
 
+	// READ-ONLY; The deployment type supported by the rack SKU.
+	DeploymentType *DeploymentType
+
 	// READ-ONLY; The free-form text describing the rack.
 	Description *string
 
@@ -2725,17 +3121,44 @@ type RacksPatchProperties struct {
 
 // RuntimeProtectionConfiguration represents the runtime protection configuration for the cluster.
 type RuntimeProtectionConfiguration struct {
+	// The definition update mode for runtime protection.
+	DefinitionUpdateMode *RuntimeProtectionDefinitionUpdateMode
+
+	// The mode of operation for runtime protection.
+	EnforcementLevel *RuntimeProtectionEnforcementLevel
+}
+
+// RuntimeProtectionConfigurationPatch represents the runtime protection configuration for the cluster for patch operations.
+type RuntimeProtectionConfigurationPatch struct {
+	// The definition update mode for runtime protection.
+	DefinitionUpdateMode *RuntimeProtectionDefinitionUpdateMode
+
 	// The mode of operation for runtime protection.
 	EnforcementLevel *RuntimeProtectionEnforcementLevel
 }
 
 // RuntimeProtectionStatus represents the runtime protection status of the bare metal machine.
 type RuntimeProtectionStatus struct {
+	// READ-ONLY; The runtime protection agent health status.
+	AgentHealthStatus *RuntimeProtectionAgentHealthStatus
+
+	// READ-ONLY; The runtime protection agent health status issues, if present.
+	AgentHealthStatusIssues []*string
+
+	// READ-ONLY; The runtime protection agent license status.
+	AgentLicenseStatus *RuntimeProtectionAgentLicenseStatus
+
+	// READ-ONLY; The definition update mode for runtime protection.
+	DefinitionUpdateMode *RuntimeProtectionDefinitionUpdateMode
+
 	// READ-ONLY; The timestamp when the malware definitions were last updated.
 	DefinitionsLastUpdated *time.Time
 
 	// READ-ONLY; The version of the malware definitions.
 	DefinitionsVersion *string
+
+	// READ-ONLY; The enforcement level set for the runtime protection on the bare metal machine.
+	EnforcementLevel *RuntimeProtectionEnforcementLevel
 
 	// READ-ONLY; The timestamp of the most recently completed scan, or empty if there has never been a scan.
 	ScanCompletedTime *time.Time
@@ -2750,6 +3173,12 @@ type RuntimeProtectionStatus struct {
 // SSHPublicKey - SshPublicKey represents the public key used to authenticate with a resource through SSH.
 type SSHPublicKey struct {
 	// REQUIRED; The SSH public key data.
+	KeyData *string
+}
+
+// SSHPublicKeyPatch - SshPublicKeyPatch represents the public key used to authenticate with a resource through SSH.
+type SSHPublicKeyPatch struct {
+	// The SSH public key data.
 	KeyData *string
 }
 
@@ -2847,6 +3276,22 @@ type ServicePrincipalInformation struct {
 	TenantID *string
 }
 
+// ServicePrincipalInformationPatch represents the details of the service principal to be used by the cluster during Arc Appliance
+// installation for patch operations.
+type ServicePrincipalInformationPatch struct {
+	// The application ID, also known as client ID, of the service principal.
+	ApplicationID *string
+
+	// The password of the service principal.
+	Password *string
+
+	// The principal ID, also known as the object ID, of the service principal.
+	PrincipalID *string
+
+	// The tenant ID, also known as the directory ID, of the tenant in which the service principal is created.
+	TenantID *string
+}
+
 // StepState represents the state of a step in an action.
 type StepState struct {
 	// READ-ONLY; The timestamp for when processing of the step reached its terminal state, in ISO 8601 format.
@@ -2925,6 +3370,23 @@ type StorageApplianceConfigurationData struct {
 	StorageApplianceName *string
 }
 
+// StorageApplianceConfigurationDataPatch represents configuration for the storage application for patch operations.
+type StorageApplianceConfigurationDataPatch struct {
+	// The credentials of the administrative interface on this storage appliance. The password field is expected to be an Azure
+	// Key Vault key URL. Until the cluster is converted to utilize managed identity by setting the secret archive settings, the
+	// actual password value should be provided instead.
+	AdminCredentials *AdministrativeCredentialsPatch
+
+	// The slot that storage appliance is in the rack based on the BOM configuration.
+	RackSlot *int64
+
+	// The serial number of the appliance.
+	SerialNumber *string
+
+	// The user-provided name for the storage appliance that will be created from this specification.
+	StorageApplianceName *string
+}
+
 // StorageApplianceEnableRemoteVendorManagementParameters represents the body of the request to enable remote vendor management
 // of a storage appliance.
 type StorageApplianceEnableRemoteVendorManagementParameters struct {
@@ -2934,6 +3396,15 @@ type StorageApplianceEnableRemoteVendorManagementParameters struct {
 	SupportEndpoints []*string
 }
 
+// StorageApplianceExpansionShelf represents an expansion shelf connected to a storage appliance.
+type StorageApplianceExpansionShelf struct {
+	// The model of the expansion shelf.
+	Model *string
+
+	// The version of the expansion shelf.
+	Version *string
+}
+
 // StorageApplianceList represents a list of storage appliances.
 type StorageApplianceList struct {
 	// REQUIRED; The StorageAppliance items on this page
@@ -2941,6 +3412,15 @@ type StorageApplianceList struct {
 
 	// The link to the next page of items
 	NextLink *string
+}
+
+// StorageApplianceMonitoringConfigurationStatus - The monitoring configuration status of the storage appliance.
+type StorageApplianceMonitoringConfigurationStatus struct {
+	// The log level for the monitoring configuration status of the storage appliance.
+	LogLevel *StorageApplianceMonitoringConfigurationStatusLogLevel
+
+	// The metrics level for the monitoring configuration status of the storage appliance.
+	MetricsLevel *StorageApplianceMonitoringConfigurationStatusMetricsLevel
 }
 
 // StorageAppliancePatchParameters represents the body of the request to patch storage appliance properties.
@@ -2994,6 +3474,9 @@ type StorageApplianceProperties struct {
 	// READ-ONLY; The descriptive message about the current detailed status.
 	DetailedStatusMessage *string
 
+	// READ-ONLY; The list of expansion shelves connected to the storage appliance.
+	ExpansionShelves []*StorageApplianceExpansionShelf
+
 	// READ-ONLY; The endpoint for the management interface of the storage appliance.
 	ManagementIPv4Address *string
 
@@ -3002,6 +3485,9 @@ type StorageApplianceProperties struct {
 
 	// READ-ONLY; The model of the storage appliance.
 	Model *string
+
+	// READ-ONLY; The monitoring configuration status of the storage appliance.
+	MonitoringConfigurationStatus *StorageApplianceMonitoringConfigurationStatus
 
 	// READ-ONLY; The provisioning state of the storage appliance.
 	ProvisioningState *StorageApplianceProvisioningState
@@ -3206,6 +3692,18 @@ type ValidationThreshold struct {
 	Value *int64
 }
 
+// ValidationThresholdPatch indicates allowed machine and node hardware and deployment failures for patch operations.
+type ValidationThresholdPatch struct {
+	// Selection of how the type evaluation is applied to the cluster calculation.
+	Grouping *ValidationThresholdGrouping
+
+	// Selection of how the threshold should be evaluated.
+	Type *ValidationThresholdType
+
+	// The numeric threshold value.
+	Value *int64
+}
+
 // VirtualMachine represents the on-premises Network Cloud virtual machine.
 type VirtualMachine struct {
 	// REQUIRED; The extended location of the resource. This property is required when creating the resource.
@@ -3277,7 +3775,7 @@ type VirtualMachinePatchParameters struct {
 // VirtualMachinePatchProperties represents the properties of the virtual machine that can be patched.
 type VirtualMachinePatchProperties struct {
 	// The credentials used to login to the image repository that has access to the specified image.
-	VMImageRepositoryCredentials *ImageRepositoryCredentials
+	VMImageRepositoryCredentials *ImageRepositoryCredentialsPatch
 }
 
 // VirtualMachinePlacementHint represents a single scheduling hint of the virtual machine.
@@ -3450,6 +3948,9 @@ type VolumeProperties struct {
 
 	// READ-ONLY; The allocated size of the volume in Mebibytes.
 	AllocatedSizeMiB *int64
+
+	// READ-ONLY; The assigned resource ID of the storage appliance that hosts the volume.
+	AssignedStorageApplianceID *string
 
 	// READ-ONLY; The list of resource IDs that attach the volume. It may include virtual machines and Hybrid AKS clusters.
 	AttachedTo []*string

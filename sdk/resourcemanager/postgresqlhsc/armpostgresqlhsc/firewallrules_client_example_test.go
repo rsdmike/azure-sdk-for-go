@@ -34,13 +34,13 @@ func ExampleFirewallRulesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.FirewallRulesClientCreateOrUpdateResponse{
-	// 	FirewallRule: &armpostgresqlhsc.FirewallRule{
+	// 	FirewallRule: armpostgresqlhsc.FirewallRule{
 	// 		Name: to.Ptr("rule1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/firewallRules"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/pgtestsvc4/firewallRules/rule1"),
@@ -50,10 +50,10 @@ func ExampleFirewallRulesClient_BeginCreateOrUpdate() {
 	// 			StartIPAddress: to.Ptr("0.0.0.0"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -78,7 +78,7 @@ func ExampleFirewallRulesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -101,7 +101,7 @@ func ExampleFirewallRulesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.FirewallRulesClientGetResponse{
-	// 	FirewallRule: &armpostgresqlhsc.FirewallRule{
+	// 	FirewallRule: armpostgresqlhsc.FirewallRule{
 	// 		Name: to.Ptr("rule1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/firewallRules"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/pgtestsvc4/firewallRules/rule1"),
@@ -111,10 +111,10 @@ func ExampleFirewallRulesClient_Get() {
 	// 			StartIPAddress: to.Ptr("0.0.0.0"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -157,10 +157,10 @@ func ExampleFirewallRulesClient_NewListByClusterPager() {
 		// 					StartIPAddress: to.Ptr("0.0.0.0"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -175,10 +175,10 @@ func ExampleFirewallRulesClient_NewListByClusterPager() {
 		// 					StartIPAddress: to.Ptr("1.0.0.0"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},

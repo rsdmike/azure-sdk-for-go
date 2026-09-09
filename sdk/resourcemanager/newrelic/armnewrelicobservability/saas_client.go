@@ -18,6 +18,8 @@ import (
 
 // SaaSClient contains the methods for the SaaS group.
 // Don't use this type directly, use NewSaaSClient() instead.
+//
+// Generated from API version 2026-06-01
 type SaaSClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type SaaSClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSaaSClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SaaSClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewSaaSClient(subscriptionID string, credential azcore.TokenCredential, opt
 
 // ActivateResource - Resolve the token to get the SaaS resource ID and activate the SaaS resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - request - The request body
 //   - options - SaaSClientActivateResourceOptions contains the optional parameters for the SaaSClient.ActivateResource method.
 func (client *SaaSClient) ActivateResource(ctx context.Context, request ActivateSaaSParameterRequest, options *SaaSClientActivateResourceOptions) (SaaSClientActivateResourceResponse, error) {
@@ -59,19 +62,14 @@ func (client *SaaSClient) ActivateResource(ctx context.Context, request Activate
 	if err != nil {
 		return SaaSClientActivateResourceResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SaaSClientActivateResourceResponse{}, err
-	}
-	resp, err := client.activateResourceHandleResponse(httpResp)
-	return resp, err
+	return client.activateResourceHandleResponse(httpResp, http.StatusOK)
 }
 
 // activateResourceCreateRequest creates the ActivateResource request.
 func (client *SaaSClient) activateResourceCreateRequest(ctx context.Context, request ActivateSaaSParameterRequest, _ *SaaSClientActivateResourceOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/NewRelic.Observability/activateSaaS"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -79,8 +77,8 @@ func (client *SaaSClient) activateResourceCreateRequest(ctx context.Context, req
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, request); err != nil {
@@ -90,8 +88,11 @@ func (client *SaaSClient) activateResourceCreateRequest(ctx context.Context, req
 }
 
 // activateResourceHandleResponse handles the ActivateResource response.
-func (client *SaaSClient) activateResourceHandleResponse(resp *http.Response) (SaaSClientActivateResourceResponse, error) {
+func (client *SaaSClient) activateResourceHandleResponse(resp *http.Response, successCodes ...int) (SaaSClientActivateResourceResponse, error) {
 	result := SaaSClientActivateResourceResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SaaSResourceDetailsResponse); err != nil {
 		return SaaSClientActivateResourceResponse{}, err
 	}

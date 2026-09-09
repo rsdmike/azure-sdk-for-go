@@ -14,6 +14,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/mysql/armmysqlflexibleservers/v2"
 	"net/http"
 	"regexp"
+	"slices"
 )
 
 // CheckNameAvailabilityWithoutLocationServer is a fake server for instances of the armmysqlflexibleservers.CheckNameAvailabilityWithoutLocationClient type.
@@ -48,9 +49,7 @@ func (c *CheckNameAvailabilityWithoutLocationServerTransport) Do(req *http.Reque
 }
 
 func (c *CheckNameAvailabilityWithoutLocationServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -66,10 +65,7 @@ func (c *CheckNameAvailabilityWithoutLocationServerTransport) dispatchToMethodFa
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -84,7 +80,7 @@ func (c *CheckNameAvailabilityWithoutLocationServerTransport) dispatchExecute(re
 	if c.srv.Execute == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Execute not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DBforMySQL/checkNameAvailability`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DBforMySQL/checkNameAvailability`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -99,7 +95,7 @@ func (c *CheckNameAvailabilityWithoutLocationServerTransport) dispatchExecute(re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NameAvailability, req)

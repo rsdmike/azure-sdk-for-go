@@ -31,7 +31,7 @@ func ExampleGiMinorVersionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.GiMinorVersionsClientGetResponse{
-	// 	GiMinorVersion: &armoracledatabase.GiMinorVersion{
+	// 	GiMinorVersion: armoracledatabase.GiMinorVersion{
 	// 		Properties: &armoracledatabase.GiMinorVersionProperties{
 	// 			Version: to.Ptr("jolryvqmzblqeiewwngwdrcmmewqrrgzwxwqivjrznzzyvxxitlhonfzpvzwrpjqiikrpibfngbotspixjtlbysflyxiowrygizhstxbqcanvdqsmnddcxtptbthsvsfcejfymhjoiksdrbupvrcfvuhjhnplavyequrmgjcyrqglmkugvprmdpgnqhzohwbdkkrlwxlwdvunlejuzncpikujpotlilymajcbfjtxydybalpyn"),
 	// 			GridImageOcid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
@@ -42,10 +42,10 @@ func ExampleGiMinorVersionsClient_Get() {
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -89,10 +89,10 @@ func ExampleGiMinorVersionsClient_NewListByParentPager_giMinorVersionsListByPare
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

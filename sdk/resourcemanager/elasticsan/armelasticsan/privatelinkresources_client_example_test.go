@@ -30,7 +30,7 @@ func ExamplePrivateLinkResourcesClient_ListByElasticSan_privateLinkResourcesList
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.PrivateLinkResourcesClientListByElasticSanResponse{
-	// 	PrivateLinkResourceListResult: &armelasticsan.PrivateLinkResourceListResult{
+	// 	PrivateLinkResourceListResult: armelasticsan.PrivateLinkResourceListResult{
 	// 		NextLink: to.Ptr("https://management.azure.com/subscriptions/subscriptionid/resourceGroups/resourcegroupname/providers/Microsoft.ElasticSan/elasticSans/elasticsanname/privateLinkResources?api-version=2024-07-01-preview&%24skiptoken=mno345pqr678"),
 	// 		Value: []*armelasticsan.PrivateLinkResource{
 	// 			{
@@ -47,10 +47,10 @@ func ExamplePrivateLinkResourcesClient_ListByElasticSan_privateLinkResourcesList
 	// 					},
 	// 				},
 	// 				SystemData: &armelasticsan.SystemData{
-	// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T17:40:52.453Z"); return t}()),
+	// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 17, 40, 52, 453000000, time.UTC)),
 	// 					CreatedBy: to.Ptr("bgurjvijz"),
 	// 					CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T17:40:52.453Z"); return t}()),
+	// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 17, 40, 52, 453000000, time.UTC)),
 	// 					LastModifiedBy: to.Ptr("uvexylihjrtinzkeluohusnaxatfqh"),
 	// 					LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 				},
@@ -79,7 +79,7 @@ func ExamplePrivateLinkResourcesClient_ListByElasticSan_privateLinkResourcesList
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.PrivateLinkResourcesClientListByElasticSanResponse{
-	// 	PrivateLinkResourceListResult: &armelasticsan.PrivateLinkResourceListResult{
+	// 	PrivateLinkResourceListResult: armelasticsan.PrivateLinkResourceListResult{
 	// 		Value: []*armelasticsan.PrivateLinkResource{
 	// 		},
 	// 	},

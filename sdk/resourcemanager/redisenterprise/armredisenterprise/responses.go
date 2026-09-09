@@ -139,27 +139,33 @@ type DatabasesClientUpgradeDBRedisVersionResponse struct {
 	// placeholder for future response values
 }
 
-// MigrationClientCancelResponse contains the response from method MigrationClient.BeginCancel.
-type MigrationClientCancelResponse struct {
+// MigrationsClientCancelResponse contains the response from method MigrationsClient.BeginCancel.
+type MigrationsClientCancelResponse struct {
 	// placeholder for future response values
 }
 
-// MigrationClientGetResponse contains the response from method MigrationClient.Get.
-type MigrationClientGetResponse struct {
+// MigrationsClientGetResponse contains the response from method MigrationsClient.Get.
+type MigrationsClientGetResponse struct {
 	// Describes the current migration operation on a Redis Enterprise cluster.
 	Migration
 }
 
-// MigrationClientListResponse contains the response from method MigrationClient.NewListPager.
-type MigrationClientListResponse struct {
+// MigrationsClientListResponse contains the response from method MigrationsClient.NewListPager.
+type MigrationsClientListResponse struct {
 	// The response of a list-all migrations.
 	MigrationList
 }
 
-// MigrationClientStartResponse contains the response from method MigrationClient.BeginStart.
-type MigrationClientStartResponse struct {
+// MigrationsClientStartResponse contains the response from method MigrationsClient.BeginStart.
+type MigrationsClientStartResponse struct {
 	// Describes the current migration operation on a Redis Enterprise cluster.
 	Migration
+}
+
+// MigrationsClientValidateResponse contains the response from method MigrationsClient.Validate.
+type MigrationsClientValidateResponse struct {
+	// Response for migration validation operation.
+	MigrationValidationResponse
 }
 
 // OperationsClientListResponse contains the response from method OperationsClient.NewListPager.

@@ -13,7 +13,7 @@ type CloudHsmClusterBackupStatusClientGetResponse struct {
 	Location *string
 
 	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
+	RequestID *string
 }
 
 // CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse contains the response from method CloudHsmClusterPrivateEndpointConnectionsClient.Create.
@@ -48,16 +48,13 @@ type CloudHsmClusterRestoreStatusClientGetResponse struct {
 	Location *string
 
 	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
+	RequestID *string
 }
 
 // CloudHsmClustersClientBackupResponse contains the response from method CloudHsmClustersClient.BeginBackup.
 type CloudHsmClustersClientBackupResponse struct {
 	// Backup operation Result
 	BackupResult
-
-	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
 }
 
 // CloudHsmClustersClientCreateOrUpdateResponse contains the response from method CloudHsmClustersClient.BeginCreateOrUpdate.
@@ -93,9 +90,6 @@ type CloudHsmClustersClientListBySubscriptionResponse struct {
 type CloudHsmClustersClientRestoreResponse struct {
 	// Restore operation properties
 	RestoreResult
-
-	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
 }
 
 // CloudHsmClustersClientUpdateResponse contains the response from method CloudHsmClustersClient.BeginUpdate.
@@ -108,18 +102,12 @@ type CloudHsmClustersClientUpdateResponse struct {
 type CloudHsmClustersClientValidateBackupPropertiesResponse struct {
 	// Backup operation Result
 	BackupResult
-
-	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
 }
 
 // CloudHsmClustersClientValidateRestorePropertiesResponse contains the response from method CloudHsmClustersClient.BeginValidateRestoreProperties.
 type CloudHsmClustersClientValidateRestorePropertiesResponse struct {
 	// Restore operation properties
 	RestoreResult
-
-	// An opaque, globally-unique, server-generated string identifier for the request.
-	XMSRequestID *string
 }
 
 // DedicatedHsmClientCreateOrUpdateResponse contains the response from method DedicatedHsmClient.BeginCreateOrUpdate.
@@ -167,6 +155,70 @@ type DedicatedHsmClientUpdateResponse struct {
 type OperationsClientListResponse struct {
 	// A list of REST API operations supported by an Azure Resource Provider. It contains an URL link to get the next set of results.
 	OperationListResult
+}
+
+// PaymentHsmClusterPrivateEndpointConnectionsClientCreateResponse contains the response from method PaymentHsmClusterPrivateEndpointConnectionsClient.Create.
+type PaymentHsmClusterPrivateEndpointConnectionsClientCreateResponse struct {
+	// The private endpoint connection resource.
+	PaymentHsmClusterPrivateEndpointConnection
+}
+
+// PaymentHsmClusterPrivateEndpointConnectionsClientDeleteResponse contains the response from method PaymentHsmClusterPrivateEndpointConnectionsClient.BeginDelete.
+type PaymentHsmClusterPrivateEndpointConnectionsClientDeleteResponse struct {
+	// placeholder for future response values
+}
+
+// PaymentHsmClusterPrivateEndpointConnectionsClientGetResponse contains the response from method PaymentHsmClusterPrivateEndpointConnectionsClient.Get.
+type PaymentHsmClusterPrivateEndpointConnectionsClientGetResponse struct {
+	// The private endpoint connection resource.
+	PaymentHsmClusterPrivateEndpointConnection
+}
+
+// PaymentHsmClusterPrivateEndpointConnectionsClientListByPaymentHsmClusterResponse contains the response from method PaymentHsmClusterPrivateEndpointConnectionsClient.NewListByPaymentHsmClusterPager.
+type PaymentHsmClusterPrivateEndpointConnectionsClientListByPaymentHsmClusterResponse struct {
+	// The response of a PaymentHsmClusterPrivateEndpointConnection list operation.
+	PaymentHsmClusterPrivateEndpointConnectionListResult
+}
+
+// PaymentHsmClusterPrivateLinkResourcesClientListByPaymentHsmClusterResponse contains the response from method PaymentHsmClusterPrivateLinkResourcesClient.NewListByPaymentHsmClusterPager.
+type PaymentHsmClusterPrivateLinkResourcesClientListByPaymentHsmClusterResponse struct {
+	// A list of private link resources.
+	PrivateLinkResourceListResult
+}
+
+// PaymentHsmClustersClientCreateOrUpdateResponse contains the response from method PaymentHsmClustersClient.BeginCreateOrUpdate.
+type PaymentHsmClustersClientCreateOrUpdateResponse struct {
+	// Resource information with extended details.
+	PaymentHsmCluster
+}
+
+// PaymentHsmClustersClientDeleteResponse contains the response from method PaymentHsmClustersClient.BeginDelete.
+type PaymentHsmClustersClientDeleteResponse struct {
+	// placeholder for future response values
+}
+
+// PaymentHsmClustersClientGetResponse contains the response from method PaymentHsmClustersClient.Get.
+type PaymentHsmClustersClientGetResponse struct {
+	// Resource information with extended details.
+	PaymentHsmCluster
+}
+
+// PaymentHsmClustersClientListByResourceGroupResponse contains the response from method PaymentHsmClustersClient.NewListByResourceGroupPager.
+type PaymentHsmClustersClientListByResourceGroupResponse struct {
+	// The response of a PaymentHsmCluster list operation.
+	PaymentHsmClusterListResult
+}
+
+// PaymentHsmClustersClientListBySubscriptionResponse contains the response from method PaymentHsmClustersClient.NewListBySubscriptionPager.
+type PaymentHsmClustersClientListBySubscriptionResponse struct {
+	// The response of a PaymentHsmCluster list operation.
+	PaymentHsmClusterListResult
+}
+
+// PaymentHsmClustersClientUpdateResponse contains the response from method PaymentHsmClustersClient.BeginUpdate.
+type PaymentHsmClustersClientUpdateResponse struct {
+	// Resource information with extended details.
+	PaymentHsmCluster
 }
 
 // PrivateEndpointConnectionsClientListByCloudHsmClusterResponse contains the response from method PrivateEndpointConnectionsClient.NewListByCloudHsmClusterPager.

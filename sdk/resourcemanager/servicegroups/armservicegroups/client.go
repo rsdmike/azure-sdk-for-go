@@ -18,6 +18,8 @@ import (
 
 // Client contains the methods for the service.
 // Don't use this type directly, use NewClient() instead.
+//
+// Generated from API version 2024-02-01-preview
 type Client struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*
 
 // Get - Get the details of the serviceGroup
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-02-01-preview
 //   - serviceGroupName - ServiceGroup Name.
 //   - options - ClientGetOptions contains the optional parameters for the Client.Get method.
 func (client *Client) Get(ctx context.Context, serviceGroupName string, options *ClientGetOptions) (ClientGetResponse, error) {
@@ -56,12 +56,7 @@ func (client *Client) Get(ctx context.Context, serviceGroupName string, options 
 	if err != nil {
 		return ClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -76,15 +71,18 @@ func (client *Client) getCreateRequest(ctx context.Context, serviceGroupName str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
+func (client *Client) getHandleResponse(resp *http.Response, successCodes ...int) (ClientGetResponse, error) {
 	result := ClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceGroup); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -93,8 +91,6 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 
 // ListAncestors - Get the details of the serviceGroup's ancestors
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-02-01-preview
 //   - serviceGroupName - ServiceGroup Name.
 //   - options - ClientListAncestorsOptions contains the optional parameters for the Client.ListAncestors method.
 func (client *Client) ListAncestors(ctx context.Context, serviceGroupName string, options *ClientListAncestorsOptions) (ClientListAncestorsResponse, error) {
@@ -111,12 +107,7 @@ func (client *Client) ListAncestors(ctx context.Context, serviceGroupName string
 	if err != nil {
 		return ClientListAncestorsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientListAncestorsResponse{}, err
-	}
-	resp, err := client.listAncestorsHandleResponse(httpResp)
-	return resp, err
+	return client.listAncestorsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listAncestorsCreateRequest creates the ListAncestors request.
@@ -131,15 +122,18 @@ func (client *Client) listAncestorsCreateRequest(ctx context.Context, serviceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listAncestorsHandleResponse handles the ListAncestors response.
-func (client *Client) listAncestorsHandleResponse(resp *http.Response) (ClientListAncestorsResponse, error) {
+func (client *Client) listAncestorsHandleResponse(resp *http.Response, successCodes ...int) (ClientListAncestorsResponse, error) {
 	result := ClientListAncestorsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceGroupCollectionResponse); err != nil {
 		return ClientListAncestorsResponse{}, err
 	}

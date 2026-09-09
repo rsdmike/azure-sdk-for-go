@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -129,9 +130,7 @@ func (l *LocalRulestacksServerTransport) Do(req *http.Request) (*http.Response, 
 }
 
 func (l *LocalRulestacksServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -177,10 +176,7 @@ func (l *LocalRulestacksServerTransport) dispatchToMethodFake(req *http.Request,
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -197,7 +193,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginCommit(req *http.Request) 
 	}
 	beginCommit := l.beginCommit.get(req)
 	if beginCommit == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/commit`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/commit`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -224,7 +220,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginCommit(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		l.beginCommit.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -241,7 +237,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginCreateOrUpdate(req *http.R
 	}
 	beginCreateOrUpdate := l.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -272,7 +268,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginCreateOrUpdate(req *http.R
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		l.beginCreateOrUpdate.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -289,7 +285,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginDelete(req *http.Request) 
 	}
 	beginDelete := l.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -316,7 +312,7 @@ func (l *LocalRulestacksServerTransport) dispatchBeginDelete(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		l.beginDelete.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -331,7 +327,7 @@ func (l *LocalRulestacksServerTransport) dispatchGet(req *http.Request) (*http.R
 	if l.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -350,7 +346,7 @@ func (l *LocalRulestacksServerTransport) dispatchGet(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).LocalRulestackResource, req)
@@ -364,7 +360,7 @@ func (l *LocalRulestacksServerTransport) dispatchGetChangeLog(req *http.Request)
 	if l.srv.GetChangeLog == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetChangeLog not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/getChangeLog`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/getChangeLog`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -383,7 +379,7 @@ func (l *LocalRulestacksServerTransport) dispatchGetChangeLog(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Changelog, req)
@@ -397,7 +393,7 @@ func (l *LocalRulestacksServerTransport) dispatchGetSupportInfo(req *http.Reques
 	if l.srv.GetSupportInfo == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSupportInfo not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/getSupportInfo`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/getSupportInfo`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -412,11 +408,7 @@ func (l *LocalRulestacksServerTransport) dispatchGetSupportInfo(req *http.Reques
 	if err != nil {
 		return nil, err
 	}
-	emailUnescaped, err := url.QueryUnescape(qp.Get("email"))
-	if err != nil {
-		return nil, err
-	}
-	emailParam := getOptional(emailUnescaped)
+	emailParam := getOptional(qp.Get("email"))
 	var options *armpanngfw.LocalRulestacksClientGetSupportInfoOptions
 	if emailParam != nil {
 		options = &armpanngfw.LocalRulestacksClientGetSupportInfoOptions{
@@ -428,7 +420,7 @@ func (l *LocalRulestacksServerTransport) dispatchGetSupportInfo(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SupportInfo, req)
@@ -442,7 +434,7 @@ func (l *LocalRulestacksServerTransport) dispatchListAdvancedSecurityObjects(req
 	if l.srv.ListAdvancedSecurityObjects == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListAdvancedSecurityObjects not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listAdvancedSecurityObjects`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listAdvancedSecurityObjects`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -457,31 +449,13 @@ func (l *LocalRulestacksServerTransport) dispatchListAdvancedSecurityObjects(req
 	if err != nil {
 		return nil, err
 	}
-	skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-	if err != nil {
-		return nil, err
-	}
-	skipParam := getOptional(skipUnescaped)
-	topUnescaped, err := url.QueryUnescape(qp.Get("top"))
-	if err != nil {
-		return nil, err
-	}
-	topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+	skipParam := getOptional(qp.Get("skip"))
+	topParam, err := parseOptional(qp.Get("top"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
 		}
 		return int32(p), nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	typeParamParam, err := parseWithCast(qp.Get("type"), func(v string) (armpanngfw.AdvSecurityObjectTypeEnum, error) {
-		p, unescapeErr := url.QueryUnescape(v)
-		if unescapeErr != nil {
-			return "", unescapeErr
-		}
-		return armpanngfw.AdvSecurityObjectTypeEnum(p), nil
 	})
 	if err != nil {
 		return nil, err
@@ -493,12 +467,12 @@ func (l *LocalRulestacksServerTransport) dispatchListAdvancedSecurityObjects(req
 			Top:  topParam,
 		}
 	}
-	respr, errRespr := l.srv.ListAdvancedSecurityObjects(req.Context(), resourceGroupNameParam, localRulestackNameParam, typeParamParam, options)
+	respr, errRespr := l.srv.ListAdvancedSecurityObjects(req.Context(), resourceGroupNameParam, localRulestackNameParam, armpanngfw.AdvSecurityObjectTypeEnum(qp.Get("type")), options)
 	if respErr := server.GetError(errRespr, req); respErr != nil {
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).AdvSecurityObjectListResponse, req)
@@ -514,7 +488,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListAppIDsPager(req *http.Re
 	}
 	newListAppIDsPager := l.newListAppIDsPager.get(req)
 	if newListAppIDsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listAppIds`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listAppIds`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -529,26 +503,10 @@ func (l *LocalRulestacksServerTransport) dispatchNewListAppIDsPager(req *http.Re
 		if err != nil {
 			return nil, err
 		}
-		appIDVersionUnescaped, err := url.QueryUnescape(qp.Get("appIdVersion"))
-		if err != nil {
-			return nil, err
-		}
-		appIDVersionParam := getOptional(appIDVersionUnescaped)
-		appPrefixUnescaped, err := url.QueryUnescape(qp.Get("appPrefix"))
-		if err != nil {
-			return nil, err
-		}
-		appPrefixParam := getOptional(appPrefixUnescaped)
-		skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-		if err != nil {
-			return nil, err
-		}
-		skipParam := getOptional(skipUnescaped)
-		topUnescaped, err := url.QueryUnescape(qp.Get("top"))
-		if err != nil {
-			return nil, err
-		}
-		topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+		appIDVersionParam := getOptional(qp.Get("appIdVersion"))
+		appPrefixParam := getOptional(qp.Get("appPrefix"))
+		skipParam := getOptional(qp.Get("skip"))
+		topParam, err := parseOptional(qp.Get("top"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -578,7 +536,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListAppIDsPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		l.newListAppIDsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -594,7 +552,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListByResourceGroupPager(req
 	}
 	newListByResourceGroupPager := l.newListByResourceGroupPager.get(req)
 	if newListByResourceGroupPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -615,7 +573,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListByResourceGroupPager(req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		l.newListByResourceGroupPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -631,7 +589,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListBySubscriptionPager(req 
 	}
 	newListBySubscriptionPager := l.newListBySubscriptionPager.get(req)
 	if newListBySubscriptionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -648,7 +606,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListBySubscriptionPager(req 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		l.newListBySubscriptionPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -664,7 +622,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListCountriesPager(req *http
 	}
 	newListCountriesPager := l.newListCountriesPager.get(req)
 	if newListCountriesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listCountries`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listCountries`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -679,16 +637,8 @@ func (l *LocalRulestacksServerTransport) dispatchNewListCountriesPager(req *http
 		if err != nil {
 			return nil, err
 		}
-		skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-		if err != nil {
-			return nil, err
-		}
-		skipParam := getOptional(skipUnescaped)
-		topUnescaped, err := url.QueryUnescape(qp.Get("top"))
-		if err != nil {
-			return nil, err
-		}
-		topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+		skipParam := getOptional(qp.Get("skip"))
+		topParam, err := parseOptional(qp.Get("top"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -716,7 +666,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListCountriesPager(req *http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		l.newListCountriesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -730,7 +680,7 @@ func (l *LocalRulestacksServerTransport) dispatchListFirewalls(req *http.Request
 	if l.srv.ListFirewalls == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListFirewalls not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listFirewalls`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listFirewalls`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -749,7 +699,7 @@ func (l *LocalRulestacksServerTransport) dispatchListFirewalls(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ListFirewallsResponse, req)
@@ -765,7 +715,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListPredefinedURLCategoriesP
 	}
 	newListPredefinedURLCategoriesPager := l.newListPredefinedURLCategoriesPager.get(req)
 	if newListPredefinedURLCategoriesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listPredefinedUrlCategories`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listPredefinedUrlCategories`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -780,16 +730,8 @@ func (l *LocalRulestacksServerTransport) dispatchNewListPredefinedURLCategoriesP
 		if err != nil {
 			return nil, err
 		}
-		skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-		if err != nil {
-			return nil, err
-		}
-		skipParam := getOptional(skipUnescaped)
-		topUnescaped, err := url.QueryUnescape(qp.Get("top"))
-		if err != nil {
-			return nil, err
-		}
-		topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+		skipParam := getOptional(qp.Get("skip"))
+		topParam, err := parseOptional(qp.Get("top"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -817,7 +759,7 @@ func (l *LocalRulestacksServerTransport) dispatchNewListPredefinedURLCategoriesP
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		l.newListPredefinedURLCategoriesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -831,7 +773,7 @@ func (l *LocalRulestacksServerTransport) dispatchListSecurityServices(req *http.
 	if l.srv.ListSecurityServices == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSecurityServices not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listSecurityServices`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listSecurityServices`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -846,31 +788,13 @@ func (l *LocalRulestacksServerTransport) dispatchListSecurityServices(req *http.
 	if err != nil {
 		return nil, err
 	}
-	skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-	if err != nil {
-		return nil, err
-	}
-	skipParam := getOptional(skipUnescaped)
-	topUnescaped, err := url.QueryUnescape(qp.Get("top"))
-	if err != nil {
-		return nil, err
-	}
-	topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+	skipParam := getOptional(qp.Get("skip"))
+	topParam, err := parseOptional(qp.Get("top"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
 		}
 		return int32(p), nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	typeParamParam, err := parseWithCast(qp.Get("type"), func(v string) (armpanngfw.SecurityServicesTypeEnum, error) {
-		p, unescapeErr := url.QueryUnescape(v)
-		if unescapeErr != nil {
-			return "", unescapeErr
-		}
-		return armpanngfw.SecurityServicesTypeEnum(p), nil
 	})
 	if err != nil {
 		return nil, err
@@ -882,12 +806,12 @@ func (l *LocalRulestacksServerTransport) dispatchListSecurityServices(req *http.
 			Top:  topParam,
 		}
 	}
-	respr, errRespr := l.srv.ListSecurityServices(req.Context(), resourceGroupNameParam, localRulestackNameParam, typeParamParam, options)
+	respr, errRespr := l.srv.ListSecurityServices(req.Context(), resourceGroupNameParam, localRulestackNameParam, armpanngfw.SecurityServicesTypeEnum(qp.Get("type")), options)
 	if respErr := server.GetError(errRespr, req); respErr != nil {
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SecurityServicesResponse, req)
@@ -901,7 +825,7 @@ func (l *LocalRulestacksServerTransport) dispatchRevert(req *http.Request) (*htt
 	if l.srv.Revert == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Revert not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/revert`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/revert`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -920,7 +844,7 @@ func (l *LocalRulestacksServerTransport) dispatchRevert(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -934,7 +858,7 @@ func (l *LocalRulestacksServerTransport) dispatchUpdate(req *http.Request) (*htt
 	if l.srv.Update == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Update not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/localRulestacks/(?P<localRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -957,7 +881,7 @@ func (l *LocalRulestacksServerTransport) dispatchUpdate(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).LocalRulestackResource, req)

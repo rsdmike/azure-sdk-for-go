@@ -65,7 +65,7 @@ func ExampleBackupPoliciesClient_CreateOrUpdate() {
 										},
 										ObjectType: to.Ptr("ScheduleBasedBackupCriteria"),
 										ScheduleTimes: []*time.Time{
-											to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-03-01T13:00:00Z"); return t }()),
+											to.Ptr(time.Date(2019, time.March, 1, 13, 0, 0, 0, time.UTC)),
 										},
 									},
 								},
@@ -122,7 +122,7 @@ func ExampleBackupPoliciesClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdataprotection.BackupPoliciesClientCreateOrUpdateResponse{
-	// 	BaseBackupPolicyResource: &armdataprotection.BaseBackupPolicyResource{
+	// 	BaseBackupPolicyResource: armdataprotection.BaseBackupPolicyResource{
 	// 		Name: to.Ptr("OSSDBPolicy"),
 	// 		Type: to.Ptr("Microsoft.DataProtection/backupVaults/backupPolicies"),
 	// 		ID: to.Ptr("/subscriptions/04cf684a-d41f-4550-9f70-7708a3a2283b/resourceGroups/000pikumar/providers/Microsoft.DataProtection/backupVaults/PrivatePreviewVault/backupPolicies/OSSDBPolicy"),
@@ -167,7 +167,7 @@ func ExampleBackupPoliciesClient_CreateOrUpdate() {
 	// 										},
 	// 										ObjectType: to.Ptr("ScheduleBasedBackupCriteria"),
 	// 										ScheduleTimes: []*time.Time{
-	// 											to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-03-01T13:00:00Z"); return t}()),
+	// 											to.Ptr(time.Date(2019, time.March, 1, 13, 0, 0, 0, time.UTC)),
 	// 										},
 	// 									},
 	// 								},
@@ -262,7 +262,7 @@ func ExampleBackupPoliciesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdataprotection.BackupPoliciesClientGetResponse{
-	// 	BaseBackupPolicyResource: &armdataprotection.BaseBackupPolicyResource{
+	// 	BaseBackupPolicyResource: armdataprotection.BaseBackupPolicyResource{
 	// 		Name: to.Ptr("OSSDBPolicy"),
 	// 		Type: to.Ptr("Microsoft.DataProtection/backupVaults/backupPolicies"),
 	// 		ID: to.Ptr("/subscriptions/04cf684a-d41f-4550-9f70-7708a3a2283b/resourceGroups/000pikumar/providers/Microsoft.DataProtection/backupVaults/PrivatePreviewVault/backupPolicies/OSSDBPolicy"),
@@ -307,7 +307,7 @@ func ExampleBackupPoliciesClient_Get() {
 	// 										},
 	// 										ObjectType: to.Ptr("ScheduleBasedBackupCriteria"),
 	// 										ScheduleTimes: []*time.Time{
-	// 											to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-03-01T13:00:00Z"); return t}()),
+	// 											to.Ptr(time.Date(2019, time.March, 1, 13, 0, 0, 0, time.UTC)),
 	// 										},
 	// 									},
 	// 								},
@@ -431,7 +431,7 @@ func ExampleBackupPoliciesClient_NewListPager() {
 		// 												},
 		// 												ObjectType: to.Ptr("ScheduleBasedBackupCriteria"),
 		// 												ScheduleTimes: []*time.Time{
-		// 													to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-03-01T13:00:00Z"); return t}()),
+		// 													to.Ptr(time.Date(2019, time.March, 1, 13, 0, 0, 0, time.UTC)),
 		// 												},
 		// 											},
 		// 										},

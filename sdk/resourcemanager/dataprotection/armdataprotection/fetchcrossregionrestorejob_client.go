@@ -18,6 +18,8 @@ import (
 
 // FetchCrossRegionRestoreJobClient contains the methods for the FetchCrossRegionRestoreJob group.
 // Don't use this type directly, use NewFetchCrossRegionRestoreJobClient() instead.
+//
+// Generated from API version 2026-03-01
 type FetchCrossRegionRestoreJobClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type FetchCrossRegionRestoreJobClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewFetchCrossRegionRestoreJobClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*FetchCrossRegionRestoreJobClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewFetchCrossRegionRestoreJobClient(subscriptionID string, credential azcor
 
 // Get - Fetches the Cross Region Restore Job
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - location - The name of the Azure region.
 //   - parameters - Request body for operation
@@ -62,19 +65,14 @@ func (client *FetchCrossRegionRestoreJobClient) Get(ctx context.Context, resourc
 	if err != nil {
 		return FetchCrossRegionRestoreJobClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FetchCrossRegionRestoreJobClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *FetchCrossRegionRestoreJobClient) getCreateRequest(ctx context.Context, resourceGroupName string, location string, parameters CrossRegionRestoreJobRequest, _ *FetchCrossRegionRestoreJobClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/locations/{location}/fetchCrossRegionRestoreJob"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -90,8 +88,8 @@ func (client *FetchCrossRegionRestoreJobClient) getCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -101,8 +99,11 @@ func (client *FetchCrossRegionRestoreJobClient) getCreateRequest(ctx context.Con
 }
 
 // getHandleResponse handles the Get response.
-func (client *FetchCrossRegionRestoreJobClient) getHandleResponse(resp *http.Response) (FetchCrossRegionRestoreJobClientGetResponse, error) {
+func (client *FetchCrossRegionRestoreJobClient) getHandleResponse(resp *http.Response, successCodes ...int) (FetchCrossRegionRestoreJobClientGetResponse, error) {
 	result := FetchCrossRegionRestoreJobClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AzureBackupJobResource); err != nil {
 		return FetchCrossRegionRestoreJobClientGetResponse{}, err
 	}

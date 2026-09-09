@@ -18,6 +18,8 @@ import (
 
 // Client contains the methods for the service.
 // Don't use this type directly, use NewClient() instead.
+//
+// Generated from API version 2026-03-01
 type Client struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type Client struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*Client, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 //
 // Validates if a feature is supported
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01
 //   - location - The name of the Azure region.
 //   - parameters - The request body
 //   - options - ClientCheckFeatureSupportOptions contains the optional parameters for the Client.CheckFeatureSupport method.
@@ -62,19 +65,14 @@ func (client *Client) CheckFeatureSupport(ctx context.Context, location string, 
 	if err != nil {
 		return ClientCheckFeatureSupportResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientCheckFeatureSupportResponse{}, err
-	}
-	resp, err := client.checkFeatureSupportHandleResponse(httpResp)
-	return resp, err
+	return client.checkFeatureSupportHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkFeatureSupportCreateRequest creates the CheckFeatureSupport request.
 func (client *Client) checkFeatureSupportCreateRequest(ctx context.Context, location string, parameters FeatureValidationRequestBaseClassification, _ *ClientCheckFeatureSupportOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DataProtection/locations/{location}/checkFeatureSupport"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -86,8 +84,8 @@ func (client *Client) checkFeatureSupportCreateRequest(ctx context.Context, loca
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -97,8 +95,11 @@ func (client *Client) checkFeatureSupportCreateRequest(ctx context.Context, loca
 }
 
 // checkFeatureSupportHandleResponse handles the CheckFeatureSupport response.
-func (client *Client) checkFeatureSupportHandleResponse(resp *http.Response) (ClientCheckFeatureSupportResponse, error) {
+func (client *Client) checkFeatureSupportHandleResponse(resp *http.Response, successCodes ...int) (ClientCheckFeatureSupportResponse, error) {
 	result := ClientCheckFeatureSupportResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return ClientCheckFeatureSupportResponse{}, err
 	}

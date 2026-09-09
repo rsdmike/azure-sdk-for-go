@@ -19,6 +19,8 @@ import (
 
 // CloudServicesNetworksClient contains the methods for the CloudServicesNetworks group.
 // Don't use this type directly, use NewCloudServicesNetworksClient() instead.
+//
+// Generated from API version 2026-07-01
 type CloudServicesNetworksClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type CloudServicesNetworksClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCloudServicesNetworksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CloudServicesNetworksClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewCloudServicesNetworksClient(subscriptionID string, credential azcore.Tok
 
 // BeginCreateOrUpdate - Create a new cloud services network or update the properties of the existing cloud services network.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudServicesNetworkName - The name of the cloud services network.
 //   - cloudServicesNetworkParameters - The request body.
@@ -68,8 +71,6 @@ func (client *CloudServicesNetworksClient) BeginCreateOrUpdate(ctx context.Conte
 
 // CreateOrUpdate - Create a new cloud services network or update the properties of the existing cloud services network.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudServicesNetworksClient) createOrUpdate(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, cloudServicesNetworkParameters CloudServicesNetwork, options *CloudServicesNetworksClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudServicesNetworksClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *CloudServicesNetworksClient) createOrUpdate(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *CloudServicesNetworksClient) createOrUpdate(ctx context.Context, r
 func (client *CloudServicesNetworksClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, cloudServicesNetworkParameters CloudServicesNetwork, options *CloudServicesNetworksClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks/{cloudServicesNetworkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -111,8 +111,8 @@ func (client *CloudServicesNetworksClient) createOrUpdateCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -129,8 +129,6 @@ func (client *CloudServicesNetworksClient) createOrUpdateCreateRequest(ctx conte
 
 // BeginDelete - Delete the provided cloud services network.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudServicesNetworkName - The name of the cloud services network.
 //   - options - CloudServicesNetworksClientBeginDeleteOptions contains the optional parameters for the CloudServicesNetworksClient.BeginDelete
@@ -154,8 +152,6 @@ func (client *CloudServicesNetworksClient) BeginDelete(ctx context.Context, reso
 
 // Delete - Delete the provided cloud services network.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudServicesNetworksClient) deleteOperation(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, options *CloudServicesNetworksClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudServicesNetworksClient.BeginDelete"
@@ -171,8 +167,7 @@ func (client *CloudServicesNetworksClient) deleteOperation(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -181,7 +176,7 @@ func (client *CloudServicesNetworksClient) deleteOperation(ctx context.Context, 
 func (client *CloudServicesNetworksClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, options *CloudServicesNetworksClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks/{cloudServicesNetworkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -197,8 +192,8 @@ func (client *CloudServicesNetworksClient) deleteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -210,8 +205,6 @@ func (client *CloudServicesNetworksClient) deleteCreateRequest(ctx context.Conte
 
 // Get - Get properties of the provided cloud services network.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudServicesNetworkName - The name of the cloud services network.
 //   - options - CloudServicesNetworksClientGetOptions contains the optional parameters for the CloudServicesNetworksClient.Get
@@ -230,19 +223,14 @@ func (client *CloudServicesNetworksClient) Get(ctx context.Context, resourceGrou
 	if err != nil {
 		return CloudServicesNetworksClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CloudServicesNetworksClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CloudServicesNetworksClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, _ *CloudServicesNetworksClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks/{cloudServicesNetworkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -258,15 +246,18 @@ func (client *CloudServicesNetworksClient) getCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CloudServicesNetworksClient) getHandleResponse(resp *http.Response) (CloudServicesNetworksClientGetResponse, error) {
+func (client *CloudServicesNetworksClient) getHandleResponse(resp *http.Response, successCodes ...int) (CloudServicesNetworksClientGetResponse, error) {
 	result := CloudServicesNetworksClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServicesNetwork); err != nil {
 		return CloudServicesNetworksClientGetResponse{}, err
 	}
@@ -274,8 +265,6 @@ func (client *CloudServicesNetworksClient) getHandleResponse(resp *http.Response
 }
 
 // NewListByResourceGroupPager - Get a list of cloud services networks in the provided resource group.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - CloudServicesNetworksClientListByResourceGroupOptions contains the optional parameters for the CloudServicesNetworksClient.NewListByResourceGroupPager
 //     method.
@@ -290,49 +279,63 @@ func (client *CloudServicesNetworksClient) NewListByResourceGroupPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return CloudServicesNetworksClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudServicesNetworksClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *CloudServicesNetworksClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *CloudServicesNetworksClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudServicesNetworksClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *CloudServicesNetworksClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *CloudServicesNetworksClient) listByResourceGroupHandleResponse(resp *http.Response) (CloudServicesNetworksClientListByResourceGroupResponse, error) {
+func (client *CloudServicesNetworksClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (CloudServicesNetworksClientListByResourceGroupResponse, error) {
 	result := CloudServicesNetworksClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServicesNetworkList); err != nil {
 		return CloudServicesNetworksClientListByResourceGroupResponse{}, err
 	}
@@ -340,8 +343,6 @@ func (client *CloudServicesNetworksClient) listByResourceGroupHandleResponse(res
 }
 
 // NewListBySubscriptionPager - Get a list of cloud services networks in the provided subscription.
-//
-// Generated from API version 2025-09-01
 //   - options - CloudServicesNetworksClientListBySubscriptionOptions contains the optional parameters for the CloudServicesNetworksClient.NewListBySubscriptionPager
 //     method.
 func (client *CloudServicesNetworksClient) NewListBySubscriptionPager(options *CloudServicesNetworksClientListBySubscriptionOptions) *runtime.Pager[CloudServicesNetworksClientListBySubscriptionResponse] {
@@ -355,45 +356,59 @@ func (client *CloudServicesNetworksClient) NewListBySubscriptionPager(options *C
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return CloudServicesNetworksClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudServicesNetworksClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *CloudServicesNetworksClient) listBySubscriptionCreateRequest(ctx context.Context, options *CloudServicesNetworksClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/cloudServicesNetworks"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudServicesNetworksClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *CloudServicesNetworksClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/cloudServicesNetworks"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *CloudServicesNetworksClient) listBySubscriptionHandleResponse(resp *http.Response) (CloudServicesNetworksClientListBySubscriptionResponse, error) {
+func (client *CloudServicesNetworksClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (CloudServicesNetworksClientListBySubscriptionResponse, error) {
 	result := CloudServicesNetworksClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudServicesNetworkList); err != nil {
 		return CloudServicesNetworksClientListBySubscriptionResponse{}, err
 	}
@@ -403,8 +418,6 @@ func (client *CloudServicesNetworksClient) listBySubscriptionHandleResponse(resp
 // BeginUpdate - Update properties of the provided cloud services network, or update the tags associated with it. Properties
 // and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudServicesNetworkName - The name of the cloud services network.
 //   - cloudServicesNetworkUpdateParameters - The request body.
@@ -430,8 +443,6 @@ func (client *CloudServicesNetworksClient) BeginUpdate(ctx context.Context, reso
 // Update - Update properties of the provided cloud services network, or update the tags associated with it. Properties and
 // tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudServicesNetworksClient) update(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, cloudServicesNetworkUpdateParameters CloudServicesNetworkPatchParameters, options *CloudServicesNetworksClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudServicesNetworksClient.BeginUpdate"
@@ -447,8 +458,7 @@ func (client *CloudServicesNetworksClient) update(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -457,7 +467,7 @@ func (client *CloudServicesNetworksClient) update(ctx context.Context, resourceG
 func (client *CloudServicesNetworksClient) updateCreateRequest(ctx context.Context, resourceGroupName string, cloudServicesNetworkName string, cloudServicesNetworkUpdateParameters CloudServicesNetworkPatchParameters, options *CloudServicesNetworksClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/cloudServicesNetworks/{cloudServicesNetworkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -473,8 +483,8 @@ func (client *CloudServicesNetworksClient) updateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}

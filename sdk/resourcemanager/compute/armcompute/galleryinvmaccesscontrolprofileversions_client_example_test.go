@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2025-03-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Create.json
+// Generated from example definition: 2025-12-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Create.json
 func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -80,13 +80,13 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginCreateOrUpdate() 
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryInVMAccessControlProfileVersionsClientCreateOrUpdateResponse{
-	// 	GalleryInVMAccessControlProfileVersion: &armcompute.GalleryInVMAccessControlProfileVersion{
+	// 	GalleryInVMAccessControlProfileVersion: armcompute.GalleryInVMAccessControlProfileVersion{
 	// 		ID: to.Ptr("/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/galleries/myGallery/inVMAccessControlProfiles/myInVMAccessControlProfileName/versions/1.0.0"),
 	// 		Properties: &armcompute.GalleryInVMAccessControlProfileVersionProperties{
 	// 			Mode: to.Ptr(armcompute.AccessControlRulesModeAudit),
@@ -136,7 +136,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginCreateOrUpdate() 
 	// 				},
 	// 			},
 	// 			ExcludeFromLatest: to.Ptr(false),
-	// 			PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-01T00:00:00Z"); return t}()),
+	// 			PublishedDate: to.Ptr(time.Date(2024, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			ProvisioningState: to.Ptr(armcompute.GalleryProvisioningStateUpdating),
 	// 		},
 	// 		Location: to.Ptr("West US"),
@@ -145,7 +145,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginCreateOrUpdate() 
 	// }
 }
 
-// Generated from example definition: 2025-03-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Delete.json
+// Generated from example definition: 2025-12-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Delete.json
 func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -162,11 +162,11 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-03-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Get.json
+// Generated from example definition: 2025-12-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Get.json
 func ExampleGalleryInVMAccessControlProfileVersionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -185,7 +185,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryInVMAccessControlProfileVersionsClientGetResponse{
-	// 	GalleryInVMAccessControlProfileVersion: &armcompute.GalleryInVMAccessControlProfileVersion{
+	// 	GalleryInVMAccessControlProfileVersion: armcompute.GalleryInVMAccessControlProfileVersion{
 	// 		ID: to.Ptr("/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/galleries/myGallery/inVMAccessControlProfiles/myInVMAccessControlProfileName/versions/1.0.0"),
 	// 		Properties: &armcompute.GalleryInVMAccessControlProfileVersionProperties{
 	// 			Mode: to.Ptr(armcompute.AccessControlRulesModeAudit),
@@ -238,7 +238,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_Get() {
 	// 				},
 	// 			},
 	// 			ExcludeFromLatest: to.Ptr(false),
-	// 			PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-01T00:00:00Z"); return t}()),
+	// 			PublishedDate: to.Ptr(time.Date(2024, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			ProvisioningState: to.Ptr(armcompute.GalleryProvisioningStateSucceeded),
 	// 		},
 	// 		Location: to.Ptr("West US"),
@@ -247,7 +247,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-03-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_ListByGalleryInVMAccessControlProfile.json
+// Generated from example definition: 2025-12-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_ListByGalleryInVMAccessControlProfile.json
 func ExampleGalleryInVMAccessControlProfileVersionsClient_NewListByGalleryInVMAccessControlProfilePager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -325,7 +325,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_NewListByGalleryInVMAc
 		// 						},
 		// 					},
 		// 					ExcludeFromLatest: to.Ptr(false),
-		// 					PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-01T00:00:00Z"); return t}()),
+		// 					PublishedDate: to.Ptr(time.Date(2024, time.January, 1, 0, 0, 0, 0, time.UTC)),
 		// 					ProvisioningState: to.Ptr(armcompute.GalleryProvisioningStateSucceeded),
 		// 				},
 		// 				Location: to.Ptr("West US"),
@@ -338,7 +338,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_NewListByGalleryInVMAc
 	}
 }
 
-// Generated from example definition: 2025-03-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Update.json
+// Generated from example definition: 2025-12-03/galleryResourceProfileExamples/GalleryInVMAccessControlProfileVersion_Update.json
 func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -372,13 +372,13 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryInVMAccessControlProfileVersionsClientUpdateResponse{
-	// 	GalleryInVMAccessControlProfileVersion: &armcompute.GalleryInVMAccessControlProfileVersion{
+	// 	GalleryInVMAccessControlProfileVersion: armcompute.GalleryInVMAccessControlProfileVersion{
 	// 		ID: to.Ptr("/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/galleries/myGallery/inVMAccessControlProfiles/myInVMAccessControlProfileName/versions/1.0.0"),
 	// 		Properties: &armcompute.GalleryInVMAccessControlProfileVersionProperties{
 	// 			Mode: to.Ptr(armcompute.AccessControlRulesModeAudit),
@@ -431,7 +431,7 @@ func ExampleGalleryInVMAccessControlProfileVersionsClient_BeginUpdate() {
 	// 				},
 	// 			},
 	// 			ExcludeFromLatest: to.Ptr(false),
-	// 			PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-01T00:00:00Z"); return t}()),
+	// 			PublishedDate: to.Ptr(time.Date(2024, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			ProvisioningState: to.Ptr(armcompute.GalleryProvisioningStateUpdating),
 	// 		},
 	// 		Location: to.Ptr("West US"),

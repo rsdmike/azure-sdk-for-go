@@ -19,6 +19,8 @@ import (
 
 // WhatIfResultsAtManagementGroupClient contains the methods for the WhatIfResultsAtManagementGroup group.
 // Don't use this type directly, use NewWhatIfResultsAtManagementGroupClient() instead.
+//
+// Generated from API version 2025-07-01
 type WhatIfResultsAtManagementGroupClient struct {
 	internal *arm.Client
 }
@@ -39,8 +41,6 @@ func NewWhatIfResultsAtManagementGroupClient(credential azcore.TokenCredential, 
 
 // BeginCreateOrUpdate - Creates or updates a Deployment stack at the specified scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - managementGroupID - The management group ID.
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - resource - Resource create parameters.
@@ -65,8 +65,6 @@ func (client *WhatIfResultsAtManagementGroupClient) BeginCreateOrUpdate(ctx cont
 
 // CreateOrUpdate - Creates or updates a Deployment stack at the specified scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 func (client *WhatIfResultsAtManagementGroupClient) createOrUpdate(ctx context.Context, managementGroupID string, deploymentStacksWhatIfResultName string, resource WhatIfResult, options *WhatIfResultsAtManagementGroupClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WhatIfResultsAtManagementGroupClient.BeginCreateOrUpdate"
@@ -82,8 +80,7 @@ func (client *WhatIfResultsAtManagementGroupClient) createOrUpdate(ctx context.C
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -104,8 +101,8 @@ func (client *WhatIfResultsAtManagementGroupClient) createOrUpdateCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -117,8 +114,6 @@ func (client *WhatIfResultsAtManagementGroupClient) createOrUpdateCreateRequest(
 // Delete - Deletes a Deployment stack by name at the specified scope. When operation completes, status code 200 returned
 // without content.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - managementGroupID - The management group ID.
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtManagementGroupClientDeleteOptions contains the optional parameters for the WhatIfResultsAtManagementGroupClient.Delete
@@ -138,8 +133,7 @@ func (client *WhatIfResultsAtManagementGroupClient) Delete(ctx context.Context, 
 		return WhatIfResultsAtManagementGroupClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return WhatIfResultsAtManagementGroupClientDeleteResponse{}, err
+		return WhatIfResultsAtManagementGroupClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return WhatIfResultsAtManagementGroupClientDeleteResponse{}, nil
 }
@@ -160,7 +154,7 @@ func (client *WhatIfResultsAtManagementGroupClient) deleteCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
+	reqQP.Set("api-version", version20250701)
 	if options != nil && options.BypassStackOutOfSyncError != nil {
 		reqQP.Set("bypassStackOutOfSyncError", strconv.FormatBool(*options.BypassStackOutOfSyncError))
 	}
@@ -176,14 +170,12 @@ func (client *WhatIfResultsAtManagementGroupClient) deleteCreateRequest(ctx cont
 	if options != nil && options.UnmanageActionResourcesWithoutDeleteSupport != nil {
 		reqQP.Set("unmanageAction.ResourcesWithoutDeleteSupport", string(*options.UnmanageActionResourcesWithoutDeleteSupport))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the Deployment stack with the given name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - managementGroupID - The management group ID.
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtManagementGroupClientGetOptions contains the optional parameters for the WhatIfResultsAtManagementGroupClient.Get
@@ -202,12 +194,7 @@ func (client *WhatIfResultsAtManagementGroupClient) Get(ctx context.Context, man
 	if err != nil {
 		return WhatIfResultsAtManagementGroupClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return WhatIfResultsAtManagementGroupClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -226,15 +213,18 @@ func (client *WhatIfResultsAtManagementGroupClient) getCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *WhatIfResultsAtManagementGroupClient) getHandleResponse(resp *http.Response) (WhatIfResultsAtManagementGroupClientGetResponse, error) {
+func (client *WhatIfResultsAtManagementGroupClient) getHandleResponse(resp *http.Response, successCodes ...int) (WhatIfResultsAtManagementGroupClientGetResponse, error) {
 	result := WhatIfResultsAtManagementGroupClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WhatIfResult); err != nil {
 		return WhatIfResultsAtManagementGroupClientGetResponse{}, err
 	}
@@ -242,8 +232,6 @@ func (client *WhatIfResultsAtManagementGroupClient) getHandleResponse(resp *http
 }
 
 // NewListPager - Lists Deployment stacks at the specified scope.
-//
-// Generated from API version 2025-07-01
 //   - managementGroupID - The management group ID.
 //   - options - WhatIfResultsAtManagementGroupClientListOptions contains the optional parameters for the WhatIfResultsAtManagementGroupClient.NewListPager
 //     method.
@@ -258,39 +246,53 @@ func (client *WhatIfResultsAtManagementGroupClient) NewListPager(managementGroup
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, managementGroupID, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, managementGroupID, nextLink, options)
 			if err != nil {
 				return WhatIfResultsAtManagementGroupClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return WhatIfResultsAtManagementGroupClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *WhatIfResultsAtManagementGroupClient) listCreateRequest(ctx context.Context, managementGroupID string, _ *WhatIfResultsAtManagementGroupClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Management/managementGroups/{managementGroupId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults"
-	if managementGroupID == "" {
-		return nil, errors.New("parameter managementGroupID cannot be empty")
+func (client *WhatIfResultsAtManagementGroupClient) listCreateRequest(ctx context.Context, managementGroupID string, nextLink string, _ *WhatIfResultsAtManagementGroupClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Management/managementGroups/{managementGroupId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults"
+		if managementGroupID == "" {
+			return nil, errors.New("parameter managementGroupID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{managementGroupId}", url.PathEscape(managementGroupID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{managementGroupId}", url.PathEscape(managementGroupID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *WhatIfResultsAtManagementGroupClient) listHandleResponse(resp *http.Response) (WhatIfResultsAtManagementGroupClientListResponse, error) {
+func (client *WhatIfResultsAtManagementGroupClient) listHandleResponse(resp *http.Response, successCodes ...int) (WhatIfResultsAtManagementGroupClientListResponse, error) {
 	result := WhatIfResultsAtManagementGroupClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WhatIfResultListResult); err != nil {
 		return WhatIfResultsAtManagementGroupClientListResponse{}, err
 	}
@@ -299,8 +301,6 @@ func (client *WhatIfResultsAtManagementGroupClient) listHandleResponse(resp *htt
 
 // BeginWhatIf - Returns property-level changes that will be made by the deployment if executed.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - managementGroupID - The management group ID.
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtManagementGroupClientBeginWhatIfOptions contains the optional parameters for the WhatIfResultsAtManagementGroupClient.BeginWhatIf
@@ -324,8 +324,6 @@ func (client *WhatIfResultsAtManagementGroupClient) BeginWhatIf(ctx context.Cont
 
 // WhatIf - Returns property-level changes that will be made by the deployment if executed.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 func (client *WhatIfResultsAtManagementGroupClient) whatIf(ctx context.Context, managementGroupID string, deploymentStacksWhatIfResultName string, options *WhatIfResultsAtManagementGroupClientBeginWhatIfOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WhatIfResultsAtManagementGroupClient.BeginWhatIf"
@@ -341,8 +339,7 @@ func (client *WhatIfResultsAtManagementGroupClient) whatIf(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -363,8 +360,8 @@ func (client *WhatIfResultsAtManagementGroupClient) whatIfCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

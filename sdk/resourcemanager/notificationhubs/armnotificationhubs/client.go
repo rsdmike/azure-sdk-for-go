@@ -19,6 +19,8 @@ import (
 
 // Client contains the methods for the service.
 // Don't use this type directly, use NewClient() instead.
+//
+// Generated from API version 2023-10-01-preview
 type Client struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type Client struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*Client, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewClient(subscriptionID string, credential azcore.TokenCredential, options
 
 // CheckNotificationHubAvailability - Checks the availability of the given notificationHub in a namespace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - parameters - Request content.
@@ -63,19 +66,14 @@ func (client *Client) CheckNotificationHubAvailability(ctx context.Context, reso
 	if err != nil {
 		return ClientCheckNotificationHubAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientCheckNotificationHubAvailabilityResponse{}, err
-	}
-	resp, err := client.checkNotificationHubAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkNotificationHubAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkNotificationHubAvailabilityCreateRequest creates the CheckNotificationHubAvailability request.
 func (client *Client) checkNotificationHubAvailabilityCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, parameters CheckAvailabilityParameters, _ *ClientCheckNotificationHubAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/checkNotificationHubAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -91,8 +89,8 @@ func (client *Client) checkNotificationHubAvailabilityCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -102,8 +100,11 @@ func (client *Client) checkNotificationHubAvailabilityCreateRequest(ctx context.
 }
 
 // checkNotificationHubAvailabilityHandleResponse handles the CheckNotificationHubAvailability response.
-func (client *Client) checkNotificationHubAvailabilityHandleResponse(resp *http.Response) (ClientCheckNotificationHubAvailabilityResponse, error) {
+func (client *Client) checkNotificationHubAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (ClientCheckNotificationHubAvailabilityResponse, error) {
 	result := ClientCheckNotificationHubAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckAvailabilityResult); err != nil {
 		return ClientCheckNotificationHubAvailabilityResponse{}, err
 	}
@@ -112,8 +113,6 @@ func (client *Client) checkNotificationHubAvailabilityHandleResponse(resp *http.
 
 // CreateOrUpdate - Creates/Update a NotificationHub in a namespace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -133,19 +132,14 @@ func (client *Client) CreateOrUpdate(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, parameters NotificationHubResource, _ *ClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -165,8 +159,8 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -176,8 +170,11 @@ func (client *Client) createOrUpdateCreateRequest(ctx context.Context, resourceG
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *Client) createOrUpdateHandleResponse(resp *http.Response) (ClientCreateOrUpdateResponse, error) {
+func (client *Client) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ClientCreateOrUpdateResponse, error) {
 	result := ClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationHubResource); err != nil {
 		return ClientCreateOrUpdateResponse{}, err
 	}
@@ -186,8 +183,6 @@ func (client *Client) createOrUpdateHandleResponse(resp *http.Response) (ClientC
 
 // CreateOrUpdateAuthorizationRule - Creates/Updates an authorization rule for a NotificationHub
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -209,19 +204,14 @@ func (client *Client) CreateOrUpdateAuthorizationRule(ctx context.Context, resou
 	if err != nil {
 		return ClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientCreateOrUpdateAuthorizationRuleResponse{}, err
-	}
-	resp, err := client.createOrUpdateAuthorizationRuleHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateAuthorizationRuleHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateAuthorizationRuleCreateRequest creates the CreateOrUpdateAuthorizationRule request.
 func (client *Client) createOrUpdateAuthorizationRuleCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, parameters SharedAccessAuthorizationRuleResource, _ *ClientCreateOrUpdateAuthorizationRuleOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules/{authorizationRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -245,8 +235,8 @@ func (client *Client) createOrUpdateAuthorizationRuleCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -256,8 +246,11 @@ func (client *Client) createOrUpdateAuthorizationRuleCreateRequest(ctx context.C
 }
 
 // createOrUpdateAuthorizationRuleHandleResponse handles the CreateOrUpdateAuthorizationRule response.
-func (client *Client) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response) (ClientCreateOrUpdateAuthorizationRuleResponse, error) {
+func (client *Client) createOrUpdateAuthorizationRuleHandleResponse(resp *http.Response, successCodes ...int) (ClientCreateOrUpdateAuthorizationRuleResponse, error) {
 	result := ClientCreateOrUpdateAuthorizationRuleResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleResource); err != nil {
 		return ClientCreateOrUpdateAuthorizationRuleResponse{}, err
 	}
@@ -266,8 +259,6 @@ func (client *Client) createOrUpdateAuthorizationRuleHandleResponse(resp *http.R
 
 // DebugSend - Test send a push notification.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -286,19 +277,14 @@ func (client *Client) DebugSend(ctx context.Context, resourceGroupName string, n
 	if err != nil {
 		return ClientDebugSendResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientDebugSendResponse{}, err
-	}
-	resp, err := client.debugSendHandleResponse(httpResp)
-	return resp, err
+	return client.debugSendHandleResponse(httpResp, http.StatusOK)
 }
 
 // debugSendCreateRequest creates the DebugSend request.
 func (client *Client) debugSendCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, _ *ClientDebugSendOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/debugsend"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -318,15 +304,18 @@ func (client *Client) debugSendCreateRequest(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // debugSendHandleResponse handles the DebugSend response.
-func (client *Client) debugSendHandleResponse(resp *http.Response) (ClientDebugSendResponse, error) {
+func (client *Client) debugSendHandleResponse(resp *http.Response, successCodes ...int) (ClientDebugSendResponse, error) {
 	result := ClientDebugSendResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DebugSendResponse); err != nil {
 		return ClientDebugSendResponse{}, err
 	}
@@ -335,8 +324,6 @@ func (client *Client) debugSendHandleResponse(resp *http.Response) (ClientDebugS
 
 // Delete - Deletes a notification hub associated with a namespace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -356,8 +343,7 @@ func (client *Client) Delete(ctx context.Context, resourceGroupName string, name
 		return ClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientDeleteResponse{}, err
+		return ClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ClientDeleteResponse{}, nil
 }
@@ -366,7 +352,7 @@ func (client *Client) Delete(ctx context.Context, resourceGroupName string, name
 func (client *Client) deleteCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, _ *ClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -386,15 +372,13 @@ func (client *Client) deleteCreateRequest(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // DeleteAuthorizationRule - Deletes a notificationHub authorization rule
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -416,8 +400,7 @@ func (client *Client) DeleteAuthorizationRule(ctx context.Context, resourceGroup
 		return ClientDeleteAuthorizationRuleResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientDeleteAuthorizationRuleResponse{}, err
+		return ClientDeleteAuthorizationRuleResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ClientDeleteAuthorizationRuleResponse{}, nil
 }
@@ -426,7 +409,7 @@ func (client *Client) DeleteAuthorizationRule(ctx context.Context, resourceGroup
 func (client *Client) deleteAuthorizationRuleCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, _ *ClientDeleteAuthorizationRuleOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules/{authorizationRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -450,15 +433,13 @@ func (client *Client) deleteAuthorizationRuleCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the notification hub.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -477,19 +458,14 @@ func (client *Client) Get(ctx context.Context, resourceGroupName string, namespa
 	if err != nil {
 		return ClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, _ *ClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -509,15 +485,18 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceGroupName st
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
+func (client *Client) getHandleResponse(resp *http.Response, successCodes ...int) (ClientGetResponse, error) {
 	result := ClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationHubResource); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -526,8 +505,6 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 
 // GetAuthorizationRule - Gets an authorization rule for a NotificationHub by name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -547,19 +524,14 @@ func (client *Client) GetAuthorizationRule(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return ClientGetAuthorizationRuleResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientGetAuthorizationRuleResponse{}, err
-	}
-	resp, err := client.getAuthorizationRuleHandleResponse(httpResp)
-	return resp, err
+	return client.getAuthorizationRuleHandleResponse(httpResp, http.StatusOK)
 }
 
 // getAuthorizationRuleCreateRequest creates the GetAuthorizationRule request.
 func (client *Client) getAuthorizationRuleCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, _ *ClientGetAuthorizationRuleOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules/{authorizationRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -583,15 +555,18 @@ func (client *Client) getAuthorizationRuleCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getAuthorizationRuleHandleResponse handles the GetAuthorizationRule response.
-func (client *Client) getAuthorizationRuleHandleResponse(resp *http.Response) (ClientGetAuthorizationRuleResponse, error) {
+func (client *Client) getAuthorizationRuleHandleResponse(resp *http.Response, successCodes ...int) (ClientGetAuthorizationRuleResponse, error) {
 	result := ClientGetAuthorizationRuleResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleResource); err != nil {
 		return ClientGetAuthorizationRuleResponse{}, err
 	}
@@ -600,8 +575,6 @@ func (client *Client) getAuthorizationRuleHandleResponse(resp *http.Response) (C
 
 // GetPnsCredentials - Lists the PNS Credentials associated with a notification hub.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -620,19 +593,14 @@ func (client *Client) GetPnsCredentials(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return ClientGetPnsCredentialsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientGetPnsCredentialsResponse{}, err
-	}
-	resp, err := client.getPnsCredentialsHandleResponse(httpResp)
-	return resp, err
+	return client.getPnsCredentialsHandleResponse(httpResp, http.StatusOK)
 }
 
 // getPnsCredentialsCreateRequest creates the GetPnsCredentials request.
 func (client *Client) getPnsCredentialsCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, _ *ClientGetPnsCredentialsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/pnsCredentials"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -652,15 +620,18 @@ func (client *Client) getPnsCredentialsCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getPnsCredentialsHandleResponse handles the GetPnsCredentials response.
-func (client *Client) getPnsCredentialsHandleResponse(resp *http.Response) (ClientGetPnsCredentialsResponse, error) {
+func (client *Client) getPnsCredentialsHandleResponse(resp *http.Response, successCodes ...int) (ClientGetPnsCredentialsResponse, error) {
 	result := ClientGetPnsCredentialsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PnsCredentialsResource); err != nil {
 		return ClientGetPnsCredentialsResponse{}, err
 	}
@@ -668,8 +639,6 @@ func (client *Client) getPnsCredentialsHandleResponse(resp *http.Response) (Clie
 }
 
 // NewListPager - Lists the notification hubs associated with a namespace.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - options - ClientListOptions contains the optional parameters for the Client.NewListPager method.
@@ -684,53 +653,67 @@ func (client *Client) NewListPager(resourceGroupName string, namespaceName strin
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, namespaceName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, namespaceName, nextLink, options)
 			if err != nil {
 				return ClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *Client) listCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, options *ClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *Client) listCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, nextLink string, options *ClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if namespaceName == "" {
+			return nil, errors.New("parameter namespaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if namespaceName == "" {
-		return nil, errors.New("parameter namespaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20231001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *Client) listHandleResponse(resp *http.Response) (ClientListResponse, error) {
+func (client *Client) listHandleResponse(resp *http.Response, successCodes ...int) (ClientListResponse, error) {
 	result := ClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationHubListResult); err != nil {
 		return ClientListResponse{}, err
 	}
@@ -738,8 +721,6 @@ func (client *Client) listHandleResponse(resp *http.Response) (ClientListRespons
 }
 
 // NewListAuthorizationRulesPager - Gets the authorization rules for a NotificationHub.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -756,51 +737,65 @@ func (client *Client) NewListAuthorizationRulesPager(resourceGroupName string, n
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, notificationHubName, options)
-			}, nil)
+			req, err := client.listAuthorizationRulesCreateRequest(ctx, resourceGroupName, namespaceName, notificationHubName, nextLink, options)
 			if err != nil {
 				return ClientListAuthorizationRulesResponse{}, err
 			}
-			return client.listAuthorizationRulesHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClientListAuthorizationRulesResponse{}, err
+			}
+			return client.listAuthorizationRulesHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listAuthorizationRulesCreateRequest creates the ListAuthorizationRules request.
-func (client *Client) listAuthorizationRulesCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, _ *ClientListAuthorizationRulesOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *Client) listAuthorizationRulesCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, nextLink string, _ *ClientListAuthorizationRulesOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if namespaceName == "" {
+			return nil, errors.New("parameter namespaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
+		if notificationHubName == "" {
+			return nil, errors.New("parameter notificationHubName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{notificationHubName}", url.PathEscape(notificationHubName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if namespaceName == "" {
-		return nil, errors.New("parameter namespaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
-	if notificationHubName == "" {
-		return nil, errors.New("parameter notificationHubName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{notificationHubName}", url.PathEscape(notificationHubName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20231001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listAuthorizationRulesHandleResponse handles the ListAuthorizationRules response.
-func (client *Client) listAuthorizationRulesHandleResponse(resp *http.Response) (ClientListAuthorizationRulesResponse, error) {
+func (client *Client) listAuthorizationRulesHandleResponse(resp *http.Response, successCodes ...int) (ClientListAuthorizationRulesResponse, error) {
 	result := ClientListAuthorizationRulesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessAuthorizationRuleListResult); err != nil {
 		return ClientListAuthorizationRulesResponse{}, err
 	}
@@ -809,8 +804,6 @@ func (client *Client) listAuthorizationRulesHandleResponse(resp *http.Response) 
 
 // ListKeys - Gets the Primary and Secondary ConnectionStrings to the NotificationHub
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -830,19 +823,14 @@ func (client *Client) ListKeys(ctx context.Context, resourceGroupName string, na
 	if err != nil {
 		return ClientListKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientListKeysResponse{}, err
-	}
-	resp, err := client.listKeysHandleResponse(httpResp)
-	return resp, err
+	return client.listKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // listKeysCreateRequest creates the ListKeys request.
 func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, _ *ClientListKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules/{authorizationRuleName}/listKeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -866,15 +854,18 @@ func (client *Client) listKeysCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listKeysHandleResponse handles the ListKeys response.
-func (client *Client) listKeysHandleResponse(resp *http.Response) (ClientListKeysResponse, error) {
+func (client *Client) listKeysHandleResponse(resp *http.Response, successCodes ...int) (ClientListKeysResponse, error) {
 	result := ClientListKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceListKeys); err != nil {
 		return ClientListKeysResponse{}, err
 	}
@@ -883,8 +874,6 @@ func (client *Client) listKeysHandleResponse(resp *http.Response) (ClientListKey
 
 // RegenerateKeys - Regenerates the Primary/Secondary Keys to the NotificationHub Authorization Rule
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -905,19 +894,14 @@ func (client *Client) RegenerateKeys(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ClientRegenerateKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientRegenerateKeysResponse{}, err
-	}
-	resp, err := client.regenerateKeysHandleResponse(httpResp)
-	return resp, err
+	return client.regenerateKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // regenerateKeysCreateRequest creates the RegenerateKeys request.
 func (client *Client) regenerateKeysCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, authorizationRuleName string, parameters PolicyKeyResource, _ *ClientRegenerateKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}/authorizationRules/{authorizationRuleName}/regenerateKeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -941,8 +925,8 @@ func (client *Client) regenerateKeysCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -952,8 +936,11 @@ func (client *Client) regenerateKeysCreateRequest(ctx context.Context, resourceG
 }
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
-func (client *Client) regenerateKeysHandleResponse(resp *http.Response) (ClientRegenerateKeysResponse, error) {
+func (client *Client) regenerateKeysHandleResponse(resp *http.Response, successCodes ...int) (ClientRegenerateKeysResponse, error) {
 	result := ClientRegenerateKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ResourceListKeys); err != nil {
 		return ClientRegenerateKeysResponse{}, err
 	}
@@ -962,8 +949,6 @@ func (client *Client) regenerateKeysHandleResponse(resp *http.Response) (ClientR
 
 // Update - Patch a NotificationHub in a namespace.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Namespace name
 //   - notificationHubName - Notification Hub name
@@ -983,19 +968,14 @@ func (client *Client) Update(ctx context.Context, resourceGroupName string, name
 	if err != nil {
 		return ClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, notificationHubName string, parameters NotificationHubPatchParameters, _ *ClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NotificationHubs/namespaces/{namespaceName}/notificationHubs/{notificationHubName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1015,8 +995,8 @@ func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -1026,8 +1006,11 @@ func (client *Client) updateCreateRequest(ctx context.Context, resourceGroupName
 }
 
 // updateHandleResponse handles the Update response.
-func (client *Client) updateHandleResponse(resp *http.Response) (ClientUpdateResponse, error) {
+func (client *Client) updateHandleResponse(resp *http.Response, successCodes ...int) (ClientUpdateResponse, error) {
 	result := ClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NotificationHubResource); err != nil {
 		return ClientUpdateResponse{}, err
 	}

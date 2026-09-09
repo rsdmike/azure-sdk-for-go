@@ -18,6 +18,8 @@ import (
 
 // EmailServicesClient contains the methods for the EmailServices group.
 // Don't use this type directly, use NewEmailServicesClient() instead.
+//
+// Generated from API version 2025-09-01
 type EmailServicesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type EmailServicesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewEmailServicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*EmailServicesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewEmailServicesClient(subscriptionID string, credential azcore.TokenCreden
 //
 // Create a new EmailService or update an existing EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - parameters - Parameters for the create or update operation
@@ -71,8 +74,6 @@ func (client *EmailServicesClient) BeginCreateOrUpdate(ctx context.Context, reso
 //
 // Create a new EmailService or update an existing EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *EmailServicesClient) createOrUpdate(ctx context.Context, resourceGroupName string, emailServiceName string, parameters EmailServiceResource, options *EmailServicesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EmailServicesClient.BeginCreateOrUpdate"
@@ -88,8 +89,7 @@ func (client *EmailServicesClient) createOrUpdate(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -98,7 +98,7 @@ func (client *EmailServicesClient) createOrUpdate(ctx context.Context, resourceG
 func (client *EmailServicesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, parameters EmailServiceResource, _ *EmailServicesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -114,8 +114,8 @@ func (client *EmailServicesClient) createOrUpdateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -128,8 +128,6 @@ func (client *EmailServicesClient) createOrUpdateCreateRequest(ctx context.Conte
 //
 // Operation to delete a EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - options - EmailServicesClientBeginDeleteOptions contains the optional parameters for the EmailServicesClient.BeginDelete
@@ -155,8 +153,6 @@ func (client *EmailServicesClient) BeginDelete(ctx context.Context, resourceGrou
 //
 // Operation to delete a EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *EmailServicesClient) deleteOperation(ctx context.Context, resourceGroupName string, emailServiceName string, options *EmailServicesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EmailServicesClient.BeginDelete"
@@ -172,8 +168,7 @@ func (client *EmailServicesClient) deleteOperation(ctx context.Context, resource
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -182,7 +177,7 @@ func (client *EmailServicesClient) deleteOperation(ctx context.Context, resource
 func (client *EmailServicesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, _ *EmailServicesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -198,8 +193,8 @@ func (client *EmailServicesClient) deleteCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -207,8 +202,6 @@ func (client *EmailServicesClient) deleteCreateRequest(ctx context.Context, reso
 //
 // Get the EmailService and its properties.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - options - EmailServicesClientGetOptions contains the optional parameters for the EmailServicesClient.Get method.
@@ -226,19 +219,14 @@ func (client *EmailServicesClient) Get(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return EmailServicesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EmailServicesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *EmailServicesClient) getCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, _ *EmailServicesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -254,15 +242,18 @@ func (client *EmailServicesClient) getCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *EmailServicesClient) getHandleResponse(resp *http.Response) (EmailServicesClientGetResponse, error) {
+func (client *EmailServicesClient) getHandleResponse(resp *http.Response, successCodes ...int) (EmailServicesClientGetResponse, error) {
 	result := EmailServicesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailServiceResource); err != nil {
 		return EmailServicesClientGetResponse{}, err
 	}
@@ -272,8 +263,6 @@ func (client *EmailServicesClient) getHandleResponse(resp *http.Response) (Email
 // NewListByResourceGroupPager - List By Resource Group
 //
 // Handles requests to list all resources in a resource group.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - EmailServicesClientListByResourceGroupOptions contains the optional parameters for the EmailServicesClient.NewListByResourceGroupPager
 //     method.
@@ -288,43 +277,57 @@ func (client *EmailServicesClient) NewListByResourceGroupPager(resourceGroupName
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return EmailServicesClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return EmailServicesClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *EmailServicesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *EmailServicesClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *EmailServicesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *EmailServicesClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *EmailServicesClient) listByResourceGroupHandleResponse(resp *http.Response) (EmailServicesClientListByResourceGroupResponse, error) {
+func (client *EmailServicesClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (EmailServicesClientListByResourceGroupResponse, error) {
 	result := EmailServicesClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailServiceResourceList); err != nil {
 		return EmailServicesClientListByResourceGroupResponse{}, err
 	}
@@ -334,8 +337,6 @@ func (client *EmailServicesClient) listByResourceGroupHandleResponse(resp *http.
 // NewListBySubscriptionPager - List By Subscription
 //
 // Handles requests to list all resources in a subscription.
-//
-// Generated from API version 2025-09-01
 //   - options - EmailServicesClientListBySubscriptionOptions contains the optional parameters for the EmailServicesClient.NewListBySubscriptionPager
 //     method.
 func (client *EmailServicesClient) NewListBySubscriptionPager(options *EmailServicesClientListBySubscriptionOptions) *runtime.Pager[EmailServicesClientListBySubscriptionResponse] {
@@ -349,39 +350,53 @@ func (client *EmailServicesClient) NewListBySubscriptionPager(options *EmailServ
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return EmailServicesClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return EmailServicesClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *EmailServicesClient) listBySubscriptionCreateRequest(ctx context.Context, _ *EmailServicesClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Communication/emailServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *EmailServicesClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *EmailServicesClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Communication/emailServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *EmailServicesClient) listBySubscriptionHandleResponse(resp *http.Response) (EmailServicesClientListBySubscriptionResponse, error) {
+func (client *EmailServicesClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (EmailServicesClientListBySubscriptionResponse, error) {
 	result := EmailServicesClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EmailServiceResourceList); err != nil {
 		return EmailServicesClientListBySubscriptionResponse{}, err
 	}
@@ -392,8 +407,6 @@ func (client *EmailServicesClient) listBySubscriptionHandleResponse(resp *http.R
 //
 // Get a list of domains that are fully verified in Exchange Online.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - options - EmailServicesClientListVerifiedExchangeOnlineDomainsOptions contains the optional parameters for the EmailServicesClient.ListVerifiedExchangeOnlineDomains
 //     method.
 func (client *EmailServicesClient) ListVerifiedExchangeOnlineDomains(ctx context.Context, options *EmailServicesClientListVerifiedExchangeOnlineDomainsOptions) (EmailServicesClientListVerifiedExchangeOnlineDomainsResponse, error) {
@@ -410,19 +423,14 @@ func (client *EmailServicesClient) ListVerifiedExchangeOnlineDomains(ctx context
 	if err != nil {
 		return EmailServicesClientListVerifiedExchangeOnlineDomainsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EmailServicesClientListVerifiedExchangeOnlineDomainsResponse{}, err
-	}
-	resp, err := client.listVerifiedExchangeOnlineDomainsHandleResponse(httpResp)
-	return resp, err
+	return client.listVerifiedExchangeOnlineDomainsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listVerifiedExchangeOnlineDomainsCreateRequest creates the ListVerifiedExchangeOnlineDomains request.
 func (client *EmailServicesClient) listVerifiedExchangeOnlineDomainsCreateRequest(ctx context.Context, _ *EmailServicesClientListVerifiedExchangeOnlineDomainsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Communication/listVerifiedExchangeOnlineDomains"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -430,15 +438,18 @@ func (client *EmailServicesClient) listVerifiedExchangeOnlineDomainsCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listVerifiedExchangeOnlineDomainsHandleResponse handles the ListVerifiedExchangeOnlineDomains response.
-func (client *EmailServicesClient) listVerifiedExchangeOnlineDomainsHandleResponse(resp *http.Response) (EmailServicesClientListVerifiedExchangeOnlineDomainsResponse, error) {
+func (client *EmailServicesClient) listVerifiedExchangeOnlineDomainsHandleResponse(resp *http.Response, successCodes ...int) (EmailServicesClientListVerifiedExchangeOnlineDomainsResponse, error) {
 	result := EmailServicesClientListVerifiedExchangeOnlineDomainsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringArray); err != nil {
 		return EmailServicesClientListVerifiedExchangeOnlineDomainsResponse{}, err
 	}
@@ -449,8 +460,6 @@ func (client *EmailServicesClient) listVerifiedExchangeOnlineDomainsHandleRespon
 //
 // Operation to update an existing EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - parameters - Parameters for the update operation
@@ -477,8 +486,6 @@ func (client *EmailServicesClient) BeginUpdate(ctx context.Context, resourceGrou
 //
 // Operation to update an existing EmailService.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *EmailServicesClient) update(ctx context.Context, resourceGroupName string, emailServiceName string, parameters EmailServiceResourceUpdate, options *EmailServicesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EmailServicesClient.BeginUpdate"
@@ -494,8 +501,7 @@ func (client *EmailServicesClient) update(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -504,7 +510,7 @@ func (client *EmailServicesClient) update(ctx context.Context, resourceGroupName
 func (client *EmailServicesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, parameters EmailServiceResourceUpdate, _ *EmailServicesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -520,8 +526,8 @@ func (client *EmailServicesClient) updateCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {

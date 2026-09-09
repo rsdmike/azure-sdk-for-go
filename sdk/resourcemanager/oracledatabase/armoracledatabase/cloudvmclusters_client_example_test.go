@@ -34,13 +34,13 @@ func ExampleCloudVMClustersClient_BeginAddVMs_addVMSToVMClusterGeneratedByMaximu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientAddVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Properties: &armoracledatabase.CloudVMClusterProperties{
 	// 			DataStorageSizeInTbs: to.Ptr[float64](1000),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](1000),
@@ -100,7 +100,7 @@ func ExampleCloudVMClustersClient_BeginAddVMs_addVMSToVMClusterGeneratedByMaximu
 	// 					FileSystemSizeGb: to.Ptr[int32](20),
 	// 				},
 	// 			},
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
 	// 			SystemVersion: to.Ptr("v1"),
@@ -144,10 +144,10 @@ func ExampleCloudVMClustersClient_BeginAddVMs_addVMSToVMClusterGeneratedByMaximu
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -175,13 +175,13 @@ func ExampleCloudVMClustersClient_BeginAddVMs_addVMSToVMClusterGeneratedByMinimu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientAddVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -210,13 +210,13 @@ func ExampleCloudVMClustersClient_BeginAddVMs_cloudVMClustersAddVms() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientAddVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Type: to.Ptr("Oracle.Database/cloudVmClusters"),
 	// 		Location: to.Ptr("eastus"),
@@ -231,7 +231,7 @@ func ExampleCloudVMClustersClient_BeginAddVMs_cloudVMClustersAddVms() {
 	// 			DataStorageSizeInTbs: to.Ptr[float64](10),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 	// 			MemorySizeInGbs: to.Ptr[int32](1000),
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			TimeZone: to.Ptr("UTC"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
@@ -397,13 +397,13 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_createVMClusterGeneratedBy
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientCreateOrUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Properties: &armoracledatabase.CloudVMClusterProperties{
 	// 			DataStorageSizeInTbs: to.Ptr[float64](1000),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](1000),
@@ -463,7 +463,7 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_createVMClusterGeneratedBy
 	// 					FileSystemSizeGb: to.Ptr[int32](20),
 	// 				},
 	// 			},
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
 	// 			SystemVersion: to.Ptr("v1"),
@@ -507,10 +507,10 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_createVMClusterGeneratedBy
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -535,13 +535,13 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_createVMClusterGeneratedBy
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientCreateOrUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -616,13 +616,13 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_cloudVMClustersCreateOrUpd
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientCreateOrUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Type: to.Ptr("Oracle.Database/cloudVmClusters"),
 	// 		Location: to.Ptr("eastus"),
@@ -637,7 +637,7 @@ func ExampleCloudVMClustersClient_BeginCreateOrUpdate_cloudVMClustersCreateOrUpd
 	// 			DataStorageSizeInTbs: to.Ptr[float64](10),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 	// 			MemorySizeInGbs: to.Ptr[int32](1000),
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			TimeZone: to.Ptr("UTC"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
@@ -719,7 +719,7 @@ func ExampleCloudVMClustersClient_BeginDelete_deleteVMClusterGeneratedByMaximumS
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -740,7 +740,7 @@ func ExampleCloudVMClustersClient_BeginDelete_deleteVMClusterGeneratedByMinimumS
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -761,7 +761,7 @@ func ExampleCloudVMClustersClient_BeginDelete_cloudVMClustersDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -784,7 +784,7 @@ func ExampleCloudVMClustersClient_Get_getVMClusterGeneratedByMaximumSetRule() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientGetResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Properties: &armoracledatabase.CloudVMClusterProperties{
 	// 			DataStorageSizeInTbs: to.Ptr[float64](1000),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](1000),
@@ -844,7 +844,7 @@ func ExampleCloudVMClustersClient_Get_getVMClusterGeneratedByMaximumSetRule() {
 	// 					FileSystemSizeGb: to.Ptr[int32](20),
 	// 				},
 	// 			},
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
 	// 			SystemVersion: to.Ptr("v1"),
@@ -888,10 +888,10 @@ func ExampleCloudVMClustersClient_Get_getVMClusterGeneratedByMaximumSetRule() {
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -916,7 +916,7 @@ func ExampleCloudVMClustersClient_Get_getVMClusterGeneratedByMinimumSetRule() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientGetResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -942,7 +942,7 @@ func ExampleCloudVMClustersClient_Get_cloudVMClustersGet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientGetResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Type: to.Ptr("Oracle.Database/cloudVmClusters"),
 	// 		Location: to.Ptr("eastus"),
@@ -957,7 +957,7 @@ func ExampleCloudVMClustersClient_Get_cloudVMClustersGet() {
 	// 			DataStorageSizeInTbs: to.Ptr[float64](10),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 	// 			MemorySizeInGbs: to.Ptr[int32](1000),
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			TimeZone: to.Ptr("UTC"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
@@ -1074,7 +1074,7 @@ func ExampleCloudVMClustersClient_NewListByResourceGroupPager_listVMClustersByRe
 		// 					DataStorageSizeInTbs: to.Ptr[float64](10),
 		// 					DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 		// 					MemorySizeInGbs: to.Ptr[int32](1000),
-		// 					TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+		// 					TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 		// 					LifecycleDetails: to.Ptr("success"),
 		// 					TimeZone: to.Ptr("UTC"),
 		// 					ZoneID: to.Ptr("ocid1..aaaa"),
@@ -1157,10 +1157,10 @@ func ExampleCloudVMClustersClient_NewListByResourceGroupPager_listVMClustersByRe
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -1245,7 +1245,7 @@ func ExampleCloudVMClustersClient_NewListByResourceGroupPager_cloudVMClustersLis
 		// 					DataStorageSizeInTbs: to.Ptr[float64](10),
 		// 					DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 		// 					MemorySizeInGbs: to.Ptr[int32](1000),
-		// 					TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+		// 					TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 		// 					LifecycleDetails: to.Ptr("success"),
 		// 					TimeZone: to.Ptr("UTC"),
 		// 					ZoneID: to.Ptr("ocid1..aaaa"),
@@ -1352,7 +1352,7 @@ func ExampleCloudVMClustersClient_NewListBySubscriptionPager_listVMClustersBySub
 		// 					DataStorageSizeInTbs: to.Ptr[float64](10),
 		// 					DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 		// 					MemorySizeInGbs: to.Ptr[int32](1000),
-		// 					TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+		// 					TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 		// 					LifecycleDetails: to.Ptr("success"),
 		// 					TimeZone: to.Ptr("UTC"),
 		// 					ZoneID: to.Ptr("ocid1..aaaa"),
@@ -1435,10 +1435,10 @@ func ExampleCloudVMClustersClient_NewListBySubscriptionPager_listVMClustersBySub
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -1523,7 +1523,7 @@ func ExampleCloudVMClustersClient_NewListBySubscriptionPager_cloudVMClustersList
 		// 					DataStorageSizeInTbs: to.Ptr[float64](10),
 		// 					DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 		// 					MemorySizeInGbs: to.Ptr[int32](1000),
-		// 					TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+		// 					TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 		// 					LifecycleDetails: to.Ptr("success"),
 		// 					TimeZone: to.Ptr("UTC"),
 		// 					ZoneID: to.Ptr("ocid1..aaaa"),
@@ -1613,7 +1613,7 @@ func ExampleCloudVMClustersClient_ListPrivateIPAddresses_listPrivateIPAddressesF
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientListPrivateIPAddressesResponse{
-	// 	undefined: &[]*armoracledatabase.PrivateIPAddressProperties{
+	// 	PrivateIPAddressPropertiesArray: []*armoracledatabase.PrivateIPAddressProperties{
 	// 		{
 	// 			DisplayName: to.Ptr("ip1"),
 	// 			HostnameLabel: to.Ptr("hostname1"),
@@ -1647,7 +1647,7 @@ func ExampleCloudVMClustersClient_ListPrivateIPAddresses_listPrivateIPAddressesF
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientListPrivateIPAddressesResponse{
-	// 	undefined: &[]*armoracledatabase.PrivateIPAddressProperties{
+	// 	PrivateIPAddressPropertiesArray: []*armoracledatabase.PrivateIPAddressProperties{
 	// 		{
 	// 			DisplayName: to.Ptr("ip1"),
 	// 			HostnameLabel: to.Ptr("hostname1"),
@@ -1681,7 +1681,7 @@ func ExampleCloudVMClustersClient_ListPrivateIPAddresses_cloudVMClustersListPriv
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientListPrivateIPAddressesResponse{
-	// 	undefined: &[]*armoracledatabase.PrivateIPAddressProperties{
+	// 	PrivateIPAddressPropertiesArray: []*armoracledatabase.PrivateIPAddressProperties{
 	// 		{
 	// 			DisplayName: to.Ptr("ip1"),
 	// 			HostnameLabel: to.Ptr("hostname1"),
@@ -1715,13 +1715,13 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_removeVMSFromVMClusterGenerated
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientRemoveVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Properties: &armoracledatabase.CloudVMClusterProperties{
 	// 			DataStorageSizeInTbs: to.Ptr[float64](1000),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](1000),
@@ -1781,7 +1781,7 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_removeVMSFromVMClusterGenerated
 	// 					FileSystemSizeGb: to.Ptr[int32](20),
 	// 				},
 	// 			},
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
 	// 			SystemVersion: to.Ptr("v1"),
@@ -1825,10 +1825,10 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_removeVMSFromVMClusterGenerated
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -1856,13 +1856,13 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_removeVMSFromVMClusterGenerated
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientRemoveVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Location: to.Ptr("eastus"),
 	// 	},
 	// }
@@ -1889,13 +1889,13 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_cloudVMClustersRemoveVms() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientRemoveVMsResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Type: to.Ptr("Oracle.Database/cloudVmClusters"),
 	// 		Location: to.Ptr("eastus"),
@@ -1910,7 +1910,7 @@ func ExampleCloudVMClustersClient_BeginRemoveVMs_cloudVMClustersRemoveVms() {
 	// 			DataStorageSizeInTbs: to.Ptr[float64](10),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 	// 			MemorySizeInGbs: to.Ptr[int32](1000),
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			TimeZone: to.Ptr("UTC"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
@@ -2023,13 +2023,13 @@ func ExampleCloudVMClustersClient_BeginUpdate_patchVMClusterGeneratedByMaximumSe
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Properties: &armoracledatabase.CloudVMClusterProperties{
 	// 			DataStorageSizeInTbs: to.Ptr[float64](1000),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](1000),
@@ -2089,7 +2089,7 @@ func ExampleCloudVMClustersClient_BeginUpdate_patchVMClusterGeneratedByMaximumSe
 	// 					FileSystemSizeGb: to.Ptr[int32](20),
 	// 				},
 	// 			},
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),
 	// 			SystemVersion: to.Ptr("v1"),
@@ -2133,10 +2133,10 @@ func ExampleCloudVMClustersClient_BeginUpdate_patchVMClusterGeneratedByMaximumSe
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -2159,13 +2159,13 @@ func ExampleCloudVMClustersClient_BeginUpdate_patchVMClusterGeneratedByMinimumSe
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		Location: to.Ptr("eastus"),
 	// 	},
 	// }
@@ -2188,13 +2188,13 @@ func ExampleCloudVMClustersClient_BeginUpdate_cloudVMClustersUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.CloudVMClustersClientUpdateResponse{
-	// 	CloudVMCluster: &armoracledatabase.CloudVMCluster{
+	// 	CloudVMCluster: armoracledatabase.CloudVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/cloudVmClusters/cluster1"),
 	// 		Type: to.Ptr("Oracle.Database/cloudVmClusters"),
 	// 		Location: to.Ptr("eastus"),
@@ -2209,7 +2209,7 @@ func ExampleCloudVMClustersClient_BeginUpdate_cloudVMClustersUpdate() {
 	// 			DataStorageSizeInTbs: to.Ptr[float64](10),
 	// 			DbNodeStorageSizeInGbs: to.Ptr[int32](100),
 	// 			MemorySizeInGbs: to.Ptr[int32](1000),
-	// 			TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-22T02:18:35.683Z"); return t}()),
+	// 			TimeCreated: to.Ptr(time.Date(2023, time.October, 22, 2, 18, 35, 683000000, time.UTC)),
 	// 			LifecycleDetails: to.Ptr("success"),
 	// 			TimeZone: to.Ptr("UTC"),
 	// 			ZoneID: to.Ptr("ocid1..aaaa"),

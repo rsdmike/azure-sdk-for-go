@@ -18,6 +18,8 @@ import (
 
 // EnvironmentClient contains the methods for the Environment group.
 // Don't use this type directly, use NewEnvironmentClient() instead.
+//
+// Generated from API version 2026-06-02-preview
 type EnvironmentClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type EnvironmentClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewEnvironmentClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*EnvironmentClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewEnvironmentClient(subscriptionID string, credential azcore.TokenCredenti
 
 // CreateOrUpdate - Create confluent environment
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-18-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - organizationName - Organization resource name
 //   - environmentID - Confluent environment id
@@ -63,19 +66,14 @@ func (client *EnvironmentClient) CreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return EnvironmentClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return EnvironmentClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *EnvironmentClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, organizationName string, environmentID string, body SCEnvironmentRecord, _ *EnvironmentClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Confluent/organizations/{organizationName}/environments/{environmentId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -95,8 +93,8 @@ func (client *EnvironmentClient) createOrUpdateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-18-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260602Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -106,8 +104,11 @@ func (client *EnvironmentClient) createOrUpdateCreateRequest(ctx context.Context
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *EnvironmentClient) createOrUpdateHandleResponse(resp *http.Response) (EnvironmentClientCreateOrUpdateResponse, error) {
+func (client *EnvironmentClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (EnvironmentClientCreateOrUpdateResponse, error) {
 	result := EnvironmentClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SCEnvironmentRecord); err != nil {
 		return EnvironmentClientCreateOrUpdateResponse{}, err
 	}
@@ -116,8 +117,6 @@ func (client *EnvironmentClient) createOrUpdateHandleResponse(resp *http.Respons
 
 // BeginDelete - Delete confluent environment by id
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-18-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - organizationName - Organization resource name
 //   - environmentID - Confluent environment id
@@ -141,8 +140,6 @@ func (client *EnvironmentClient) BeginDelete(ctx context.Context, resourceGroupN
 
 // Delete - Delete confluent environment by id
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-18-preview
 func (client *EnvironmentClient) deleteOperation(ctx context.Context, resourceGroupName string, organizationName string, environmentID string, options *EnvironmentClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EnvironmentClient.BeginDelete"
@@ -158,8 +155,7 @@ func (client *EnvironmentClient) deleteOperation(ctx context.Context, resourceGr
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -168,7 +164,7 @@ func (client *EnvironmentClient) deleteOperation(ctx context.Context, resourceGr
 func (client *EnvironmentClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, organizationName string, environmentID string, _ *EnvironmentClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Confluent/organizations/{organizationName}/environments/{environmentId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -188,7 +184,7 @@ func (client *EnvironmentClient) deleteCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-18-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260602Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }

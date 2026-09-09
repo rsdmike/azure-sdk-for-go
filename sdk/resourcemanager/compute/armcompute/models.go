@@ -132,6 +132,13 @@ type AdditionalCapabilities struct {
 	UltraSSDEnabled *bool
 }
 
+// AdditionalDiskProperties - Specifies additional properties for a managed disk that can be set at the time of implicit creation
+// of the disk.
+type AdditionalDiskProperties struct {
+	// Specifies the managed disk properties that can be set at the time of implicit creation of the disk.
+	ManagedDiskProperties *VirtualMachineDiskProperties
+}
+
 // AdditionalReplicaSet - Describes the additional replica set information.
 type AdditionalReplicaSet struct {
 	// The number of direct drive replicas of the Image Version to be created.This Property is updatable
@@ -234,6 +241,14 @@ type AutomaticRepairsPolicy struct {
 	// Type of repair action (replace, restart, reimage) that will be used for repairing unhealthy virtual machines in the scale
 	// set. Default value is replace.
 	RepairAction *RepairAction
+}
+
+// AutomaticSKUMigrationPolicy - Specifies the configuration parameters used to control automatic SKU migration for the virtual
+// machine scale set. When enabled, the platform may migrate instances to a different VM size from the SKU profile depending
+// on platform demands.
+type AutomaticSKUMigrationPolicy struct {
+	// Specifies whether automatic SKU migration should be enabled on the virtual machine scale set. The default value is false.
+	Enabled *bool
 }
 
 // AutomaticZoneRebalancingPolicy - The configuration parameters used while performing automatic AZ balancing.
@@ -494,9 +509,13 @@ type CapacityReservationGroupListResult struct {
 
 // CapacityReservationGroupProperties - capacity reservation group Properties.
 type CapacityReservationGroupProperties struct {
-	// Indicates the type of capacity reservation. Allowed values are 'Block' for block capacity reservations and 'Targeted' for
-	// reservations that enable a VM to consume a specific capacity reservation when a capacity reservation group is provided.
-	// The reservation type is immutable and cannot be changed after it is assigned.
+	// Indicates the type of capacity reservation. Allowed values are 'Block' for block capacity reservations that enable a VM
+	// to consume capacity only from this capacity block when it is associated using a capacity reservation group, 'Targeted'
+	// for reservations that enable a VM to consume capacity from an explicitly associated capacity reservation group and fall
+	// back to the publicly available capacity if the reservation is full, and 'Open' for reservations that a VM consumes when
+	// it is eligible from an implicitly associated capacity reservation group with the matching VM size and zone without associating
+	// that capacity reservation group and fall back to the publicly available capacity if the reservation is full. The reservation
+	// type is immutable and cannot be changed after the capacity reservation group is created.
 	ReservationType *ReservationType
 
 	// Specifies the settings to enable sharing across subscriptions for the capacity reservation group resource. The capacity
@@ -529,6 +548,10 @@ type CapacityReservationGroupUpdate struct {
 // CapacityReservationInstanceView - The instance view of a capacity reservation that provides as snapshot of the runtime
 // properties of the capacity reservation that is managed by the platform and can change outside of control plane operations.
 type CapacityReservationInstanceView struct {
+	// The reservation state information for a capacity reservation, this detail is primarily provided for Future capacity reservations.
+	// Minimum API version: 2026-04-01.
+	ReservationStateInfo *CapacityReservationStateInfo
+
 	// The resource status information.
 	Statuses []*InstanceViewStatus
 
@@ -539,6 +562,10 @@ type CapacityReservationInstanceView struct {
 // CapacityReservationInstanceViewWithName - The instance view of a capacity reservation that includes the name of the capacity
 // reservation. It is used for the response to the instance view of a capacity reservation group.
 type CapacityReservationInstanceViewWithName struct {
+	// The reservation state information for a capacity reservation, this detail is primarily provided for Future capacity reservations.
+	// Minimum API version: 2026-04-01.
+	ReservationStateInfo *CapacityReservationStateInfo
+
 	// The resource status information.
 	Statuses []*InstanceViewStatus
 
@@ -564,14 +591,21 @@ type CapacityReservationProfile struct {
 	// Specifies the capacity reservation group resource id that should be used for allocating the virtual machine or scaleset
 	// vm instances provided enough capacity has been reserved. Please refer to https://aka.ms/CapacityReservation for more details.
 	CapacityReservationGroup *SubResource
+
+	// Specifies whether the virtual machine is explicitly opted out from being associated with any capacity reservation. When
+	// set to true, the virtual machine will not be allowed to implicitly or explicitly associate with any type of capacity reservation
+	// and will consume capacity from the publicly available capacity. Minimum api-version: 2026-04-01.
+	DisableCapacityReservationAssignment *bool
 }
 
 // CapacityReservationProperties - Properties of the Capacity reservation.
 type CapacityReservationProperties struct {
-	// Defines the schedule for Block-type capacity reservations. Specifies the schedule during which capacity reservation is
-	// active and VM or VMSS resource can be allocated using reservation. This property is required and only supported when the
-	// capacity reservation group type is 'Block'. The scheduleProfile, start, and end fields are immutable after creation. Minimum
-	// API version: 2025-04-01. Please refer to https://aka.ms/blockcapacityreservation for more details.
+	// Defines the schedule for Block and Future capacity reservations. Specifies the schedule during which capacity reservation
+	// is active and VM or VMSS resource can be allocated using reservation. For Block capacity reservations, the scheduleProfile,
+	// start, and end fields are immutable after creation. Please refer to https://aka.ms/blockcapacityreservation for more details.
+	// Minimum API version for Block capacity reservations: 2025-04-01. Future capacity reservations must use this property with
+	// only a start time, which can be changed until the ‘modifiableUntil’ time. Please refer to https://aka.ms/futurecapacityreservation
+	// for more details. Minimum API version for Future capacity reservations: 2026-04-01.
 	ScheduleProfile *ScheduleProfile
 
 	// READ-ONLY; The Capacity reservation instance view.
@@ -599,6 +633,12 @@ type CapacityReservationProperties struct {
 	VirtualMachinesAssociated []*SubResourceReadOnly
 }
 
+// CapacityReservationStateInfo - Details related to the current state for a Future capacity reservation.
+type CapacityReservationStateInfo struct {
+	// The current state of the capacity reservation.
+	ReservationState *ReservationState
+}
+
 // CapacityReservationUpdate - Specifies information about the capacity reservation. sku.capacity cannot be updated for Block
 // Capacity Reservation. Tags can be update for all Capacity Reservation Types.
 type CapacityReservationUpdate struct {
@@ -621,6 +661,12 @@ type CapacityReservationUtilization struct {
 	// READ-ONLY; The value provides the current capacity of the VM size which was reserved successfully and for which the customer
 	// is getting billed. Minimum api-version: 2022-08-01.
 	CurrentCapacity *int32
+
+	// READ-ONLY; For open capacity reservations, this provides a map of the used reserved capacity count keyed by the subscription
+	// id (a GUID) that is consuming the capacity, i.e. each entry maps a consuming subscription id to the count of reserved capacity
+	// it is currently using. This is populated only for open capacity reservations and is not reported for targeted and block
+	// capacity reservations, which instead report allocation through virtualMachinesAllocated. Minimum api-version: 2026-04-01.
+	UsedReservedCountBySubscription map[string]*int32
 
 	// READ-ONLY; A list of all virtual machines resource ids allocated against the capacity reservation.
 	VirtualMachinesAllocated []*SubResourceReadOnly
@@ -1397,6 +1443,13 @@ type DiskAccessUpdate struct {
 	Tags map[string]*string
 }
 
+// DiskAvailabilityPolicy - In the case of an availability or connectivity issue with the disk, specify the behavior of your
+// VM.
+type DiskAvailabilityPolicy struct {
+	// Determines how to handle disks with slow I/O.
+	ActionOnDiskDelay *VirtualMachineDiskDelayAction
+}
+
 // DiskEncryptionSet - disk encryption set resource.
 type DiskEncryptionSet struct {
 	// REQUIRED; The geo-location where the resource lives
@@ -1734,6 +1787,9 @@ type DiskRestorePointProperties struct {
 	// READ-ONLY; Replication state of disk restore point when source resource is from a different region.
 	ReplicationState *string
 
+	// READ-ONLY; The state of snapshot which determines the access availability of the snapshot.
+	SnapshotAccessState *SnapshotAccessState
+
 	// READ-ONLY; arm id of source disk or source disk restore point.
 	SourceResourceID *string
 
@@ -1773,6 +1829,9 @@ type DiskSecurityProfile struct {
 
 	// Specifies the SecurityType of the VM. Applicable for OS disks only.
 	SecurityType *DiskSecurityTypes
+
+	// READ-ONLY; Indicates the version of Confidential VM for the resource.
+	ConfidentialVMVersion *ConfidentialVMVersion
 }
 
 // DiskUpdate - Disk update resource.
@@ -1995,6 +2054,21 @@ type ExtendedLocation struct {
 
 	// The type of the extended location.
 	Type *ExtendedLocationTypes
+}
+
+// ExtensionFeatureMetadata - Additional metadata about extension features, including compliance and capability tags.
+type ExtensionFeatureMetadata struct {
+	// List of additional metadata properties (e.g., compliance flags, supported features).
+	ExtensionFeatureTags []*ExtensionFeatureTag
+}
+
+// ExtensionFeatureTag - Represents a key-value pair for extension feature metadata.
+type ExtensionFeatureTag struct {
+	// REQUIRED; The key of the feature tag.
+	Key *string
+
+	// The value of the feature tag.
+	Value *string
 }
 
 // ExternalHealthPolicy - Specifies the external health policy for the virtual machine scale set.
@@ -3136,6 +3210,11 @@ type GrantAccessData struct {
 
 // HardwareProfile - Specifies the hardware settings for the virtual machine.
 type HardwareProfile struct {
+	// Specifies the processor mode for the virtual machine or virtual machine scale set. Optional; if omitted, the platform default
+	// applies (currently Deterministic). This property can be updated on a running VM or VMSS without deallocation or reboot.
+	// Minimum api-version: 2026-04-01.
+	ProcessorMode *ProcessorMode
+
 	// Specifies the size of the virtual machine. The enum data type is currently deprecated and will be removed by December 23rd
 	// 2023. The recommended way to get the list of available sizes is using these APIs: [List all available virtual machine sizes
 	// in an availability set](https://docs.microsoft.com/rest/api/compute/availabilitysets/listavailablesizes), [List all available
@@ -3160,6 +3239,10 @@ type HostEndpointSettings struct {
 	// emitting access denial entries in the logs but it does not actually deny any requests to host endpoints. In Enforce mode,
 	// the system will enforce the access control and it is the recommended mode of operation.
 	Mode *Modes
+
+	// When set to true, instructs the GuestProxyAgent inside the VM to load additional access control rules defined in a local
+	// file on the VM.
+	UseLocalFileRules *bool
 }
 
 // Image - The source user image virtual hard disk. The virtual hard disk will be copied before being attached to the virtual
@@ -3388,6 +3471,44 @@ type ImageVersionSecurityProfile struct {
 	UefiSettings *GalleryImageVersionUefiSettings
 }
 
+// ImmutabilityPolicy - The immutability policy currently applied to a snapshot.
+type ImmutabilityPolicy struct {
+	// READ-ONLY; The immutability duration for the snapshot, in number of days.
+	ImmutabilityDurationDays *int32
+
+	// READ-ONLY; Indicates whether the immutability policy has expired.
+	IsPolicyExpired *bool
+
+	// READ-ONLY; The time when the immutability policy will expire on the snapshot.
+	PolicyExpirationTime *time.Time
+
+	// READ-ONLY; The time when the immutability policy was set on the snapshot.
+	PolicyStartTime *time.Time
+
+	// READ-ONLY; The type of the immutability policy.
+	Type *ImmutabilityPolicyType
+}
+
+// ImmutabilityPolicyData - Data used for updating the immutability policy of a snapshot.
+type ImmutabilityPolicyData struct {
+	// REQUIRED; The immutability duration for the snapshot, in number of days.
+	ImmutabilityDurationDays *int32
+
+	// REQUIRED; The type of the immutability policy. 'Unlocked' allows the policy to be modified by privileged users; 'Locked'
+	// prevents reduction of the immutability duration but allows extension of the lock period.
+	Type *ImmutabilityPolicyType
+}
+
+// ImmutabilityPolicyLockData - Data used for locking the immutability policy of a snapshot.
+type ImmutabilityPolicyLockData struct {
+	// REQUIRED; The immutability duration for the snapshot, in number of days.
+	ImmutabilityDurationDays *int32
+
+	// REQUIRED; The type of the immutability policy. 'Unlocked' allows the policy to be modified by privileged users; 'Locked'
+	// prevents reduction of the immutability duration but allows extension of the lock period.
+	Type *ImmutabilityPolicyType
+}
+
 // InnerError - Inner error details.
 type InnerError struct {
 	// The internal error message or exception dump.
@@ -3413,6 +3534,118 @@ type InstanceViewStatus struct {
 
 	// The time of the status.
 	Time *time.Time
+}
+
+// InterconnectBlock - Specifies information about the Interconnect Block.
+type InterconnectBlock struct {
+	// REQUIRED; The geo-location where the resource lives
+	Location *string
+
+	// REQUIRED; SKU of the resource for which capacity needs to be pre-allocated. Both `sku.name` and `sku.capacity` are required
+	// at create. After create, only `sku.capacity` can be updated.
+	SKU *SKU
+
+	// Placement section specifies the user-defined constraints for Interconnect Block hardware placement. This property cannot
+	// be changed once Interconnect Block is provisioned.
+	Placement *Placement
+
+	// Properties of the Interconnect Block.
+	Properties *InterconnectBlockProperties
+
+	// Resource tags.
+	Tags map[string]*string
+
+	// The availability zones.
+	Zones []*string
+
+	// READ-ONLY; Fully qualified resource ID for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string
+
+	// READ-ONLY; The name of the resource
+	Name *string
+
+	// READ-ONLY; Azure Resource Manager metadata containing createdBy and modifiedBy information.
+	SystemData *SystemData
+
+	// READ-ONLY; The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or "Microsoft.Storage/storageAccounts"
+	Type *string
+}
+
+// InterconnectBlockInstanceView - The instance view of an Interconnect Block.
+type InterconnectBlockInstanceView struct {
+	// READ-ONLY; The current capacity allocated for this Interconnect Block.
+	CurrentCapacity *int32
+
+	// READ-ONLY; The resource status information.
+	Statuses []*InstanceViewStatus
+}
+
+// InterconnectBlockListResult - The list Interconnect Block operation response.
+type InterconnectBlockListResult struct {
+	// REQUIRED; The list of Interconnect Blocks.
+	Value []*InterconnectBlock
+
+	// The URI to fetch the next page of Interconnect Blocks. Call ListNext() with this URI to fetch the next page of Interconnect
+	// Blocks.
+	NextLink *string
+}
+
+// InterconnectBlockProfile - The parameters of an Interconnect Block Profile.
+type InterconnectBlockProfile struct {
+	// Specifies the Interconnect Block resource ID that should be used for allocating the Virtual Machine or Scale Set VM instances
+	// provided enough capacity has been reserved.
+	InterconnectBlock *APIEntityReference
+}
+
+// InterconnectBlockProperties - Properties of the Interconnect Block.
+type InterconnectBlockProperties struct {
+	// REQUIRED; The Microsoft.Network/interconnectGroups resource that this Interconnect Block is associated with. Required at
+	// create and immutable thereafter.
+	InterconnectGroup *APIEntityReference
+
+	// READ-ONLY; The Interconnect Block instance view.
+	InstanceView *InterconnectBlockInstanceView
+
+	// READ-ONLY; A unique id (GUID) generated and assigned to the Interconnect Block by the platform which does not change throughout
+	// the lifetime of the resource.
+	InterconnectBlockID *string
+
+	// READ-ONLY; The provisioning state, which only appears in the response.
+	ProvisioningState *string
+
+	// READ-ONLY; The date time when the Interconnect Block was last updated.
+	ProvisioningTime *time.Time
+
+	// READ-ONLY; Specifies the time at which the Interconnect Block resource was created.
+	TimeCreated *time.Time
+
+	// READ-ONLY; A list of all virtual machine resource ids that are associated with the Interconnect Block.
+	VirtualMachinesAssociated []*SubResourceReadOnly
+}
+
+// InterconnectBlockUpdate - Specifies information about the Interconnect Block. Only tags and sku.capacity can be updated.
+type InterconnectBlockUpdate struct {
+	// SKU of the resource for which capacity needs to be pre-allocated. Only `sku.capacity` is mutable; `sku.name` is immutable.
+	SKU *SKU
+
+	// Resource tags
+	Tags map[string]*string
+}
+
+// InterconnectGroupProfile - Specifies the interconnect group profile for a virtual machine, used to associate the VM with
+// an interconnect group and subgroups.
+type InterconnectGroupProfile struct {
+	// Reference to the interconnect group resource.
+	InterconnectGroup *SubResource
+
+	// The list of subgroup references within the interconnect group.
+	Subgroups []*SubResource
+}
+
+// InterconnectInstanceView - The Interconnect Block instance view details for a Virtual Machine or Scale Set VM instance.
+type InterconnectInstanceView struct {
+	// READ-ONLY; The ID (GUID) of the Interconnect subgroup in which the Virtual Machine was placed.
+	InterconnectSubgroupID *string
 }
 
 // KeyForDiskEncryptionSet - Key Vault Key Url to be used for server side encryption of Managed Disks and Snapshots
@@ -3633,6 +3866,10 @@ type MaintenanceRedeployStatus struct {
 
 // ManagedDiskParameters - The parameters of a managed disk.
 type ManagedDiskParameters struct {
+	// Specifies additional properties for the managed disk that can be set at the time of implicit creation of the disk. This
+	// property is not captured for Restore Points.
+	AdditionalDiskProperties *AdditionalDiskProperties
+
 	// Specifies the customer managed disk encryption set resource id for the managed disk.
 	DiskEncryptionSet *DiskEncryptionSetParameters
 
@@ -3662,6 +3899,16 @@ type MigrateToVirtualMachineScaleSetInput struct {
 	// REQUIRED; Specifies information about the Virtual Machine Scale Set that the Availability Set should be migrated to. Minimum
 	// api‐version: 2024‐11‐01.
 	VirtualMachineScaleSetFlexible *SubResource
+}
+
+// MigrateVMAvailabilityZoneInput - The input for MigrateVMAvailabilityZone.
+type MigrateVMAvailabilityZoneInput struct {
+	// REQUIRED; The virtual machine scale set instance ids to be migrated to the target availability zone.
+	InstanceIDs []*string
+
+	// The target logical availability zone ("1", "2" or "3") to migrate the virtual machine scale set instances to. If omitted,
+	// the platform selects the target zone.
+	TargetZone *string
 }
 
 // MigrateVMToVirtualMachineScaleSetInput - The input of virtual machine migration from Availability Set to Flexible Virtual
@@ -3697,6 +3944,9 @@ type NetworkInterfaceReferenceProperties struct {
 
 // NetworkProfile - Specifies the network interfaces or the networking configuration of the virtual machine.
 type NetworkProfile struct {
+	// Specifies the interconnect group profile to associate with the virtual machine. Minimum api-version: 2026-03-01.
+	InterconnectGroupProfile *InterconnectGroupProfile
+
 	// specifies the Microsoft.Network API version used when creating networking resources in the Network Interface Configurations
 	NetworkAPIVersion *NetworkAPIVersion
 
@@ -5075,6 +5325,10 @@ type SKUProfile struct {
 	// Specifies the allocation strategy for the virtual machine scale set based on which the VMs will be allocated.
 	AllocationStrategy *AllocationStrategy
 
+	// Specifies the policy that controls whether the platform may automatically migrate scale set instances to a different VM
+	// size from the SKU profile depending on platform demands. When omitted, automatic SKU migration is disabled.
+	AutomaticSKUMigrationPolicy *AutomaticSKUMigrationPolicy
+
 	// Specifies the VM sizes for the virtual machine scale set.
 	VMSizes []*SKUProfileVMSize
 }
@@ -5200,18 +5454,29 @@ type ScaleInPolicy struct {
 	Rules []*VirtualMachineScaleSetScaleInRules
 }
 
-// ScheduleProfile - Defines the schedule for Block-type capacity reservations. Specifies the schedule during which capacity
-// reservation is active and VM or VMSS resource can be allocated using reservation. This property is required and only supported
-// when the capacity reservation group type is 'Block'. The scheduleProfile, start, and end fields are immutable after creation.
-// Minimum API version: 2025-04-01. Please refer to https://aka.ms/blockcapacityreservation for more details.
+// ScheduleProfile - Defines the schedule for Block and Future capacity reservations. Specifies the schedule during which
+// capacity reservation is active and VM or VMSS resource can be allocated using reservation. For Block capacity reservations,
+// the scheduleProfile, start, and end fields are immutable after creation. Please refer to https://aka.ms/blockcapacityreservation
+// for more details. Minimum API version for Block capacity reservations: 2025-04-01. Future capacity reservations must use
+// this property with only a start time, which can be changed until the ‘modifiableUntil’ time. Please refer to https://aka.ms/futurecapacityreservation
+// for more details. Minimum API version for Future capacity reservations: 2026-04-01.
 type ScheduleProfile struct {
-	// The required end date for block capacity reservations. Must be after the start date, with a duration of either 1–14 whole
+	// The required end date for Block capacity reservations. Must be after the start date, with a duration of either 1–14 whole
 	// days or 3–26 whole weeks. Example: 2025-06-28.
 	End *string
 
-	// The required start date for block capacity reservations. Must be today or within 56 days in the future. For same-day scheduling,
-	// requests must be submitted before 11:30 AM UTC. Example: 2025-06-27.
+	// The minimum number of days that must pass after the start date before a Future capacity reservation can be updated or deleted
+	// once it has been committed. Will be populated with a default value if not provided.
+	MinimumCommitmentDays *int32
+
+	// The required start date for Block or Future capacity reservations. Block capacity reservations: Must be today or within
+	// 56 days in the future. For same-day scheduling, requests must be submitted before 11:30 AM UTC. Future capacity reservations:
+	// Must be at least 7 days in the future, and maximum 6 months in the future. Minimum API version for Future capacity reservations:
+	// 2026-04-01. Example: 2025-06-27, applicable for both Block and Future capacity reservations.
 	Start *string
+
+	// READ-ONLY; The date/time until which a Future capacity reservation can be updated or deleted. Read-only.
+	ModifiableUntil *time.Time
 }
 
 type ScheduledEventsAdditionalPublishingTargets struct {
@@ -5638,6 +5903,10 @@ type SnapshotProperties struct {
 	// READ-ONLY; The state of the snapshot.
 	DiskState *DiskState
 
+	// READ-ONLY; The immutability policy currently applied to this snapshot. Present only when an immutability policy has been
+	// configured.
+	ImmutabilityPolicy *ImmutabilityPolicy
+
 	// READ-ONLY; Incremental snapshots for a disk share an incremental snapshot family id. The Get Page Range Diff API can only
 	// be called on incremental snapshots with the same family id.
 	IncrementalSnapshotFamilyID *string
@@ -5755,6 +6024,10 @@ type StorageProfile struct {
 	// Specifies the parameters that are used to add a data disk to a virtual machine. For more information about disks, see [About
 	// disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
 	DataDisks []*DataDisk
+
+	// Specifies the Disk API version used when applying additionalDiskProperties to managed disks. The value must be in the format
+	// YYYY-MM-DD (e.g., "2026-03-02").
+	DiskAPIVersion *DiskAPIVersion
 
 	// Specifies the disk controller type configured for the VM. **Note:** This property will be set to the default disk controller
 	// type if not specified provided virtual machine is being created with 'hyperVGeneration' set to V2 based on the capabilities
@@ -6406,6 +6679,84 @@ type VirtualMachineCaptureResult struct {
 	Schema *string
 }
 
+// VirtualMachineDiagnosticRunCommand - Describes a Virtual Machine diagnostic run command.
+type VirtualMachineDiagnosticRunCommand struct {
+	// REQUIRED; The geo-location where the resource lives
+	Location *string
+
+	// Describes the properties of a Virtual Machine diagnostic run command.
+	Properties *VirtualMachineRunCommandProperties
+
+	// Resource tags.
+	Tags map[string]*string
+
+	// READ-ONLY; Fully qualified resource ID for the resource. Ex - /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+	ID *string
+
+	// READ-ONLY; The name of the resource
+	Name *string
+
+	// READ-ONLY; Azure Resource Manager metadata containing createdBy and modifiedBy information.
+	SystemData *SystemData
+
+	// READ-ONLY; The type of the resource. E.g. "Microsoft.Compute/virtualMachines" or "Microsoft.Storage/storageAccounts"
+	Type *string
+}
+
+// VirtualMachineDiagnosticRunCommandsListResult - The List diagnostic run command operation response
+type VirtualMachineDiagnosticRunCommandsListResult struct {
+	// REQUIRED; The list of diagnostic run commands.
+	Value []*VirtualMachineDiagnosticRunCommand
+
+	// The uri to fetch the next page of diagnostic run commands.
+	NextLink *string
+}
+
+// VirtualMachineDiskProperties - Specifies the properties of a managed disk that can be set at the time of implicit creation
+// of the disk.
+type VirtualMachineDiskProperties struct {
+	// In the case of an availability or connectivity issue with the disk, specify the behavior of your VM.
+	AvailabilityPolicy *DiskAvailabilityPolicy
+
+	// Set to true to enable bursting beyond the provisioned performance target of the disk. Bursting is disabled by default.
+	// Does not apply to Ultra disks.
+	BurstingEnabled *bool
+
+	// Azure resource Id of the DiskAccess resource for using private endpoints on disks.
+	DiskAccessID *string
+
+	// The total number of IOPS that will be allowed across all VMs mounting the shared disk as ReadOnly. One operation can transfer
+	// between 4k and 256k bytes.
+	DiskIOPSReadOnly *int64
+
+	// The total throughput (MBps) that will be allowed across all VMs mounting the shared disk as ReadOnly. MBps means millions
+	// of bytes per second - MB here uses the ISO notation, of powers of 10.
+	DiskMBpsReadOnly *int64
+
+	// Logical sector size in bytes for Ultra Disks. Supported values are 512 and 4096. 4096 is the default.
+	LogicalSectorSize *int32
+
+	// The maximum number of VMs that can attach to the disk at the same time. Value greater than one indicates a disk that can
+	// be mounted on multiple VMs at the same time. Applies to data disks only.
+	MaxShares *int32
+
+	// Policy for accessing the disk via network.
+	NetworkAccessPolicy *VirtualMachineDiskNetworkAccessPolicy
+
+	// Setting this property to true improves reliability and performance of data disks that are frequently (more than 5 times
+	// a day) detached from one virtual machine and attached to another. This property should not be set for disks that are not
+	// detached and attached frequently as it causes the disks to not align with the fault domain of the virtual machine.
+	OptimizedForFrequentAttach *bool
+
+	// Set this flag to true to get a boost on the performance target of the disk deployed. This flag can only be set on disk
+	// creation time and cannot be disabled after enabled.
+	PerformancePlus *bool
+
+	// Performance tier of the disk (e.g., P4, S10) as described here: https://azure.microsoft.com/en-us/pricing/details/managed-disks/.
+	// Does not apply to Ultra disks.
+	Tier *string
+}
+
 // VirtualMachineExtension - Describes a Virtual Machine Extension.
 type VirtualMachineExtension struct {
 	// REQUIRED; The geo-location where the resource lives
@@ -6438,7 +6789,8 @@ type VirtualMachineExtensionHandlerInstanceView struct {
 	// Specifies the type of the extension; an example is "CustomScriptExtension".
 	Type *string
 
-	// Specifies the version of the script handler.
+	// Specifies the Major.Minor.Patch.Hotfix version of the script handler. Azure platform will deliver the latest Patch.Hotfix
+	// version in the Major.Minor series.
 	TypeHandlerVersion *string
 }
 
@@ -6483,6 +6835,21 @@ type VirtualMachineExtensionImageProperties struct {
 	// Whether the extension can be used on xRP VMScaleSets. By default existing extensions are usable on scalesets, but there
 	// might be cases where a publisher wants to explicitly indicate the extension is only enabled for CRP VMs but not VMSS.
 	VMScaleSetEnabled *bool
+
+	// READ-ONLY; Additional metadata about extension features, including compliance and capability tags.
+	ExtensionFeatureMetadata *ExtensionFeatureMetadata
+
+	// READ-ONLY; Categorizes the type of change introduced (e.g., BugFix, SecurityFix, CompatibilityUpdate, NewFeature, Other).
+	ReleaseCategory *ReleaseCategory
+
+	// READ-ONLY; Summary of changes or updates in this extension version.
+	ReleaseNotes *string
+
+	// READ-ONLY; Specifies when and how the extension should be executed.
+	RunProfile *RunProfile
+
+	// READ-ONLY; Indicates the urgency level for applying this extension update.
+	UrgencyLevel *UrgencyLevel
 }
 
 // VirtualMachineExtensionInstanceView - The instance view of a virtual machine extension.
@@ -6499,7 +6866,8 @@ type VirtualMachineExtensionInstanceView struct {
 	// Specifies the type of the extension; an example is "CustomScriptExtension".
 	Type *string
 
-	// Specifies the version of the script handler.
+	// Specifies the Major.Minor.Patch.Hotfix version of the script handler. Azure platform will deliver the latest Patch.Hotfix
+	// version in the Major.Minor series.
 	TypeHandlerVersion *string
 }
 
@@ -6541,7 +6909,8 @@ type VirtualMachineExtensionProperties struct {
 	// Specifies the type of the extension; an example is "CustomScriptExtension".
 	Type *string
 
-	// Specifies the version of the script handler.
+	// Specifies the Major.Minor version of the script handler. Customer is able to specify only the Major.Minor version of an
+	// extension, Azure platform will deliver the latest Patch.Hotfix version in the Major.Minor series.
 	TypeHandlerVersion *string
 
 	// READ-ONLY; The provisioning state, which only appears in the response.
@@ -6589,7 +6958,8 @@ type VirtualMachineExtensionUpdateProperties struct {
 	// Specifies the type of the extension; an example is "CustomScriptExtension".
 	Type *string
 
-	// Specifies the version of the script handler.
+	// Specifies the Major.Minor version of the script handler. Customer is able to specify only the Major.Minor version of an
+	// extension, Azure platform will deliver the latest Patch.Hotfix version in the Major.Minor series.
 	TypeHandlerVersion *string
 }
 
@@ -6607,6 +6977,9 @@ type VirtualMachineHealthStatus struct {
 
 // VirtualMachineIPTag - Contains the IP tag associated with the public IP address.
 type VirtualMachineIPTag struct {
+	// The first party service tag resource identifier associated with the public IP address.
+	FirstPartyServiceTagID *string
+
 	// IP tag type. Example: FirstPartyUsage.
 	IPTagType *string
 
@@ -6818,6 +7191,14 @@ type VirtualMachineInstanceView struct {
 	// 2020-06-01.
 	AssignedHost *string
 
+	// READ-ONLY; Specifies which type of capacity reservation the virtual machine will consume capacity from if eligible or whether
+	// it is explicitly opted out from being associated and consuming capacity from any reserved capacity available in the subscription.
+	// Minimum api-version: 2026-04-01.
+	CapacityReservationType *CapacityReservationType
+
+	// READ-ONLY; The Interconnect runtime view of the Virtual Machine. Minimum api-version: 2026-03-01.
+	InterconnectInstanceView *InterconnectInstanceView
+
 	// READ-ONLY; [Preview Feature] Specifies whether the VM is currently in or out of the Standby Pool.
 	IsVMInStandbyPool *bool
 
@@ -6983,6 +7364,9 @@ type VirtualMachineProperties struct {
 	// Specifies information about the dedicated host group that the virtual machine resides in. **Note:** User cannot specify
 	// both host and hostGroup properties. Minimum api-version: 2020-06-01.
 	HostGroup *SubResource
+
+	// Specifies information about the Interconnect Block that is used to allocate the Virtual Machine. Minimum api-version: 2026-03-01.
+	InterconnectBlockProfile *InterconnectBlockProfile
 
 	// Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server
 	// operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating
@@ -7445,7 +7829,8 @@ type VirtualMachineScaleSetExtensionProperties struct {
 	// Specifies the type of the extension; an example is "CustomScriptExtension".
 	Type *string
 
-	// Specifies the version of the script handler.
+	// Specifies the Major.Minor version of the script handler. Customer is able to specify only the Major.Minor version of an
+	// extension, Azure platform will deliver the latest Patch.Hotfix version in the Major.Minor series.
 	TypeHandlerVersion *string
 
 	// READ-ONLY; The provisioning state, which only appears in the response.
@@ -7469,6 +7854,10 @@ type VirtualMachineScaleSetExtensionUpdate struct {
 
 // VirtualMachineScaleSetHardwareProfile - Specifies the hardware settings for the virtual machine scale set.
 type VirtualMachineScaleSetHardwareProfile struct {
+	// Specifies the processor mode for the virtual machine scale set. Optional; if omitted, the platform default applies (currently
+	// Deterministic). This property can be updated on a running VMSS without deallocation or reboot. Minimum api-version: 2026-04-01.
+	ProcessorMode *ProcessorMode
+
 	// Specifies the properties for customizing the size of the virtual machine. Minimum api-version: 2021-11-01. Please follow
 	// the instructions in [VM Customization](https://aka.ms/vmcustomization) for more details.
 	VMSizeProperties *VMSizeProperties
@@ -7517,6 +7906,9 @@ type VirtualMachineScaleSetIPConfigurationProperties struct {
 
 // VirtualMachineScaleSetIPTag - Contains the IP tag associated with the public IP address.
 type VirtualMachineScaleSetIPTag struct {
+	// The first party service tag resource identifier associated with the public IP address.
+	FirstPartyServiceTagID *string
+
 	// IP tag type. Example: FirstPartyUsage.
 	IPTagType *string
 
@@ -7606,6 +7998,10 @@ type VirtualMachineScaleSetListWithLinkResult struct {
 
 // VirtualMachineScaleSetManagedDiskParameters - Describes the parameters of a ScaleSet managed disk.
 type VirtualMachineScaleSetManagedDiskParameters struct {
+	// Specifies additional properties for the managed disk that can be set at the time of implicit creation of the disk. This
+	// property is not captured for Restore Points.
+	AdditionalDiskProperties *AdditionalDiskProperties
+
 	// Specifies the customer managed disk encryption set resource id for the managed disk.
 	DiskEncryptionSet *DiskEncryptionSetParameters
 
@@ -7688,6 +8084,9 @@ type VirtualMachineScaleSetNetworkProfile struct {
 	// A reference to a load balancer probe used to determine the health of an instance in the virtual machine scale set. The
 	// reference will be in the form: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/loadBalancers/{loadBalancerName}/probes/{probeName}'.
 	HealthProbe *APIEntityReference
+
+	// Specifies the interconnect group profile to associate with the scale set. Minimum api-version: 2026-03-01.
+	InterconnectGroupProfile *InterconnectGroupProfile
 
 	// specifies the Microsoft.Network API version used when creating networking resources in the Network Interface Configurations
 	// for Virtual Machine Scale Set with orchestration mode 'Flexible'
@@ -7989,6 +8388,10 @@ type VirtualMachineScaleSetStorageProfile struct {
 	// about disks, see [About disks and VHDs for Azure virtual machines](https://docs.microsoft.com/azure/virtual-machines/managed-disks-overview).
 	DataDisks []*VirtualMachineScaleSetDataDisk
 
+	// Specifies the Disk API version used when applying additionalDiskProperties to managed disks. The value must be in the format
+	// YYYY-MM-DD (e.g., "2026-03-02").
+	DiskAPIVersion *DiskAPIVersion
+
 	// Specifies the disk controller type configured for the virtual machines in the scale set. Minimum api-version: 2022-08-01
 	DiskControllerType *string
 
@@ -8121,6 +8524,9 @@ type VirtualMachineScaleSetUpdateNetworkProfile struct {
 	// A reference to a load balancer probe used to determine the health of an instance in the virtual machine scale set. The
 	// reference will be in the form: '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/loadBalancers/{loadBalancerName}/probes/{probeName}'.
 	HealthProbe *APIEntityReference
+
+	// Specifies the interconnect group profile to associate with the scale set. Minimum api-version: 2026-03-01.
+	InterconnectGroupProfile *InterconnectGroupProfile
 
 	// specifies the Microsoft.Network API version used when creating networking resources in the Network Interface Configurations
 	// for Virtual Machine Scale Set with orchestration mode 'Flexible'
@@ -8270,6 +8676,10 @@ type VirtualMachineScaleSetUpdateStorageProfile struct {
 	// The data disks.
 	DataDisks []*VirtualMachineScaleSetDataDisk
 
+	// Specifies the Disk API version used when applying additionalDiskProperties to managed disks. The value must be in the format
+	// YYYY-MM-DD (e.g., "2026-03-02").
+	DiskAPIVersion *DiskAPIVersion
+
 	// Specifies the disk controller type configured for the virtual machines in the scale set. **Note:** You need to deallocate
 	// the virtual machines in the scale set before updating its disk controller type based on the upgrade mode configured for
 	// the scale set. Minimum api-version: 2022-08-01
@@ -8295,6 +8705,9 @@ type VirtualMachineScaleSetUpdateVMProfile struct {
 
 	// Specifies the hardware profile related details of a scale set. Minimum api-version: 2021-11-01.
 	HardwareProfile *VirtualMachineScaleSetHardwareProfile
+
+	// Specifies the Interconnect Block related details of a scale set. Minimum api-version: 2026-03-01.
+	InterconnectBlockProfile *InterconnectBlockProfile
 
 	// The license type, which is for bring your own license scenario.
 	LicenseType *string
@@ -8484,6 +8897,14 @@ type VirtualMachineScaleSetVMInstanceView struct {
 	// 2020-06-01.
 	AssignedHost *string
 
+	// READ-ONLY; Specifies which type of capacity reservation the virtual machine scale set VM instance will consume capacity
+	// from if eligible or whether it is explicitly opted out from being associated and consuming capacity from any reserved capacity
+	// available in the subscription. Minimum api-version: 2026-04-01.
+	CapacityReservationType *CapacityReservationType
+
+	// READ-ONLY; The Interconnect runtime view of the Scale Set VM instance. Minimum api-version: 2026-03-01.
+	InterconnectInstanceView *InterconnectInstanceView
+
 	// READ-ONLY; The health status for the VM.
 	VMHealth *VirtualMachineHealthStatus
 }
@@ -8500,6 +8921,9 @@ type VirtualMachineScaleSetVMListResult struct {
 
 // VirtualMachineScaleSetVMNetworkProfileConfiguration - Describes a virtual machine scale set VM network profile.
 type VirtualMachineScaleSetVMNetworkProfileConfiguration struct {
+	// Specifies the interconnect group profile to associate with the scale set vm instance. Minimum api-version: 2026-03-01.
+	InterconnectGroupProfile *InterconnectGroupProfile
+
 	// The list of network configurations.
 	NetworkInterfaceConfigurations []*VirtualMachineScaleSetNetworkConfiguration
 }
@@ -8528,6 +8952,9 @@ type VirtualMachineScaleSetVMProfile struct {
 
 	// Specifies the hardware profile related details of a scale set. Minimum api-version: 2021-11-01.
 	HardwareProfile *VirtualMachineScaleSetHardwareProfile
+
+	// Specifies the Interconnect Block related details of a Scale Set. Minimum api-version: 2026-03-01.
+	InterconnectBlockProfile *InterconnectBlockProfile
 
 	// Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server
 	// operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating
@@ -8585,11 +9012,19 @@ type VirtualMachineScaleSetVMProperties struct {
 	// set.
 	AvailabilitySet *SubResource
 
+	// Specifies information about the capacity reservation that is used to allocate the virtual machine scale set VM instance.
+	// The capacity reservation group is inherited from the parent virtual machine scale set and cannot be changed on the individual
+	// scale set VM instance. Minimum api-version: 2026-04-01.
+	CapacityReservation *CapacityReservationProfile
+
 	// Specifies the boot diagnostic settings state. Minimum api-version: 2015-06-15.
 	DiagnosticsProfile *DiagnosticsProfile
 
 	// Specifies the hardware settings for the virtual machine.
 	HardwareProfile *HardwareProfile
+
+	// Specifies the Interconnect Block related details of a Scale Set VM instance. Minimum api-version: 2026-03-01.
+	InterconnectBlockProfile *InterconnectBlockProfile
 
 	// Specifies that the image or disk that is being used was licensed on-premises. <br><br> Possible values for Windows Server
 	// operating system are: <br><br> Windows_Client <br><br> Windows_Server <br><br> Possible values for Linux Server operating

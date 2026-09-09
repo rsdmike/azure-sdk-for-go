@@ -36,13 +36,13 @@ func ExamplePrivateEndpointConnectionsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.PrivateEndpointConnectionsClientCreateOrUpdateResponse{
-	// 	PrivateEndpointConnection: &armpostgresqlhsc.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armpostgresqlhsc.PrivateEndpointConnection{
 	// 		Name: to.Ptr("private-endpoint-connection-name"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/privateEndpointConnections"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/privateEndpointConnections/private-endpoint-connection-name"),
@@ -78,7 +78,7 @@ func ExamplePrivateEndpointConnectionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -101,7 +101,7 @@ func ExamplePrivateEndpointConnectionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.PrivateEndpointConnectionsClientGetResponse{
-	// 	PrivateEndpointConnection: &armpostgresqlhsc.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armpostgresqlhsc.PrivateEndpointConnection{
 	// 		Name: to.Ptr("private-endpoint-connection-name"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/privateEndpointConnections"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/privateEndpointConnections/private-endpoint-connection-name"),
@@ -120,10 +120,10 @@ func ExamplePrivateEndpointConnectionsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armpostgresqlhsc.PrivateEndpointConnectionProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -175,10 +175,10 @@ func ExamplePrivateEndpointConnectionsClient_NewListByClusterPager() {
 		// 					ProvisioningState: to.Ptr(armpostgresqlhsc.PrivateEndpointConnectionProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -202,10 +202,10 @@ func ExamplePrivateEndpointConnectionsClient_NewListByClusterPager() {
 		// 					ProvisioningState: to.Ptr(armpostgresqlhsc.PrivateEndpointConnectionProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},

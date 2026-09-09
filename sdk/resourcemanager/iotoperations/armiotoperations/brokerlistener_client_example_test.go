@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-03-01/BrokerListener_CreateOrUpdate_Complex.json
+// Generated from example definition: 2026-07-01/BrokerListener_CreateOrUpdate_Complex.json
 func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdateComplex() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -73,13 +73,13 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.BrokerListenerClientCreateOrUpdateResponse{
-	// 	BrokerListenerResource: &armiotoperations.BrokerListenerResource{
+	// 	BrokerListenerResource: armiotoperations.BrokerListenerResource{
 	// 		Properties: &armiotoperations.BrokerListenerProperties{
 	// 			ServiceName: to.Ptr("tpfiszlapdpxktx"),
 	// 			ServiceType: to.Ptr(armiotoperations.ServiceTypeLoadBalancer),
@@ -131,16 +131,16 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/BrokerListener_CreateOrUpdate_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/BrokerListener_CreateOrUpdate_MaximumSet_Gen.json
 func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -203,13 +203,13 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.BrokerListenerClientCreateOrUpdateResponse{
-	// 	BrokerListenerResource: &armiotoperations.BrokerListenerResource{
+	// 	BrokerListenerResource: armiotoperations.BrokerListenerResource{
 	// 		Properties: &armiotoperations.BrokerListenerProperties{
 	// 			ServiceName: to.Ptr("tpfiszlapdpxktx"),
 	// 			Ports: []*armiotoperations.ListenerPort{
@@ -262,16 +262,16 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/BrokerListener_CreateOrUpdate_Simple.json
+// Generated from example definition: 2026-07-01/BrokerListener_CreateOrUpdate_Simple.json
 func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdateSimple() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -300,13 +300,13 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.BrokerListenerClientCreateOrUpdateResponse{
-	// 	BrokerListenerResource: &armiotoperations.BrokerListenerResource{
+	// 	BrokerListenerResource: armiotoperations.BrokerListenerResource{
 	// 		Properties: &armiotoperations.BrokerListenerProperties{
 	// 			ServiceName: to.Ptr("tpfiszlapdpxktx"),
 	// 			ServiceType: to.Ptr(armiotoperations.ServiceTypeLoadBalancer),
@@ -327,16 +327,16 @@ func ExampleBrokerListenerClient_BeginCreateOrUpdate_brokerListenerCreateOrUpdat
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/BrokerListener_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/BrokerListener_Delete_MaximumSet_Gen.json
 func ExampleBrokerListenerClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -353,11 +353,11 @@ func ExampleBrokerListenerClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-03-01/BrokerListener_Get_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/BrokerListener_Get_MaximumSet_Gen.json
 func ExampleBrokerListenerClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -376,7 +376,7 @@ func ExampleBrokerListenerClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.BrokerListenerClientGetResponse{
-	// 	BrokerListenerResource: &armiotoperations.BrokerListenerResource{
+	// 	BrokerListenerResource: armiotoperations.BrokerListenerResource{
 	// 		Properties: &armiotoperations.BrokerListenerProperties{
 	// 			ServiceName: to.Ptr("tpfiszlapdpxktx"),
 	// 			Ports: []*armiotoperations.ListenerPort{
@@ -429,16 +429,16 @@ func ExampleBrokerListenerClient_Get() {
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/BrokerListener_ListByResourceGroup_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/BrokerListener_ListByResourceGroup_MaximumSet_Gen.json
 func ExampleBrokerListenerClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -516,10 +516,10 @@ func ExampleBrokerListenerClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armiotoperations.SystemData{
 		// 					CreatedBy: to.Ptr("contosouser"),
 		// 					CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("contosouser"),
 		// 					LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

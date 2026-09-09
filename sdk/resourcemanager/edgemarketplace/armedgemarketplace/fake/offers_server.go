@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -75,9 +76,7 @@ func (o *OffersServerTransport) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (o *OffersServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -101,10 +100,7 @@ func (o *OffersServerTransport) dispatchToMethodFake(req *http.Request, method s
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -121,7 +117,7 @@ func (o *OffersServerTransport) dispatchBeginGenerateAccessToken(req *http.Reque
 	}
 	beginGenerateAccessToken := o.beginGenerateAccessToken.get(req)
 	if beginGenerateAccessToken == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/generateAccessToken`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/generateAccessToken`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -152,7 +148,7 @@ func (o *OffersServerTransport) dispatchBeginGenerateAccessToken(req *http.Reque
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		o.beginGenerateAccessToken.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -167,7 +163,7 @@ func (o *OffersServerTransport) dispatchGet(req *http.Request) (*http.Response, 
 	if o.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -186,7 +182,7 @@ func (o *OffersServerTransport) dispatchGet(req *http.Request) (*http.Response, 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Offer, req)
@@ -200,7 +196,7 @@ func (o *OffersServerTransport) dispatchGetAccessToken(req *http.Request) (*http
 	if o.srv.GetAccessToken == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAccessToken not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/getAccessToken`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.EdgeMarketplace/offers/(?P<offerId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/getAccessToken`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -223,7 +219,7 @@ func (o *OffersServerTransport) dispatchGetAccessToken(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DiskAccessToken, req)
@@ -239,7 +235,7 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 	}
 	newListPager := o.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.EdgeMarketplace/offers`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.EdgeMarketplace/offers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -250,11 +246,7 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 		if err != nil {
 			return nil, err
 		}
-		topUnescaped, err := url.QueryUnescape(qp.Get("$top"))
-		if err != nil {
-			return nil, err
-		}
-		topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+		topParam, err := parseOptional(qp.Get("$top"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -264,11 +256,7 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 		if err != nil {
 			return nil, err
 		}
-		skipUnescaped, err := url.QueryUnescape(qp.Get("skip"))
-		if err != nil {
-			return nil, err
-		}
-		skipParam, err := parseOptional(skipUnescaped, func(v string) (int32, error) {
+		skipParam, err := parseOptional(qp.Get("skip"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -278,11 +266,7 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 		if err != nil {
 			return nil, err
 		}
-		maxpagesizeUnescaped, err := url.QueryUnescape(qp.Get("maxpagesize"))
-		if err != nil {
-			return nil, err
-		}
-		maxpagesizeParam, err := parseOptional(maxpagesizeUnescaped, func(v string) (int32, error) {
+		maxpagesizeParam, err := parseOptional(qp.Get("maxpagesize"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -292,16 +276,8 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 		if err != nil {
 			return nil, err
 		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
-		skipTokenUnescaped, err := url.QueryUnescape(qp.Get("$skipToken"))
-		if err != nil {
-			return nil, err
-		}
-		skipTokenParam := getOptional(skipTokenUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
+		skipTokenParam := getOptional(qp.Get("$skipToken"))
 		var options *armedgemarketplace.OffersClientListOptions
 		if topParam != nil || skipParam != nil || maxpagesizeParam != nil || filterParam != nil || skipTokenParam != nil {
 			options = &armedgemarketplace.OffersClientListOptions{
@@ -323,7 +299,7 @@ func (o *OffersServerTransport) dispatchNewListPager(req *http.Request) (*http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		o.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -339,7 +315,7 @@ func (o *OffersServerTransport) dispatchNewListBySubscriptionPager(req *http.Req
 	}
 	newListBySubscriptionPager := o.newListBySubscriptionPager.get(req)
 	if newListBySubscriptionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.EdgeMarketplace/offers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.EdgeMarketplace/offers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -356,7 +332,7 @@ func (o *OffersServerTransport) dispatchNewListBySubscriptionPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		o.newListBySubscriptionPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

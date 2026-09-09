@@ -7,18 +7,19 @@ package armpurview
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // UsagesClient contains the methods for the Usages group.
 // Don't use this type directly, use NewUsagesClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type UsagesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type UsagesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*UsagesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,9 +48,7 @@ func NewUsagesClient(subscriptionID string, credential azcore.TokenCredential, o
 //
 // Get the usage quota configuration
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
-//   - location - The location name.
+//   - location - The name of the Azure region.
 //   - options - UsagesClientGetOptions contains the optional parameters for the UsagesClient.Get method.
 func (client *UsagesClient) Get(ctx context.Context, location string, options *UsagesClientGetOptions) (UsagesClientGetResponse, error) {
 	var err error
@@ -62,19 +64,14 @@ func (client *UsagesClient) Get(ctx context.Context, location string, options *U
 	if err != nil {
 		return UsagesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return UsagesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *UsagesClient) getCreateRequest(ctx context.Context, location string, options *UsagesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Purview/locations/{location}/usages"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -89,15 +86,18 @@ func (client *UsagesClient) getCreateRequest(ctx context.Context, location strin
 	if options != nil && options.Filter != nil {
 		reqQP.Set("$filter", *options.Filter)
 	}
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *UsagesClient) getHandleResponse(resp *http.Response) (UsagesClientGetResponse, error) {
+func (client *UsagesClient) getHandleResponse(resp *http.Response, successCodes ...int) (UsagesClientGetResponse, error) {
 	result := UsagesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageList); err != nil {
 		return UsagesClientGetResponse{}, err
 	}

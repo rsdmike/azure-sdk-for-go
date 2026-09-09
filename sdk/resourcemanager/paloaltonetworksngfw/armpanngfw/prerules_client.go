@@ -18,6 +18,8 @@ import (
 
 // PreRulesClient contains the methods for the PreRules group.
 // Don't use this type directly, use NewPreRulesClient() instead.
+//
+// Generated from API version 2025-10-08
 type PreRulesClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewPreRulesClient(credential azcore.TokenCredential, options *arm.ClientOpt
 
 // BeginCreateOrUpdate - Create a PreRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - resource - Resource create parameters.
@@ -64,8 +64,6 @@ func (client *PreRulesClient) BeginCreateOrUpdate(ctx context.Context, globalRul
 
 // CreateOrUpdate - Create a PreRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *PreRulesClient) createOrUpdate(ctx context.Context, globalRulestackName string, priority string, resource PreRulesResource, options *PreRulesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PreRulesClient.BeginCreateOrUpdate"
@@ -81,8 +79,7 @@ func (client *PreRulesClient) createOrUpdate(ctx context.Context, globalRulestac
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -103,8 +100,8 @@ func (client *PreRulesClient) createOrUpdateCreateRequest(ctx context.Context, g
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -115,8 +112,6 @@ func (client *PreRulesClient) createOrUpdateCreateRequest(ctx context.Context, g
 
 // BeginDelete - Delete a PreRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - options - PreRulesClientBeginDeleteOptions contains the optional parameters for the PreRulesClient.BeginDelete method.
@@ -139,8 +134,6 @@ func (client *PreRulesClient) BeginDelete(ctx context.Context, globalRulestackNa
 
 // Delete - Delete a PreRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *PreRulesClient) deleteOperation(ctx context.Context, globalRulestackName string, priority string, options *PreRulesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PreRulesClient.BeginDelete"
@@ -156,8 +149,7 @@ func (client *PreRulesClient) deleteOperation(ctx context.Context, globalRulesta
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -178,15 +170,13 @@ func (client *PreRulesClient) deleteCreateRequest(ctx context.Context, globalRul
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a PreRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - options - PreRulesClientGetOptions contains the optional parameters for the PreRulesClient.Get method.
@@ -204,12 +194,7 @@ func (client *PreRulesClient) Get(ctx context.Context, globalRulestackName strin
 	if err != nil {
 		return PreRulesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PreRulesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -228,15 +213,18 @@ func (client *PreRulesClient) getCreateRequest(ctx context.Context, globalRulest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PreRulesClient) getHandleResponse(resp *http.Response) (PreRulesClientGetResponse, error) {
+func (client *PreRulesClient) getHandleResponse(resp *http.Response, successCodes ...int) (PreRulesClientGetResponse, error) {
 	result := PreRulesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PreRulesResource); err != nil {
 		return PreRulesClientGetResponse{}, err
 	}
@@ -245,8 +233,6 @@ func (client *PreRulesClient) getHandleResponse(resp *http.Response) (PreRulesCl
 
 // GetCounters - Get counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - options - PreRulesClientGetCountersOptions contains the optional parameters for the PreRulesClient.GetCounters method.
@@ -264,12 +250,7 @@ func (client *PreRulesClient) GetCounters(ctx context.Context, globalRulestackNa
 	if err != nil {
 		return PreRulesClientGetCountersResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PreRulesClientGetCountersResponse{}, err
-	}
-	resp, err := client.getCountersHandleResponse(httpResp)
-	return resp, err
+	return client.getCountersHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCountersCreateRequest creates the GetCounters request.
@@ -288,18 +269,21 @@ func (client *PreRulesClient) getCountersCreateRequest(ctx context.Context, glob
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getCountersHandleResponse handles the GetCounters response.
-func (client *PreRulesClient) getCountersHandleResponse(resp *http.Response) (PreRulesClientGetCountersResponse, error) {
+func (client *PreRulesClient) getCountersHandleResponse(resp *http.Response, successCodes ...int) (PreRulesClientGetCountersResponse, error) {
 	result := PreRulesClientGetCountersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleCounter); err != nil {
 		return PreRulesClientGetCountersResponse{}, err
 	}
@@ -307,8 +291,6 @@ func (client *PreRulesClient) getCountersHandleResponse(resp *http.Response) (Pr
 }
 
 // NewListPager - List PreRulesResource resources by Tenant
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - options - PreRulesClientListOptions contains the optional parameters for the PreRulesClient.NewListPager method.
 func (client *PreRulesClient) NewListPager(globalRulestackName string, options *PreRulesClientListOptions) *runtime.Pager[PreRulesClientListResponse] {
@@ -322,39 +304,53 @@ func (client *PreRulesClient) NewListPager(globalRulestackName string, options *
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, globalRulestackName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, globalRulestackName, nextLink, options)
 			if err != nil {
 				return PreRulesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PreRulesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *PreRulesClient) listCreateRequest(ctx context.Context, globalRulestackName string, _ *PreRulesClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/preRules"
-	if globalRulestackName == "" {
-		return nil, errors.New("parameter globalRulestackName cannot be empty")
+func (client *PreRulesClient) listCreateRequest(ctx context.Context, globalRulestackName string, nextLink string, _ *PreRulesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/preRules"
+		if globalRulestackName == "" {
+			return nil, errors.New("parameter globalRulestackName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251008)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *PreRulesClient) listHandleResponse(resp *http.Response) (PreRulesClientListResponse, error) {
+func (client *PreRulesClient) listHandleResponse(resp *http.Response, successCodes ...int) (PreRulesClientListResponse, error) {
 	result := PreRulesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PreRulesResourceListResult); err != nil {
 		return PreRulesClientListResponse{}, err
 	}
@@ -363,8 +359,6 @@ func (client *PreRulesClient) listHandleResponse(resp *http.Response) (PreRulesC
 
 // RefreshCounters - Refresh counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - options - PreRulesClientRefreshCountersOptions contains the optional parameters for the PreRulesClient.RefreshCounters
@@ -384,8 +378,7 @@ func (client *PreRulesClient) RefreshCounters(ctx context.Context, globalRulesta
 		return PreRulesClientRefreshCountersResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return PreRulesClientRefreshCountersResponse{}, err
+		return PreRulesClientRefreshCountersResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return PreRulesClientRefreshCountersResponse{}, nil
 }
@@ -406,18 +399,16 @@ func (client *PreRulesClient) refreshCountersCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // ResetCounters - Reset counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - priority - Pre Rule priority
 //   - options - PreRulesClientResetCountersOptions contains the optional parameters for the PreRulesClient.ResetCounters method.
@@ -435,12 +426,7 @@ func (client *PreRulesClient) ResetCounters(ctx context.Context, globalRulestack
 	if err != nil {
 		return PreRulesClientResetCountersResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PreRulesClientResetCountersResponse{}, err
-	}
-	resp, err := client.resetCountersHandleResponse(httpResp)
-	return resp, err
+	return client.resetCountersHandleResponse(httpResp, http.StatusOK)
 }
 
 // resetCountersCreateRequest creates the ResetCounters request.
@@ -459,18 +445,21 @@ func (client *PreRulesClient) resetCountersCreateRequest(ctx context.Context, gl
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // resetCountersHandleResponse handles the ResetCounters response.
-func (client *PreRulesClient) resetCountersHandleResponse(resp *http.Response) (PreRulesClientResetCountersResponse, error) {
+func (client *PreRulesClient) resetCountersHandleResponse(resp *http.Response, successCodes ...int) (PreRulesClientResetCountersResponse, error) {
 	result := PreRulesClientResetCountersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleCounterReset); err != nil {
 		return PreRulesClientResetCountersResponse{}, err
 	}

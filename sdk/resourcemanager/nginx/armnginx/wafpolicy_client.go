@@ -18,6 +18,8 @@ import (
 
 // WafPolicyClient contains the methods for the WafPolicy group.
 // Don't use this type directly, use NewWafPolicyClient() instead.
+//
+// Generated from API version 2025-11-01
 type WafPolicyClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type WafPolicyClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewWafPolicyClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*WafPolicyClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewWafPolicyClient(subscriptionID string, credential azcore.TokenCredential
 
 // BeginCreate - Create or update the Nginx Waf Policy for given Nginx deployment
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentName - The name of targeted NGINX deployment
 //   - wafPolicyName - The name of Waf Policy
@@ -68,8 +71,6 @@ func (client *WafPolicyClient) BeginCreate(ctx context.Context, resourceGroupNam
 
 // Create - Create or update the Nginx Waf Policy for given Nginx deployment
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 func (client *WafPolicyClient) create(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, body DeploymentWafPolicy, options *WafPolicyClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WafPolicyClient.BeginCreate"
@@ -85,8 +86,7 @@ func (client *WafPolicyClient) create(ctx context.Context, resourceGroupName str
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *WafPolicyClient) create(ctx context.Context, resourceGroupName str
 func (client *WafPolicyClient) createCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, body DeploymentWafPolicy, _ *WafPolicyClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies/{wafPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *WafPolicyClient) createCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -127,8 +127,6 @@ func (client *WafPolicyClient) createCreateRequest(ctx context.Context, resource
 
 // BeginDelete - Reset the Nginx Waf Policy of given Nginx deployment to default
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentName - The name of targeted NGINX deployment
 //   - wafPolicyName - The name of Waf Policy
@@ -152,8 +150,6 @@ func (client *WafPolicyClient) BeginDelete(ctx context.Context, resourceGroupNam
 
 // Delete - Reset the Nginx Waf Policy of given Nginx deployment to default
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 func (client *WafPolicyClient) deleteOperation(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, options *WafPolicyClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WafPolicyClient.BeginDelete"
@@ -169,8 +165,7 @@ func (client *WafPolicyClient) deleteOperation(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -179,7 +174,7 @@ func (client *WafPolicyClient) deleteOperation(ctx context.Context, resourceGrou
 func (client *WafPolicyClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, _ *WafPolicyClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies/{wafPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -199,15 +194,13 @@ func (client *WafPolicyClient) deleteCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get the Nginx Waf Policy of given Nginx deployment
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentName - The name of targeted NGINX deployment
 //   - wafPolicyName - The name of Waf Policy
@@ -226,19 +219,14 @@ func (client *WafPolicyClient) Get(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return WafPolicyClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return WafPolicyClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *WafPolicyClient) getCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, _ *WafPolicyClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies/{wafPolicyName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -258,15 +246,18 @@ func (client *WafPolicyClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *WafPolicyClient) getHandleResponse(resp *http.Response) (WafPolicyClientGetResponse, error) {
+func (client *WafPolicyClient) getHandleResponse(resp *http.Response, successCodes ...int) (WafPolicyClientGetResponse, error) {
 	result := WafPolicyClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentWafPolicy); err != nil {
 		return WafPolicyClientGetResponse{}, err
 	}
@@ -274,8 +265,6 @@ func (client *WafPolicyClient) getHandleResponse(resp *http.Response) (WafPolicy
 }
 
 // NewListPager - List Waf Policies of given Nginx deployment
-//
-// Generated from API version 2025-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentName - The name of targeted NGINX deployment
 //   - options - WafPolicyClientListOptions contains the optional parameters for the WafPolicyClient.NewListPager method.
@@ -290,47 +279,61 @@ func (client *WafPolicyClient) NewListPager(resourceGroupName string, deployment
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, deploymentName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, deploymentName, nextLink, options)
 			if err != nil {
 				return WafPolicyClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return WafPolicyClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *WafPolicyClient) listCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, _ *WafPolicyClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *WafPolicyClient) listCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, nextLink string, _ *WafPolicyClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if deploymentName == "" {
+			return nil, errors.New("parameter deploymentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{deploymentName}", url.PathEscape(deploymentName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if deploymentName == "" {
-		return nil, errors.New("parameter deploymentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{deploymentName}", url.PathEscape(deploymentName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *WafPolicyClient) listHandleResponse(resp *http.Response) (WafPolicyClientListResponse, error) {
+func (client *WafPolicyClient) listHandleResponse(resp *http.Response, successCodes ...int) (WafPolicyClientListResponse, error) {
 	result := WafPolicyClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentWafPolicyListResponse); err != nil {
 		return WafPolicyClientListResponse{}, err
 	}

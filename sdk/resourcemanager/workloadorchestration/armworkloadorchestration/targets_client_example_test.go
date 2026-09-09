@@ -35,7 +35,7 @@ func ExampleTargetsClient_BeginCreateOrUpdate() {
 			ContextID:      to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 			HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 			Status: &armworkloadorchestration.DeploymentStatus{
-				LastModified:         to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t }()),
+				LastModified:         to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 				Deployed:             to.Ptr[int32](24),
 				ExpectedRunningJobID: to.Ptr[int32](19),
 				RunningJobID:         to.Ptr[int32](6),
@@ -72,13 +72,13 @@ func ExampleTargetsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientCreateOrUpdateResponse{
-	// 	Target: &armworkloadorchestration.Target{
+	// 	Target: armworkloadorchestration.Target{
 	// 		Properties: &armworkloadorchestration.TargetProperties{
 	// 			Description: to.Ptr("riabrxtvhlmizyhffdpjeyhvw"),
 	// 			DisplayName: to.Ptr("qjlbshhqzfmwxvvynibkoi"),
@@ -90,7 +90,7 @@ func ExampleTargetsClient_BeginCreateOrUpdate() {
 	// 			ContextID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 	// 			HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 	// 			Status: &armworkloadorchestration.DeploymentStatus{
-	// 				LastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t}()),
+	// 				LastModified: to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 	// 				Deployed: to.Ptr[int32](24),
 	// 				ExpectedRunningJobID: to.Ptr[int32](19),
 	// 				RunningJobID: to.Ptr[int32](6),
@@ -129,10 +129,10 @@ func ExampleTargetsClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -156,7 +156,7 @@ func ExampleTargetsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -179,7 +179,7 @@ func ExampleTargetsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientGetResponse{
-	// 	Target: &armworkloadorchestration.Target{
+	// 	Target: armworkloadorchestration.Target{
 	// 		Properties: &armworkloadorchestration.TargetProperties{
 	// 			Description: to.Ptr("riabrxtvhlmizyhffdpjeyhvw"),
 	// 			DisplayName: to.Ptr("qjlbshhqzfmwxvvynibkoi"),
@@ -191,7 +191,7 @@ func ExampleTargetsClient_Get() {
 	// 			ContextID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 	// 			HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 	// 			Status: &armworkloadorchestration.DeploymentStatus{
-	// 				LastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t}()),
+	// 				LastModified: to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 	// 				Deployed: to.Ptr[int32](24),
 	// 				ExpectedRunningJobID: to.Ptr[int32](19),
 	// 				RunningJobID: to.Ptr[int32](6),
@@ -230,10 +230,10 @@ func ExampleTargetsClient_Get() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -258,7 +258,7 @@ func ExampleTargetsClient_BeginInstallSolution() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -299,7 +299,7 @@ func ExampleTargetsClient_NewListByResourceGroupPager() {
 		// 					ContextID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 		// 					HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 		// 					Status: &armworkloadorchestration.DeploymentStatus{
-		// 						LastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t}()),
+		// 						LastModified: to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 		// 						Deployed: to.Ptr[int32](24),
 		// 						ExpectedRunningJobID: to.Ptr[int32](19),
 		// 						RunningJobID: to.Ptr[int32](6),
@@ -338,10 +338,10 @@ func ExampleTargetsClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("nvjczgdguyvllp"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -388,7 +388,7 @@ func ExampleTargetsClient_NewListBySubscriptionPager() {
 		// 					ContextID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 		// 					HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 		// 					Status: &armworkloadorchestration.DeploymentStatus{
-		// 						LastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t}()),
+		// 						LastModified: to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 		// 						Deployed: to.Ptr[int32](24),
 		// 						ExpectedRunningJobID: to.Ptr[int32](19),
 		// 						RunningJobID: to.Ptr[int32](6),
@@ -427,10 +427,10 @@ func ExampleTargetsClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("nvjczgdguyvllp"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -459,13 +459,13 @@ func ExampleTargetsClient_BeginPublishSolutionVersion() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientPublishSolutionVersionResponse{
-	// 	SolutionVersion: &armworkloadorchestration.SolutionVersion{
+	// 	SolutionVersion: armworkloadorchestration.SolutionVersion{
 	// 		Properties: &armworkloadorchestration.SolutionVersionProperties{
 	// 			SolutionTemplateVersionID: to.Ptr("ykgyybnfeqxcz"),
 	// 			Revision: to.Ptr[int32](17),
@@ -515,10 +515,10 @@ func ExampleTargetsClient_BeginPublishSolutionVersion() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -544,7 +544,7 @@ func ExampleTargetsClient_BeginRemoveRevision() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -578,13 +578,13 @@ func ExampleTargetsClient_BeginResolveConfiguration() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientResolveConfigurationResponse{
-	// 	ResolvedConfiguration: &armworkloadorchestration.ResolvedConfiguration{
+	// 	ResolvedConfiguration: armworkloadorchestration.ResolvedConfiguration{
 	// 		Configuration: to.Ptr("vjxrtzgboqltqnkbcq"),
 	// 	},
 	// }
@@ -620,13 +620,13 @@ func ExampleTargetsClient_BeginReviewSolutionVersion() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientReviewSolutionVersionResponse{
-	// 	SolutionVersion: &armworkloadorchestration.SolutionVersion{
+	// 	SolutionVersion: armworkloadorchestration.SolutionVersion{
 	// 		Properties: &armworkloadorchestration.SolutionVersionProperties{
 	// 			SolutionTemplateVersionID: to.Ptr("ykgyybnfeqxcz"),
 	// 			Revision: to.Ptr[int32](17),
@@ -676,10 +676,10 @@ func ExampleTargetsClient_BeginReviewSolutionVersion() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -705,7 +705,7 @@ func ExampleTargetsClient_BeginUninstallSolution() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -742,13 +742,13 @@ func ExampleTargetsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientUpdateResponse{
-	// 	Target: &armworkloadorchestration.Target{
+	// 	Target: armworkloadorchestration.Target{
 	// 		Properties: &armworkloadorchestration.TargetProperties{
 	// 			Description: to.Ptr("riabrxtvhlmizyhffdpjeyhvw"),
 	// 			DisplayName: to.Ptr("qjlbshhqzfmwxvvynibkoi"),
@@ -760,7 +760,7 @@ func ExampleTargetsClient_BeginUpdate() {
 	// 			ContextID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"),
 	// 			HierarchyLevel: to.Ptr("octqptfirejhjfavlnfqeiikqx"),
 	// 			Status: &armworkloadorchestration.DeploymentStatus{
-	// 				LastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:12:04.224Z"); return t}()),
+	// 				LastModified: to.Ptr(time.Date(2025, time.June, 9, 10, 12, 4, 224000000, time.UTC)),
 	// 				Deployed: to.Ptr[int32](24),
 	// 				ExpectedRunningJobID: to.Ptr[int32](19),
 	// 				RunningJobID: to.Ptr[int32](6),
@@ -799,10 +799,10 @@ func ExampleTargetsClient_BeginUpdate() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -830,13 +830,13 @@ func ExampleTargetsClient_BeginUpdateExternalValidationStatus() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.TargetsClientUpdateExternalValidationStatusResponse{
-	// 	SolutionVersion: &armworkloadorchestration.SolutionVersion{
+	// 	SolutionVersion: armworkloadorchestration.SolutionVersion{
 	// 		Properties: &armworkloadorchestration.SolutionVersionProperties{
 	// 			SolutionTemplateVersionID: to.Ptr("ykgyybnfeqxcz"),
 	// 			Revision: to.Ptr[int32](17),
@@ -886,10 +886,10 @@ func ExampleTargetsClient_BeginUpdateExternalValidationStatus() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

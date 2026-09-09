@@ -37,13 +37,13 @@ func ExampleStaticSitesClient_BeginApproveOrRejectPrivateEndpointConnection() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientApproveOrRejectPrivateEndpointConnectionResponse{
-	// 	RemotePrivateEndpointConnectionARMResource: &armappservice.RemotePrivateEndpointConnectionARMResource{
+	// 	RemotePrivateEndpointConnectionARMResource: armappservice.RemotePrivateEndpointConnectionARMResource{
 	// 		Name: to.Ptr("connection"),
 	// 		Type: to.Ptr("Microsoft.Web/sites/privateEndpointConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/sites/testSite/privateEndpointConnections/connection"),
@@ -86,7 +86,7 @@ func ExampleStaticSitesClient_CreateOrUpdateBasicAuth() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateBasicAuthResponse{
-	// 	StaticSiteBasicAuthPropertiesARMResource: &armappservice.StaticSiteBasicAuthPropertiesARMResource{
+	// 	StaticSiteBasicAuthPropertiesARMResource: armappservice.StaticSiteBasicAuthPropertiesARMResource{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/basicAuth/default"),
 	// 		Properties: &armappservice.StaticSiteBasicAuthPropertiesARMResourceProperties{
 	// 			ApplicableEnvironmentsMode: to.Ptr("AllEnvironments"),
@@ -122,7 +122,7 @@ func ExampleStaticSitesClient_CreateOrUpdateBuildDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/databaseConnections/default"),
@@ -161,7 +161,7 @@ func ExampleStaticSitesClient_CreateOrUpdateDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/databaseConnections/default"),
@@ -207,13 +207,13 @@ func ExampleStaticSitesClient_BeginCreateOrUpdateStaticSite() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteResponse{
-	// 	StaticSiteARMResource: &armappservice.StaticSiteARMResource{
+	// 	StaticSiteARMResource: armappservice.StaticSiteARMResource{
 	// 		Name: to.Ptr("testStaticSite0"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0"),
@@ -265,7 +265,7 @@ func ExampleStaticSitesClient_CreateOrUpdateStaticSiteAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting1": to.Ptr("someval"),
@@ -299,7 +299,7 @@ func ExampleStaticSitesClient_CreateOrUpdateStaticSiteBuildAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting1": to.Ptr("someval"),
@@ -333,7 +333,7 @@ func ExampleStaticSitesClient_CreateOrUpdateStaticSiteBuildFunctionAppSettings()
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting1": to.Ptr("someval"),
@@ -362,16 +362,16 @@ func ExampleStaticSitesClient_BeginCreateOrUpdateStaticSiteCustomDomain() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteCustomDomainResponse{
-	// 	StaticSiteCustomDomainOverviewARMResource: &armappservice.StaticSiteCustomDomainOverviewARMResource{
+	// 	StaticSiteCustomDomainOverviewARMResource: armappservice.StaticSiteCustomDomainOverviewARMResource{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSitesBuilds/testStaticSite0/customDomains/custom.domain.net"),
 	// 		Properties: &armappservice.StaticSiteCustomDomainOverviewARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			DomainName: to.Ptr("custom.domain.net"),
 	// 		},
 	// 	},
@@ -402,7 +402,7 @@ func ExampleStaticSitesClient_CreateOrUpdateStaticSiteFunctionAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting1": to.Ptr("someval"),
@@ -439,9 +439,9 @@ func ExampleStaticSitesClient_CreateUserRolesInvitationLink() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientCreateUserRolesInvitationLinkResponse{
-	// 	StaticSiteUserInvitationResponseResource: &armappservice.StaticSiteUserInvitationResponseResource{
+	// 	StaticSiteUserInvitationResponseResource: armappservice.StaticSiteUserInvitationResponseResource{
 	// 		Properties: &armappservice.StaticSiteUserInvitationResponseResourceProperties{
-	// 			ExpiresOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-28T16:53:56.211Z"); return t}()),
+	// 			ExpiresOn: to.Ptr(time.Date(2020, time.February, 28, 16, 53, 56, 211000000, time.UTC)),
 	// 			InvitationURL: to.Ptr("https://happy-sea-15afae3e.azurestaticwebsites.net?invite=asdf"),
 	// 		},
 	// 	},
@@ -473,7 +473,7 @@ func ExampleStaticSitesClient_BeginCreateZipDeploymentForStaticSite() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -507,7 +507,7 @@ func ExampleStaticSitesClient_BeginCreateZipDeploymentForStaticSiteBuild() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -577,12 +577,14 @@ func ExampleStaticSitesClient_BeginDeletePrivateEndpointConnection() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientDeletePrivateEndpointConnectionResponse{
+	// 	Interface: map[string]any{
+	// 	},
 	// }
 }
 
@@ -603,7 +605,7 @@ func ExampleStaticSitesClient_BeginDeleteStaticSite() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -629,7 +631,7 @@ func ExampleStaticSitesClient_BeginDeleteStaticSiteBuild() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -655,7 +657,7 @@ func ExampleStaticSitesClient_BeginDeleteStaticSiteCustomDomain() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -703,7 +705,7 @@ func ExampleStaticSitesClient_BeginDetachStaticSite() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -775,7 +777,7 @@ func ExampleStaticSitesClient_GetBasicAuth() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetBasicAuthResponse{
-	// 	StaticSiteBasicAuthPropertiesARMResource: &armappservice.StaticSiteBasicAuthPropertiesARMResource{
+	// 	StaticSiteBasicAuthPropertiesARMResource: armappservice.StaticSiteBasicAuthPropertiesARMResource{
 	// 		Name: to.Ptr("default"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/basicAuth/default"),
 	// 		Properties: &armappservice.StaticSiteBasicAuthPropertiesARMResourceProperties{
@@ -805,7 +807,7 @@ func ExampleStaticSitesClient_GetBuildDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetBuildDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/databaseConnections/default"),
@@ -837,7 +839,7 @@ func ExampleStaticSitesClient_GetBuildDatabaseConnectionWithDetails() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/databaseConnections/default"),
@@ -977,7 +979,7 @@ func ExampleStaticSitesClient_GetDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/databaseConnections/default"),
@@ -1009,7 +1011,7 @@ func ExampleStaticSitesClient_GetDatabaseConnectionWithDetails() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetDatabaseConnectionWithDetailsResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/databaseConnections/default"),
@@ -1149,13 +1151,13 @@ func ExampleStaticSitesClient_GetLinkedBackend() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetLinkedBackendResponse{
-	// 	StaticSiteLinkedBackendARMResource: &armappservice.StaticSiteLinkedBackendARMResource{
+	// 	StaticSiteLinkedBackendARMResource: armappservice.StaticSiteLinkedBackendARMResource{
 	// 		Name: to.Ptr("testBackend"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/linkedBackends"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 	// 		Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 	// 			BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/backendRg/providers/Microsoft.Web/sites/testBackend"),
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-12-24T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2021, time.December, 24, 17, 33, 11, 641000000, time.UTC)),
 	// 			ProvisioningState: to.Ptr("Succeeded"),
 	// 			Region: to.Ptr("West US 2"),
 	// 		},
@@ -1182,13 +1184,13 @@ func ExampleStaticSitesClient_GetLinkedBackendForBuild() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetLinkedBackendForBuildResponse{
-	// 	StaticSiteLinkedBackendARMResource: &armappservice.StaticSiteLinkedBackendARMResource{
+	// 	StaticSiteLinkedBackendARMResource: armappservice.StaticSiteLinkedBackendARMResource{
 	// 		Name: to.Ptr("testBackend"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/linkedBackends"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 	// 		Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 	// 			BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/backendRg/providers/Microsoft.Web/sites/testBackend"),
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-12-24T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2021, time.December, 24, 17, 33, 11, 641000000, time.UTC)),
 	// 			ProvisioningState: to.Ptr("Succeeded"),
 	// 			Region: to.Ptr("West US 2"),
 	// 		},
@@ -1227,7 +1229,7 @@ func ExampleStaticSitesClient_NewGetLinkedBackendsPager() {
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 		// 				Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 		// 					BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testBackend"),
-		// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					ProvisioningState: to.Ptr("Succeeded"),
 		// 					Region: to.Ptr("West US 2"),
 		// 				},
@@ -1269,7 +1271,7 @@ func ExampleStaticSitesClient_NewGetLinkedBackendsForBuildPager() {
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 		// 				Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 		// 					BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testBackend"),
-		// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					ProvisioningState: to.Ptr("Succeeded"),
 		// 					Region: to.Ptr("West US 2"),
 		// 				},
@@ -1299,7 +1301,7 @@ func ExampleStaticSitesClient_GetPrivateEndpointConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetPrivateEndpointConnectionResponse{
-	// 	RemotePrivateEndpointConnectionARMResource: &armappservice.RemotePrivateEndpointConnectionARMResource{
+	// 	RemotePrivateEndpointConnectionARMResource: armappservice.RemotePrivateEndpointConnectionARMResource{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/sites/testSite/privateEndpointConnections/connection"),
 	// 		Properties: &armappservice.RemotePrivateEndpointConnectionARMResourceProperties{
 	// 			PrivateEndpoint: &armappservice.ArmIDWrapper{
@@ -1380,7 +1382,7 @@ func ExampleStaticSitesClient_GetPrivateLinkResources() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetPrivateLinkResourcesResponse{
-	// 	PrivateLinkResourcesWrapper: &armappservice.PrivateLinkResourcesWrapper{
+	// 	PrivateLinkResourcesWrapper: armappservice.PrivateLinkResourcesWrapper{
 	// 		Value: []*armappservice.PrivateLinkResource{
 	// 			{
 	// 				Name: to.Ptr("site"),
@@ -1420,7 +1422,7 @@ func ExampleStaticSitesClient_GetStaticSite() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetStaticSiteResponse{
-	// 	StaticSiteARMResource: &armappservice.StaticSiteARMResource{
+	// 	StaticSiteARMResource: armappservice.StaticSiteARMResource{
 	// 		Name: to.Ptr("testStaticSite0"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0"),
@@ -1436,7 +1438,7 @@ func ExampleStaticSitesClient_GetStaticSite() {
 	// 			LinkedBackends: []*armappservice.StaticSiteLinkedBackend{
 	// 				{
 	// 					BackendResourceID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.ApiManagement/service/apimService0"),
-	// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-27T04:57:24.8058474"); return t}()),
+	// 					CreatedOn: to.Ptr(time.Time{}),
 	// 					ProvisioningState: to.Ptr("Succeeded"),
 	// 				},
 	// 			},
@@ -1472,17 +1474,17 @@ func ExampleStaticSitesClient_GetStaticSiteBuild() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetStaticSiteBuildResponse{
-	// 	StaticSiteBuildARMResource: &armappservice.StaticSiteBuildARMResource{
+	// 	StaticSiteBuildARMResource: armappservice.StaticSiteBuildARMResource{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12"),
 	// 		Properties: &armappservice.StaticSiteBuildARMResourceProperties{
 	// 			BuildID: to.Ptr("12"),
-	// 			CreatedTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedTimeUTC: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			Hostname: to.Ptr("happy-sea-15afae3e-12.westus2.azurestaticwebsites.net"),
-	// 			LastUpdatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			LastUpdatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			LinkedBackends: []*armappservice.StaticSiteLinkedBackend{
 	// 				{
 	// 					BackendResourceID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.ApiManagement/service/apimService0"),
-	// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-27T04:57:24.8058474"); return t}()),
+	// 					CreatedOn: to.Ptr(time.Time{}),
 	// 					ProvisioningState: to.Ptr("Succeeded"),
 	// 				},
 	// 			},
@@ -1523,9 +1525,9 @@ func ExampleStaticSitesClient_NewGetStaticSiteBuildsPager() {
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default"),
 		// 				Properties: &armappservice.StaticSiteBuildARMResourceProperties{
 		// 					BuildID: to.Ptr("default"),
-		// 					CreatedTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedTimeUTC: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					Hostname: to.Ptr("happy-sea-15afae3e.azurestaticwebsites.net"),
-		// 					LastUpdatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					LastUpdatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					LinkedBackends: []*armappservice.StaticSiteLinkedBackend{
 		// 					},
 		// 					SourceBranch: to.Ptr("demo"),
@@ -1536,13 +1538,13 @@ func ExampleStaticSitesClient_NewGetStaticSiteBuildsPager() {
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12"),
 		// 				Properties: &armappservice.StaticSiteBuildARMResourceProperties{
 		// 					BuildID: to.Ptr("12"),
-		// 					CreatedTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedTimeUTC: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					Hostname: to.Ptr("happy-sea-15afae3e-12.westus2.azurestaticwebsites.net"),
-		// 					LastUpdatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					LastUpdatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					LinkedBackends: []*armappservice.StaticSiteLinkedBackend{
 		// 						{
 		// 							BackendResourceID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.ApiManagement/service/apimService0"),
-		// 							CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-27T04:57:24.8058474"); return t}()),
+		// 							CreatedOn: to.Ptr(time.Time{}),
 		// 							ProvisioningState: to.Ptr("Succeeded"),
 		// 						},
 		// 					},
@@ -1576,10 +1578,10 @@ func ExampleStaticSitesClient_GetStaticSiteCustomDomain() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetStaticSiteCustomDomainResponse{
-	// 	StaticSiteCustomDomainOverviewARMResource: &armappservice.StaticSiteCustomDomainOverviewARMResource{
+	// 	StaticSiteCustomDomainOverviewARMResource: armappservice.StaticSiteCustomDomainOverviewARMResource{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSitesBuilds/testStaticSite0/customDomains/custom.domain.net"),
 	// 		Properties: &armappservice.StaticSiteCustomDomainOverviewARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			DomainName: to.Ptr("custom.domain.net"),
 	// 		},
 	// 	},
@@ -1661,12 +1663,12 @@ func ExampleStaticSitesClient_GetUserProvidedFunctionAppForStaticSite() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{
-	// 	StaticSiteUserProvidedFunctionAppARMResource: &armappservice.StaticSiteUserProvidedFunctionAppARMResource{
+	// 	StaticSiteUserProvidedFunctionAppARMResource: armappservice.StaticSiteUserProvidedFunctionAppARMResource{
 	// 		Name: to.Ptr("testFunctionApp"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 	// 		Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			FunctionAppRegion: to.Ptr("West US 2"),
 	// 			FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 	// 		},
@@ -1693,12 +1695,12 @@ func ExampleStaticSitesClient_GetUserProvidedFunctionAppForStaticSiteBuild() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{
-	// 	StaticSiteUserProvidedFunctionAppARMResource: &armappservice.StaticSiteUserProvidedFunctionAppARMResource{
+	// 	StaticSiteUserProvidedFunctionAppARMResource: armappservice.StaticSiteUserProvidedFunctionAppARMResource{
 	// 		Name: to.Ptr("testFunctionApp"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 	// 		Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			FunctionAppRegion: to.Ptr("West US 2"),
 	// 			FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 	// 		},
@@ -1736,7 +1738,7 @@ func ExampleStaticSitesClient_NewGetUserProvidedFunctionAppsForStaticSitePager()
 		// 				Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 		// 				Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-		// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					FunctionAppRegion: to.Ptr("West US 2"),
 		// 					FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 		// 				},
@@ -1777,7 +1779,7 @@ func ExampleStaticSitesClient_NewGetUserProvidedFunctionAppsForStaticSiteBuildPa
 		// 				Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 		// 				Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-		// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					FunctionAppRegion: to.Ptr("West US 2"),
 		// 					FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 		// 				},
@@ -1810,19 +1812,19 @@ func ExampleStaticSitesClient_BeginLinkBackend() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientLinkBackendResponse{
-	// 	StaticSiteLinkedBackendARMResource: &armappservice.StaticSiteLinkedBackendARMResource{
+	// 	StaticSiteLinkedBackendARMResource: armappservice.StaticSiteLinkedBackendARMResource{
 	// 		Name: to.Ptr("testBackend"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/linkedBackends"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 	// 		Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 	// 			BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/backendRg/providers/Microsoft.Web/sites/testBackend"),
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-12-24T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2021, time.December, 24, 17, 33, 11, 641000000, time.UTC)),
 	// 			ProvisioningState: to.Ptr("Succeeded"),
 	// 			Region: to.Ptr("West US 2"),
 	// 		},
@@ -1852,19 +1854,19 @@ func ExampleStaticSitesClient_BeginLinkBackendToBuild() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientLinkBackendToBuildResponse{
-	// 	StaticSiteLinkedBackendARMResource: &armappservice.StaticSiteLinkedBackendARMResource{
+	// 	StaticSiteLinkedBackendARMResource: armappservice.StaticSiteLinkedBackendARMResource{
 	// 		Name: to.Ptr("testBackend"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/linkedBackends"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/linkedBackends/testBackend"),
 	// 		Properties: &armappservice.StaticSiteLinkedBackendARMResourceProperties{
 	// 			BackendResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/backendRg/providers/Microsoft.Web/sites/testBackend"),
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-12-24T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2021, time.December, 24, 17, 33, 11, 641000000, time.UTC)),
 	// 			ProvisioningState: to.Ptr("Succeeded"),
 	// 			Region: to.Ptr("West US 2"),
 	// 		},
@@ -1986,7 +1988,7 @@ func ExampleStaticSitesClient_ListStaticSiteAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting0": to.Ptr("someVal"),
@@ -2014,7 +2016,7 @@ func ExampleStaticSitesClient_ListStaticSiteBuildAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteBuildAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting0": to.Ptr("someVal"),
@@ -2042,7 +2044,7 @@ func ExampleStaticSitesClient_ListStaticSiteBuildFunctionAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/12/config/appSettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting0": to.Ptr("someVal"),
@@ -2108,7 +2110,7 @@ func ExampleStaticSitesClient_ListStaticSiteConfiguredRoles() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteConfiguredRolesResponse{
-	// 	StringList: &armappservice.StringList{
+	// 	StringList: armappservice.StringList{
 	// 		Properties: []*string{
 	// 			to.Ptr("authenticated"),
 	// 			to.Ptr("anonymous"),
@@ -2146,7 +2148,7 @@ func ExampleStaticSitesClient_NewListStaticSiteCustomDomainsPager() {
 		// 			{
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSitesBuilds/testStaticSite0/customDomains/custom.domain.net"),
 		// 				Properties: &armappservice.StaticSiteCustomDomainOverviewARMResourceProperties{
-		// 					CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+		// 					CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 		// 					DomainName: to.Ptr("custom.domain.net"),
 		// 				},
 		// 			},
@@ -2175,7 +2177,7 @@ func ExampleStaticSitesClient_ListStaticSiteFunctionAppSettings() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteFunctionAppSettingsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/config/appsettings"),
 	// 		Properties: map[string]*string{
 	// 			"setting0": to.Ptr("someVal"),
@@ -2241,7 +2243,7 @@ func ExampleStaticSitesClient_ListStaticSiteSecrets() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientListStaticSiteSecretsResponse{
-	// 	StringDictionary: &armappservice.StringDictionary{
+	// 	StringDictionary: armappservice.StringDictionary{
 	// 		Properties: map[string]*string{
 	// 			"dnsOwnershipKey": to.Ptr("ownershipKey123123"),
 	// 		},
@@ -2318,7 +2320,7 @@ func ExampleStaticSitesClient_PreviewWorkflow() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientPreviewWorkflowResponse{
-	// 	StaticSitesWorkflowPreview: &armappservice.StaticSitesWorkflowPreview{
+	// 	StaticSitesWorkflowPreview: armappservice.StaticSitesWorkflowPreview{
 	// 		Properties: &armappservice.StaticSitesWorkflowPreviewProperties{
 	// 			Path: to.Ptr(".github/workflows/azure-static-web-apps-<generated_hostname>.yml"),
 	// 			Contents: to.Ptr("base64encodedworkflowcontentspreview"),
@@ -2350,18 +2352,18 @@ func ExampleStaticSitesClient_BeginRegisterUserProvidedFunctionAppWithStaticSite
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteResponse{
-	// 	StaticSiteUserProvidedFunctionAppARMResource: &armappservice.StaticSiteUserProvidedFunctionAppARMResource{
+	// 	StaticSiteUserProvidedFunctionAppARMResource: armappservice.StaticSiteUserProvidedFunctionAppARMResource{
 	// 		Name: to.Ptr("testFunctionApp"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 	// 		Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			FunctionAppRegion: to.Ptr("West US 2"),
 	// 			FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 	// 		},
@@ -2392,18 +2394,18 @@ func ExampleStaticSitesClient_BeginRegisterUserProvidedFunctionAppWithStaticSite
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientRegisterUserProvidedFunctionAppWithStaticSiteBuildResponse{
-	// 	StaticSiteUserProvidedFunctionAppARMResource: &armappservice.StaticSiteUserProvidedFunctionAppARMResource{
+	// 	StaticSiteUserProvidedFunctionAppARMResource: armappservice.StaticSiteUserProvidedFunctionAppARMResource{
 	// 		Name: to.Ptr("testFunctionApp"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/userProvidedFunctionApps"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/userProvidedFunctionApps/testFunctionApp"),
 	// 		Properties: &armappservice.StaticSiteUserProvidedFunctionAppARMResourceProperties{
-	// 			CreatedOn: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-04T17:33:11.641Z"); return t}()),
+	// 			CreatedOn: to.Ptr(time.Date(2020, time.March, 4, 17, 33, 11, 641000000, time.UTC)),
 	// 			FunctionAppRegion: to.Ptr("West US 2"),
 	// 			FunctionAppResourceID: to.Ptr("/subscription/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/functionRG/providers/Microsoft.Web/sites/testFunctionApp"),
 	// 		},
@@ -2503,7 +2505,7 @@ func ExampleStaticSitesClient_UpdateBuildDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientUpdateBuildDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/builds/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/builds/default/databaseConnections/default"),
@@ -2537,7 +2539,7 @@ func ExampleStaticSitesClient_UpdateDatabaseConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientUpdateDatabaseConnectionResponse{
-	// 	DatabaseConnection: &armappservice.DatabaseConnection{
+	// 	DatabaseConnection: armappservice.DatabaseConnection{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites/databaseConnections"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0/databaseConnections/default"),
@@ -2571,7 +2573,7 @@ func ExampleStaticSitesClient_UpdateStaticSite() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientUpdateStaticSiteResponse{
-	// 	StaticSiteARMResource: &armappservice.StaticSiteARMResource{
+	// 	StaticSiteARMResource: armappservice.StaticSiteARMResource{
 	// 		Name: to.Ptr("testStaticSite0"),
 	// 		Type: to.Ptr("Microsoft.Web/staticSites"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/rg/providers/Microsoft.Web/staticSites/testStaticSite0"),
@@ -2622,7 +2624,7 @@ func ExampleStaticSitesClient_UpdateStaticSiteUser() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.StaticSitesClientUpdateStaticSiteUserResponse{
-	// 	StaticSiteUserARMResource: &armappservice.StaticSiteUserARMResource{
+	// 	StaticSiteUserARMResource: armappservice.StaticSiteUserARMResource{
 	// 		Properties: &armappservice.StaticSiteUserARMResourceProperties{
 	// 			DisplayName: to.Ptr("username"),
 	// 			Provider: to.Ptr("aad"),
@@ -2655,7 +2657,7 @@ func ExampleStaticSitesClient_BeginValidateBackend() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -2681,7 +2683,7 @@ func ExampleStaticSitesClient_BeginValidateBackendForBuild() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -2704,7 +2706,7 @@ func ExampleStaticSitesClient_BeginValidateCustomDomainCanBeAddedToStaticSite() 
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res

@@ -18,6 +18,8 @@ import (
 
 // PrivateLinkResourcesClient contains the methods for the PrivateLinkResources group.
 // Don't use this type directly, use NewPrivateLinkResourcesClient() instead.
+//
+// Generated from API version 2025-09-01
 type PrivateLinkResourcesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type PrivateLinkResourcesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PrivateLinkResourcesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 
 // ListByElasticSan - Gets the private link resources that need to be created for a elastic San.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - elasticSanName - The name of the ElasticSan.
 //   - options - PrivateLinkResourcesClientListByElasticSanOptions contains the optional parameters for the PrivateLinkResourcesClient.ListByElasticSan
@@ -61,19 +64,14 @@ func (client *PrivateLinkResourcesClient) ListByElasticSan(ctx context.Context, 
 	if err != nil {
 		return PrivateLinkResourcesClientListByElasticSanResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PrivateLinkResourcesClientListByElasticSanResponse{}, err
-	}
-	resp, err := client.listByElasticSanHandleResponse(httpResp)
-	return resp, err
+	return client.listByElasticSanHandleResponse(httpResp, http.StatusOK)
 }
 
 // listByElasticSanCreateRequest creates the ListByElasticSan request.
 func (client *PrivateLinkResourcesClient) listByElasticSanCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, _ *PrivateLinkResourcesClientListByElasticSanOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/privateLinkResources"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -89,15 +87,18 @@ func (client *PrivateLinkResourcesClient) listByElasticSanCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByElasticSanHandleResponse handles the ListByElasticSan response.
-func (client *PrivateLinkResourcesClient) listByElasticSanHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByElasticSanResponse, error) {
+func (client *PrivateLinkResourcesClient) listByElasticSanHandleResponse(resp *http.Response, successCodes ...int) (PrivateLinkResourcesClientListByElasticSanResponse, error) {
 	result := PrivateLinkResourcesClientListByElasticSanResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceListResult); err != nil {
 		return PrivateLinkResourcesClientListByElasticSanResponse{}, err
 	}

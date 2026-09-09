@@ -11,10 +11,11 @@ import (
 	azfake "github.com/Azure/azure-sdk-for-go/sdk/azcore/fake"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/fake/server"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/hardwaresecuritymodules/armhardwaresecuritymodules/v2"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/hardwaresecuritymodules/armhardwaresecuritymodules/v3"
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // CloudHsmClusterRestoreStatusServer is a fake server for instances of the armhardwaresecuritymodules.CloudHsmClusterRestoreStatusClient type.
@@ -49,9 +50,7 @@ func (c *CloudHsmClusterRestoreStatusServerTransport) Do(req *http.Request) (*ht
 }
 
 func (c *CloudHsmClusterRestoreStatusServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -67,10 +66,7 @@ func (c *CloudHsmClusterRestoreStatusServerTransport) dispatchToMethodFake(req *
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -85,7 +81,7 @@ func (c *CloudHsmClusterRestoreStatusServerTransport) dispatchGet(req *http.Requ
 	if c.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HardwareSecurityModules/cloudHsmClusters/(?P<cloudHsmClusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreOperationStatus/(?P<jobId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.HardwareSecurityModules/cloudHsmClusters/(?P<cloudHsmClusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreOperationStatus/(?P<jobId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -108,7 +104,7 @@ func (c *CloudHsmClusterRestoreStatusServerTransport) dispatchGet(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RestoreResult, req)
@@ -118,8 +114,8 @@ func (c *CloudHsmClusterRestoreStatusServerTransport) dispatchGet(req *http.Requ
 	if val := server.GetResponse(respr).Location; val != nil {
 		resp.Header.Set("Location", *val)
 	}
-	if val := server.GetResponse(respr).XMSRequestID; val != nil {
-		resp.Header.Set("x-ms-request-id", *val)
+	if val := server.GetResponse(respr).RequestID; val != nil {
+		resp.Header.Set("X-Ms-Request-Id", *val)
 	}
 	return resp, nil
 }

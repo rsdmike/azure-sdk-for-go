@@ -44,13 +44,13 @@ func ExampleInboundEndpointsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.InboundEndpointsClientCreateOrUpdateResponse{
-	// 	InboundEndpoint: &armdnsresolver.InboundEndpoint{
+	// 	InboundEndpoint: armdnsresolver.InboundEndpoint{
 	// 		Name: to.Ptr("sampleInboundEndpoint"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolvers/inboundEndpoints"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -70,9 +70,9 @@ func ExampleInboundEndpointsClient_BeginCreateOrUpdate() {
 	// 			ResourceGUID: to.Ptr("87b3e20a-5833-4c40-8ad7-c5160bb1c5bd"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -99,7 +99,7 @@ func ExampleInboundEndpointsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -127,7 +127,7 @@ func ExampleInboundEndpointsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.InboundEndpointsClientGetResponse{
-	// 	InboundEndpoint: &armdnsresolver.InboundEndpoint{
+	// 	InboundEndpoint: armdnsresolver.InboundEndpoint{
 	// 		Name: to.Ptr("sampleInboundEndpoint"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolvers/inboundEndpoints"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -147,9 +147,9 @@ func ExampleInboundEndpointsClient_Get() {
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -204,9 +204,9 @@ func ExampleInboundEndpointsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -233,9 +233,9 @@ func ExampleInboundEndpointsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("87b3e20a-5833-4c40-8ad7-c5160bb1c5bd"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 2, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 3, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -269,13 +269,13 @@ func ExampleInboundEndpointsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.InboundEndpointsClientUpdateResponse{
-	// 	InboundEndpoint: &armdnsresolver.InboundEndpoint{
+	// 	InboundEndpoint: armdnsresolver.InboundEndpoint{
 	// 		Name: to.Ptr("sampleInboundEndpoint"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolvers/inboundEndpoints"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -295,9 +295,9 @@ func ExampleInboundEndpointsClient_BeginUpdate() {
 	// 			ResourceGUID: to.Ptr("87b3e20a-5833-4c40-8ad7-c5160bb1c5bd"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{

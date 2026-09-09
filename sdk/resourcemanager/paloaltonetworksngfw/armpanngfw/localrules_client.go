@@ -18,6 +18,8 @@ import (
 
 // LocalRulesClient contains the methods for the LocalRules group.
 // Don't use this type directly, use NewLocalRulesClient() instead.
+//
+// Generated from API version 2025-10-08
 type LocalRulesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type LocalRulesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewLocalRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LocalRulesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewLocalRulesClient(subscriptionID string, credential azcore.TokenCredentia
 
 // BeginCreateOrUpdate - Create a LocalRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -68,8 +71,6 @@ func (client *LocalRulesClient) BeginCreateOrUpdate(ctx context.Context, resourc
 
 // CreateOrUpdate - Create a LocalRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *LocalRulesClient) createOrUpdate(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, resource LocalRulesResource, options *LocalRulesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "LocalRulesClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *LocalRulesClient) createOrUpdate(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *LocalRulesClient) createOrUpdate(ctx context.Context, resourceGrou
 func (client *LocalRulesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, resource LocalRulesResource, _ *LocalRulesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *LocalRulesClient) createOrUpdateCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *LocalRulesClient) createOrUpdateCreateRequest(ctx context.Context,
 
 // BeginDelete - Delete a LocalRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -152,8 +150,6 @@ func (client *LocalRulesClient) BeginDelete(ctx context.Context, resourceGroupNa
 
 // Delete - Delete a LocalRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *LocalRulesClient) deleteOperation(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, options *LocalRulesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "LocalRulesClient.BeginDelete"
@@ -169,8 +165,7 @@ func (client *LocalRulesClient) deleteOperation(ctx context.Context, resourceGro
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -179,7 +174,7 @@ func (client *LocalRulesClient) deleteOperation(ctx context.Context, resourceGro
 func (client *LocalRulesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, _ *LocalRulesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -199,15 +194,13 @@ func (client *LocalRulesClient) deleteCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a LocalRulesResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -226,19 +219,14 @@ func (client *LocalRulesClient) Get(ctx context.Context, resourceGroupName strin
 	if err != nil {
 		return LocalRulesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return LocalRulesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *LocalRulesClient) getCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, _ *LocalRulesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -258,15 +246,18 @@ func (client *LocalRulesClient) getCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *LocalRulesClient) getHandleResponse(resp *http.Response) (LocalRulesClientGetResponse, error) {
+func (client *LocalRulesClient) getHandleResponse(resp *http.Response, successCodes ...int) (LocalRulesClientGetResponse, error) {
 	result := LocalRulesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalRulesResource); err != nil {
 		return LocalRulesClientGetResponse{}, err
 	}
@@ -275,8 +266,6 @@ func (client *LocalRulesClient) getHandleResponse(resp *http.Response) (LocalRul
 
 // GetCounters - Get counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -295,19 +284,14 @@ func (client *LocalRulesClient) GetCounters(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return LocalRulesClientGetCountersResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return LocalRulesClientGetCountersResponse{}, err
-	}
-	resp, err := client.getCountersHandleResponse(httpResp)
-	return resp, err
+	return client.getCountersHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCountersCreateRequest creates the GetCounters request.
 func (client *LocalRulesClient) getCountersCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, options *LocalRulesClientGetCountersOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}/getCounters"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -327,18 +311,21 @@ func (client *LocalRulesClient) getCountersCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getCountersHandleResponse handles the GetCounters response.
-func (client *LocalRulesClient) getCountersHandleResponse(resp *http.Response) (LocalRulesClientGetCountersResponse, error) {
+func (client *LocalRulesClient) getCountersHandleResponse(resp *http.Response, successCodes ...int) (LocalRulesClientGetCountersResponse, error) {
 	result := LocalRulesClientGetCountersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleCounter); err != nil {
 		return LocalRulesClientGetCountersResponse{}, err
 	}
@@ -346,8 +333,6 @@ func (client *LocalRulesClient) getCountersHandleResponse(resp *http.Response) (
 }
 
 // NewListByLocalRulestacksPager - List LocalRulesResource resources by LocalRulestacks
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - options - LocalRulesClientListByLocalRulestacksOptions contains the optional parameters for the LocalRulesClient.NewListByLocalRulestacksPager
@@ -363,47 +348,61 @@ func (client *LocalRulesClient) NewListByLocalRulestacksPager(resourceGroupName 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByLocalRulestacksCreateRequest(ctx, resourceGroupName, localRulestackName, options)
-			}, nil)
+			req, err := client.listByLocalRulestacksCreateRequest(ctx, resourceGroupName, localRulestackName, nextLink, options)
 			if err != nil {
 				return LocalRulesClientListByLocalRulestacksResponse{}, err
 			}
-			return client.listByLocalRulestacksHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return LocalRulesClientListByLocalRulestacksResponse{}, err
+			}
+			return client.listByLocalRulestacksHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByLocalRulestacksCreateRequest creates the ListByLocalRulestacks request.
-func (client *LocalRulesClient) listByLocalRulestacksCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, _ *LocalRulesClientListByLocalRulestacksOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *LocalRulesClient) listByLocalRulestacksCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, nextLink string, _ *LocalRulesClientListByLocalRulestacksOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if localRulestackName == "" {
+			return nil, errors.New("parameter localRulestackName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{localRulestackName}", url.PathEscape(localRulestackName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if localRulestackName == "" {
-		return nil, errors.New("parameter localRulestackName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{localRulestackName}", url.PathEscape(localRulestackName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251008)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByLocalRulestacksHandleResponse handles the ListByLocalRulestacks response.
-func (client *LocalRulesClient) listByLocalRulestacksHandleResponse(resp *http.Response) (LocalRulesClientListByLocalRulestacksResponse, error) {
+func (client *LocalRulesClient) listByLocalRulestacksHandleResponse(resp *http.Response, successCodes ...int) (LocalRulesClientListByLocalRulestacksResponse, error) {
 	result := LocalRulesClientListByLocalRulestacksResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LocalRulesResourceListResult); err != nil {
 		return LocalRulesClientListByLocalRulestacksResponse{}, err
 	}
@@ -412,8 +411,6 @@ func (client *LocalRulesClient) listByLocalRulestacksHandleResponse(resp *http.R
 
 // RefreshCounters - Refresh counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -434,8 +431,7 @@ func (client *LocalRulesClient) RefreshCounters(ctx context.Context, resourceGro
 		return LocalRulesClientRefreshCountersResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return LocalRulesClientRefreshCountersResponse{}, err
+		return LocalRulesClientRefreshCountersResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return LocalRulesClientRefreshCountersResponse{}, nil
 }
@@ -444,7 +440,7 @@ func (client *LocalRulesClient) RefreshCounters(ctx context.Context, resourceGro
 func (client *LocalRulesClient) refreshCountersCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, options *LocalRulesClientRefreshCountersOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}/refreshCounters"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -464,18 +460,16 @@ func (client *LocalRulesClient) refreshCountersCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // ResetCounters - Reset counters
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - priority - Local Rule priority
@@ -495,19 +489,14 @@ func (client *LocalRulesClient) ResetCounters(ctx context.Context, resourceGroup
 	if err != nil {
 		return LocalRulesClientResetCountersResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return LocalRulesClientResetCountersResponse{}, err
-	}
-	resp, err := client.resetCountersHandleResponse(httpResp)
-	return resp, err
+	return client.resetCountersHandleResponse(httpResp, http.StatusOK)
 }
 
 // resetCountersCreateRequest creates the ResetCounters request.
 func (client *LocalRulesClient) resetCountersCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, priority string, options *LocalRulesClientResetCountersOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/localRules/{priority}/resetCounters"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -527,18 +516,21 @@ func (client *LocalRulesClient) resetCountersCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
+	reqQP.Set("api-version", version20251008)
 	if options != nil && options.FirewallName != nil {
 		reqQP.Set("firewallName", *options.FirewallName)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // resetCountersHandleResponse handles the ResetCounters response.
-func (client *LocalRulesClient) resetCountersHandleResponse(resp *http.Response) (LocalRulesClientResetCountersResponse, error) {
+func (client *LocalRulesClient) resetCountersHandleResponse(resp *http.Response, successCodes ...int) (LocalRulesClientResetCountersResponse, error) {
 	result := LocalRulesClientResetCountersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RuleCounterReset); err != nil {
 		return LocalRulesClientResetCountersResponse{}, err
 	}

@@ -18,6 +18,8 @@ import (
 
 // VolumeSnapshotsClient contains the methods for the VolumeSnapshots group.
 // Don't use this type directly, use NewVolumeSnapshotsClient() instead.
+//
+// Generated from API version 2025-09-01
 type VolumeSnapshotsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type VolumeSnapshotsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewVolumeSnapshotsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VolumeSnapshotsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewVolumeSnapshotsClient(subscriptionID string, credential azcore.TokenCred
 
 // BeginCreate - Create a Volume Snapshot.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - elasticSanName - The name of the ElasticSan.
 //   - volumeGroupName - The name of the VolumeGroup.
@@ -69,8 +72,6 @@ func (client *VolumeSnapshotsClient) BeginCreate(ctx context.Context, resourceGr
 
 // Create - Create a Volume Snapshot.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *VolumeSnapshotsClient) create(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, snapshotName string, parameters Snapshot, options *VolumeSnapshotsClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VolumeSnapshotsClient.BeginCreate"
@@ -86,8 +87,7 @@ func (client *VolumeSnapshotsClient) create(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *VolumeSnapshotsClient) create(ctx context.Context, resourceGroupNa
 func (client *VolumeSnapshotsClient) createCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, snapshotName string, parameters Snapshot, _ *VolumeSnapshotsClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots/{snapshotName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +120,8 @@ func (client *VolumeSnapshotsClient) createCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -132,8 +132,6 @@ func (client *VolumeSnapshotsClient) createCreateRequest(ctx context.Context, re
 
 // BeginDelete - Delete a Volume Snapshot.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - elasticSanName - The name of the ElasticSan.
 //   - volumeGroupName - The name of the VolumeGroup.
@@ -159,8 +157,6 @@ func (client *VolumeSnapshotsClient) BeginDelete(ctx context.Context, resourceGr
 
 // Delete - Delete a Volume Snapshot.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *VolumeSnapshotsClient) deleteOperation(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, snapshotName string, options *VolumeSnapshotsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VolumeSnapshotsClient.BeginDelete"
@@ -176,8 +172,7 @@ func (client *VolumeSnapshotsClient) deleteOperation(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -186,7 +181,7 @@ func (client *VolumeSnapshotsClient) deleteOperation(ctx context.Context, resour
 func (client *VolumeSnapshotsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, snapshotName string, _ *VolumeSnapshotsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots/{snapshotName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -210,15 +205,13 @@ func (client *VolumeSnapshotsClient) deleteCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a Volume Snapshot.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - elasticSanName - The name of the ElasticSan.
 //   - volumeGroupName - The name of the VolumeGroup.
@@ -238,19 +231,14 @@ func (client *VolumeSnapshotsClient) Get(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return VolumeSnapshotsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return VolumeSnapshotsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *VolumeSnapshotsClient) getCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, snapshotName string, _ *VolumeSnapshotsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots/{snapshotName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -274,15 +262,18 @@ func (client *VolumeSnapshotsClient) getCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *VolumeSnapshotsClient) getHandleResponse(resp *http.Response) (VolumeSnapshotsClientGetResponse, error) {
+func (client *VolumeSnapshotsClient) getHandleResponse(resp *http.Response, successCodes ...int) (VolumeSnapshotsClientGetResponse, error) {
 	result := VolumeSnapshotsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Snapshot); err != nil {
 		return VolumeSnapshotsClientGetResponse{}, err
 	}
@@ -290,8 +281,6 @@ func (client *VolumeSnapshotsClient) getHandleResponse(resp *http.Response) (Vol
 }
 
 // NewListByVolumeGroupPager - List Snapshots in a VolumeGroup or List Snapshots by Volume (name) in a VolumeGroup using filter
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - elasticSanName - The name of the ElasticSan.
 //   - volumeGroupName - The name of the VolumeGroup.
@@ -308,54 +297,68 @@ func (client *VolumeSnapshotsClient) NewListByVolumeGroupPager(resourceGroupName
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByVolumeGroupCreateRequest(ctx, resourceGroupName, elasticSanName, volumeGroupName, options)
-			}, nil)
+			req, err := client.listByVolumeGroupCreateRequest(ctx, resourceGroupName, elasticSanName, volumeGroupName, nextLink, options)
 			if err != nil {
 				return VolumeSnapshotsClientListByVolumeGroupResponse{}, err
 			}
-			return client.listByVolumeGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return VolumeSnapshotsClientListByVolumeGroupResponse{}, err
+			}
+			return client.listByVolumeGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByVolumeGroupCreateRequest creates the ListByVolumeGroup request.
-func (client *VolumeSnapshotsClient) listByVolumeGroupCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, options *VolumeSnapshotsClientListByVolumeGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *VolumeSnapshotsClient) listByVolumeGroupCreateRequest(ctx context.Context, resourceGroupName string, elasticSanName string, volumeGroupName string, nextLink string, options *VolumeSnapshotsClientListByVolumeGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if elasticSanName == "" {
+			return nil, errors.New("parameter elasticSanName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{elasticSanName}", url.PathEscape(elasticSanName))
+		if volumeGroupName == "" {
+			return nil, errors.New("parameter volumeGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{volumeGroupName}", url.PathEscape(volumeGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if elasticSanName == "" {
-		return nil, errors.New("parameter elasticSanName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{elasticSanName}", url.PathEscape(elasticSanName))
-	if volumeGroupName == "" {
-		return nil, errors.New("parameter volumeGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{volumeGroupName}", url.PathEscape(volumeGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByVolumeGroupHandleResponse handles the ListByVolumeGroup response.
-func (client *VolumeSnapshotsClient) listByVolumeGroupHandleResponse(resp *http.Response) (VolumeSnapshotsClientListByVolumeGroupResponse, error) {
+func (client *VolumeSnapshotsClient) listByVolumeGroupHandleResponse(resp *http.Response, successCodes ...int) (VolumeSnapshotsClientListByVolumeGroupResponse, error) {
 	result := VolumeSnapshotsClientListByVolumeGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotList); err != nil {
 		return VolumeSnapshotsClientListByVolumeGroupResponse{}, err
 	}

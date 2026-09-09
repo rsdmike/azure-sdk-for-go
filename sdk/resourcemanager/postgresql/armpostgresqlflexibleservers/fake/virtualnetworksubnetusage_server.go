@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // VirtualNetworkSubnetUsageServer is a fake server for instances of the armpostgresqlflexibleservers.VirtualNetworkSubnetUsageClient type.
@@ -49,9 +50,7 @@ func (v *VirtualNetworkSubnetUsageServerTransport) Do(req *http.Request) (*http.
 }
 
 func (v *VirtualNetworkSubnetUsageServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -67,10 +66,7 @@ func (v *VirtualNetworkSubnetUsageServerTransport) dispatchToMethodFake(req *htt
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -85,7 +81,7 @@ func (v *VirtualNetworkSubnetUsageServerTransport) dispatchList(req *http.Reques
 	if v.srv.List == nil {
 		return nil, &nonRetriableError{errors.New("fake for method List not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DBforPostgreSQL/locations/(?P<locationName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/checkVirtualNetworkSubnetUsage`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DBforPostgreSQL/locations/(?P<locationName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/checkVirtualNetworkSubnetUsage`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -104,7 +100,7 @@ func (v *VirtualNetworkSubnetUsageServerTransport) dispatchList(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualNetworkSubnetUsageModel, req)

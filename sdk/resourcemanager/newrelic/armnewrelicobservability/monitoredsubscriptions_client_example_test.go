@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2025-05-01-preview/MonitoredSubscriptions_CreateOrUpdate.json
+// Generated from example definition: 2026-06-01/MonitoredSubscriptions_CreateOrUpdate.json
 func ExampleMonitoredSubscriptionsClient_BeginCreateorUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -28,13 +28,13 @@ func ExampleMonitoredSubscriptionsClient_BeginCreateorUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitoredSubscriptionsClientCreateorUpdateResponse{
-	// 	MonitoredSubscriptionProperties: &armnewrelicobservability.MonitoredSubscriptionProperties{
+	// 	MonitoredSubscriptionProperties: armnewrelicobservability.MonitoredSubscriptionProperties{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("NewRelic.Observability/monitors/monitoredSubscriptions"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor/monitoredSubscriptions/default"),
@@ -104,7 +104,7 @@ func ExampleMonitoredSubscriptionsClient_BeginCreateorUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/MonitoredSubscriptions_Delete.json
+// Generated from example definition: 2026-06-01/MonitoredSubscriptions_Delete.json
 func ExampleMonitoredSubscriptionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -121,11 +121,11 @@ func ExampleMonitoredSubscriptionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/MonitoredSubscriptions_Get.json
+// Generated from example definition: 2026-06-01/MonitoredSubscriptions_Get.json
 func ExampleMonitoredSubscriptionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -144,7 +144,7 @@ func ExampleMonitoredSubscriptionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitoredSubscriptionsClientGetResponse{
-	// 	MonitoredSubscriptionProperties: &armnewrelicobservability.MonitoredSubscriptionProperties{
+	// 	MonitoredSubscriptionProperties: armnewrelicobservability.MonitoredSubscriptionProperties{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("NewRelic.Observability/monitors/monitoredSubscriptions"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor/monitoredSubscriptions/default"),
@@ -214,7 +214,7 @@ func ExampleMonitoredSubscriptionsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/MonitoredSubscriptions_List.json
+// Generated from example definition: 2026-06-01/MonitoredSubscriptions_List.json
 func ExampleMonitoredSubscriptionsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -312,7 +312,7 @@ func ExampleMonitoredSubscriptionsClient_NewListPager() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/MonitoredSubscriptions_Update.json
+// Generated from example definition: 2026-06-01/MonitoredSubscriptions_Update.json
 func ExampleMonitoredSubscriptionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -329,13 +329,13 @@ func ExampleMonitoredSubscriptionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitoredSubscriptionsClientUpdateResponse{
-	// 	MonitoredSubscriptionProperties: &armnewrelicobservability.MonitoredSubscriptionProperties{
+	// 	MonitoredSubscriptionProperties: armnewrelicobservability.MonitoredSubscriptionProperties{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("NewRelic.Observability/monitors/monitoredSubscriptions"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor/monitoredSubscriptions/default"),

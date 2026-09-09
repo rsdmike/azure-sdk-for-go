@@ -18,6 +18,8 @@ import (
 
 // CertificateObjectGlobalRulestackClient contains the methods for the CertificateObjectGlobalRulestack group.
 // Don't use this type directly, use NewCertificateObjectGlobalRulestackClient() instead.
+//
+// Generated from API version 2025-10-08
 type CertificateObjectGlobalRulestackClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewCertificateObjectGlobalRulestackClient(credential azcore.TokenCredential
 
 // BeginCreateOrUpdate - Create a CertificateObjectGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - certificate name
 //   - resource - Resource create parameters.
@@ -64,8 +64,6 @@ func (client *CertificateObjectGlobalRulestackClient) BeginCreateOrUpdate(ctx co
 
 // CreateOrUpdate - Create a CertificateObjectGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *CertificateObjectGlobalRulestackClient) createOrUpdate(ctx context.Context, globalRulestackName string, name string, resource CertificateObjectGlobalRulestackResource, options *CertificateObjectGlobalRulestackClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CertificateObjectGlobalRulestackClient.BeginCreateOrUpdate"
@@ -81,8 +79,7 @@ func (client *CertificateObjectGlobalRulestackClient) createOrUpdate(ctx context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -103,8 +100,8 @@ func (client *CertificateObjectGlobalRulestackClient) createOrUpdateCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -115,8 +112,6 @@ func (client *CertificateObjectGlobalRulestackClient) createOrUpdateCreateReques
 
 // BeginDelete - Delete a CertificateObjectGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - certificate name
 //   - options - CertificateObjectGlobalRulestackClientBeginDeleteOptions contains the optional parameters for the CertificateObjectGlobalRulestackClient.BeginDelete
@@ -140,8 +135,6 @@ func (client *CertificateObjectGlobalRulestackClient) BeginDelete(ctx context.Co
 
 // Delete - Delete a CertificateObjectGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *CertificateObjectGlobalRulestackClient) deleteOperation(ctx context.Context, globalRulestackName string, name string, options *CertificateObjectGlobalRulestackClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CertificateObjectGlobalRulestackClient.BeginDelete"
@@ -157,8 +150,7 @@ func (client *CertificateObjectGlobalRulestackClient) deleteOperation(ctx contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -179,15 +171,13 @@ func (client *CertificateObjectGlobalRulestackClient) deleteCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a CertificateObjectGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - certificate name
 //   - options - CertificateObjectGlobalRulestackClientGetOptions contains the optional parameters for the CertificateObjectGlobalRulestackClient.Get
@@ -206,12 +196,7 @@ func (client *CertificateObjectGlobalRulestackClient) Get(ctx context.Context, g
 	if err != nil {
 		return CertificateObjectGlobalRulestackClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CertificateObjectGlobalRulestackClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -230,15 +215,18 @@ func (client *CertificateObjectGlobalRulestackClient) getCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CertificateObjectGlobalRulestackClient) getHandleResponse(resp *http.Response) (CertificateObjectGlobalRulestackClientGetResponse, error) {
+func (client *CertificateObjectGlobalRulestackClient) getHandleResponse(resp *http.Response, successCodes ...int) (CertificateObjectGlobalRulestackClientGetResponse, error) {
 	result := CertificateObjectGlobalRulestackClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateObjectGlobalRulestackResource); err != nil {
 		return CertificateObjectGlobalRulestackClientGetResponse{}, err
 	}
@@ -246,8 +234,6 @@ func (client *CertificateObjectGlobalRulestackClient) getHandleResponse(resp *ht
 }
 
 // NewListPager - List CertificateObjectGlobalRulestackResource resources by Tenant
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - options - CertificateObjectGlobalRulestackClientListOptions contains the optional parameters for the CertificateObjectGlobalRulestackClient.NewListPager
 //     method.
@@ -262,39 +248,53 @@ func (client *CertificateObjectGlobalRulestackClient) NewListPager(globalRulesta
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, globalRulestackName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, globalRulestackName, nextLink, options)
 			if err != nil {
 				return CertificateObjectGlobalRulestackClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CertificateObjectGlobalRulestackClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *CertificateObjectGlobalRulestackClient) listCreateRequest(ctx context.Context, globalRulestackName string, _ *CertificateObjectGlobalRulestackClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/certificates"
-	if globalRulestackName == "" {
-		return nil, errors.New("parameter globalRulestackName cannot be empty")
+func (client *CertificateObjectGlobalRulestackClient) listCreateRequest(ctx context.Context, globalRulestackName string, nextLink string, _ *CertificateObjectGlobalRulestackClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/certificates"
+		if globalRulestackName == "" {
+			return nil, errors.New("parameter globalRulestackName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251008)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *CertificateObjectGlobalRulestackClient) listHandleResponse(resp *http.Response) (CertificateObjectGlobalRulestackClientListResponse, error) {
+func (client *CertificateObjectGlobalRulestackClient) listHandleResponse(resp *http.Response, successCodes ...int) (CertificateObjectGlobalRulestackClientListResponse, error) {
 	result := CertificateObjectGlobalRulestackClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateObjectGlobalRulestackResourceListResult); err != nil {
 		return CertificateObjectGlobalRulestackClientListResponse{}, err
 	}

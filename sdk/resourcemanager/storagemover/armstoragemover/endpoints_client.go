@@ -18,6 +18,8 @@ import (
 
 // EndpointsClient contains the methods for the Endpoints group.
 // Don't use this type directly, use NewEndpointsClient() instead.
+//
+// Generated from API version 2025-12-01
 type EndpointsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type EndpointsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewEndpointsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*EndpointsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewEndpointsClient(subscriptionID string, credential azcore.TokenCredential
 
 // CreateOrUpdate - Creates or updates an Endpoint resource, which represents a data transfer source or destination.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - endpointName - The name of the Endpoint resource.
@@ -62,19 +65,14 @@ func (client *EndpointsClient) CreateOrUpdate(ctx context.Context, resourceGroup
 	if err != nil {
 		return EndpointsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EndpointsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *EndpointsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, endpointName string, endpoint Endpoint, _ *EndpointsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints/{endpointName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *EndpointsClient) createOrUpdateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, endpoint); err != nil {
@@ -105,8 +103,11 @@ func (client *EndpointsClient) createOrUpdateCreateRequest(ctx context.Context, 
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *EndpointsClient) createOrUpdateHandleResponse(resp *http.Response) (EndpointsClientCreateOrUpdateResponse, error) {
+func (client *EndpointsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (EndpointsClientCreateOrUpdateResponse, error) {
 	result := EndpointsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Endpoint); err != nil {
 		return EndpointsClientCreateOrUpdateResponse{}, err
 	}
@@ -115,8 +116,6 @@ func (client *EndpointsClient) createOrUpdateHandleResponse(resp *http.Response)
 
 // BeginDelete - Deletes an Endpoint resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - endpointName - The name of the Endpoint resource.
@@ -140,8 +139,6 @@ func (client *EndpointsClient) BeginDelete(ctx context.Context, resourceGroupNam
 
 // Delete - Deletes an Endpoint resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 func (client *EndpointsClient) deleteOperation(ctx context.Context, resourceGroupName string, storageMoverName string, endpointName string, options *EndpointsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EndpointsClient.BeginDelete"
@@ -157,8 +154,7 @@ func (client *EndpointsClient) deleteOperation(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -167,7 +163,7 @@ func (client *EndpointsClient) deleteOperation(ctx context.Context, resourceGrou
 func (client *EndpointsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, endpointName string, _ *EndpointsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints/{endpointName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -187,15 +183,13 @@ func (client *EndpointsClient) deleteCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets an Endpoint resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - endpointName - The name of the Endpoint resource.
@@ -214,19 +208,14 @@ func (client *EndpointsClient) Get(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return EndpointsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EndpointsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *EndpointsClient) getCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, endpointName string, _ *EndpointsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints/{endpointName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -246,15 +235,18 @@ func (client *EndpointsClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *EndpointsClient) getHandleResponse(resp *http.Response) (EndpointsClientGetResponse, error) {
+func (client *EndpointsClient) getHandleResponse(resp *http.Response, successCodes ...int) (EndpointsClientGetResponse, error) {
 	result := EndpointsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Endpoint); err != nil {
 		return EndpointsClientGetResponse{}, err
 	}
@@ -262,8 +254,6 @@ func (client *EndpointsClient) getHandleResponse(resp *http.Response) (Endpoints
 }
 
 // NewListPager - Lists all Endpoints in a Storage Mover.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - options - EndpointsClientListOptions contains the optional parameters for the EndpointsClient.NewListPager method.
@@ -278,47 +268,61 @@ func (client *EndpointsClient) NewListPager(resourceGroupName string, storageMov
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, storageMoverName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, storageMoverName, nextLink, options)
 			if err != nil {
 				return EndpointsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return EndpointsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *EndpointsClient) listCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, _ *EndpointsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *EndpointsClient) listCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, nextLink string, _ *EndpointsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if storageMoverName == "" {
+			return nil, errors.New("parameter storageMoverName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{storageMoverName}", url.PathEscape(storageMoverName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if storageMoverName == "" {
-		return nil, errors.New("parameter storageMoverName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{storageMoverName}", url.PathEscape(storageMoverName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251201)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *EndpointsClient) listHandleResponse(resp *http.Response) (EndpointsClientListResponse, error) {
+func (client *EndpointsClient) listHandleResponse(resp *http.Response, successCodes ...int) (EndpointsClientListResponse, error) {
 	result := EndpointsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EndpointList); err != nil {
 		return EndpointsClientListResponse{}, err
 	}
@@ -327,8 +331,6 @@ func (client *EndpointsClient) listHandleResponse(resp *http.Response) (Endpoint
 
 // Update - Updates properties for an Endpoint resource. Properties not specified in the request body will be unchanged.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - endpointName - The name of the Endpoint resource.
@@ -347,19 +349,14 @@ func (client *EndpointsClient) Update(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return EndpointsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EndpointsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *EndpointsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, endpointName string, endpoint EndpointBaseUpdateParameters, _ *EndpointsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/endpoints/{endpointName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -379,8 +376,8 @@ func (client *EndpointsClient) updateCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, endpoint); err != nil {
@@ -390,8 +387,11 @@ func (client *EndpointsClient) updateCreateRequest(ctx context.Context, resource
 }
 
 // updateHandleResponse handles the Update response.
-func (client *EndpointsClient) updateHandleResponse(resp *http.Response) (EndpointsClientUpdateResponse, error) {
+func (client *EndpointsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (EndpointsClientUpdateResponse, error) {
 	result := EndpointsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Endpoint); err != nil {
 		return EndpointsClientUpdateResponse{}, err
 	}

@@ -63,6 +63,35 @@ type CapabilityTypesClientListResponse struct {
 	CapabilityTypeListResult
 }
 
+// ConnectionsClientCreateOrUpdateResponse contains the response from method ConnectionsClient.CreateOrUpdate.
+type ConnectionsClientCreateOrUpdateResponse struct {
+	// Model that represents a connection between a workspace and a target resource.
+	// A connection provisions and tracks the trust relationship that authorizes the
+	// actor to reach the Chaos Studio data plane for the workspace and target during
+	// fault injection.
+	Connection
+}
+
+// ConnectionsClientDeleteResponse contains the response from method ConnectionsClient.Delete.
+type ConnectionsClientDeleteResponse struct {
+	// placeholder for future response values
+}
+
+// ConnectionsClientGetResponse contains the response from method ConnectionsClient.Get.
+type ConnectionsClientGetResponse struct {
+	// Model that represents a connection between a workspace and a target resource.
+	// A connection provisions and tracks the trust relationship that authorizes the
+	// actor to reach the Chaos Studio data plane for the workspace and target during
+	// fault injection.
+	Connection
+}
+
+// ConnectionsClientListAllResponse contains the response from method ConnectionsClient.NewListAllPager.
+type ConnectionsClientListAllResponse struct {
+	// Model that represents a list of connections and a link for pagination.
+	ConnectionListResult
+}
+
 // DiscoveredResourcesClientGetResponse contains the response from method DiscoveredResourcesClient.Get.
 type DiscoveredResourcesClientGetResponse struct {
 	// Model that represents a discovered resource.
@@ -219,13 +248,10 @@ type ScenarioConfigurationsClientDeleteResponse struct {
 	// placeholder for future response values
 }
 
-// ScenarioConfigurationsClientExecuteResponse contains the response from method ScenarioConfigurationsClient.Execute.
+// ScenarioConfigurationsClientExecuteResponse contains the response from method ScenarioConfigurationsClient.BeginExecute.
 type ScenarioConfigurationsClientExecuteResponse struct {
-	// The Location header contains the URL where the status of the long running operation can be checked.
-	Location *string
-
-	// The Retry-After header can indicate how long the client should wait before polling the operation status.
-	RetryAfter *int32
+	// Model that represents the scenario run.
+	ScenarioRun
 }
 
 // ScenarioConfigurationsClientFixResourcePermissionsResponse contains the response from method ScenarioConfigurationsClient.BeginFixResourcePermissions.
@@ -252,13 +278,10 @@ type ScenarioConfigurationsClientValidateResponse struct {
 	Validation
 }
 
-// ScenarioRunsClientCancelResponse contains the response from method ScenarioRunsClient.Cancel.
+// ScenarioRunsClientCancelResponse contains the response from method ScenarioRunsClient.BeginCancel.
 type ScenarioRunsClientCancelResponse struct {
-	// The Location header contains the URL where the status of the long running operation can be checked.
-	Location *string
-
-	// The Retry-After header can indicate how long the client should wait before polling the operation status.
-	RetryAfter *int32
+	// Model that represents the scenario run.
+	ScenarioRun
 }
 
 // ScenarioRunsClientGetResponse contains the response from method ScenarioRunsClient.Get.
@@ -266,10 +289,10 @@ type ScenarioRunsClientGetResponse struct {
 	// Model that represents the scenario run.
 	ScenarioRun
 
-	// The Location header contains the URL where the status of the long running operation can be checked.
+	// The URL where the status of the long-running operation can be polled.
 	Location *string
 
-	// The Retry-After header can indicate how long the client should wait before polling the operation status.
+	// The number of seconds the client should wait before polling again.
 	RetryAfter *int32
 }
 
@@ -348,6 +371,18 @@ type WorkspacesClientDeleteResponse struct {
 	// placeholder for future response values
 }
 
+// WorkspacesClientDiscoverResponse contains the response from method WorkspacesClient.BeginDiscover.
+type WorkspacesClientDiscoverResponse struct {
+	// Model that represents the latest workspace discovery result.
+	WorkspaceDiscovery
+}
+
+// WorkspacesClientEvaluateResponse contains the response from method WorkspacesClient.BeginEvaluate.
+type WorkspacesClientEvaluateResponse struct {
+	// Model that represents the latest workspace evaluation result.
+	WorkspaceEvaluation
+}
+
 // WorkspacesClientGetResponse contains the response from method WorkspacesClient.Get.
 type WorkspacesClientGetResponse struct {
 	// Model that represents a Workspace resource.
@@ -364,12 +399,6 @@ type WorkspacesClientListAllResponse struct {
 type WorkspacesClientListResponse struct {
 	// Model that represents a list of Workspace resources and a link for pagination.
 	WorkspaceListResult
-}
-
-// WorkspacesClientRefreshRecommendationsResponse contains the response from method WorkspacesClient.BeginRefreshRecommendations.
-type WorkspacesClientRefreshRecommendationsResponse struct {
-	// Model that represents the latest workspace evaluation result.
-	WorkspaceEvaluation
 }
 
 // WorkspacesClientUpdateResponse contains the response from method WorkspacesClient.BeginUpdate.

@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2025-05-01-preview/BillingInfo_Get.json
+// Generated from example definition: 2026-06-01/BillingInfo_Get.json
 func ExampleBillingInfoClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -30,7 +30,7 @@ func ExampleBillingInfoClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.BillingInfoClientGetResponse{
-	// 	BillingInfoResponse: &armnewrelicobservability.BillingInfoResponse{
+	// 	BillingInfoResponse: armnewrelicobservability.BillingInfoResponse{
 	// 		MarketplaceSaasInfo: &armnewrelicobservability.MarketplaceSaaSInfo{
 	// 			BilledAzureSubscriptionID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 	// 			MarketplaceResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.SaaS/resources/AzNewRelic_b1190c8f"),

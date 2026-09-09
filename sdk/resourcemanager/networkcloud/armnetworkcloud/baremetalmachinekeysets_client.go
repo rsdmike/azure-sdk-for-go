@@ -19,6 +19,8 @@ import (
 
 // BareMetalMachineKeySetsClient contains the methods for the BareMetalMachineKeySets group.
 // Don't use this type directly, use NewBareMetalMachineKeySetsClient() instead.
+//
+// Generated from API version 2026-07-01
 type BareMetalMachineKeySetsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type BareMetalMachineKeySetsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewBareMetalMachineKeySetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*BareMetalMachineKeySetsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewBareMetalMachineKeySetsClient(subscriptionID string, credential azcore.T
 
 // BeginCreateOrUpdate - Create a new bare metal machine key set or update the existing one for the provided cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterName - The name of the cluster.
 //   - bareMetalMachineKeySetName - The name of the bare metal machine key set.
@@ -69,8 +72,6 @@ func (client *BareMetalMachineKeySetsClient) BeginCreateOrUpdate(ctx context.Con
 
 // CreateOrUpdate - Create a new bare metal machine key set or update the existing one for the provided cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *BareMetalMachineKeySetsClient) createOrUpdate(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, bareMetalMachineKeySetParameters BareMetalMachineKeySet, options *BareMetalMachineKeySetsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BareMetalMachineKeySetsClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *BareMetalMachineKeySetsClient) createOrUpdate(ctx context.Context,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *BareMetalMachineKeySetsClient) createOrUpdate(ctx context.Context,
 func (client *BareMetalMachineKeySetsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, bareMetalMachineKeySetParameters BareMetalMachineKeySet, options *BareMetalMachineKeySetsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets/{bareMetalMachineKeySetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *BareMetalMachineKeySetsClient) createOrUpdateCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -134,8 +134,6 @@ func (client *BareMetalMachineKeySetsClient) createOrUpdateCreateRequest(ctx con
 
 // BeginDelete - Delete the bare metal machine key set of the provided cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterName - The name of the cluster.
 //   - bareMetalMachineKeySetName - The name of the bare metal machine key set.
@@ -160,8 +158,6 @@ func (client *BareMetalMachineKeySetsClient) BeginDelete(ctx context.Context, re
 
 // Delete - Delete the bare metal machine key set of the provided cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *BareMetalMachineKeySetsClient) deleteOperation(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, options *BareMetalMachineKeySetsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BareMetalMachineKeySetsClient.BeginDelete"
@@ -177,8 +173,7 @@ func (client *BareMetalMachineKeySetsClient) deleteOperation(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -187,7 +182,7 @@ func (client *BareMetalMachineKeySetsClient) deleteOperation(ctx context.Context
 func (client *BareMetalMachineKeySetsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, options *BareMetalMachineKeySetsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets/{bareMetalMachineKeySetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -207,8 +202,8 @@ func (client *BareMetalMachineKeySetsClient) deleteCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -220,8 +215,6 @@ func (client *BareMetalMachineKeySetsClient) deleteCreateRequest(ctx context.Con
 
 // Get - Get bare metal machine key set of the provided cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterName - The name of the cluster.
 //   - bareMetalMachineKeySetName - The name of the bare metal machine key set.
@@ -241,19 +234,14 @@ func (client *BareMetalMachineKeySetsClient) Get(ctx context.Context, resourceGr
 	if err != nil {
 		return BareMetalMachineKeySetsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return BareMetalMachineKeySetsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *BareMetalMachineKeySetsClient) getCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, _ *BareMetalMachineKeySetsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets/{bareMetalMachineKeySetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -273,15 +261,18 @@ func (client *BareMetalMachineKeySetsClient) getCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *BareMetalMachineKeySetsClient) getHandleResponse(resp *http.Response) (BareMetalMachineKeySetsClientGetResponse, error) {
+func (client *BareMetalMachineKeySetsClient) getHandleResponse(resp *http.Response, successCodes ...int) (BareMetalMachineKeySetsClientGetResponse, error) {
 	result := BareMetalMachineKeySetsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BareMetalMachineKeySet); err != nil {
 		return BareMetalMachineKeySetsClientGetResponse{}, err
 	}
@@ -289,8 +280,6 @@ func (client *BareMetalMachineKeySetsClient) getHandleResponse(resp *http.Respon
 }
 
 // NewListByClusterPager - Get a list of bare metal machine key sets for the provided cluster.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterName - The name of the cluster.
 //   - options - BareMetalMachineKeySetsClientListByClusterOptions contains the optional parameters for the BareMetalMachineKeySetsClient.NewListByClusterPager
@@ -306,53 +295,67 @@ func (client *BareMetalMachineKeySetsClient) NewListByClusterPager(resourceGroup
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, options)
-			}, nil)
+			req, err := client.listByClusterCreateRequest(ctx, resourceGroupName, clusterName, nextLink, options)
 			if err != nil {
 				return BareMetalMachineKeySetsClientListByClusterResponse{}, err
 			}
-			return client.listByClusterHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return BareMetalMachineKeySetsClientListByClusterResponse{}, err
+			}
+			return client.listByClusterHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByClusterCreateRequest creates the ListByCluster request.
-func (client *BareMetalMachineKeySetsClient) listByClusterCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, options *BareMetalMachineKeySetsClientListByClusterOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *BareMetalMachineKeySetsClient) listByClusterCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, nextLink string, options *BareMetalMachineKeySetsClientListByClusterOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if clusterName == "" {
+			return nil, errors.New("parameter clusterName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{clusterName}", url.PathEscape(clusterName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if clusterName == "" {
-		return nil, errors.New("parameter clusterName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{clusterName}", url.PathEscape(clusterName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByClusterHandleResponse handles the ListByCluster response.
-func (client *BareMetalMachineKeySetsClient) listByClusterHandleResponse(resp *http.Response) (BareMetalMachineKeySetsClientListByClusterResponse, error) {
+func (client *BareMetalMachineKeySetsClient) listByClusterHandleResponse(resp *http.Response, successCodes ...int) (BareMetalMachineKeySetsClientListByClusterResponse, error) {
 	result := BareMetalMachineKeySetsClientListByClusterResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BareMetalMachineKeySetList); err != nil {
 		return BareMetalMachineKeySetsClientListByClusterResponse{}, err
 	}
@@ -362,8 +365,6 @@ func (client *BareMetalMachineKeySetsClient) listByClusterHandleResponse(resp *h
 // BeginUpdate - Patch properties of bare metal machine key set for the provided cluster, or update the tags associated with
 // it. Properties and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterName - The name of the cluster.
 //   - bareMetalMachineKeySetName - The name of the bare metal machine key set.
@@ -390,8 +391,6 @@ func (client *BareMetalMachineKeySetsClient) BeginUpdate(ctx context.Context, re
 // Update - Patch properties of bare metal machine key set for the provided cluster, or update the tags associated with it.
 // Properties and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *BareMetalMachineKeySetsClient) update(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, bareMetalMachineKeySetUpdateParameters BareMetalMachineKeySetPatchParameters, options *BareMetalMachineKeySetsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BareMetalMachineKeySetsClient.BeginUpdate"
@@ -407,8 +406,7 @@ func (client *BareMetalMachineKeySetsClient) update(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -417,7 +415,7 @@ func (client *BareMetalMachineKeySetsClient) update(ctx context.Context, resourc
 func (client *BareMetalMachineKeySetsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, clusterName string, bareMetalMachineKeySetName string, bareMetalMachineKeySetUpdateParameters BareMetalMachineKeySetPatchParameters, options *BareMetalMachineKeySetsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusters/{clusterName}/bareMetalMachineKeySets/{bareMetalMachineKeySetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -437,8 +435,8 @@ func (client *BareMetalMachineKeySetsClient) updateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}

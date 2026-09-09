@@ -18,6 +18,8 @@ import (
 
 // TrafficFiltersClient contains the methods for the TrafficFilters group.
 // Don't use this type directly, use NewTrafficFiltersClient() instead.
+//
+// Generated from API version 2025-06-01
 type TrafficFiltersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type TrafficFiltersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewTrafficFiltersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*TrafficFiltersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewTrafficFiltersClient(subscriptionID string, credential azcore.TokenCrede
 // Delete - Delete an existing traffic filter associated with your Elastic monitor resource, removing its network traffic
 // control capabilities.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - TrafficFiltersClientDeleteOptions contains the optional parameters for the TrafficFiltersClient.Delete method.
@@ -62,8 +65,7 @@ func (client *TrafficFiltersClient) Delete(ctx context.Context, resourceGroupNam
 		return TrafficFiltersClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TrafficFiltersClientDeleteResponse{}, err
+		return TrafficFiltersClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return TrafficFiltersClientDeleteResponse{}, nil
 }
@@ -72,7 +74,7 @@ func (client *TrafficFiltersClient) Delete(ctx context.Context, resourceGroupNam
 func (client *TrafficFiltersClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, options *TrafficFiltersClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/deleteTrafficFilter"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -88,10 +90,10 @@ func (client *TrafficFiltersClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
+	reqQP.Set("api-version", version20250601)
 	if options != nil && options.RulesetID != nil {
 		reqQP.Set("rulesetId", *options.RulesetID)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }

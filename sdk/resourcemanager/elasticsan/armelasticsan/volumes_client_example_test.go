@@ -40,13 +40,13 @@ func ExampleVolumesClient_BeginCreate_volumesCreateMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientCreateResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("hxm"),
 	// 		Type: to.Ptr("sxsbsdhngvbcpxxcuvyt"),
 	// 		ID: to.Ptr("sipsx"),
@@ -70,10 +70,10 @@ func ExampleVolumesClient_BeginCreate_volumesCreateMaximumSetGen() {
 	// 			VolumeID: to.Ptr("tbwshhvrbqyseonkeztlbzhrckd"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.546Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 546000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("bpuxtfzqwdhifevjtucoc"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.547Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 547000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ourjjlolgugpxnkbiegumkicksibep"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -102,13 +102,13 @@ func ExampleVolumesClient_BeginCreate_volumesCreateMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientCreateResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("o"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/volumes"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/volumes/{volumeName}"),
@@ -132,10 +132,10 @@ func ExampleVolumesClient_BeginCreate_volumesCreateMinimumSetGen() {
 	// 			VolumeID: to.Ptr("umwjlxntntjejiyrywrytkzbfbluhk"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bcclmbseed"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -162,7 +162,7 @@ func ExampleVolumesClient_BeginDelete_volumesDeleteMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -188,7 +188,7 @@ func ExampleVolumesClient_BeginDelete_volumesDeleteMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -216,7 +216,7 @@ func ExampleVolumesClient_Get_volumesGetMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientGetResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("wrrvufwzhwd"),
 	// 		Type: to.Ptr("kzaqluwzgssofiulhkxmzafsdhcno"),
 	// 		ID: to.Ptr("xsqrx"),
@@ -240,10 +240,10 @@ func ExampleVolumesClient_Get_volumesGetMaximumSetGen() {
 	// 			VolumeID: to.Ptr("qbowllkrvxsnpplweplsmfgncplpu"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-05-02T20:06:12.883Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.May, 2, 20, 6, 12, 883000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("ndexrszfpxfmlbjzollrgzhhae"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-05-02T20:06:12.884Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.May, 2, 20, 6, 12, 884000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("hdqkgsdybfsl"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -270,7 +270,7 @@ func ExampleVolumesClient_Get_volumesGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientGetResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("o"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/volumes"),
 	// 		ID: to.Ptr("swkcmwglncgtsnejzvldnbpsifxez"),
@@ -294,10 +294,10 @@ func ExampleVolumesClient_Get_volumesGetMinimumSetGen() {
 	// 			VolumeID: to.Ptr("umwjlxntntjejiyrywrytkzbfbluhk"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bcclmbseed"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -355,10 +355,10 @@ func ExampleVolumesClient_NewListByVolumeGroupPager_volumesListByVolumeGroupMaxi
 		// 					VolumeID: to.Ptr("tbwshhvrbqyseonkeztlbzhrckd"),
 		// 				},
 		// 				SystemData: &armelasticsan.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.546Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 546000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("bpuxtfzqwdhifevjtucoc"),
 		// 					CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.547Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 547000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ourjjlolgugpxnkbiegumkicksibep"),
 		// 					LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 				},
@@ -421,13 +421,13 @@ func ExampleVolumesClient_BeginPreBackup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientPreBackupResponse{
-	// 	PreValidationResponse: &armelasticsan.PreValidationResponse{
+	// 	PreValidationResponse: armelasticsan.PreValidationResponse{
 	// 		ValidationStatus: to.Ptr("success"),
 	// 	},
 	// }
@@ -454,13 +454,13 @@ func ExampleVolumesClient_BeginPreRestore() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientPreRestoreResponse{
-	// 	PreValidationResponse: &armelasticsan.PreValidationResponse{
+	// 	PreValidationResponse: armelasticsan.PreValidationResponse{
 	// 		ValidationStatus: to.Ptr("success"),
 	// 	},
 	// }
@@ -490,13 +490,13 @@ func ExampleVolumesClient_BeginUpdate_volumesUpdateMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientUpdateResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("hxm"),
 	// 		Type: to.Ptr("sxsbsdhngvbcpxxcuvyt"),
 	// 		ID: to.Ptr("sipsx"),
@@ -520,10 +520,10 @@ func ExampleVolumesClient_BeginUpdate_volumesUpdateMaximumSetGen() {
 	// 			VolumeID: to.Ptr("tbwshhvrbqyseonkeztlbzhrckd"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.546Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 546000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("bpuxtfzqwdhifevjtucoc"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-29T14:22:13.547Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 29, 14, 22, 13, 547000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ourjjlolgugpxnkbiegumkicksibep"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -548,13 +548,13 @@ func ExampleVolumesClient_BeginUpdate_volumesUpdateMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumesClientUpdateResponse{
-	// 	Volume: &armelasticsan.Volume{
+	// 	Volume: armelasticsan.Volume{
 	// 		Name: to.Ptr("o"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/volumes"),
 	// 		ID: to.Ptr("swkcmwglncgtsnejzvldnbpsifxez"),
@@ -578,10 +578,10 @@ func ExampleVolumesClient_BeginUpdate_volumesUpdateMinimumSetGen() {
 	// 			VolumeID: to.Ptr("umwjlxntntjejiyrywrytkzbfbluhk"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bcclmbseed"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},

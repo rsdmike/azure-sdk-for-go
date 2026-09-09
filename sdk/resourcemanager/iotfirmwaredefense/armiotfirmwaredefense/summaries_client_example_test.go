@@ -30,7 +30,7 @@ func ExampleSummariesClient_Get_summariesGetMaximumSetGenGeneratedByMaximumSetRu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.SummariesClientGetResponse{
-	// 	SummaryResource: &armiotfirmwaredefense.SummaryResource{
+	// 	SummaryResource: armiotfirmwaredefense.SummaryResource{
 	// 		Properties: &armiotfirmwaredefense.FirmwareSummary{
 	// 			SummaryType: to.Ptr(armiotfirmwaredefense.SummaryTypeFirmware),
 	// 			ProvisioningState: to.Ptr(armiotfirmwaredefense.ProvisioningStateSucceeded),
@@ -41,10 +41,10 @@ func ExampleSummariesClient_Get_summariesGetMaximumSetGenGeneratedByMaximumSetRu
 	// 		SystemData: &armiotfirmwaredefense.SystemData{
 	// 			CreatedBy: to.Ptr("UserName"),
 	// 			CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("UserName"),
 	// 			LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -69,7 +69,7 @@ func ExampleSummariesClient_Get_summariesGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.SummariesClientGetResponse{
-	// 	SummaryResource: &armiotfirmwaredefense.SummaryResource{
+	// 	SummaryResource: armiotfirmwaredefense.SummaryResource{
 	// 	},
 	// }
 }
@@ -110,10 +110,10 @@ func ExampleSummariesClient_NewListByFirmwarePager_summariesListByFirmwareMaximu
 		// 				SystemData: &armiotfirmwaredefense.SystemData{
 		// 					CreatedBy: to.Ptr("UserName"),
 		// 					CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("UserName"),
 		// 					LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

@@ -103,13 +103,13 @@ func ExampleExadbVMClustersClient_BeginCreateOrUpdate_exadbVMClustersCreateOrUpd
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientCreateOrUpdateResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		Properties: &armoracledatabase.ExadbVMClusterProperties{
 	// 			Ocid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			ClusterName: to.Ptr("p"),
@@ -203,10 +203,10 @@ func ExampleExadbVMClustersClient_BeginCreateOrUpdate_exadbVMClustersCreateOrUpd
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -231,13 +231,13 @@ func ExampleExadbVMClustersClient_BeginCreateOrUpdate_exadbVMClustersCreateOrUpd
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientCreateOrUpdateResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Oracle.Database/exadbVmClusters/vmCluster"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -261,7 +261,7 @@ func ExampleExadbVMClustersClient_BeginDelete_exadbVMClustersDeleteMaximumSet() 
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -282,7 +282,7 @@ func ExampleExadbVMClustersClient_BeginDelete_exadbVMClustersDeleteMinimumSet() 
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -305,7 +305,7 @@ func ExampleExadbVMClustersClient_Get_exadbVMClustersGetMaximumSet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientGetResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		Properties: &armoracledatabase.ExadbVMClusterProperties{
 	// 			Ocid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			ClusterName: to.Ptr("p"),
@@ -399,10 +399,10 @@ func ExampleExadbVMClustersClient_Get_exadbVMClustersGetMaximumSet() {
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -427,7 +427,7 @@ func ExampleExadbVMClustersClient_Get_exadbVMClustersGetMaximumSetGeneratedByMin
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientGetResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Oracle.Database/exadbVmClusters/exadbVmClusterName1"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -553,10 +553,10 @@ func ExampleExadbVMClustersClient_NewListByResourceGroupPager_exadbVMClustersLis
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -720,10 +720,10 @@ func ExampleExadbVMClustersClient_NewListBySubscriptionPager_exadbVMClustersList
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -791,13 +791,13 @@ func ExampleExadbVMClustersClient_BeginRemoveVMs_exadbVMClustersRemoveVmsMaximum
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientRemoveVMsResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		Properties: &armoracledatabase.ExadbVMClusterProperties{
 	// 			Ocid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			ClusterName: to.Ptr("p"),
@@ -891,10 +891,10 @@ func ExampleExadbVMClustersClient_BeginRemoveVMs_exadbVMClustersRemoveVmsMaximum
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -923,13 +923,13 @@ func ExampleExadbVMClustersClient_BeginRemoveVMs_exadbVMClustersRemoveVmsMaximum
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientRemoveVMsResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Oracle.Database/exadbVmClusters/vmCluster1"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},
@@ -963,13 +963,13 @@ func ExampleExadbVMClustersClient_BeginUpdate_exadbVMClustersUpdateMaximumSet() 
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientUpdateResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		Properties: &armoracledatabase.ExadbVMClusterProperties{
 	// 			Ocid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			ClusterName: to.Ptr("p"),
@@ -1063,10 +1063,10 @@ func ExampleExadbVMClustersClient_BeginUpdate_exadbVMClustersUpdateMaximumSet() 
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -1089,13 +1089,13 @@ func ExampleExadbVMClustersClient_BeginUpdate_exadbVMClustersUpdateMaximumSetGen
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.ExadbVMClustersClientUpdateResponse{
-	// 	ExadbVMCluster: &armoracledatabase.ExadbVMCluster{
+	// 	ExadbVMCluster: armoracledatabase.ExadbVMCluster{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/Oracle.Database/exadbVmClusters/exadbvmclusterq"),
 	// 		Location: to.Ptr("eastus"),
 	// 	},

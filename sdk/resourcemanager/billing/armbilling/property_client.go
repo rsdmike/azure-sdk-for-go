@@ -17,8 +17,6 @@ import (
 	"strings"
 )
 
-const defaultPropertyClientVersion string = "2024-04-01"
-
 // PropertyClient contains the methods for the Property group.
 // Don't use this type directly, use NewPropertyClient() instead.
 //
@@ -33,6 +31,9 @@ type PropertyClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPropertyClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PropertyClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -61,19 +62,14 @@ func (client *PropertyClient) Get(ctx context.Context, options *PropertyClientGe
 	if err != nil {
 		return PropertyClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PropertyClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *PropertyClient) getCreateRequest(ctx context.Context, options *PropertyClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Billing/billingProperty/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -81,7 +77,7 @@ func (client *PropertyClient) getCreateRequest(ctx context.Context, options *Pro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPropertyClientVersion)
+	reqQP.Set("api-version", version20240401)
 	if options != nil && options.IncludeBillingCountry != nil {
 		reqQP.Set("includeBillingCountry", strconv.FormatBool(*options.IncludeBillingCountry))
 	}
@@ -94,8 +90,11 @@ func (client *PropertyClient) getCreateRequest(ctx context.Context, options *Pro
 }
 
 // getHandleResponse handles the Get response.
-func (client *PropertyClient) getHandleResponse(resp *http.Response) (PropertyClientGetResponse, error) {
+func (client *PropertyClient) getHandleResponse(resp *http.Response, successCodes ...int) (PropertyClientGetResponse, error) {
 	result := PropertyClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Property); err != nil {
 		return PropertyClientGetResponse{}, err
 	}
@@ -122,19 +121,14 @@ func (client *PropertyClient) Update(ctx context.Context, parameters Property, o
 	if err != nil {
 		return PropertyClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PropertyClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *PropertyClient) updateCreateRequest(ctx context.Context, parameters Property, _ *PropertyClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Billing/billingProperty/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPatch, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -142,7 +136,7 @@ func (client *PropertyClient) updateCreateRequest(ctx context.Context, parameter
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPropertyClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -153,8 +147,11 @@ func (client *PropertyClient) updateCreateRequest(ctx context.Context, parameter
 }
 
 // updateHandleResponse handles the Update response.
-func (client *PropertyClient) updateHandleResponse(resp *http.Response) (PropertyClientUpdateResponse, error) {
+func (client *PropertyClient) updateHandleResponse(resp *http.Response, successCodes ...int) (PropertyClientUpdateResponse, error) {
 	result := PropertyClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Property); err != nil {
 		return PropertyClientUpdateResponse{}, err
 	}

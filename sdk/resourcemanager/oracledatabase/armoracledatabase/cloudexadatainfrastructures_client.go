@@ -18,6 +18,8 @@ import (
 
 // CloudExadataInfrastructuresClient contains the methods for the CloudExadataInfrastructures group.
 // Don't use this type directly, use NewCloudExadataInfrastructuresClient() instead.
+//
+// Generated from API version 2025-09-01
 type CloudExadataInfrastructuresClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CloudExadataInfrastructuresClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCloudExadataInfrastructuresClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CloudExadataInfrastructuresClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewCloudExadataInfrastructuresClient(subscriptionID string, credential azco
 
 // BeginAddStorageCapacity - Perform add storage capacity on exadata infra
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - options - CloudExadataInfrastructuresClientBeginAddStorageCapacityOptions contains the optional parameters for the CloudExadataInfrastructuresClient.BeginAddStorageCapacity
@@ -66,8 +69,6 @@ func (client *CloudExadataInfrastructuresClient) BeginAddStorageCapacity(ctx con
 
 // AddStorageCapacity - Perform add storage capacity on exadata infra
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudExadataInfrastructuresClient) addStorageCapacity(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, options *CloudExadataInfrastructuresClientBeginAddStorageCapacityOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudExadataInfrastructuresClient.BeginAddStorageCapacity"
@@ -83,8 +84,7 @@ func (client *CloudExadataInfrastructuresClient) addStorageCapacity(ctx context.
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -93,7 +93,7 @@ func (client *CloudExadataInfrastructuresClient) addStorageCapacity(ctx context.
 func (client *CloudExadataInfrastructuresClient) addStorageCapacityCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, _ *CloudExadataInfrastructuresClientBeginAddStorageCapacityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}/addStorageCapacity"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -109,16 +109,14 @@ func (client *CloudExadataInfrastructuresClient) addStorageCapacityCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // BeginConfigureExascale - Configures Exascale on Cloud exadata infrastructure resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - body - The content of the action request
@@ -143,8 +141,6 @@ func (client *CloudExadataInfrastructuresClient) BeginConfigureExascale(ctx cont
 
 // ConfigureExascale - Configures Exascale on Cloud exadata infrastructure resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudExadataInfrastructuresClient) configureExascale(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, body ConfigureExascaleCloudExadataInfrastructureDetails, options *CloudExadataInfrastructuresClientBeginConfigureExascaleOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudExadataInfrastructuresClient.BeginConfigureExascale"
@@ -160,8 +156,7 @@ func (client *CloudExadataInfrastructuresClient) configureExascale(ctx context.C
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -170,7 +165,7 @@ func (client *CloudExadataInfrastructuresClient) configureExascale(ctx context.C
 func (client *CloudExadataInfrastructuresClient) configureExascaleCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, body ConfigureExascaleCloudExadataInfrastructureDetails, _ *CloudExadataInfrastructuresClientBeginConfigureExascaleOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}/configureExascale"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -186,8 +181,8 @@ func (client *CloudExadataInfrastructuresClient) configureExascaleCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -198,8 +193,6 @@ func (client *CloudExadataInfrastructuresClient) configureExascaleCreateRequest(
 
 // BeginCreateOrUpdate - Create a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - resource - Resource create parameters.
@@ -224,8 +217,6 @@ func (client *CloudExadataInfrastructuresClient) BeginCreateOrUpdate(ctx context
 
 // CreateOrUpdate - Create a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudExadataInfrastructuresClient) createOrUpdate(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, resource CloudExadataInfrastructure, options *CloudExadataInfrastructuresClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudExadataInfrastructuresClient.BeginCreateOrUpdate"
@@ -241,8 +232,7 @@ func (client *CloudExadataInfrastructuresClient) createOrUpdate(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -251,7 +241,7 @@ func (client *CloudExadataInfrastructuresClient) createOrUpdate(ctx context.Cont
 func (client *CloudExadataInfrastructuresClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, resource CloudExadataInfrastructure, _ *CloudExadataInfrastructuresClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -267,8 +257,8 @@ func (client *CloudExadataInfrastructuresClient) createOrUpdateCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -279,8 +269,6 @@ func (client *CloudExadataInfrastructuresClient) createOrUpdateCreateRequest(ctx
 
 // BeginDelete - Delete a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - options - CloudExadataInfrastructuresClientBeginDeleteOptions contains the optional parameters for the CloudExadataInfrastructuresClient.BeginDelete
@@ -304,8 +292,6 @@ func (client *CloudExadataInfrastructuresClient) BeginDelete(ctx context.Context
 
 // Delete - Delete a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudExadataInfrastructuresClient) deleteOperation(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, options *CloudExadataInfrastructuresClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudExadataInfrastructuresClient.BeginDelete"
@@ -321,8 +307,7 @@ func (client *CloudExadataInfrastructuresClient) deleteOperation(ctx context.Con
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -331,7 +316,7 @@ func (client *CloudExadataInfrastructuresClient) deleteOperation(ctx context.Con
 func (client *CloudExadataInfrastructuresClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, _ *CloudExadataInfrastructuresClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -347,15 +332,13 @@ func (client *CloudExadataInfrastructuresClient) deleteCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - options - CloudExadataInfrastructuresClientGetOptions contains the optional parameters for the CloudExadataInfrastructuresClient.Get
@@ -374,19 +357,14 @@ func (client *CloudExadataInfrastructuresClient) Get(ctx context.Context, resour
 	if err != nil {
 		return CloudExadataInfrastructuresClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CloudExadataInfrastructuresClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CloudExadataInfrastructuresClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, _ *CloudExadataInfrastructuresClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -402,15 +380,18 @@ func (client *CloudExadataInfrastructuresClient) getCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CloudExadataInfrastructuresClient) getHandleResponse(resp *http.Response) (CloudExadataInfrastructuresClientGetResponse, error) {
+func (client *CloudExadataInfrastructuresClient) getHandleResponse(resp *http.Response, successCodes ...int) (CloudExadataInfrastructuresClientGetResponse, error) {
 	result := CloudExadataInfrastructuresClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudExadataInfrastructure); err != nil {
 		return CloudExadataInfrastructuresClientGetResponse{}, err
 	}
@@ -418,8 +399,6 @@ func (client *CloudExadataInfrastructuresClient) getHandleResponse(resp *http.Re
 }
 
 // NewListByResourceGroupPager - List CloudExadataInfrastructure resources by resource group
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - CloudExadataInfrastructuresClientListByResourceGroupOptions contains the optional parameters for the CloudExadataInfrastructuresClient.NewListByResourceGroupPager
 //     method.
@@ -434,43 +413,57 @@ func (client *CloudExadataInfrastructuresClient) NewListByResourceGroupPager(res
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return CloudExadataInfrastructuresClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudExadataInfrastructuresClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *CloudExadataInfrastructuresClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *CloudExadataInfrastructuresClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudExadataInfrastructuresClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *CloudExadataInfrastructuresClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *CloudExadataInfrastructuresClient) listByResourceGroupHandleResponse(resp *http.Response) (CloudExadataInfrastructuresClientListByResourceGroupResponse, error) {
+func (client *CloudExadataInfrastructuresClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (CloudExadataInfrastructuresClientListByResourceGroupResponse, error) {
 	result := CloudExadataInfrastructuresClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudExadataInfrastructureListResult); err != nil {
 		return CloudExadataInfrastructuresClientListByResourceGroupResponse{}, err
 	}
@@ -478,8 +471,6 @@ func (client *CloudExadataInfrastructuresClient) listByResourceGroupHandleRespon
 }
 
 // NewListBySubscriptionPager - List CloudExadataInfrastructure resources by subscription ID
-//
-// Generated from API version 2025-09-01
 //   - options - CloudExadataInfrastructuresClientListBySubscriptionOptions contains the optional parameters for the CloudExadataInfrastructuresClient.NewListBySubscriptionPager
 //     method.
 func (client *CloudExadataInfrastructuresClient) NewListBySubscriptionPager(options *CloudExadataInfrastructuresClientListBySubscriptionOptions) *runtime.Pager[CloudExadataInfrastructuresClientListBySubscriptionResponse] {
@@ -493,39 +484,53 @@ func (client *CloudExadataInfrastructuresClient) NewListBySubscriptionPager(opti
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return CloudExadataInfrastructuresClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CloudExadataInfrastructuresClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *CloudExadataInfrastructuresClient) listBySubscriptionCreateRequest(ctx context.Context, _ *CloudExadataInfrastructuresClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Oracle.Database/cloudExadataInfrastructures"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CloudExadataInfrastructuresClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *CloudExadataInfrastructuresClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Oracle.Database/cloudExadataInfrastructures"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *CloudExadataInfrastructuresClient) listBySubscriptionHandleResponse(resp *http.Response) (CloudExadataInfrastructuresClientListBySubscriptionResponse, error) {
+func (client *CloudExadataInfrastructuresClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (CloudExadataInfrastructuresClientListBySubscriptionResponse, error) {
 	result := CloudExadataInfrastructuresClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CloudExadataInfrastructureListResult); err != nil {
 		return CloudExadataInfrastructuresClientListBySubscriptionResponse{}, err
 	}
@@ -534,8 +539,6 @@ func (client *CloudExadataInfrastructuresClient) listBySubscriptionHandleRespons
 
 // BeginUpdate - Update a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudexadatainfrastructurename - CloudExadataInfrastructure name
 //   - properties - The resource properties to be updated.
@@ -560,8 +563,6 @@ func (client *CloudExadataInfrastructuresClient) BeginUpdate(ctx context.Context
 
 // Update - Update a CloudExadataInfrastructure
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *CloudExadataInfrastructuresClient) update(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, properties CloudExadataInfrastructureUpdate, options *CloudExadataInfrastructuresClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudExadataInfrastructuresClient.BeginUpdate"
@@ -577,8 +578,7 @@ func (client *CloudExadataInfrastructuresClient) update(ctx context.Context, res
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -587,7 +587,7 @@ func (client *CloudExadataInfrastructuresClient) update(ctx context.Context, res
 func (client *CloudExadataInfrastructuresClient) updateCreateRequest(ctx context.Context, resourceGroupName string, cloudexadatainfrastructurename string, properties CloudExadataInfrastructureUpdate, _ *CloudExadataInfrastructuresClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudExadataInfrastructures/{cloudexadatainfrastructurename}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -603,8 +603,8 @@ func (client *CloudExadataInfrastructuresClient) updateCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {

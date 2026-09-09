@@ -34,13 +34,13 @@ func ExampleDomainListsClient_BeginBulk_downloadDnsResolverDomainListDomains() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientBulkResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -53,9 +53,9 @@ func ExampleDomainListsClient_BeginBulk_downloadDnsResolverDomainListDomains() {
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -87,13 +87,13 @@ func ExampleDomainListsClient_BeginBulk_uploadDnsResolverDomainListDomains() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientBulkResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -106,9 +106,9 @@ func ExampleDomainListsClient_BeginBulk_uploadDnsResolverDomainListDomains() {
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-29T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.April, 29, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.May, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -141,13 +141,13 @@ func ExampleDomainListsClient_BeginCreateOrUpdate_upsertDnsResolverDomainListWit
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientCreateOrUpdateResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -159,9 +159,9 @@ func ExampleDomainListsClient_BeginCreateOrUpdate_upsertDnsResolverDomainListWit
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -198,13 +198,13 @@ func ExampleDomainListsClient_BeginCreateOrUpdate_upsertDnsResolverDomainListWit
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientCreateOrUpdateResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -218,9 +218,9 @@ func ExampleDomainListsClient_BeginCreateOrUpdate_upsertDnsResolverDomainListWit
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -247,7 +247,7 @@ func ExampleDomainListsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -270,7 +270,7 @@ func ExampleDomainListsClient_Get_retrieveDnsResolverDomainListWithBulkNumberOfD
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientGetResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -282,9 +282,9 @@ func ExampleDomainListsClient_Get_retrieveDnsResolverDomainListWithBulkNumberOfD
 	// 			ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -313,7 +313,7 @@ func ExampleDomainListsClient_Get_retrieveDnsResolverDomainListWithLessThan1000D
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientGetResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -327,9 +327,9 @@ func ExampleDomainListsClient_Get_retrieveDnsResolverDomainListWithLessThan1000D
 	// 			ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -379,9 +379,9 @@ func ExampleDomainListsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("ad9c8da4-3bb2-4821-a878-c2cb07b01fb6"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -400,9 +400,9 @@ func ExampleDomainListsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -455,9 +455,9 @@ func ExampleDomainListsClient_NewListByResourceGroupPager() {
 		// 					ResourceGUID: to.Ptr("ad9c8da4-3bb2-4821-a878-c2cb07b01fb6"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -476,9 +476,9 @@ func ExampleDomainListsClient_NewListByResourceGroupPager() {
 		// 					ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -517,13 +517,13 @@ func ExampleDomainListsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DomainListsClientUpdateResponse{
-	// 	DomainList: &armdnsresolver.DomainList{
+	// 	DomainList: armdnsresolver.DomainList{
 	// 		Name: to.Ptr("sampleDnsResolverDomainList"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverDomainLists"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -537,9 +537,9 @@ func ExampleDomainListsClient_BeginUpdate() {
 	// 			ResourceGUID: to.Ptr("b6b2d964-8588-4e3a-a7fe-8a5b7fe8eca5"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{

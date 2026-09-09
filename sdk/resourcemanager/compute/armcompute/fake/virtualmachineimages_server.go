@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -74,9 +75,7 @@ func (v *VirtualMachineImagesServerTransport) Do(req *http.Request) (*http.Respo
 }
 
 func (v *VirtualMachineImagesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -104,10 +103,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchToMethodFake(req *http.Req
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -122,7 +118,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchGet(req *http.Request) (*h
 	if v.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmimage/offers/(?P<offer>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/skus/(?P<skus>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<version>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmimage/offers/(?P<offer>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/skus/(?P<skus>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<version>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -153,7 +149,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchGet(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImage, req)
@@ -167,7 +163,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchList(req *http.Request) (*
 	if v.srv.List == nil {
 		return nil, &nonRetriableError{errors.New("fake for method List not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmimage/offers/(?P<offer>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/skus/(?P<skus>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmimage/offers/(?P<offer>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/skus/(?P<skus>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -190,16 +186,8 @@ func (v *VirtualMachineImagesServerTransport) dispatchList(req *http.Request) (*
 	if err != nil {
 		return nil, err
 	}
-	expandUnescaped, err := url.QueryUnescape(qp.Get("$expand"))
-	if err != nil {
-		return nil, err
-	}
-	expandParam := getOptional(expandUnescaped)
-	topUnescaped, err := url.QueryUnescape(qp.Get("$top"))
-	if err != nil {
-		return nil, err
-	}
-	topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+	expandParam := getOptional(qp.Get("$expand"))
+	topParam, err := parseOptional(qp.Get("$top"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -209,11 +197,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchList(req *http.Request) (*
 	if err != nil {
 		return nil, err
 	}
-	orderbyUnescaped, err := url.QueryUnescape(qp.Get("$orderby"))
-	if err != nil {
-		return nil, err
-	}
-	orderbyParam := getOptional(orderbyUnescaped)
+	orderbyParam := getOptional(qp.Get("$orderby"))
 	var options *armcompute.VirtualMachineImagesClientListOptions
 	if expandParam != nil || topParam != nil || orderbyParam != nil {
 		options = &armcompute.VirtualMachineImagesClientListOptions{
@@ -227,7 +211,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchList(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImageResourceArray, req)
@@ -241,7 +225,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListByEdgeZone(req *http.R
 	if v.srv.ListByEdgeZone == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListByEdgeZone not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/edgeZones/(?P<edgeZone>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/vmimages`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/edgeZones/(?P<edgeZone>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/vmimages`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -260,7 +244,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListByEdgeZone(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VMImagesInEdgeZoneListResult, req)
@@ -274,7 +258,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListOffers(req *http.Reque
 	if v.srv.ListOffers == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListOffers not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmimage/offers`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmimage/offers`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -293,7 +277,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListOffers(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImageResourceArray, req)
@@ -307,7 +291,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListPublishers(req *http.R
 	if v.srv.ListPublishers == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListPublishers not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -322,7 +306,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListPublishers(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImageResourceArray, req)
@@ -336,7 +320,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListSKUs(req *http.Request
 	if v.srv.ListSKUs == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSKUs not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmimage/offers/(?P<offer>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/skus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmimage/offers/(?P<offer>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/skus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -359,7 +343,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListSKUs(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImageResourceArray, req)
@@ -373,7 +357,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListWithProperties(req *ht
 	if v.srv.ListWithProperties == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListWithProperties not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmimage/offers/(?P<offer>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/skus/(?P<skus>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions?\$expand=Properties`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmimage/offers/(?P<offer>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/skus/(?P<skus>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions?\$expand=Properties`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -396,15 +380,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListWithProperties(req *ht
 	if err != nil {
 		return nil, err
 	}
-	expandParam, err := url.QueryUnescape(qp.Get("$expand"))
-	if err != nil {
-		return nil, err
-	}
-	topUnescaped, err := url.QueryUnescape(qp.Get("$top"))
-	if err != nil {
-		return nil, err
-	}
-	topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+	topParam, err := parseOptional(qp.Get("$top"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -414,11 +390,7 @@ func (v *VirtualMachineImagesServerTransport) dispatchListWithProperties(req *ht
 	if err != nil {
 		return nil, err
 	}
-	orderbyUnescaped, err := url.QueryUnescape(qp.Get("$orderby"))
-	if err != nil {
-		return nil, err
-	}
-	orderbyParam := getOptional(orderbyUnescaped)
+	orderbyParam := getOptional(qp.Get("$orderby"))
 	var options *armcompute.VirtualMachineImagesClientListWithPropertiesOptions
 	if topParam != nil || orderbyParam != nil {
 		options = &armcompute.VirtualMachineImagesClientListWithPropertiesOptions{
@@ -426,12 +398,12 @@ func (v *VirtualMachineImagesServerTransport) dispatchListWithProperties(req *ht
 			Orderby: orderbyParam,
 		}
 	}
-	respr, errRespr := v.srv.ListWithProperties(req.Context(), locationParam, publisherNameParam, offerParam, skusParam, expandParam, options)
+	respr, errRespr := v.srv.ListWithProperties(req.Context(), locationParam, publisherNameParam, offerParam, skusParam, qp.Get("$expand"), options)
 	if respErr := server.GetError(errRespr, req); respErr != nil {
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineImageArray, req)

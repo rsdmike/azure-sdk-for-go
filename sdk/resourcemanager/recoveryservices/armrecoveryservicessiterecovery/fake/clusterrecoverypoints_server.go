@@ -7,15 +7,15 @@ package fake
 import (
 	"errors"
 	"fmt"
-	"net/http"
-	"net/url"
-	"regexp"
-
 	azfake "github.com/Azure/azure-sdk-for-go/sdk/azcore/fake"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/fake/server"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"net/http"
+	"net/url"
+	"regexp"
+	"slices"
 )
 
 // ClusterRecoveryPointsServer is a fake server for instances of the armrecoveryservicessiterecovery.ClusterRecoveryPointsClient type.
@@ -54,9 +54,7 @@ func (c *ClusterRecoveryPointsServerTransport) Do(req *http.Request) (*http.Resp
 }
 
 func (c *ClusterRecoveryPointsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -72,10 +70,7 @@ func (c *ClusterRecoveryPointsServerTransport) dispatchToMethodFake(req *http.Re
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -92,7 +87,7 @@ func (c *ClusterRecoveryPointsServerTransport) dispatchNewListByReplicationProte
 	}
 	newListByReplicationProtectionClusterPager := c.newListByReplicationProtectionClusterPager.get(req)
 	if newListByReplicationProtectionClusterPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.RecoveryServices/vaults/(?P<resourceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/replicationFabrics/(?P<fabricName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/replicationProtectionContainers/(?P<protectionContainerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/replicationProtectionClusters/(?P<replicationProtectionClusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/recoveryPoints`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.RecoveryServices/vaults/(?P<resourceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/replicationFabrics/(?P<fabricName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/replicationProtectionContainers/(?P<protectionContainerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/replicationProtectionClusters/(?P<replicationProtectionClusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/recoveryPoints`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 7 {
@@ -129,7 +124,7 @@ func (c *ClusterRecoveryPointsServerTransport) dispatchNewListByReplicationProte
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		c.newListByReplicationProtectionClusterPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

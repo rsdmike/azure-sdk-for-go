@@ -4,6 +4,10 @@
 
 package armdeviceprovisioningservices
 
+const (
+	version20260831 string = "2026-08-31"
+)
+
 // AccessRightsDescription - Rights that this key has.
 type AccessRightsDescription string
 
@@ -85,24 +89,6 @@ func PossibleCreatedByTypeValues() []CreatedByType {
 	}
 }
 
-// DeviceRegistryNamespaceAuthenticationType - Device Registry Namespace MI authentication type: UserAssigned, SystemAssigned.
-type DeviceRegistryNamespaceAuthenticationType string
-
-const (
-	// DeviceRegistryNamespaceAuthenticationTypeSystemAssigned - System assigned authentication type.
-	DeviceRegistryNamespaceAuthenticationTypeSystemAssigned DeviceRegistryNamespaceAuthenticationType = "SystemAssigned"
-	// DeviceRegistryNamespaceAuthenticationTypeUserAssigned - User assigned authentication type.
-	DeviceRegistryNamespaceAuthenticationTypeUserAssigned DeviceRegistryNamespaceAuthenticationType = "UserAssigned"
-)
-
-// PossibleDeviceRegistryNamespaceAuthenticationTypeValues returns the possible values for the DeviceRegistryNamespaceAuthenticationType const type.
-func PossibleDeviceRegistryNamespaceAuthenticationTypeValues() []DeviceRegistryNamespaceAuthenticationType {
-	return []DeviceRegistryNamespaceAuthenticationType{
-		DeviceRegistryNamespaceAuthenticationTypeSystemAssigned,
-		DeviceRegistryNamespaceAuthenticationTypeUserAssigned,
-	}
-}
-
 // IPFilterActionType - The desired action for requests captured by this rule.
 type IPFilterActionType string
 
@@ -148,6 +134,27 @@ const (
 func PossibleIotDpsSKUValues() []IotDpsSKU {
 	return []IotDpsSKU{
 		IotDpsSKUS1,
+	}
+}
+
+// IotHubAuthenticationType - IotHub MI authentication type: KeyBased, UserAssigned, SystemAssigned.
+type IotHubAuthenticationType string
+
+const (
+	// IotHubAuthenticationTypeKeyBased - Key Based authentication type.
+	IotHubAuthenticationTypeKeyBased IotHubAuthenticationType = "KeyBased"
+	// IotHubAuthenticationTypeSystemAssigned - System assigned authentication type.
+	IotHubAuthenticationTypeSystemAssigned IotHubAuthenticationType = "SystemAssigned"
+	// IotHubAuthenticationTypeUserAssigned - User assigned authentication type.
+	IotHubAuthenticationTypeUserAssigned IotHubAuthenticationType = "UserAssigned"
+)
+
+// PossibleIotHubAuthenticationTypeValues returns the possible values for the IotHubAuthenticationType const type.
+func PossibleIotHubAuthenticationTypeValues() []IotHubAuthenticationType {
+	return []IotHubAuthenticationType{
+		IotHubAuthenticationTypeKeyBased,
+		IotHubAuthenticationTypeSystemAssigned,
+		IotHubAuthenticationTypeUserAssigned,
 	}
 }
 

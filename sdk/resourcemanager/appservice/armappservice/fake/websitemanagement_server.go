@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -139,9 +140,7 @@ func (w *WebSiteManagementServerTransport) Do(req *http.Request) (*http.Response
 }
 
 func (w *WebSiteManagementServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -193,10 +192,7 @@ func (w *WebSiteManagementServerTransport) dispatchToMethodFake(req *http.Reques
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -211,7 +207,7 @@ func (w *WebSiteManagementServerTransport) dispatchCheckNameAvailability(req *ht
 	if w.srv.CheckNameAvailability == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CheckNameAvailability not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/checknameavailability`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/checknameavailability`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -226,7 +222,7 @@ func (w *WebSiteManagementServerTransport) dispatchCheckNameAvailability(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ResourceNameAvailability, req)
@@ -245,7 +241,7 @@ func (w *WebSiteManagementServerTransport) dispatchGetPublishingUser(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).User, req)
@@ -259,7 +255,7 @@ func (w *WebSiteManagementServerTransport) dispatchGetSourceControl(req *http.Re
 	if w.srv.GetSourceControl == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSourceControl not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Web/sourcecontrols/(?P<sourceControlType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/Microsoft\.Web/sourcecontrols/(?P<sourceControlType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -274,7 +270,7 @@ func (w *WebSiteManagementServerTransport) dispatchGetSourceControl(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SourceControl, req)
@@ -288,7 +284,7 @@ func (w *WebSiteManagementServerTransport) dispatchGetSubscriptionDeploymentLoca
 	if w.srv.GetSubscriptionDeploymentLocations == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSubscriptionDeploymentLocations not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/deploymentLocations`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/deploymentLocations`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -299,7 +295,7 @@ func (w *WebSiteManagementServerTransport) dispatchGetSubscriptionDeploymentLoca
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DeploymentLocations, req)
@@ -315,7 +311,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListAseRegionsPager(req *h
 	}
 	newListAseRegionsPager := w.newListAseRegionsPager.get(req)
 	if newListAseRegionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/aseRegions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/aseRegions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -332,7 +328,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListAseRegionsPager(req *h
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListAseRegionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -348,23 +344,15 @@ func (w *WebSiteManagementServerTransport) dispatchNewListBillingMetersPager(req
 	}
 	newListBillingMetersPager := w.newListBillingMetersPager.get(req)
 	if newListBillingMetersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/billingMeters`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/billingMeters`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
 			return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 		}
 		qp := req.URL.Query()
-		billingLocationUnescaped, err := url.QueryUnescape(qp.Get("billingLocation"))
-		if err != nil {
-			return nil, err
-		}
-		billingLocationParam := getOptional(billingLocationUnescaped)
-		oSTypeUnescaped, err := url.QueryUnescape(qp.Get("osType"))
-		if err != nil {
-			return nil, err
-		}
-		oSTypeParam := getOptional(oSTypeUnescaped)
+		billingLocationParam := getOptional(qp.Get("billingLocation"))
+		oSTypeParam := getOptional(qp.Get("osType"))
 		var options *armappservice.WebSiteManagementClientListBillingMetersOptions
 		if billingLocationParam != nil || oSTypeParam != nil {
 			options = &armappservice.WebSiteManagementClientListBillingMetersOptions{
@@ -383,7 +371,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListBillingMetersPager(req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListBillingMetersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -399,18 +387,14 @@ func (w *WebSiteManagementServerTransport) dispatchNewListCustomHostNameSitesPag
 	}
 	newListCustomHostNameSitesPager := w.newListCustomHostNameSitesPager.get(req)
 	if newListCustomHostNameSitesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/customhostnameSites`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/customhostnameSites`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
 			return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 		}
 		qp := req.URL.Query()
-		hostnameUnescaped, err := url.QueryUnescape(qp.Get("hostname"))
-		if err != nil {
-			return nil, err
-		}
-		hostnameParam := getOptional(hostnameUnescaped)
+		hostnameParam := getOptional(qp.Get("hostname"))
 		var options *armappservice.WebSiteManagementClientListCustomHostNameSitesOptions
 		if hostnameParam != nil {
 			options = &armappservice.WebSiteManagementClientListCustomHostNameSitesOptions{
@@ -428,7 +412,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListCustomHostNameSitesPag
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListCustomHostNameSitesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -444,47 +428,27 @@ func (w *WebSiteManagementServerTransport) dispatchNewListGeoRegionsPager(req *h
 	}
 	newListGeoRegionsPager := w.newListGeoRegionsPager.get(req)
 	if newListGeoRegionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/geoRegions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/geoRegions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
 			return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 		}
 		qp := req.URL.Query()
-		sKUUnescaped, err := url.QueryUnescape(qp.Get("sku"))
+		sKUParam := getOptional(armappservice.SKUName(qp.Get("sku")))
+		linuxWorkersEnabledParam, err := parseOptional(qp.Get("linuxWorkersEnabled"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
-		sKUParam := getOptional(armappservice.SKUName(sKUUnescaped))
-		linuxWorkersEnabledUnescaped, err := url.QueryUnescape(qp.Get("linuxWorkersEnabled"))
+		xenonWorkersEnabledParam, err := parseOptional(qp.Get("xenonWorkersEnabled"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
-		linuxWorkersEnabledParam, err := parseOptional(linuxWorkersEnabledUnescaped, strconv.ParseBool)
+		linuxDynamicWorkersEnabledParam, err := parseOptional(qp.Get("linuxDynamicWorkersEnabled"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
-		xenonWorkersEnabledUnescaped, err := url.QueryUnescape(qp.Get("xenonWorkersEnabled"))
-		if err != nil {
-			return nil, err
-		}
-		xenonWorkersEnabledParam, err := parseOptional(xenonWorkersEnabledUnescaped, strconv.ParseBool)
-		if err != nil {
-			return nil, err
-		}
-		linuxDynamicWorkersEnabledUnescaped, err := url.QueryUnescape(qp.Get("linuxDynamicWorkersEnabled"))
-		if err != nil {
-			return nil, err
-		}
-		linuxDynamicWorkersEnabledParam, err := parseOptional(linuxDynamicWorkersEnabledUnescaped, strconv.ParseBool)
-		if err != nil {
-			return nil, err
-		}
-		customModeWorkersEnabledUnescaped, err := url.QueryUnescape(qp.Get("customModeWorkersEnabled"))
-		if err != nil {
-			return nil, err
-		}
-		customModeWorkersEnabledParam, err := parseOptional(customModeWorkersEnabledUnescaped, strconv.ParseBool)
+		customModeWorkersEnabledParam, err := parseOptional(qp.Get("customModeWorkersEnabled"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
@@ -509,7 +473,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListGeoRegionsPager(req *h
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListGeoRegionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -525,7 +489,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListPremierAddOnOffersPage
 	}
 	newListPremierAddOnOffersPager := w.newListPremierAddOnOffersPager.get(req)
 	if newListPremierAddOnOffersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/premieraddonoffers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/premieraddonoffers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -542,7 +506,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListPremierAddOnOffersPage
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPremierAddOnOffersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -556,7 +520,7 @@ func (w *WebSiteManagementServerTransport) dispatchListSKUs(req *http.Request) (
 	if w.srv.ListSKUs == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSKUs not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/skus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/skus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -567,7 +531,7 @@ func (w *WebSiteManagementServerTransport) dispatchListSKUs(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SKUInfos, req)
@@ -583,7 +547,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListSiteIdentifiersAssigne
 	}
 	newListSiteIdentifiersAssignedToHostNamePager := w.newListSiteIdentifiersAssignedToHostNamePager.get(req)
 	if newListSiteIdentifiersAssignedToHostNamePager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/listSitesAssignedToHostName`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/listSitesAssignedToHostName`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -604,7 +568,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListSiteIdentifiersAssigne
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteIdentifiersAssignedToHostNamePager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -631,7 +595,7 @@ func (w *WebSiteManagementServerTransport) dispatchNewListSourceControlsPager(re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSourceControlsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -645,7 +609,7 @@ func (w *WebSiteManagementServerTransport) dispatchMove(req *http.Request) (*htt
 	if w.srv.Move == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Move not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/moveResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/moveResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -664,7 +628,7 @@ func (w *WebSiteManagementServerTransport) dispatchMove(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -678,7 +642,7 @@ func (w *WebSiteManagementServerTransport) dispatchRegionalCheckNameAvailability
 	if w.srv.RegionalCheckNameAvailability == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RegionalCheckNameAvailability not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/checknameavailability`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/checknameavailability`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -697,7 +661,7 @@ func (w *WebSiteManagementServerTransport) dispatchRegionalCheckNameAvailability
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DnlResourceNameAvailability, req)
@@ -720,7 +684,7 @@ func (w *WebSiteManagementServerTransport) dispatchUpdatePublishingUser(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).User, req)
@@ -734,7 +698,7 @@ func (w *WebSiteManagementServerTransport) dispatchUpdateSourceControl(req *http
 	if w.srv.UpdateSourceControl == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSourceControl not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Web/sourcecontrols/(?P<sourceControlType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/Microsoft\.Web/sourcecontrols/(?P<sourceControlType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -753,7 +717,7 @@ func (w *WebSiteManagementServerTransport) dispatchUpdateSourceControl(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SourceControl, req)
@@ -767,7 +731,7 @@ func (w *WebSiteManagementServerTransport) dispatchValidate(req *http.Request) (
 	if w.srv.Validate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Validate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/validate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/validate`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -786,7 +750,7 @@ func (w *WebSiteManagementServerTransport) dispatchValidate(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ValidateResponse, req)
@@ -800,7 +764,7 @@ func (w *WebSiteManagementServerTransport) dispatchValidateMove(req *http.Reques
 	if w.srv.ValidateMove == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ValidateMove not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/validateMoveResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/validateMoveResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -819,7 +783,7 @@ func (w *WebSiteManagementServerTransport) dispatchValidateMove(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -833,7 +797,7 @@ func (w *WebSiteManagementServerTransport) dispatchVerifyHostingEnvironmentVnet(
 	if w.srv.VerifyHostingEnvironmentVnet == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VerifyHostingEnvironmentVnet not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/verifyHostingEnvironmentVnet`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/verifyHostingEnvironmentVnet`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -848,7 +812,7 @@ func (w *WebSiteManagementServerTransport) dispatchVerifyHostingEnvironmentVnet(
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetValidationFailureDetails, req)

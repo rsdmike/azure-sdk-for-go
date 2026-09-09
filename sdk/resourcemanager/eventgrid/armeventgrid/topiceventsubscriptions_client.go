@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // TopicEventSubscriptionsClient contains the methods for the TopicEventSubscriptions group.
 // Don't use this type directly, use NewTopicEventSubscriptionsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type TopicEventSubscriptionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type TopicEventSubscriptionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewTopicEventSubscriptionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*TopicEventSubscriptionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewTopicEventSubscriptionsClient(subscriptionID string, credential azcore.T
 //
 // Asynchronously creates a new event subscription or updates an existing event subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -74,8 +76,6 @@ func (client *TopicEventSubscriptionsClient) BeginCreateOrUpdate(ctx context.Con
 //
 // Asynchronously creates a new event subscription or updates an existing event subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *TopicEventSubscriptionsClient) createOrUpdate(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, options *TopicEventSubscriptionsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TopicEventSubscriptionsClient.BeginCreateOrUpdate"
@@ -91,8 +91,7 @@ func (client *TopicEventSubscriptionsClient) createOrUpdate(ctx context.Context,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -101,7 +100,7 @@ func (client *TopicEventSubscriptionsClient) createOrUpdate(ctx context.Context,
 func (client *TopicEventSubscriptionsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, eventSubscriptionInfo EventSubscription, _ *TopicEventSubscriptionsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -121,8 +120,8 @@ func (client *TopicEventSubscriptionsClient) createOrUpdateCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, eventSubscriptionInfo); err != nil {
@@ -135,8 +134,6 @@ func (client *TopicEventSubscriptionsClient) createOrUpdateCreateRequest(ctx con
 //
 // Delete an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -163,8 +160,6 @@ func (client *TopicEventSubscriptionsClient) BeginDelete(ctx context.Context, re
 //
 // Delete an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *TopicEventSubscriptionsClient) deleteOperation(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, options *TopicEventSubscriptionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TopicEventSubscriptionsClient.BeginDelete"
@@ -180,8 +175,7 @@ func (client *TopicEventSubscriptionsClient) deleteOperation(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -190,7 +184,7 @@ func (client *TopicEventSubscriptionsClient) deleteOperation(ctx context.Context
 func (client *TopicEventSubscriptionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, _ *TopicEventSubscriptionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -210,8 +204,8 @@ func (client *TopicEventSubscriptionsClient) deleteCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -219,8 +213,6 @@ func (client *TopicEventSubscriptionsClient) deleteCreateRequest(ctx context.Con
 //
 // Get properties of an event subscription of a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -240,19 +232,14 @@ func (client *TopicEventSubscriptionsClient) Get(ctx context.Context, resourceGr
 	if err != nil {
 		return TopicEventSubscriptionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TopicEventSubscriptionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *TopicEventSubscriptionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, _ *TopicEventSubscriptionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -272,15 +259,18 @@ func (client *TopicEventSubscriptionsClient) getCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *TopicEventSubscriptionsClient) getHandleResponse(resp *http.Response) (TopicEventSubscriptionsClientGetResponse, error) {
+func (client *TopicEventSubscriptionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (TopicEventSubscriptionsClientGetResponse, error) {
 	result := TopicEventSubscriptionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscription); err != nil {
 		return TopicEventSubscriptionsClientGetResponse{}, err
 	}
@@ -291,8 +281,6 @@ func (client *TopicEventSubscriptionsClient) getHandleResponse(resp *http.Respon
 //
 // Get all delivery attributes for an event subscription for topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -312,19 +300,14 @@ func (client *TopicEventSubscriptionsClient) GetDeliveryAttributes(ctx context.C
 	if err != nil {
 		return TopicEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TopicEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
-	}
-	resp, err := client.getDeliveryAttributesHandleResponse(httpResp)
-	return resp, err
+	return client.getDeliveryAttributesHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeliveryAttributesCreateRequest creates the GetDeliveryAttributes request.
 func (client *TopicEventSubscriptionsClient) getDeliveryAttributesCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, _ *TopicEventSubscriptionsClientGetDeliveryAttributesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}/getDeliveryAttributes"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -344,15 +327,18 @@ func (client *TopicEventSubscriptionsClient) getDeliveryAttributesCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeliveryAttributesHandleResponse handles the GetDeliveryAttributes response.
-func (client *TopicEventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response) (TopicEventSubscriptionsClientGetDeliveryAttributesResponse, error) {
+func (client *TopicEventSubscriptionsClient) getDeliveryAttributesHandleResponse(resp *http.Response, successCodes ...int) (TopicEventSubscriptionsClientGetDeliveryAttributesResponse, error) {
 	result := TopicEventSubscriptionsClientGetDeliveryAttributesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeliveryAttributeListResult); err != nil {
 		return TopicEventSubscriptionsClientGetDeliveryAttributesResponse{}, err
 	}
@@ -363,8 +349,6 @@ func (client *TopicEventSubscriptionsClient) getDeliveryAttributesHandleResponse
 //
 // Get the full endpoint URL for an event subscription for topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -384,19 +368,14 @@ func (client *TopicEventSubscriptionsClient) GetFullURL(ctx context.Context, res
 	if err != nil {
 		return TopicEventSubscriptionsClientGetFullURLResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TopicEventSubscriptionsClientGetFullURLResponse{}, err
-	}
-	resp, err := client.getFullURLHandleResponse(httpResp)
-	return resp, err
+	return client.getFullURLHandleResponse(httpResp, http.StatusOK)
 }
 
 // getFullURLCreateRequest creates the GetFullURL request.
 func (client *TopicEventSubscriptionsClient) getFullURLCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, _ *TopicEventSubscriptionsClientGetFullURLOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}/getFullUrl"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -416,15 +395,18 @@ func (client *TopicEventSubscriptionsClient) getFullURLCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getFullURLHandleResponse handles the GetFullURL response.
-func (client *TopicEventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response) (TopicEventSubscriptionsClientGetFullURLResponse, error) {
+func (client *TopicEventSubscriptionsClient) getFullURLHandleResponse(resp *http.Response, successCodes ...int) (TopicEventSubscriptionsClientGetFullURLResponse, error) {
 	result := TopicEventSubscriptionsClientGetFullURLResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionFullURL); err != nil {
 		return TopicEventSubscriptionsClientGetFullURLResponse{}, err
 	}
@@ -434,8 +416,6 @@ func (client *TopicEventSubscriptionsClient) getFullURLHandleResponse(resp *http
 // NewListPager - List all event subscriptions for a specific topic.
 //
 // List all event subscriptions that have been created for a specific topic.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - options - TopicEventSubscriptionsClientListOptions contains the optional parameters for the TopicEventSubscriptionsClient.NewListPager
@@ -451,53 +431,67 @@ func (client *TopicEventSubscriptionsClient) NewListPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, topicName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, topicName, nextLink, options)
 			if err != nil {
 				return TopicEventSubscriptionsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return TopicEventSubscriptionsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *TopicEventSubscriptionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, topicName string, options *TopicEventSubscriptionsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *TopicEventSubscriptionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, topicName string, nextLink string, options *TopicEventSubscriptionsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if topicName == "" {
+			return nil, errors.New("parameter topicName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{topicName}", url.PathEscape(topicName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if topicName == "" {
-		return nil, errors.New("parameter topicName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{topicName}", url.PathEscape(topicName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *TopicEventSubscriptionsClient) listHandleResponse(resp *http.Response) (TopicEventSubscriptionsClientListResponse, error) {
+func (client *TopicEventSubscriptionsClient) listHandleResponse(resp *http.Response, successCodes ...int) (TopicEventSubscriptionsClientListResponse, error) {
 	result := TopicEventSubscriptionsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionsListResult); err != nil {
 		return TopicEventSubscriptionsClientListResponse{}, err
 	}
@@ -508,8 +502,6 @@ func (client *TopicEventSubscriptionsClient) listHandleResponse(resp *http.Respo
 //
 // Update an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - topicName - Name of the topic.
 //   - eventSubscriptionName - Name of the event subscription to be found.
@@ -537,8 +529,6 @@ func (client *TopicEventSubscriptionsClient) BeginUpdate(ctx context.Context, re
 //
 // Update an existing event subscription for a topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *TopicEventSubscriptionsClient) update(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, options *TopicEventSubscriptionsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TopicEventSubscriptionsClient.BeginUpdate"
@@ -554,8 +544,7 @@ func (client *TopicEventSubscriptionsClient) update(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -564,7 +553,7 @@ func (client *TopicEventSubscriptionsClient) update(ctx context.Context, resourc
 func (client *TopicEventSubscriptionsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, topicName string, eventSubscriptionName string, eventSubscriptionUpdateParameters EventSubscriptionUpdateParameters, _ *TopicEventSubscriptionsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/topics/{topicName}/eventSubscriptions/{eventSubscriptionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -584,8 +573,8 @@ func (client *TopicEventSubscriptionsClient) updateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, eventSubscriptionUpdateParameters); err != nil {

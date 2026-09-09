@@ -8,11 +8,11 @@ import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud/v2"
 	"log"
 )
 
-// Generated from example definition: 2025-09-01/L2Networks_Create.json
+// Generated from example definition: 2026-07-01/L2Networks_Create.json
 func ExampleL2NetworksClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -44,13 +44,13 @@ func ExampleL2NetworksClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.L2NetworksClientCreateOrUpdateResponse{
-	// 	L2Network: &armnetworkcloud.L2Network{
+	// 	L2Network: armnetworkcloud.L2Network{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -70,10 +70,10 @@ func ExampleL2NetworksClient_BeginCreateOrUpdate() {
 	// 			ProvisioningState: to.Ptr(armnetworkcloud.L2NetworkProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -86,7 +86,7 @@ func ExampleL2NetworksClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/L2Networks_Delete.json
+// Generated from example definition: 2026-07-01/L2Networks_Delete.json
 func ExampleL2NetworksClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -103,11 +103,11 @@ func ExampleL2NetworksClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/L2Networks_Get.json
+// Generated from example definition: 2026-07-01/L2Networks_Get.json
 func ExampleL2NetworksClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -126,7 +126,7 @@ func ExampleL2NetworksClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.L2NetworksClientGetResponse{
-	// 	L2Network: &armnetworkcloud.L2Network{
+	// 	L2Network: armnetworkcloud.L2Network{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -146,10 +146,10 @@ func ExampleL2NetworksClient_Get() {
 	// 			ProvisioningState: to.Ptr(armnetworkcloud.L2NetworkProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -162,7 +162,7 @@ func ExampleL2NetworksClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/L2Networks_ListByResourceGroup.json
+// Generated from example definition: 2026-07-01/L2Networks_ListByResourceGroup.json
 func ExampleL2NetworksClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -208,10 +208,10 @@ func ExampleL2NetworksClient_NewListByResourceGroupPager() {
 		// 					ProvisioningState: to.Ptr(armnetworkcloud.L2NetworkProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -227,7 +227,7 @@ func ExampleL2NetworksClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/L2Networks_ListBySubscription.json
+// Generated from example definition: 2026-07-01/L2Networks_ListBySubscription.json
 func ExampleL2NetworksClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -273,10 +273,10 @@ func ExampleL2NetworksClient_NewListBySubscriptionPager() {
 		// 					ProvisioningState: to.Ptr(armnetworkcloud.L2NetworkProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -292,7 +292,7 @@ func ExampleL2NetworksClient_NewListBySubscriptionPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/L2Networks_Patch.json
+// Generated from example definition: 2026-07-01/L2Networks_Patch.json
 func ExampleL2NetworksClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -316,7 +316,7 @@ func ExampleL2NetworksClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.L2NetworksClientUpdateResponse{
-	// 	L2Network: &armnetworkcloud.L2Network{
+	// 	L2Network: armnetworkcloud.L2Network{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -336,10 +336,10 @@ func ExampleL2NetworksClient_Update() {
 	// 			ProvisioningState: to.Ptr(armnetworkcloud.L2NetworkProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},

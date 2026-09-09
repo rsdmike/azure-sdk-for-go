@@ -33,7 +33,7 @@ func ExampleOracleSubscriptionsClient_BeginAddAzureSubscriptions_addAzureSubscri
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -58,7 +58,7 @@ func ExampleOracleSubscriptionsClient_BeginAddAzureSubscriptions_addAzureSubscri
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -83,7 +83,7 @@ func ExampleOracleSubscriptionsClient_BeginAddAzureSubscriptions_oracleSubscript
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -119,13 +119,13 @@ func ExampleOracleSubscriptionsClient_BeginCreateOrUpdate_createOrUpdateOracleSu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientCreateOrUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{
 	// 			ProvisioningState: to.Ptr(armoracledatabase.OracleSubscriptionProvisioningStateSucceeded),
 	// 			SaasSubscriptionID: to.Ptr("saas1"),
@@ -152,10 +152,10 @@ func ExampleOracleSubscriptionsClient_BeginCreateOrUpdate_createOrUpdateOracleSu
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -178,13 +178,13 @@ func ExampleOracleSubscriptionsClient_BeginCreateOrUpdate_createOrUpdateOracleSu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientCreateOrUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 	},
 	// }
 }
@@ -215,13 +215,13 @@ func ExampleOracleSubscriptionsClient_BeginCreateOrUpdate_oracleSubscriptionsCre
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientCreateOrUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Oracle.Database/oracleSubscriptions/default"),
 	// 		Type: to.Ptr("Oracle.Database/oracleSubscriptions"),
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{
@@ -258,7 +258,7 @@ func ExampleOracleSubscriptionsClient_BeginDelete_deleteOracleSubscriptionGenera
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -279,7 +279,7 @@ func ExampleOracleSubscriptionsClient_BeginDelete_deleteOracleSubscriptionGenera
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -300,7 +300,7 @@ func ExampleOracleSubscriptionsClient_BeginDelete_oracleSubscriptionsDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -323,7 +323,7 @@ func ExampleOracleSubscriptionsClient_Get_getOracleSubscriptionGeneratedByMaximu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientGetResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{
 	// 			ProvisioningState: to.Ptr(armoracledatabase.OracleSubscriptionProvisioningStateSucceeded),
 	// 			SaasSubscriptionID: to.Ptr("saas1"),
@@ -350,10 +350,10 @@ func ExampleOracleSubscriptionsClient_Get_getOracleSubscriptionGeneratedByMaximu
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -378,7 +378,7 @@ func ExampleOracleSubscriptionsClient_Get_getOracleSubscriptionGeneratedByMinimu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientGetResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 	},
 	// }
 }
@@ -402,7 +402,7 @@ func ExampleOracleSubscriptionsClient_Get_oracleSubscriptionsGet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientGetResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Oracle.Database/oracleSubscriptions/default"),
 	// 		Type: to.Ptr("Oracle.Database/oracleSubscriptions"),
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{
@@ -439,13 +439,13 @@ func ExampleOracleSubscriptionsClient_BeginListActivationLinks_listActivationLin
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListActivationLinksResponse{
-	// 	ActivationLinks: &armoracledatabase.ActivationLinks{
+	// 	ActivationLinks: armoracledatabase.ActivationLinks{
 	// 		NewCloudAccountActivationLink: to.Ptr("https://new-tenancy-activation-link"),
 	// 		ExistingCloudAccountActivationLink: to.Ptr("https://existing-tenancy-activation-link"),
 	// 	},
@@ -469,13 +469,13 @@ func ExampleOracleSubscriptionsClient_BeginListActivationLinks_listActivationLin
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListActivationLinksResponse{
-	// 	ActivationLinks: &armoracledatabase.ActivationLinks{
+	// 	ActivationLinks: armoracledatabase.ActivationLinks{
 	// 	},
 	// }
 }
@@ -497,13 +497,13 @@ func ExampleOracleSubscriptionsClient_BeginListActivationLinks_oracleSubscriptio
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListActivationLinksResponse{
-	// 	ActivationLinks: &armoracledatabase.ActivationLinks{
+	// 	ActivationLinks: armoracledatabase.ActivationLinks{
 	// 		NewCloudAccountActivationLink: to.Ptr("https://new-tenancy-activation-link"),
 	// 		ExistingCloudAccountActivationLink: to.Ptr("https://existing-tenancy-activation-link"),
 	// 	},
@@ -562,10 +562,10 @@ func ExampleOracleSubscriptionsClient_NewListBySubscriptionPager_listOracleSubsc
 		// 				SystemData: &armoracledatabase.SystemData{
 		// 					CreatedBy: to.Ptr("sqehacivpuim"),
 		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -674,13 +674,13 @@ func ExampleOracleSubscriptionsClient_BeginListCloudAccountDetails_listCloudAcco
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListCloudAccountDetailsResponse{
-	// 	CloudAccountDetails: &armoracledatabase.CloudAccountDetails{
+	// 	CloudAccountDetails: armoracledatabase.CloudAccountDetails{
 	// 		CloudAccountName: to.Ptr("Cloud Account"),
 	// 		CloudAccountHomeRegion: to.Ptr("East US"),
 	// 	},
@@ -704,13 +704,13 @@ func ExampleOracleSubscriptionsClient_BeginListCloudAccountDetails_listCloudAcco
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListCloudAccountDetailsResponse{
-	// 	CloudAccountDetails: &armoracledatabase.CloudAccountDetails{
+	// 	CloudAccountDetails: armoracledatabase.CloudAccountDetails{
 	// 	},
 	// }
 }
@@ -732,13 +732,13 @@ func ExampleOracleSubscriptionsClient_BeginListCloudAccountDetails_oracleSubscri
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListCloudAccountDetailsResponse{
-	// 	CloudAccountDetails: &armoracledatabase.CloudAccountDetails{
+	// 	CloudAccountDetails: armoracledatabase.CloudAccountDetails{
 	// 		CloudAccountName: to.Ptr("Cloud Account"),
 	// 		CloudAccountHomeRegion: to.Ptr("East US"),
 	// 	},
@@ -762,16 +762,16 @@ func ExampleOracleSubscriptionsClient_BeginListSaasSubscriptionDetails_listSaasS
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListSaasSubscriptionDetailsResponse{
-	// 	SaasSubscriptionDetails: &armoracledatabase.SaasSubscriptionDetails{
+	// 	SaasSubscriptionDetails: armoracledatabase.SaasSubscriptionDetails{
 	// 		ID: to.Ptr("1234567890"),
 	// 		SubscriptionName: to.Ptr("Oracle"),
-	// 		TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-07T00:00:00Z"); return t}()),
+	// 		TimeCreated: to.Ptr(time.Date(2022, time.March, 7, 0, 0, 0, 0, time.UTC)),
 	// 		OfferID: to.Ptr("offer1"),
 	// 		PlanID: to.Ptr("silver"),
 	// 		SaasSubscriptionStatus: to.Ptr("PendingFulfillmentStart"),
@@ -802,13 +802,13 @@ func ExampleOracleSubscriptionsClient_BeginListSaasSubscriptionDetails_listSaasS
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListSaasSubscriptionDetailsResponse{
-	// 	SaasSubscriptionDetails: &armoracledatabase.SaasSubscriptionDetails{
+	// 	SaasSubscriptionDetails: armoracledatabase.SaasSubscriptionDetails{
 	// 	},
 	// }
 }
@@ -830,16 +830,16 @@ func ExampleOracleSubscriptionsClient_BeginListSaasSubscriptionDetails_oracleSub
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientListSaasSubscriptionDetailsResponse{
-	// 	SaasSubscriptionDetails: &armoracledatabase.SaasSubscriptionDetails{
+	// 	SaasSubscriptionDetails: armoracledatabase.SaasSubscriptionDetails{
 	// 		ID: to.Ptr("1234567890"),
 	// 		SubscriptionName: to.Ptr("Oracle"),
-	// 		TimeCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-07T00:00:00Z"); return t}()),
+	// 		TimeCreated: to.Ptr(time.Date(2022, time.March, 7, 0, 0, 0, 0, time.UTC)),
 	// 		OfferID: to.Ptr("offer1"),
 	// 		PlanID: to.Ptr("silver"),
 	// 		SaasSubscriptionStatus: to.Ptr("PendingFulfillmentStart"),
@@ -882,13 +882,13 @@ func ExampleOracleSubscriptionsClient_BeginUpdate_patchOracleSubscriptionGenerat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{
 	// 			ProvisioningState: to.Ptr(armoracledatabase.OracleSubscriptionProvisioningStateSucceeded),
 	// 			SaasSubscriptionID: to.Ptr("saas1"),
@@ -915,10 +915,10 @@ func ExampleOracleSubscriptionsClient_BeginUpdate_patchOracleSubscriptionGenerat
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -941,13 +941,13 @@ func ExampleOracleSubscriptionsClient_BeginUpdate_patchOracleSubscriptionGenerat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 	},
 	// }
 }
@@ -969,13 +969,13 @@ func ExampleOracleSubscriptionsClient_BeginUpdate_oracleSubscriptionsUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.OracleSubscriptionsClientUpdateResponse{
-	// 	OracleSubscription: &armoracledatabase.OracleSubscription{
+	// 	OracleSubscription: armoracledatabase.OracleSubscription{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Oracle.Database/oracleSubscriptions/default"),
 	// 		Type: to.Ptr("Oracle.Database/oracleSubscriptions"),
 	// 		Properties: &armoracledatabase.OracleSubscriptionProperties{

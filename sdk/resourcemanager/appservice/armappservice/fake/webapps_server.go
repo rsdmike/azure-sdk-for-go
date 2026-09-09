@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -1419,11 +1420,11 @@ type WebAppsServer struct {
 	StartContinuousWebJobSlot func(ctx context.Context, resourceGroupName string, name string, webJobName string, slot string, options *armappservice.WebAppsClientStartContinuousWebJobSlotOptions) (resp azfake.Responder[armappservice.WebAppsClientStartContinuousWebJobSlotResponse], errResp azfake.ErrorResponder)
 
 	// BeginStartNetworkTrace is the fake for method WebAppsClient.BeginStartNetworkTrace
-	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted, http.StatusNoContent
+	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted
 	BeginStartNetworkTrace func(ctx context.Context, resourceGroupName string, name string, options *armappservice.WebAppsClientBeginStartNetworkTraceOptions) (resp azfake.PollerResponder[armappservice.WebAppsClientStartNetworkTraceResponse], errResp azfake.ErrorResponder)
 
 	// BeginStartNetworkTraceSlot is the fake for method WebAppsClient.BeginStartNetworkTraceSlot
-	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted, http.StatusNoContent
+	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted
 	BeginStartNetworkTraceSlot func(ctx context.Context, resourceGroupName string, name string, slot string, options *armappservice.WebAppsClientBeginStartNetworkTraceSlotOptions) (resp azfake.PollerResponder[armappservice.WebAppsClientStartNetworkTraceSlotResponse], errResp azfake.ErrorResponder)
 
 	// StartSlot is the fake for method WebAppsClient.StartSlot
@@ -1435,11 +1436,11 @@ type WebAppsServer struct {
 	StartWebSiteNetworkTrace func(ctx context.Context, resourceGroupName string, name string, options *armappservice.WebAppsClientStartWebSiteNetworkTraceOptions) (resp azfake.Responder[armappservice.WebAppsClientStartWebSiteNetworkTraceResponse], errResp azfake.ErrorResponder)
 
 	// BeginStartWebSiteNetworkTraceOperation is the fake for method WebAppsClient.BeginStartWebSiteNetworkTraceOperation
-	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted, http.StatusNoContent
+	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted
 	BeginStartWebSiteNetworkTraceOperation func(ctx context.Context, resourceGroupName string, name string, options *armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationOptions) (resp azfake.PollerResponder[armappservice.WebAppsClientStartWebSiteNetworkTraceOperationResponse], errResp azfake.ErrorResponder)
 
 	// BeginStartWebSiteNetworkTraceOperationSlot is the fake for method WebAppsClient.BeginStartWebSiteNetworkTraceOperationSlot
-	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted, http.StatusNoContent
+	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted
 	BeginStartWebSiteNetworkTraceOperationSlot func(ctx context.Context, resourceGroupName string, name string, slot string, options *armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationSlotOptions) (resp azfake.PollerResponder[armappservice.WebAppsClientStartWebSiteNetworkTraceOperationSlotResponse], errResp azfake.ErrorResponder)
 
 	// StartWebSiteNetworkTraceSlot is the fake for method WebAppsClient.StartWebSiteNetworkTraceSlot
@@ -1924,9 +1925,7 @@ func (w *WebAppsServerTransport) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (w *WebAppsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -2772,10 +2771,7 @@ func (w *WebAppsServerTransport) dispatchToMethodFake(req *http.Request, method 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -2790,7 +2786,7 @@ func (w *WebAppsServerTransport) dispatchAddPremierAddOn(req *http.Request) (*ht
 	if w.srv.AddPremierAddOn == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AddPremierAddOn not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -2817,7 +2813,7 @@ func (w *WebAppsServerTransport) dispatchAddPremierAddOn(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -2831,7 +2827,7 @@ func (w *WebAppsServerTransport) dispatchAddPremierAddOnSlot(req *http.Request) 
 	if w.srv.AddPremierAddOnSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AddPremierAddOnSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -2862,7 +2858,7 @@ func (w *WebAppsServerTransport) dispatchAddPremierAddOnSlot(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -2876,7 +2872,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostname(req *http.Request
 	if w.srv.AnalyzeCustomHostname == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AnalyzeCustomHostname not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/analyzeCustomHostname`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/analyzeCustomHostname`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -2891,11 +2887,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostname(req *http.Request
 	if err != nil {
 		return nil, err
 	}
-	hostNameUnescaped, err := url.QueryUnescape(qp.Get("hostName"))
-	if err != nil {
-		return nil, err
-	}
-	hostNameParam := getOptional(hostNameUnescaped)
+	hostNameParam := getOptional(qp.Get("hostName"))
 	var options *armappservice.WebAppsClientAnalyzeCustomHostnameOptions
 	if hostNameParam != nil {
 		options = &armappservice.WebAppsClientAnalyzeCustomHostnameOptions{
@@ -2907,7 +2899,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostname(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CustomHostnameAnalysisResult, req)
@@ -2921,7 +2913,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostnameSlot(req *http.Req
 	if w.srv.AnalyzeCustomHostnameSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AnalyzeCustomHostnameSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/analyzeCustomHostname`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/analyzeCustomHostname`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -2940,11 +2932,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostnameSlot(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	hostNameUnescaped, err := url.QueryUnescape(qp.Get("hostName"))
-	if err != nil {
-		return nil, err
-	}
-	hostNameParam := getOptional(hostNameUnescaped)
+	hostNameParam := getOptional(qp.Get("hostName"))
 	var options *armappservice.WebAppsClientAnalyzeCustomHostnameSlotOptions
 	if hostNameParam != nil {
 		options = &armappservice.WebAppsClientAnalyzeCustomHostnameSlotOptions{
@@ -2956,7 +2944,7 @@ func (w *WebAppsServerTransport) dispatchAnalyzeCustomHostnameSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CustomHostnameAnalysisResult, req)
@@ -2970,7 +2958,7 @@ func (w *WebAppsServerTransport) dispatchApplySlotConfigToProduction(req *http.R
 	if w.srv.ApplySlotConfigToProduction == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ApplySlotConfigToProduction not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/applySlotConfig`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/applySlotConfig`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -2993,7 +2981,7 @@ func (w *WebAppsServerTransport) dispatchApplySlotConfigToProduction(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -3007,7 +2995,7 @@ func (w *WebAppsServerTransport) dispatchApplySlotConfigurationSlot(req *http.Re
 	if w.srv.ApplySlotConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ApplySlotConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/applySlotConfig`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/applySlotConfig`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -3034,7 +3022,7 @@ func (w *WebAppsServerTransport) dispatchApplySlotConfigurationSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -3050,7 +3038,7 @@ func (w *WebAppsServerTransport) dispatchBeginApproveOrRejectPrivateEndpointConn
 	}
 	beginApproveOrRejectPrivateEndpointConnection := w.beginApproveOrRejectPrivateEndpointConnection.get(req)
 	if beginApproveOrRejectPrivateEndpointConnection == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -3085,7 +3073,7 @@ func (w *WebAppsServerTransport) dispatchBeginApproveOrRejectPrivateEndpointConn
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginApproveOrRejectPrivateEndpointConnection.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -3102,7 +3090,7 @@ func (w *WebAppsServerTransport) dispatchBeginApproveOrRejectPrivateEndpointConn
 	}
 	beginApproveOrRejectPrivateEndpointConnectionSlot := w.beginApproveOrRejectPrivateEndpointConnectionSlot.get(req)
 	if beginApproveOrRejectPrivateEndpointConnectionSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -3141,7 +3129,7 @@ func (w *WebAppsServerTransport) dispatchBeginApproveOrRejectPrivateEndpointConn
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginApproveOrRejectPrivateEndpointConnectionSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -3156,7 +3144,7 @@ func (w *WebAppsServerTransport) dispatchBackup(req *http.Request) (*http.Respon
 	if w.srv.Backup == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Backup not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -3179,7 +3167,7 @@ func (w *WebAppsServerTransport) dispatchBackup(req *http.Request) (*http.Respon
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -3193,7 +3181,7 @@ func (w *WebAppsServerTransport) dispatchBackupSlot(req *http.Request) (*http.Re
 	if w.srv.BackupSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method BackupSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -3220,7 +3208,7 @@ func (w *WebAppsServerTransport) dispatchBackupSlot(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -3234,7 +3222,7 @@ func (w *WebAppsServerTransport) dispatchCreateDeployment(req *http.Request) (*h
 	if w.srv.CreateDeployment == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateDeployment not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -3261,7 +3249,7 @@ func (w *WebAppsServerTransport) dispatchCreateDeployment(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -3275,7 +3263,7 @@ func (w *WebAppsServerTransport) dispatchCreateDeploymentSlot(req *http.Request)
 	if w.srv.CreateDeploymentSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateDeploymentSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -3306,7 +3294,7 @@ func (w *WebAppsServerTransport) dispatchCreateDeploymentSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -3322,7 +3310,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateFunction(req *http.Request) 
 	}
 	beginCreateFunction := w.beginCreateFunction.get(req)
 	if beginCreateFunction == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -3357,7 +3345,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateFunction(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateFunction.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3374,7 +3362,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceFunctionSlot(req *ht
 	}
 	beginCreateInstanceFunctionSlot := w.beginCreateInstanceFunctionSlot.get(req)
 	if beginCreateInstanceFunctionSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -3413,7 +3401,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceFunctionSlot(req *ht
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateInstanceFunctionSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3430,7 +3418,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceMSDeployOperation(re
 	}
 	beginCreateInstanceMSDeployOperation := w.beginCreateInstanceMSDeployOperation.get(req)
 	if beginCreateInstanceMSDeployOperation == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -3465,7 +3453,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceMSDeployOperation(re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateInstanceMSDeployOperation.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3482,7 +3470,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceMSDeployOperationSlo
 	}
 	beginCreateInstanceMSDeployOperationSlot := w.beginCreateInstanceMSDeployOperationSlot.get(req)
 	if beginCreateInstanceMSDeployOperationSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -3521,7 +3509,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateInstanceMSDeployOperationSlo
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateInstanceMSDeployOperationSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3538,7 +3526,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateMSDeployOperation(req *http.
 	}
 	beginCreateMSDeployOperation := w.beginCreateMSDeployOperation.get(req)
 	if beginCreateMSDeployOperation == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -3569,7 +3557,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateMSDeployOperation(req *http.
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateMSDeployOperation.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3586,7 +3574,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateMSDeployOperationSlot(req *h
 	}
 	beginCreateMSDeployOperationSlot := w.beginCreateMSDeployOperationSlot.get(req)
 	if beginCreateMSDeployOperationSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -3621,7 +3609,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateMSDeployOperationSlot(req *h
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateMSDeployOperationSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -3636,7 +3624,7 @@ func (w *WebAppsServerTransport) dispatchCreateOneDeployOperation(req *http.Requ
 	if w.srv.CreateOneDeployOperation == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOneDeployOperation not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/onedeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/onedeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -3655,7 +3643,7 @@ func (w *WebAppsServerTransport) dispatchCreateOneDeployOperation(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Interface, req)
@@ -3671,7 +3659,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdate(req *http.Request) 
 	}
 	beginCreateOrUpdate := w.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -3702,7 +3690,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdate(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginCreateOrUpdate.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -3717,7 +3705,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateConfiguration(req *http.R
 	if w.srv.CreateOrUpdateConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -3740,7 +3728,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateConfiguration(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -3754,7 +3742,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateConfigurationSlot(req *ht
 	if w.srv.CreateOrUpdateConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -3781,7 +3769,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateConfigurationSlot(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -3795,7 +3783,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateDomainOwnershipIdentifier
 	if w.srv.CreateOrUpdateDomainOwnershipIdentifier == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateDomainOwnershipIdentifier not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -3822,7 +3810,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateDomainOwnershipIdentifier
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -3836,7 +3824,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateDomainOwnershipIdentifier
 	if w.srv.CreateOrUpdateDomainOwnershipIdentifierSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateDomainOwnershipIdentifierSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -3867,7 +3855,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateDomainOwnershipIdentifier
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -3881,7 +3869,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateFunctionSecret(req *http.
 	if w.srv.CreateOrUpdateFunctionSecret == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateFunctionSecret not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/keys/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/keys/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -3912,7 +3900,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateFunctionSecret(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).KeyInfo, req)
@@ -3926,7 +3914,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateFunctionSecretSlot(req *h
 	if w.srv.CreateOrUpdateFunctionSecretSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateFunctionSecretSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/keys/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/keys/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -3961,7 +3949,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateFunctionSecretSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).KeyInfo, req)
@@ -3975,7 +3963,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostNameBinding(req *http
 	if w.srv.CreateOrUpdateHostNameBinding == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHostNameBinding not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4002,7 +3990,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostNameBinding(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostNameBinding, req)
@@ -4016,7 +4004,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostNameBindingSlot(req *
 	if w.srv.CreateOrUpdateHostNameBindingSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHostNameBindingSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4047,7 +4035,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostNameBindingSlot(req *
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostNameBinding, req)
@@ -4061,7 +4049,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostSecret(req *http.Requ
 	if w.srv.CreateOrUpdateHostSecret == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHostSecret not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/(?P<keyType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/(?P<keyType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4092,7 +4080,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostSecret(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).KeyInfo, req)
@@ -4106,7 +4094,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostSecretSlot(req *http.
 	if w.srv.CreateOrUpdateHostSecretSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHostSecretSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/(?P<keyType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/(?P<keyType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -4141,7 +4129,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHostSecretSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).KeyInfo, req)
@@ -4155,7 +4143,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHybridConnection(req *htt
 	if w.srv.CreateOrUpdateHybridConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHybridConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4186,7 +4174,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHybridConnection(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -4200,7 +4188,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHybridConnectionSlot(req 
 	if w.srv.CreateOrUpdateHybridConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateHybridConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -4235,7 +4223,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateHybridConnectionSlot(req 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -4249,7 +4237,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdatePublicCertificate(req *ht
 	if w.srv.CreateOrUpdatePublicCertificate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdatePublicCertificate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4276,7 +4264,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdatePublicCertificate(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PublicCertificate, req)
@@ -4290,7 +4278,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdatePublicCertificateSlot(req
 	if w.srv.CreateOrUpdatePublicCertificateSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdatePublicCertificateSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4321,7 +4309,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdatePublicCertificateSlot(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PublicCertificate, req)
@@ -4335,7 +4323,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateRelayServiceConnection(re
 	if w.srv.CreateOrUpdateRelayServiceConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateRelayServiceConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4362,7 +4350,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateRelayServiceConnection(re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -4376,7 +4364,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateRelayServiceConnectionSlo
 	if w.srv.CreateOrUpdateRelayServiceConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateRelayServiceConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4407,7 +4395,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateRelayServiceConnectionSlo
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -4421,7 +4409,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSiteContainer(req *http.R
 	if w.srv.CreateOrUpdateSiteContainer == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateSiteContainer not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4448,7 +4436,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSiteContainer(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteContainer, req)
@@ -4462,7 +4450,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSiteContainerSlot(req *ht
 	if w.srv.CreateOrUpdateSiteContainerSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateSiteContainerSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4493,7 +4481,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSiteContainerSlot(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteContainer, req)
@@ -4509,7 +4497,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSlot(req *http.Reque
 	}
 	beginCreateOrUpdateSlot := w.beginCreateOrUpdateSlot.get(req)
 	if beginCreateOrUpdateSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -4544,7 +4532,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSlot(req *http.Reque
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginCreateOrUpdateSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -4561,7 +4549,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSourceControl(req *h
 	}
 	beginCreateOrUpdateSourceControl := w.beginCreateOrUpdateSourceControl.get(req)
 	if beginCreateOrUpdateSourceControl == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -4592,7 +4580,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSourceControl(req *h
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, resp.StatusCode) {
 		w.beginCreateOrUpdateSourceControl.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -4609,7 +4597,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSourceControlSlot(re
 	}
 	beginCreateOrUpdateSourceControlSlot := w.beginCreateOrUpdateSourceControlSlot.get(req)
 	if beginCreateOrUpdateSourceControlSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -4644,7 +4632,7 @@ func (w *WebAppsServerTransport) dispatchBeginCreateOrUpdateSourceControlSlot(re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, resp.StatusCode) {
 		w.beginCreateOrUpdateSourceControlSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -4659,7 +4647,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSwiftVirtualNetworkConnec
 	if w.srv.CreateOrUpdateSwiftVirtualNetworkConnectionWithCheck == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateSwiftVirtualNetworkConnectionWithCheck not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -4682,7 +4670,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSwiftVirtualNetworkConnec
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -4696,7 +4684,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSwiftVirtualNetworkConnec
 	if w.srv.CreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateSwiftVirtualNetworkConnectionWithCheckSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4723,7 +4711,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateSwiftVirtualNetworkConnec
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -4737,7 +4725,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnection(req *http.
 	if w.srv.CreateOrUpdateVnetConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateVnetConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4764,7 +4752,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnection(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)
@@ -4778,7 +4766,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionGateway(req
 	if w.srv.CreateOrUpdateVnetConnectionGateway == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateVnetConnectionGateway not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4809,7 +4797,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionGateway(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -4823,7 +4811,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionGatewaySlot
 	if w.srv.CreateOrUpdateVnetConnectionGatewaySlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateVnetConnectionGatewaySlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -4858,7 +4846,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionGatewaySlot
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -4872,7 +4860,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionSlot(req *h
 	if w.srv.CreateOrUpdateVnetConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdateVnetConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -4903,7 +4891,7 @@ func (w *WebAppsServerTransport) dispatchCreateOrUpdateVnetConnectionSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)
@@ -4917,7 +4905,7 @@ func (w *WebAppsServerTransport) dispatchDelete(req *http.Request) (*http.Respon
 	if w.srv.Delete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Delete not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -4932,19 +4920,11 @@ func (w *WebAppsServerTransport) dispatchDelete(req *http.Request) (*http.Respon
 	if err != nil {
 		return nil, err
 	}
-	deleteMetricsUnescaped, err := url.QueryUnescape(qp.Get("deleteMetrics"))
+	deleteMetricsParam, err := parseOptional(qp.Get("deleteMetrics"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
-	deleteMetricsParam, err := parseOptional(deleteMetricsUnescaped, strconv.ParseBool)
-	if err != nil {
-		return nil, err
-	}
-	deleteEmptyServerFarmUnescaped, err := url.QueryUnescape(qp.Get("deleteEmptyServerFarm"))
-	if err != nil {
-		return nil, err
-	}
-	deleteEmptyServerFarmParam, err := parseOptional(deleteEmptyServerFarmUnescaped, strconv.ParseBool)
+	deleteEmptyServerFarmParam, err := parseOptional(qp.Get("deleteEmptyServerFarm"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -4960,7 +4940,7 @@ func (w *WebAppsServerTransport) dispatchDelete(req *http.Request) (*http.Respon
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -4974,7 +4954,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackup(req *http.Request) (*http.
 	if w.srv.DeleteBackup == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteBackup not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -4997,7 +4977,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackup(req *http.Request) (*http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5011,7 +4991,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupConfiguration(req *http.Req
 	if w.srv.DeleteBackupConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteBackupConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -5030,7 +5010,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupConfiguration(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5044,7 +5024,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupConfigurationSlot(req *http
 	if w.srv.DeleteBackupConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteBackupConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5067,7 +5047,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupConfigurationSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5081,7 +5061,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupSlot(req *http.Request) (*h
 	if w.srv.DeleteBackupSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteBackupSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5108,7 +5088,7 @@ func (w *WebAppsServerTransport) dispatchDeleteBackupSlot(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5122,7 +5102,7 @@ func (w *WebAppsServerTransport) dispatchDeleteContinuousWebJob(req *http.Reques
 	if w.srv.DeleteContinuousWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteContinuousWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5145,7 +5125,7 @@ func (w *WebAppsServerTransport) dispatchDeleteContinuousWebJob(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5159,7 +5139,7 @@ func (w *WebAppsServerTransport) dispatchDeleteContinuousWebJobSlot(req *http.Re
 	if w.srv.DeleteContinuousWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteContinuousWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5186,7 +5166,7 @@ func (w *WebAppsServerTransport) dispatchDeleteContinuousWebJobSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5200,7 +5180,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDeployment(req *http.Request) (*h
 	if w.srv.DeleteDeployment == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteDeployment not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5223,7 +5203,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDeployment(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5237,7 +5217,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDeploymentSlot(req *http.Request)
 	if w.srv.DeleteDeploymentSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteDeploymentSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5264,7 +5244,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDeploymentSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5278,7 +5258,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDomainOwnershipIdentifier(req *ht
 	if w.srv.DeleteDomainOwnershipIdentifier == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteDomainOwnershipIdentifier not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5301,7 +5281,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDomainOwnershipIdentifier(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5315,7 +5295,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDomainOwnershipIdentifierSlot(req
 	if w.srv.DeleteDomainOwnershipIdentifierSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteDomainOwnershipIdentifierSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5342,7 +5322,7 @@ func (w *WebAppsServerTransport) dispatchDeleteDomainOwnershipIdentifierSlot(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5356,7 +5336,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunction(req *http.Request) (*htt
 	if w.srv.DeleteFunction == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteFunction not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5379,7 +5359,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunction(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5393,7 +5373,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunctionSecret(req *http.Request)
 	if w.srv.DeleteFunctionSecret == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteFunctionSecret not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/keys/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/keys/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5420,7 +5400,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunctionSecret(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5434,7 +5414,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunctionSecretSlot(req *http.Requ
 	if w.srv.DeleteFunctionSecretSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteFunctionSecretSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/keys/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/keys/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -5465,7 +5445,7 @@ func (w *WebAppsServerTransport) dispatchDeleteFunctionSecretSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5479,7 +5459,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostNameBinding(req *http.Request
 	if w.srv.DeleteHostNameBinding == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHostNameBinding not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5502,7 +5482,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostNameBinding(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5516,7 +5496,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostNameBindingSlot(req *http.Req
 	if w.srv.DeleteHostNameBindingSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHostNameBindingSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5543,7 +5523,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostNameBindingSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5557,7 +5537,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostSecret(req *http.Request) (*h
 	if w.srv.DeleteHostSecret == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHostSecret not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/(?P<keyType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/(?P<keyType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5584,7 +5564,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostSecret(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5598,7 +5578,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostSecretSlot(req *http.Request)
 	if w.srv.DeleteHostSecretSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHostSecretSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/(?P<keyType>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<keyName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/(?P<keyType>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<keyName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -5629,7 +5609,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHostSecretSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5643,7 +5623,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHybridConnection(req *http.Reques
 	if w.srv.DeleteHybridConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHybridConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5670,7 +5650,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHybridConnection(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5684,7 +5664,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHybridConnectionSlot(req *http.Re
 	if w.srv.DeleteHybridConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteHybridConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -5715,7 +5695,7 @@ func (w *WebAppsServerTransport) dispatchDeleteHybridConnectionSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5729,7 +5709,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceFunctionSlot(req *http.Re
 	if w.srv.DeleteInstanceFunctionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteInstanceFunctionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5756,7 +5736,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceFunctionSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5770,7 +5750,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceProcess(req *http.Request
 	if w.srv.DeleteInstanceProcess == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteInstanceProcess not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5797,7 +5777,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceProcess(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5811,7 +5791,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceProcessSlot(req *http.Req
 	if w.srv.DeleteInstanceProcessSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteInstanceProcessSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -5842,7 +5822,7 @@ func (w *WebAppsServerTransport) dispatchDeleteInstanceProcessSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5856,7 +5836,7 @@ func (w *WebAppsServerTransport) dispatchDeletePremierAddOn(req *http.Request) (
 	if w.srv.DeletePremierAddOn == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeletePremierAddOn not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -5879,7 +5859,7 @@ func (w *WebAppsServerTransport) dispatchDeletePremierAddOn(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5893,7 +5873,7 @@ func (w *WebAppsServerTransport) dispatchDeletePremierAddOnSlot(req *http.Reques
 	if w.srv.DeletePremierAddOnSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeletePremierAddOnSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -5920,7 +5900,7 @@ func (w *WebAppsServerTransport) dispatchDeletePremierAddOnSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -5936,7 +5916,7 @@ func (w *WebAppsServerTransport) dispatchBeginDeletePrivateEndpointConnection(re
 	}
 	beginDeletePrivateEndpointConnection := w.beginDeletePrivateEndpointConnection.get(req)
 	if beginDeletePrivateEndpointConnection == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -5967,7 +5947,7 @@ func (w *WebAppsServerTransport) dispatchBeginDeletePrivateEndpointConnection(re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginDeletePrivateEndpointConnection.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -5984,7 +5964,7 @@ func (w *WebAppsServerTransport) dispatchBeginDeletePrivateEndpointConnectionSlo
 	}
 	beginDeletePrivateEndpointConnectionSlot := w.beginDeletePrivateEndpointConnectionSlot.get(req)
 	if beginDeletePrivateEndpointConnectionSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -6019,7 +5999,7 @@ func (w *WebAppsServerTransport) dispatchBeginDeletePrivateEndpointConnectionSlo
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginDeletePrivateEndpointConnectionSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -6034,7 +6014,7 @@ func (w *WebAppsServerTransport) dispatchDeleteProcess(req *http.Request) (*http
 	if w.srv.DeleteProcess == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteProcess not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6057,7 +6037,7 @@ func (w *WebAppsServerTransport) dispatchDeleteProcess(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6071,7 +6051,7 @@ func (w *WebAppsServerTransport) dispatchDeleteProcessSlot(req *http.Request) (*
 	if w.srv.DeleteProcessSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteProcessSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6098,7 +6078,7 @@ func (w *WebAppsServerTransport) dispatchDeleteProcessSlot(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6112,7 +6092,7 @@ func (w *WebAppsServerTransport) dispatchDeletePublicCertificate(req *http.Reque
 	if w.srv.DeletePublicCertificate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeletePublicCertificate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6135,7 +6115,7 @@ func (w *WebAppsServerTransport) dispatchDeletePublicCertificate(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6149,7 +6129,7 @@ func (w *WebAppsServerTransport) dispatchDeletePublicCertificateSlot(req *http.R
 	if w.srv.DeletePublicCertificateSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeletePublicCertificateSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6176,7 +6156,7 @@ func (w *WebAppsServerTransport) dispatchDeletePublicCertificateSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6190,7 +6170,7 @@ func (w *WebAppsServerTransport) dispatchDeleteRelayServiceConnection(req *http.
 	if w.srv.DeleteRelayServiceConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteRelayServiceConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6213,7 +6193,7 @@ func (w *WebAppsServerTransport) dispatchDeleteRelayServiceConnection(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6227,7 +6207,7 @@ func (w *WebAppsServerTransport) dispatchDeleteRelayServiceConnectionSlot(req *h
 	if w.srv.DeleteRelayServiceConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteRelayServiceConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6254,7 +6234,7 @@ func (w *WebAppsServerTransport) dispatchDeleteRelayServiceConnectionSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6268,7 +6248,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteContainer(req *http.Request) 
 	if w.srv.DeleteSiteContainer == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSiteContainer not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6291,7 +6271,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteContainer(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6305,7 +6285,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteContainerSlot(req *http.Reque
 	if w.srv.DeleteSiteContainerSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSiteContainerSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6332,7 +6312,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteContainerSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6346,7 +6326,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteExtension(req *http.Request) 
 	if w.srv.DeleteSiteExtension == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSiteExtension not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6369,7 +6349,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteExtension(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6383,7 +6363,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteExtensionSlot(req *http.Reque
 	if w.srv.DeleteSiteExtensionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSiteExtensionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6410,7 +6390,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSiteExtensionSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6424,7 +6404,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSlot(req *http.Request) (*http.Re
 	if w.srv.DeleteSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6443,19 +6423,11 @@ func (w *WebAppsServerTransport) dispatchDeleteSlot(req *http.Request) (*http.Re
 	if err != nil {
 		return nil, err
 	}
-	deleteMetricsUnescaped, err := url.QueryUnescape(qp.Get("deleteMetrics"))
+	deleteMetricsParam, err := parseOptional(qp.Get("deleteMetrics"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
-	deleteMetricsParam, err := parseOptional(deleteMetricsUnescaped, strconv.ParseBool)
-	if err != nil {
-		return nil, err
-	}
-	deleteEmptyServerFarmUnescaped, err := url.QueryUnescape(qp.Get("deleteEmptyServerFarm"))
-	if err != nil {
-		return nil, err
-	}
-	deleteEmptyServerFarmParam, err := parseOptional(deleteEmptyServerFarmUnescaped, strconv.ParseBool)
+	deleteEmptyServerFarmParam, err := parseOptional(qp.Get("deleteEmptyServerFarm"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -6471,7 +6443,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSlot(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6485,7 +6457,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControl(req *http.Request) 
 	if w.srv.DeleteSourceControl == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSourceControl not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -6500,11 +6472,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControl(req *http.Request) 
 	if err != nil {
 		return nil, err
 	}
-	additionalFlagsUnescaped, err := url.QueryUnescape(qp.Get("additionalFlags"))
-	if err != nil {
-		return nil, err
-	}
-	additionalFlagsParam := getOptional(additionalFlagsUnescaped)
+	additionalFlagsParam := getOptional(qp.Get("additionalFlags"))
 	var options *armappservice.WebAppsClientDeleteSourceControlOptions
 	if additionalFlagsParam != nil {
 		options = &armappservice.WebAppsClientDeleteSourceControlOptions{
@@ -6516,7 +6484,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControl(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6530,7 +6498,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControlSlot(req *http.Reque
 	if w.srv.DeleteSourceControlSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSourceControlSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6549,11 +6517,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControlSlot(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	additionalFlagsUnescaped, err := url.QueryUnescape(qp.Get("additionalFlags"))
-	if err != nil {
-		return nil, err
-	}
-	additionalFlagsParam := getOptional(additionalFlagsUnescaped)
+	additionalFlagsParam := getOptional(qp.Get("additionalFlags"))
 	var options *armappservice.WebAppsClientDeleteSourceControlSlotOptions
 	if additionalFlagsParam != nil {
 		options = &armappservice.WebAppsClientDeleteSourceControlSlotOptions{
@@ -6565,7 +6529,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSourceControlSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6579,7 +6543,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSwiftVirtualNetwork(req *http.Req
 	if w.srv.DeleteSwiftVirtualNetwork == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSwiftVirtualNetwork not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -6598,7 +6562,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSwiftVirtualNetwork(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6612,7 +6576,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSwiftVirtualNetworkSlot(req *http
 	if w.srv.DeleteSwiftVirtualNetworkSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteSwiftVirtualNetworkSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6635,7 +6599,7 @@ func (w *WebAppsServerTransport) dispatchDeleteSwiftVirtualNetworkSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6649,7 +6613,7 @@ func (w *WebAppsServerTransport) dispatchDeleteTriggeredWebJob(req *http.Request
 	if w.srv.DeleteTriggeredWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteTriggeredWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6672,7 +6636,7 @@ func (w *WebAppsServerTransport) dispatchDeleteTriggeredWebJob(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6686,7 +6650,7 @@ func (w *WebAppsServerTransport) dispatchDeleteTriggeredWebJobSlot(req *http.Req
 	if w.srv.DeleteTriggeredWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteTriggeredWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6713,7 +6677,7 @@ func (w *WebAppsServerTransport) dispatchDeleteTriggeredWebJobSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6727,7 +6691,7 @@ func (w *WebAppsServerTransport) dispatchDeleteVnetConnection(req *http.Request)
 	if w.srv.DeleteVnetConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteVnetConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6750,7 +6714,7 @@ func (w *WebAppsServerTransport) dispatchDeleteVnetConnection(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6764,7 +6728,7 @@ func (w *WebAppsServerTransport) dispatchDeleteVnetConnectionSlot(req *http.Requ
 	if w.srv.DeleteVnetConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeleteVnetConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -6791,7 +6755,7 @@ func (w *WebAppsServerTransport) dispatchDeleteVnetConnectionSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6805,7 +6769,7 @@ func (w *WebAppsServerTransport) dispatchDeployWorkflowArtifacts(req *http.Reque
 	if w.srv.DeployWorkflowArtifacts == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeployWorkflowArtifacts not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployWorkflowArtifacts`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployWorkflowArtifacts`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -6834,7 +6798,7 @@ func (w *WebAppsServerTransport) dispatchDeployWorkflowArtifacts(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6848,7 +6812,7 @@ func (w *WebAppsServerTransport) dispatchDeployWorkflowArtifactsSlot(req *http.R
 	if w.srv.DeployWorkflowArtifactsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DeployWorkflowArtifactsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployWorkflowArtifacts`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployWorkflowArtifacts`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6881,7 +6845,7 @@ func (w *WebAppsServerTransport) dispatchDeployWorkflowArtifactsSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -6895,7 +6859,7 @@ func (w *WebAppsServerTransport) dispatchDiscoverBackup(req *http.Request) (*htt
 	if w.srv.DiscoverBackup == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DiscoverBackup not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/discoverbackup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/discoverbackup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -6918,7 +6882,7 @@ func (w *WebAppsServerTransport) dispatchDiscoverBackup(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RestoreRequest, req)
@@ -6932,7 +6896,7 @@ func (w *WebAppsServerTransport) dispatchDiscoverBackupSlot(req *http.Request) (
 	if w.srv.DiscoverBackupSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DiscoverBackupSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/discoverbackup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/discoverbackup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -6959,7 +6923,7 @@ func (w *WebAppsServerTransport) dispatchDiscoverBackupSlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RestoreRequest, req)
@@ -6973,7 +6937,7 @@ func (w *WebAppsServerTransport) dispatchGenerateNewSitePublishingPassword(req *
 	if w.srv.GenerateNewSitePublishingPassword == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GenerateNewSitePublishingPassword not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/newpassword`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/newpassword`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -6992,7 +6956,7 @@ func (w *WebAppsServerTransport) dispatchGenerateNewSitePublishingPassword(req *
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -7006,7 +6970,7 @@ func (w *WebAppsServerTransport) dispatchGenerateNewSitePublishingPasswordSlot(r
 	if w.srv.GenerateNewSitePublishingPasswordSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GenerateNewSitePublishingPasswordSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/newpassword`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/newpassword`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7029,7 +6993,7 @@ func (w *WebAppsServerTransport) dispatchGenerateNewSitePublishingPasswordSlot(r
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -7043,7 +7007,7 @@ func (w *WebAppsServerTransport) dispatchGet(req *http.Request) (*http.Response,
 	if w.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7062,7 +7026,7 @@ func (w *WebAppsServerTransport) dispatchGet(req *http.Request) (*http.Response,
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Site, req)
@@ -7076,7 +7040,7 @@ func (w *WebAppsServerTransport) dispatchGetAppSettingKeyVaultReference(req *htt
 	if w.srv.GetAppSettingKeyVaultReference == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAppSettingKeyVaultReference not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/appsettings/(?P<appSettingKey>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/appsettings/(?P<appSettingKey>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7099,7 +7063,7 @@ func (w *WebAppsServerTransport) dispatchGetAppSettingKeyVaultReference(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).APIKVReference, req)
@@ -7113,7 +7077,7 @@ func (w *WebAppsServerTransport) dispatchGetAppSettingKeyVaultReferenceSlot(req 
 	if w.srv.GetAppSettingKeyVaultReferenceSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAppSettingKeyVaultReferenceSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/appsettings/(?P<appSettingKey>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/appsettings/(?P<appSettingKey>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -7140,7 +7104,7 @@ func (w *WebAppsServerTransport) dispatchGetAppSettingKeyVaultReferenceSlot(req 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).APIKVReference, req)
@@ -7156,7 +7120,7 @@ func (w *WebAppsServerTransport) dispatchNewGetAppSettingsKeyVaultReferencesPage
 	}
 	newGetAppSettingsKeyVaultReferencesPager := w.newGetAppSettingsKeyVaultReferencesPager.get(req)
 	if newGetAppSettingsKeyVaultReferencesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/appsettings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/appsettings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -7181,7 +7145,7 @@ func (w *WebAppsServerTransport) dispatchNewGetAppSettingsKeyVaultReferencesPage
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetAppSettingsKeyVaultReferencesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -7197,7 +7161,7 @@ func (w *WebAppsServerTransport) dispatchNewGetAppSettingsKeyVaultReferencesSlot
 	}
 	newGetAppSettingsKeyVaultReferencesSlotPager := w.newGetAppSettingsKeyVaultReferencesSlotPager.get(req)
 	if newGetAppSettingsKeyVaultReferencesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/appsettings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/appsettings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -7226,7 +7190,7 @@ func (w *WebAppsServerTransport) dispatchNewGetAppSettingsKeyVaultReferencesSlot
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetAppSettingsKeyVaultReferencesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -7240,7 +7204,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettings(req *http.Request) (*ht
 	if w.srv.GetAuthSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7259,7 +7223,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettings(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettings, req)
@@ -7273,7 +7237,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsSlot(req *http.Request) 
 	if w.srv.GetAuthSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7296,7 +7260,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsSlot(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettings, req)
@@ -7310,7 +7274,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2(req *http.Request) (*
 	if w.srv.GetAuthSettingsV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettingsV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7329,7 +7293,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -7343,7 +7307,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2Slot(req *http.Request
 	if w.srv.GetAuthSettingsV2Slot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettingsV2Slot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7366,7 +7330,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2Slot(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -7380,7 +7344,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2WithoutSecrets(req *ht
 	if w.srv.GetAuthSettingsV2WithoutSecrets == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettingsV2WithoutSecrets not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7399,7 +7363,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2WithoutSecrets(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -7413,7 +7377,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2WithoutSecretsSlot(req
 	if w.srv.GetAuthSettingsV2WithoutSecretsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetAuthSettingsV2WithoutSecretsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7436,7 +7400,7 @@ func (w *WebAppsServerTransport) dispatchGetAuthSettingsV2WithoutSecretsSlot(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -7450,7 +7414,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupConfiguration(req *http.Reques
 	if w.srv.GetBackupConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetBackupConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7469,7 +7433,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupConfiguration(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupRequest, req)
@@ -7483,7 +7447,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupConfigurationSlot(req *http.Re
 	if w.srv.GetBackupConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetBackupConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7506,7 +7470,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupConfigurationSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupRequest, req)
@@ -7520,7 +7484,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupStatus(req *http.Request) (*ht
 	if w.srv.GetBackupStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetBackupStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7543,7 +7507,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupStatus(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -7557,7 +7521,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupStatusSlot(req *http.Request) 
 	if w.srv.GetBackupStatusSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetBackupStatusSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -7584,7 +7548,7 @@ func (w *WebAppsServerTransport) dispatchGetBackupStatusSlot(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -7598,7 +7562,7 @@ func (w *WebAppsServerTransport) dispatchGetConfiguration(req *http.Request) (*h
 	if w.srv.GetConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7617,7 +7581,7 @@ func (w *WebAppsServerTransport) dispatchGetConfiguration(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -7631,7 +7595,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSlot(req *http.Request)
 	if w.srv.GetConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7654,7 +7618,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -7668,7 +7632,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSnapshot(req *http.Requ
 	if w.srv.GetConfigurationSnapshot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetConfigurationSnapshot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots/(?P<snapshotId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots/(?P<snapshotId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7691,7 +7655,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSnapshot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -7705,7 +7669,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSnapshotSlot(req *http.
 	if w.srv.GetConfigurationSnapshotSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetConfigurationSnapshotSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots/(?P<snapshotId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots/(?P<snapshotId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -7732,7 +7696,7 @@ func (w *WebAppsServerTransport) dispatchGetConfigurationSnapshotSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -7746,7 +7710,7 @@ func (w *WebAppsServerTransport) dispatchGetContainerLogsZip(req *http.Request) 
 	if w.srv.GetContainerLogsZip == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetContainerLogsZip not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/containerlogs/zip/download`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/containerlogs/zip/download`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -7765,7 +7729,7 @@ func (w *WebAppsServerTransport) dispatchGetContainerLogsZip(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -7785,7 +7749,7 @@ func (w *WebAppsServerTransport) dispatchGetContainerLogsZipSlot(req *http.Reque
 	if w.srv.GetContainerLogsZipSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetContainerLogsZipSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/containerlogs/zip/download`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/containerlogs/zip/download`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7808,7 +7772,7 @@ func (w *WebAppsServerTransport) dispatchGetContainerLogsZipSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -7828,7 +7792,7 @@ func (w *WebAppsServerTransport) dispatchGetContinuousWebJob(req *http.Request) 
 	if w.srv.GetContinuousWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetContinuousWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7851,7 +7815,7 @@ func (w *WebAppsServerTransport) dispatchGetContinuousWebJob(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ContinuousWebJob, req)
@@ -7865,7 +7829,7 @@ func (w *WebAppsServerTransport) dispatchGetContinuousWebJobSlot(req *http.Reque
 	if w.srv.GetContinuousWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetContinuousWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -7892,7 +7856,7 @@ func (w *WebAppsServerTransport) dispatchGetContinuousWebJobSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ContinuousWebJob, req)
@@ -7906,7 +7870,7 @@ func (w *WebAppsServerTransport) dispatchGetDeployment(req *http.Request) (*http
 	if w.srv.GetDeployment == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDeployment not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -7929,7 +7893,7 @@ func (w *WebAppsServerTransport) dispatchGetDeployment(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -7943,7 +7907,7 @@ func (w *WebAppsServerTransport) dispatchGetDeploymentSlot(req *http.Request) (*
 	if w.srv.GetDeploymentSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDeploymentSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -7970,7 +7934,7 @@ func (w *WebAppsServerTransport) dispatchGetDeploymentSlot(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -7984,7 +7948,7 @@ func (w *WebAppsServerTransport) dispatchGetDiagnosticLogsConfiguration(req *htt
 	if w.srv.GetDiagnosticLogsConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDiagnosticLogsConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/logs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/logs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -8003,7 +7967,7 @@ func (w *WebAppsServerTransport) dispatchGetDiagnosticLogsConfiguration(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteLogsConfig, req)
@@ -8017,7 +7981,7 @@ func (w *WebAppsServerTransport) dispatchGetDiagnosticLogsConfigurationSlot(req 
 	if w.srv.GetDiagnosticLogsConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDiagnosticLogsConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/logs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/logs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8040,7 +8004,7 @@ func (w *WebAppsServerTransport) dispatchGetDiagnosticLogsConfigurationSlot(req 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteLogsConfig, req)
@@ -8054,7 +8018,7 @@ func (w *WebAppsServerTransport) dispatchGetDomainOwnershipIdentifier(req *http.
 	if w.srv.GetDomainOwnershipIdentifier == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDomainOwnershipIdentifier not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8077,7 +8041,7 @@ func (w *WebAppsServerTransport) dispatchGetDomainOwnershipIdentifier(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -8091,7 +8055,7 @@ func (w *WebAppsServerTransport) dispatchGetDomainOwnershipIdentifierSlot(req *h
 	if w.srv.GetDomainOwnershipIdentifierSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDomainOwnershipIdentifierSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8118,7 +8082,7 @@ func (w *WebAppsServerTransport) dispatchGetDomainOwnershipIdentifierSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -8132,7 +8096,7 @@ func (w *WebAppsServerTransport) dispatchGetFtpAllowed(req *http.Request) (*http
 	if w.srv.GetFtpAllowed == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetFtpAllowed not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/ftp`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/ftp`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -8151,7 +8115,7 @@ func (w *WebAppsServerTransport) dispatchGetFtpAllowed(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -8165,7 +8129,7 @@ func (w *WebAppsServerTransport) dispatchGetFtpAllowedSlot(req *http.Request) (*
 	if w.srv.GetFtpAllowedSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetFtpAllowedSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/ftp`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/ftp`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8188,7 +8152,7 @@ func (w *WebAppsServerTransport) dispatchGetFtpAllowedSlot(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -8202,7 +8166,7 @@ func (w *WebAppsServerTransport) dispatchGetFunction(req *http.Request) (*http.R
 	if w.srv.GetFunction == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetFunction not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8225,7 +8189,7 @@ func (w *WebAppsServerTransport) dispatchGetFunction(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionEnvelope, req)
@@ -8239,7 +8203,7 @@ func (w *WebAppsServerTransport) dispatchGetFunctionsAdminToken(req *http.Reques
 	if w.srv.GetFunctionsAdminToken == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetFunctionsAdminToken not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/admin/token`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/admin/token`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -8258,7 +8222,7 @@ func (w *WebAppsServerTransport) dispatchGetFunctionsAdminToken(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Value, req)
@@ -8272,7 +8236,7 @@ func (w *WebAppsServerTransport) dispatchGetFunctionsAdminTokenSlot(req *http.Re
 	if w.srv.GetFunctionsAdminTokenSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetFunctionsAdminTokenSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/admin/token`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/admin/token`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8295,7 +8259,7 @@ func (w *WebAppsServerTransport) dispatchGetFunctionsAdminTokenSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Value, req)
@@ -8309,7 +8273,7 @@ func (w *WebAppsServerTransport) dispatchGetHostNameBinding(req *http.Request) (
 	if w.srv.GetHostNameBinding == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetHostNameBinding not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8332,7 +8296,7 @@ func (w *WebAppsServerTransport) dispatchGetHostNameBinding(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostNameBinding, req)
@@ -8346,7 +8310,7 @@ func (w *WebAppsServerTransport) dispatchGetHostNameBindingSlot(req *http.Reques
 	if w.srv.GetHostNameBindingSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetHostNameBindingSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings/(?P<hostName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings/(?P<hostName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8373,7 +8337,7 @@ func (w *WebAppsServerTransport) dispatchGetHostNameBindingSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostNameBinding, req)
@@ -8387,7 +8351,7 @@ func (w *WebAppsServerTransport) dispatchGetHybridConnection(req *http.Request) 
 	if w.srv.GetHybridConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetHybridConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8414,7 +8378,7 @@ func (w *WebAppsServerTransport) dispatchGetHybridConnection(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -8428,7 +8392,7 @@ func (w *WebAppsServerTransport) dispatchGetHybridConnectionSlot(req *http.Reque
 	if w.srv.GetHybridConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetHybridConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -8459,7 +8423,7 @@ func (w *WebAppsServerTransport) dispatchGetHybridConnectionSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -8473,7 +8437,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceFunctionSlot(req *http.Reque
 	if w.srv.GetInstanceFunctionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceFunctionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8500,7 +8464,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceFunctionSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionEnvelope, req)
@@ -8514,7 +8478,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceInfo(req *http.Request) (*ht
 	if w.srv.GetInstanceInfo == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceInfo not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8537,7 +8501,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceInfo(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WebSiteInstanceStatus, req)
@@ -8551,7 +8515,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceInfoSlot(req *http.Request) 
 	if w.srv.GetInstanceInfoSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceInfoSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8578,7 +8542,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceInfoSlot(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WebSiteInstanceStatus, req)
@@ -8592,7 +8556,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMSDeployLog(req *http.Reques
 	if w.srv.GetInstanceMSDeployLog == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceMSDeployLog not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8615,7 +8579,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMSDeployLog(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployLog, req)
@@ -8629,7 +8593,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMSDeployLogSlot(req *http.Re
 	if w.srv.GetInstanceMSDeployLogSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceMSDeployLogSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8656,7 +8620,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMSDeployLogSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployLog, req)
@@ -8670,7 +8634,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMsDeployStatus(req *http.Req
 	if w.srv.GetInstanceMsDeployStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceMsDeployStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -8693,7 +8657,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMsDeployStatus(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployStatus, req)
@@ -8707,7 +8671,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMsDeployStatusSlot(req *http
 	if w.srv.GetInstanceMsDeployStatusSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceMsDeployStatusSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8734,7 +8698,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceMsDeployStatusSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployStatus, req)
@@ -8748,7 +8712,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcess(req *http.Request) (
 	if w.srv.GetInstanceProcess == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcess not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8775,7 +8739,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcess(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessInfo, req)
@@ -8789,7 +8753,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessDump(req *http.Reques
 	if w.srv.GetInstanceProcessDump == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcessDump not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dump`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dump`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -8816,7 +8780,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessDump(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -8836,7 +8800,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessDumpSlot(req *http.Re
 	if w.srv.GetInstanceProcessDumpSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcessDumpSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dump`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dump`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -8867,7 +8831,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessDumpSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -8887,7 +8851,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessModule(req *http.Requ
 	if w.srv.GetInstanceProcessModule == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcessModule not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules/(?P<baseAddress>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules/(?P<baseAddress>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -8918,7 +8882,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessModule(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessModuleInfo, req)
@@ -8932,7 +8896,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessModuleSlot(req *http.
 	if w.srv.GetInstanceProcessModuleSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcessModuleSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules/(?P<baseAddress>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules/(?P<baseAddress>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 8 {
@@ -8967,7 +8931,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessModuleSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessModuleInfo, req)
@@ -8981,7 +8945,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessSlot(req *http.Reques
 	if w.srv.GetInstanceProcessSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceProcessSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -9012,7 +8976,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceProcessSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessInfo, req)
@@ -9026,7 +8990,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceWorkflowSlot(req *http.Reque
 	if w.srv.GetInstanceWorkflowSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetInstanceWorkflowSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/workflows/(?P<workflowName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/workflows/(?P<workflowName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9053,7 +9017,7 @@ func (w *WebAppsServerTransport) dispatchGetInstanceWorkflowSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WorkflowEnvelope, req)
@@ -9067,7 +9031,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployLog(req *http.Request) (*htt
 	if w.srv.GetMSDeployLog == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMSDeployLog not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9086,7 +9050,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployLog(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployLog, req)
@@ -9100,7 +9064,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployLogSlot(req *http.Request) (
 	if w.srv.GetMSDeployLogSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMSDeployLogSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9123,7 +9087,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployLogSlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployLog, req)
@@ -9137,7 +9101,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployStatus(req *http.Request) (*
 	if w.srv.GetMSDeployStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMSDeployStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9156,7 +9120,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployStatus(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployStatus, req)
@@ -9170,7 +9134,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployStatusSlot(req *http.Request
 	if w.srv.GetMSDeployStatusSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMSDeployStatusSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/MSDeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/MSDeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9193,7 +9157,7 @@ func (w *WebAppsServerTransport) dispatchGetMSDeployStatusSlot(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MSDeployStatus, req)
@@ -9207,7 +9171,7 @@ func (w *WebAppsServerTransport) dispatchGetMigrateMySQLStatus(req *http.Request
 	if w.srv.GetMigrateMySQLStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMigrateMySQLStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/migratemysql/status`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/migratemysql/status`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9226,7 +9190,7 @@ func (w *WebAppsServerTransport) dispatchGetMigrateMySQLStatus(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MigrateMySQLStatus, req)
@@ -9240,7 +9204,7 @@ func (w *WebAppsServerTransport) dispatchGetMigrateMySQLStatusSlot(req *http.Req
 	if w.srv.GetMigrateMySQLStatusSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetMigrateMySQLStatusSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/migratemysql/status`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/migratemysql/status`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9263,7 +9227,7 @@ func (w *WebAppsServerTransport) dispatchGetMigrateMySQLStatusSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).MigrateMySQLStatus, req)
@@ -9277,7 +9241,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperation(req *http.Requ
 	if w.srv.GetNetworkTraceOperation == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTraceOperation not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/operationresults/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/operationresults/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9300,7 +9264,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperation(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9314,7 +9278,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationSlot(req *http.
 	if w.srv.GetNetworkTraceOperationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTraceOperationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/operationresults/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/operationresults/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9341,7 +9305,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9355,7 +9319,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationSlotV2(req *htt
 	if w.srv.GetNetworkTraceOperationSlotV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTraceOperationSlotV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTraces/current/operationresults/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTraces/current/operationresults/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9382,7 +9346,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationSlotV2(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9396,7 +9360,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationV2(req *http.Re
 	if w.srv.GetNetworkTraceOperationV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTraceOperationV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTraces/current/operationresults/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTraces/current/operationresults/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9419,7 +9383,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraceOperationV2(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9433,7 +9397,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraces(req *http.Request) (*h
 	if w.srv.GetNetworkTraces == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTraces not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9456,7 +9420,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTraces(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9470,7 +9434,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesSlot(req *http.Request)
 	if w.srv.GetNetworkTracesSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTracesSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9497,7 +9461,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9511,7 +9475,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesSlotV2(req *http.Reques
 	if w.srv.GetNetworkTracesSlotV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTracesSlotV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTraces/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTraces/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9538,7 +9502,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesSlotV2(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9552,7 +9516,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesV2(req *http.Request) (
 	if w.srv.GetNetworkTracesV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetNetworkTracesV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTraces/(?P<operationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTraces/(?P<operationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9575,7 +9539,7 @@ func (w *WebAppsServerTransport) dispatchGetNetworkTracesV2(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkTraceArray, req)
@@ -9589,7 +9553,7 @@ func (w *WebAppsServerTransport) dispatchGetOneDeployStatus(req *http.Request) (
 	if w.srv.GetOneDeployStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetOneDeployStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensions/onedeploy`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensions/onedeploy`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9608,7 +9572,7 @@ func (w *WebAppsServerTransport) dispatchGetOneDeployStatus(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Interface, req)
@@ -9622,7 +9586,7 @@ func (w *WebAppsServerTransport) dispatchGetPremierAddOn(req *http.Request) (*ht
 	if w.srv.GetPremierAddOn == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPremierAddOn not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9645,7 +9609,7 @@ func (w *WebAppsServerTransport) dispatchGetPremierAddOn(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -9659,7 +9623,7 @@ func (w *WebAppsServerTransport) dispatchGetPremierAddOnSlot(req *http.Request) 
 	if w.srv.GetPremierAddOnSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPremierAddOnSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9686,7 +9650,7 @@ func (w *WebAppsServerTransport) dispatchGetPremierAddOnSlot(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -9700,7 +9664,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateAccess(req *http.Request) (*h
 	if w.srv.GetPrivateAccess == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateAccess not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateAccess/virtualNetworks`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateAccess/virtualNetworks`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9719,7 +9683,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateAccess(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateAccess, req)
@@ -9733,7 +9697,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateAccessSlot(req *http.Request)
 	if w.srv.GetPrivateAccessSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateAccessSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateAccess/virtualNetworks`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateAccess/virtualNetworks`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9756,7 +9720,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateAccessSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateAccess, req)
@@ -9770,7 +9734,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateEndpointConnection(req *http.
 	if w.srv.GetPrivateEndpointConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateEndpointConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9793,7 +9757,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateEndpointConnection(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RemotePrivateEndpointConnectionARMResource, req)
@@ -9809,7 +9773,7 @@ func (w *WebAppsServerTransport) dispatchNewGetPrivateEndpointConnectionListPage
 	}
 	newGetPrivateEndpointConnectionListPager := w.newGetPrivateEndpointConnectionListPager.get(req)
 	if newGetPrivateEndpointConnectionListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -9834,7 +9798,7 @@ func (w *WebAppsServerTransport) dispatchNewGetPrivateEndpointConnectionListPage
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetPrivateEndpointConnectionListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -9850,7 +9814,7 @@ func (w *WebAppsServerTransport) dispatchNewGetPrivateEndpointConnectionListSlot
 	}
 	newGetPrivateEndpointConnectionListSlotPager := w.newGetPrivateEndpointConnectionListSlotPager.get(req)
 	if newGetPrivateEndpointConnectionListSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -9879,7 +9843,7 @@ func (w *WebAppsServerTransport) dispatchNewGetPrivateEndpointConnectionListSlot
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetPrivateEndpointConnectionListSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -9893,7 +9857,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateEndpointConnectionSlot(req *h
 	if w.srv.GetPrivateEndpointConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateEndpointConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateEndpointConnections/(?P<privateEndpointConnectionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -9920,7 +9884,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateEndpointConnectionSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RemotePrivateEndpointConnectionARMResource, req)
@@ -9934,7 +9898,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateLinkResources(req *http.Reque
 	if w.srv.GetPrivateLinkResources == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateLinkResources not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateLinkResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateLinkResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -9953,7 +9917,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateLinkResources(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateLinkResourcesWrapper, req)
@@ -9967,7 +9931,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateLinkResourcesSlot(req *http.R
 	if w.srv.GetPrivateLinkResourcesSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPrivateLinkResourcesSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateLinkResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateLinkResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -9990,7 +9954,7 @@ func (w *WebAppsServerTransport) dispatchGetPrivateLinkResourcesSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateLinkResourcesWrapper, req)
@@ -10004,7 +9968,7 @@ func (w *WebAppsServerTransport) dispatchGetProcess(req *http.Request) (*http.Re
 	if w.srv.GetProcess == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcess not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10027,7 +9991,7 @@ func (w *WebAppsServerTransport) dispatchGetProcess(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessInfo, req)
@@ -10041,7 +10005,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessDump(req *http.Request) (*htt
 	if w.srv.GetProcessDump == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcessDump not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dump`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dump`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10064,7 +10028,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessDump(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -10084,7 +10048,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessDumpSlot(req *http.Request) (
 	if w.srv.GetProcessDumpSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcessDumpSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dump`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dump`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10111,7 +10075,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessDumpSlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -10131,7 +10095,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessModule(req *http.Request) (*h
 	if w.srv.GetProcessModule == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcessModule not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules/(?P<baseAddress>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules/(?P<baseAddress>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10158,7 +10122,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessModule(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessModuleInfo, req)
@@ -10172,7 +10136,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessModuleSlot(req *http.Request)
 	if w.srv.GetProcessModuleSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcessModuleSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules/(?P<baseAddress>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules/(?P<baseAddress>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -10203,7 +10167,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessModuleSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessModuleInfo, req)
@@ -10217,7 +10181,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessSlot(req *http.Request) (*htt
 	if w.srv.GetProcessSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetProcessSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10244,7 +10208,7 @@ func (w *WebAppsServerTransport) dispatchGetProcessSlot(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProcessInfo, req)
@@ -10260,7 +10224,7 @@ func (w *WebAppsServerTransport) dispatchBeginGetProductionSiteDeploymentStatus(
 	}
 	beginGetProductionSiteDeploymentStatus := w.beginGetProductionSiteDeploymentStatus.get(req)
 	if beginGetProductionSiteDeploymentStatus == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deploymentStatus/(?P<deploymentStatusId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deploymentStatus/(?P<deploymentStatusId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -10291,7 +10255,7 @@ func (w *WebAppsServerTransport) dispatchBeginGetProductionSiteDeploymentStatus(
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginGetProductionSiteDeploymentStatus.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -10306,7 +10270,7 @@ func (w *WebAppsServerTransport) dispatchGetPublicCertificate(req *http.Request)
 	if w.srv.GetPublicCertificate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPublicCertificate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10329,7 +10293,7 @@ func (w *WebAppsServerTransport) dispatchGetPublicCertificate(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PublicCertificate, req)
@@ -10343,7 +10307,7 @@ func (w *WebAppsServerTransport) dispatchGetPublicCertificateSlot(req *http.Requ
 	if w.srv.GetPublicCertificateSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetPublicCertificateSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates/(?P<publicCertificateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates/(?P<publicCertificateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10370,7 +10334,7 @@ func (w *WebAppsServerTransport) dispatchGetPublicCertificateSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PublicCertificate, req)
@@ -10384,7 +10348,7 @@ func (w *WebAppsServerTransport) dispatchGetRelayServiceConnection(req *http.Req
 	if w.srv.GetRelayServiceConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetRelayServiceConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10407,7 +10371,7 @@ func (w *WebAppsServerTransport) dispatchGetRelayServiceConnection(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -10421,7 +10385,7 @@ func (w *WebAppsServerTransport) dispatchGetRelayServiceConnectionSlot(req *http
 	if w.srv.GetRelayServiceConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetRelayServiceConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10448,7 +10412,7 @@ func (w *WebAppsServerTransport) dispatchGetRelayServiceConnectionSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -10462,7 +10426,7 @@ func (w *WebAppsServerTransport) dispatchGetScmAllowed(req *http.Request) (*http
 	if w.srv.GetScmAllowed == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetScmAllowed not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/scm`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/scm`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -10481,7 +10445,7 @@ func (w *WebAppsServerTransport) dispatchGetScmAllowed(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -10495,7 +10459,7 @@ func (w *WebAppsServerTransport) dispatchGetScmAllowedSlot(req *http.Request) (*
 	if w.srv.GetScmAllowedSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetScmAllowedSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/scm`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/scm`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10518,7 +10482,7 @@ func (w *WebAppsServerTransport) dispatchGetScmAllowedSlot(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -10532,7 +10496,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteConnectionStringKeyVaultReferenc
 	if w.srv.GetSiteConnectionStringKeyVaultReference == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteConnectionStringKeyVaultReference not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/connectionstrings/(?P<connectionStringKey>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/connectionstrings/(?P<connectionStringKey>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10555,7 +10519,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteConnectionStringKeyVaultReferenc
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).APIKVReference, req)
@@ -10569,7 +10533,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteConnectionStringKeyVaultReferenc
 	if w.srv.GetSiteConnectionStringKeyVaultReferenceSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteConnectionStringKeyVaultReferenceSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/connectionstrings/(?P<connectionStringKey>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/connectionstrings/(?P<connectionStringKey>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10596,7 +10560,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteConnectionStringKeyVaultReferenc
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).APIKVReference, req)
@@ -10612,7 +10576,7 @@ func (w *WebAppsServerTransport) dispatchNewGetSiteConnectionStringKeyVaultRefer
 	}
 	newGetSiteConnectionStringKeyVaultReferencesPager := w.newGetSiteConnectionStringKeyVaultReferencesPager.get(req)
 	if newGetSiteConnectionStringKeyVaultReferencesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/connectionstrings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/connectionstrings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -10637,7 +10601,7 @@ func (w *WebAppsServerTransport) dispatchNewGetSiteConnectionStringKeyVaultRefer
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetSiteConnectionStringKeyVaultReferencesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -10653,7 +10617,7 @@ func (w *WebAppsServerTransport) dispatchNewGetSiteConnectionStringKeyVaultRefer
 	}
 	newGetSiteConnectionStringKeyVaultReferencesSlotPager := w.newGetSiteConnectionStringKeyVaultReferencesSlotPager.get(req)
 	if newGetSiteConnectionStringKeyVaultReferencesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/configreferences/connectionstrings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/configreferences/connectionstrings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -10682,7 +10646,7 @@ func (w *WebAppsServerTransport) dispatchNewGetSiteConnectionStringKeyVaultRefer
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newGetSiteConnectionStringKeyVaultReferencesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -10696,7 +10660,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteContainer(req *http.Request) (*h
 	if w.srv.GetSiteContainer == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteContainer not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10719,7 +10683,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteContainer(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteContainer, req)
@@ -10733,7 +10697,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteContainerSlot(req *http.Request)
 	if w.srv.GetSiteContainerSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteContainerSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers/(?P<containerName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers/(?P<containerName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10760,7 +10724,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteContainerSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteContainer, req)
@@ -10774,7 +10738,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteExtension(req *http.Request) (*h
 	if w.srv.GetSiteExtension == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteExtension not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10797,7 +10761,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteExtension(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteExtensionInfo, req)
@@ -10811,7 +10775,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteExtensionSlot(req *http.Request)
 	if w.srv.GetSiteExtensionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSiteExtensionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -10838,7 +10802,7 @@ func (w *WebAppsServerTransport) dispatchGetSiteExtensionSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteExtensionInfo, req)
@@ -10852,7 +10816,7 @@ func (w *WebAppsServerTransport) dispatchGetSitePhpErrorLogFlag(req *http.Reques
 	if w.srv.GetSitePhpErrorLogFlag == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSitePhpErrorLogFlag not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/phplogging`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/phplogging`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -10871,7 +10835,7 @@ func (w *WebAppsServerTransport) dispatchGetSitePhpErrorLogFlag(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SitePhpErrorLogFlag, req)
@@ -10885,7 +10849,7 @@ func (w *WebAppsServerTransport) dispatchGetSitePhpErrorLogFlagSlot(req *http.Re
 	if w.srv.GetSitePhpErrorLogFlagSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSitePhpErrorLogFlagSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/phplogging`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/phplogging`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10908,7 +10872,7 @@ func (w *WebAppsServerTransport) dispatchGetSitePhpErrorLogFlagSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SitePhpErrorLogFlag, req)
@@ -10922,7 +10886,7 @@ func (w *WebAppsServerTransport) dispatchGetSlot(req *http.Request) (*http.Respo
 	if w.srv.GetSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -10945,7 +10909,7 @@ func (w *WebAppsServerTransport) dispatchGetSlot(req *http.Request) (*http.Respo
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Site, req)
@@ -10961,7 +10925,7 @@ func (w *WebAppsServerTransport) dispatchBeginGetSlotSiteDeploymentStatusSlot(re
 	}
 	beginGetSlotSiteDeploymentStatusSlot := w.beginGetSlotSiteDeploymentStatusSlot.get(req)
 	if beginGetSlotSiteDeploymentStatusSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deploymentStatus/(?P<deploymentStatusId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deploymentStatus/(?P<deploymentStatusId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -10996,7 +10960,7 @@ func (w *WebAppsServerTransport) dispatchBeginGetSlotSiteDeploymentStatusSlot(re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginGetSlotSiteDeploymentStatusSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -11011,7 +10975,7 @@ func (w *WebAppsServerTransport) dispatchGetSourceControl(req *http.Request) (*h
 	if w.srv.GetSourceControl == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSourceControl not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11030,7 +10994,7 @@ func (w *WebAppsServerTransport) dispatchGetSourceControl(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteSourceControl, req)
@@ -11044,7 +11008,7 @@ func (w *WebAppsServerTransport) dispatchGetSourceControlSlot(req *http.Request)
 	if w.srv.GetSourceControlSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSourceControlSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11067,7 +11031,7 @@ func (w *WebAppsServerTransport) dispatchGetSourceControlSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteSourceControl, req)
@@ -11081,7 +11045,7 @@ func (w *WebAppsServerTransport) dispatchGetSwiftVirtualNetworkConnection(req *h
 	if w.srv.GetSwiftVirtualNetworkConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSwiftVirtualNetworkConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11100,7 +11064,7 @@ func (w *WebAppsServerTransport) dispatchGetSwiftVirtualNetworkConnection(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -11114,7 +11078,7 @@ func (w *WebAppsServerTransport) dispatchGetSwiftVirtualNetworkConnectionSlot(re
 	if w.srv.GetSwiftVirtualNetworkConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetSwiftVirtualNetworkConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11137,7 +11101,7 @@ func (w *WebAppsServerTransport) dispatchGetSwiftVirtualNetworkConnectionSlot(re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -11151,7 +11115,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJob(req *http.Request) (
 	if w.srv.GetTriggeredWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetTriggeredWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11174,7 +11138,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJob(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TriggeredWebJob, req)
@@ -11188,7 +11152,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobHistory(req *http.Req
 	if w.srv.GetTriggeredWebJobHistory == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetTriggeredWebJobHistory not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/history/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/history/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -11215,7 +11179,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobHistory(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TriggeredJobHistory, req)
@@ -11229,7 +11193,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobHistorySlot(req *http
 	if w.srv.GetTriggeredWebJobHistorySlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetTriggeredWebJobHistorySlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/history/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/history/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -11260,7 +11224,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobHistorySlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TriggeredJobHistory, req)
@@ -11274,7 +11238,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobSlot(req *http.Reques
 	if w.srv.GetTriggeredWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetTriggeredWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -11301,7 +11265,7 @@ func (w *WebAppsServerTransport) dispatchGetTriggeredWebJobSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TriggeredWebJob, req)
@@ -11315,7 +11279,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnection(req *http.Request) (*
 	if w.srv.GetVnetConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetVnetConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11338,7 +11302,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnection(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)
@@ -11352,7 +11316,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionGateway(req *http.Requ
 	if w.srv.GetVnetConnectionGateway == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetVnetConnectionGateway not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -11379,7 +11343,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionGateway(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -11393,7 +11357,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionGatewaySlot(req *http.
 	if w.srv.GetVnetConnectionGatewaySlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetVnetConnectionGatewaySlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -11424,7 +11388,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionGatewaySlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -11438,7 +11402,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionSlot(req *http.Request
 	if w.srv.GetVnetConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetVnetConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -11465,7 +11429,7 @@ func (w *WebAppsServerTransport) dispatchGetVnetConnectionSlot(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)
@@ -11479,7 +11443,7 @@ func (w *WebAppsServerTransport) dispatchGetWebJob(req *http.Request) (*http.Res
 	if w.srv.GetWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/webjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/webjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11502,7 +11466,7 @@ func (w *WebAppsServerTransport) dispatchGetWebJob(req *http.Request) (*http.Res
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WebJob, req)
@@ -11516,7 +11480,7 @@ func (w *WebAppsServerTransport) dispatchGetWebJobSlot(req *http.Request) (*http
 	if w.srv.GetWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/webjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/webjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -11543,7 +11507,7 @@ func (w *WebAppsServerTransport) dispatchGetWebJobSlot(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WebJob, req)
@@ -11557,7 +11521,7 @@ func (w *WebAppsServerTransport) dispatchGetWebSiteContainerLogs(req *http.Reque
 	if w.srv.GetWebSiteContainerLogs == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetWebSiteContainerLogs not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/containerlogs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/containerlogs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11576,7 +11540,7 @@ func (w *WebAppsServerTransport) dispatchGetWebSiteContainerLogs(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -11596,7 +11560,7 @@ func (w *WebAppsServerTransport) dispatchGetWebSiteContainerLogsSlot(req *http.R
 	if w.srv.GetWebSiteContainerLogsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetWebSiteContainerLogsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/containerlogs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/containerlogs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11619,7 +11583,7 @@ func (w *WebAppsServerTransport) dispatchGetWebSiteContainerLogsSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -11639,7 +11603,7 @@ func (w *WebAppsServerTransport) dispatchGetWorkflow(req *http.Request) (*http.R
 	if w.srv.GetWorkflow == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetWorkflow not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/workflows/(?P<workflowName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/workflows/(?P<workflowName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11662,7 +11626,7 @@ func (w *WebAppsServerTransport) dispatchGetWorkflow(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WorkflowEnvelope, req)
@@ -11678,7 +11642,7 @@ func (w *WebAppsServerTransport) dispatchBeginInstallSiteExtension(req *http.Req
 	}
 	beginInstallSiteExtension := w.beginInstallSiteExtension.get(req)
 	if beginInstallSiteExtension == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -11709,7 +11673,7 @@ func (w *WebAppsServerTransport) dispatchBeginInstallSiteExtension(req *http.Req
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginInstallSiteExtension.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -11726,7 +11690,7 @@ func (w *WebAppsServerTransport) dispatchBeginInstallSiteExtensionSlot(req *http
 	}
 	beginInstallSiteExtensionSlot := w.beginInstallSiteExtensionSlot.get(req)
 	if beginInstallSiteExtensionSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions/(?P<siteExtensionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions/(?P<siteExtensionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -11761,7 +11725,7 @@ func (w *WebAppsServerTransport) dispatchBeginInstallSiteExtensionSlot(req *http
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginInstallSiteExtensionSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -11776,7 +11740,7 @@ func (w *WebAppsServerTransport) dispatchIsCloneable(req *http.Request) (*http.R
 	if w.srv.IsCloneable == nil {
 		return nil, &nonRetriableError{errors.New("fake for method IsCloneable not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/iscloneable`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/iscloneable`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11795,7 +11759,7 @@ func (w *WebAppsServerTransport) dispatchIsCloneable(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteCloneability, req)
@@ -11809,7 +11773,7 @@ func (w *WebAppsServerTransport) dispatchIsCloneableSlot(req *http.Request) (*ht
 	if w.srv.IsCloneableSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method IsCloneableSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/iscloneable`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/iscloneable`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11832,7 +11796,7 @@ func (w *WebAppsServerTransport) dispatchIsCloneableSlot(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteCloneability, req)
@@ -11848,7 +11812,7 @@ func (w *WebAppsServerTransport) dispatchNewListPager(req *http.Request) (*http.
 	}
 	newListPager := w.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -11865,7 +11829,7 @@ func (w *WebAppsServerTransport) dispatchNewListPager(req *http.Request) (*http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -11879,7 +11843,7 @@ func (w *WebAppsServerTransport) dispatchListApplicationSettings(req *http.Reque
 	if w.srv.ListApplicationSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListApplicationSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/appsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/appsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11898,7 +11862,7 @@ func (w *WebAppsServerTransport) dispatchListApplicationSettings(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -11912,7 +11876,7 @@ func (w *WebAppsServerTransport) dispatchListApplicationSettingsSlot(req *http.R
 	if w.srv.ListApplicationSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListApplicationSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/appsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/appsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -11935,7 +11899,7 @@ func (w *WebAppsServerTransport) dispatchListApplicationSettingsSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -11949,7 +11913,7 @@ func (w *WebAppsServerTransport) dispatchListAzureStorageAccounts(req *http.Requ
 	if w.srv.ListAzureStorageAccounts == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListAzureStorageAccounts not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/azurestorageaccounts/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/azurestorageaccounts/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -11968,7 +11932,7 @@ func (w *WebAppsServerTransport) dispatchListAzureStorageAccounts(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).AzureStoragePropertyDictionaryResource, req)
@@ -11982,7 +11946,7 @@ func (w *WebAppsServerTransport) dispatchListAzureStorageAccountsSlot(req *http.
 	if w.srv.ListAzureStorageAccountsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListAzureStorageAccountsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/azurestorageaccounts/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/azurestorageaccounts/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -12005,7 +11969,7 @@ func (w *WebAppsServerTransport) dispatchListAzureStorageAccountsSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).AzureStoragePropertyDictionaryResource, req)
@@ -12019,7 +11983,7 @@ func (w *WebAppsServerTransport) dispatchListBackupStatusSecrets(req *http.Reque
 	if w.srv.ListBackupStatusSecrets == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListBackupStatusSecrets not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -12046,7 +12010,7 @@ func (w *WebAppsServerTransport) dispatchListBackupStatusSecrets(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -12060,7 +12024,7 @@ func (w *WebAppsServerTransport) dispatchListBackupStatusSecretsSlot(req *http.R
 	if w.srv.ListBackupStatusSecretsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListBackupStatusSecretsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -12091,7 +12055,7 @@ func (w *WebAppsServerTransport) dispatchListBackupStatusSecretsSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupItem, req)
@@ -12107,7 +12071,7 @@ func (w *WebAppsServerTransport) dispatchNewListBackupsPager(req *http.Request) 
 	}
 	newListBackupsPager := w.newListBackupsPager.get(req)
 	if newListBackupsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12132,7 +12096,7 @@ func (w *WebAppsServerTransport) dispatchNewListBackupsPager(req *http.Request) 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListBackupsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12148,7 +12112,7 @@ func (w *WebAppsServerTransport) dispatchNewListBackupsSlotPager(req *http.Reque
 	}
 	newListBackupsSlotPager := w.newListBackupsSlotPager.get(req)
 	if newListBackupsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12177,7 +12141,7 @@ func (w *WebAppsServerTransport) dispatchNewListBackupsSlotPager(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListBackupsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12193,7 +12157,7 @@ func (w *WebAppsServerTransport) dispatchNewListBasicPublishingCredentialsPolici
 	}
 	newListBasicPublishingCredentialsPoliciesPager := w.newListBasicPublishingCredentialsPoliciesPager.get(req)
 	if newListBasicPublishingCredentialsPoliciesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12218,7 +12182,7 @@ func (w *WebAppsServerTransport) dispatchNewListBasicPublishingCredentialsPolici
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListBasicPublishingCredentialsPoliciesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12234,7 +12198,7 @@ func (w *WebAppsServerTransport) dispatchNewListBasicPublishingCredentialsPolici
 	}
 	newListBasicPublishingCredentialsPoliciesSlotPager := w.newListBasicPublishingCredentialsPoliciesSlotPager.get(req)
 	if newListBasicPublishingCredentialsPoliciesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12263,7 +12227,7 @@ func (w *WebAppsServerTransport) dispatchNewListBasicPublishingCredentialsPolici
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListBasicPublishingCredentialsPoliciesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12279,7 +12243,7 @@ func (w *WebAppsServerTransport) dispatchNewListByResourceGroupPager(req *http.R
 	}
 	newListByResourceGroupPager := w.newListByResourceGroupPager.get(req)
 	if newListByResourceGroupPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -12290,11 +12254,7 @@ func (w *WebAppsServerTransport) dispatchNewListByResourceGroupPager(req *http.R
 		if err != nil {
 			return nil, err
 		}
-		includeSlotsUnescaped, err := url.QueryUnescape(qp.Get("includeSlots"))
-		if err != nil {
-			return nil, err
-		}
-		includeSlotsParam, err := parseOptional(includeSlotsUnescaped, strconv.ParseBool)
+		includeSlotsParam, err := parseOptional(qp.Get("includeSlots"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
@@ -12315,7 +12275,7 @@ func (w *WebAppsServerTransport) dispatchNewListByResourceGroupPager(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListByResourceGroupPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12331,7 +12291,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationSnapshotInfoPager(r
 	}
 	newListConfigurationSnapshotInfoPager := w.newListConfigurationSnapshotInfoPager.get(req)
 	if newListConfigurationSnapshotInfoPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12356,7 +12316,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationSnapshotInfoPager(r
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListConfigurationSnapshotInfoPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12372,7 +12332,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationSnapshotInfoSlotPag
 	}
 	newListConfigurationSnapshotInfoSlotPager := w.newListConfigurationSnapshotInfoSlotPager.get(req)
 	if newListConfigurationSnapshotInfoSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12401,7 +12361,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationSnapshotInfoSlotPag
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListConfigurationSnapshotInfoSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12417,7 +12377,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationsPager(req *http.Re
 	}
 	newListConfigurationsPager := w.newListConfigurationsPager.get(req)
 	if newListConfigurationsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12442,7 +12402,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationsPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListConfigurationsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12458,7 +12418,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationsSlotPager(req *htt
 	}
 	newListConfigurationsSlotPager := w.newListConfigurationsSlotPager.get(req)
 	if newListConfigurationsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12487,7 +12447,7 @@ func (w *WebAppsServerTransport) dispatchNewListConfigurationsSlotPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListConfigurationsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12501,7 +12461,7 @@ func (w *WebAppsServerTransport) dispatchListConnectionStrings(req *http.Request
 	if w.srv.ListConnectionStrings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListConnectionStrings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/connectionstrings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/connectionstrings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -12520,7 +12480,7 @@ func (w *WebAppsServerTransport) dispatchListConnectionStrings(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ConnectionStringDictionary, req)
@@ -12534,7 +12494,7 @@ func (w *WebAppsServerTransport) dispatchListConnectionStringsSlot(req *http.Req
 	if w.srv.ListConnectionStringsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListConnectionStringsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/connectionstrings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/connectionstrings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -12557,7 +12517,7 @@ func (w *WebAppsServerTransport) dispatchListConnectionStringsSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ConnectionStringDictionary, req)
@@ -12573,7 +12533,7 @@ func (w *WebAppsServerTransport) dispatchNewListContinuousWebJobsPager(req *http
 	}
 	newListContinuousWebJobsPager := w.newListContinuousWebJobsPager.get(req)
 	if newListContinuousWebJobsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12598,7 +12558,7 @@ func (w *WebAppsServerTransport) dispatchNewListContinuousWebJobsPager(req *http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListContinuousWebJobsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12614,7 +12574,7 @@ func (w *WebAppsServerTransport) dispatchNewListContinuousWebJobsSlotPager(req *
 	}
 	newListContinuousWebJobsSlotPager := w.newListContinuousWebJobsSlotPager.get(req)
 	if newListContinuousWebJobsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12643,7 +12603,7 @@ func (w *WebAppsServerTransport) dispatchNewListContinuousWebJobsSlotPager(req *
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListContinuousWebJobsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12657,7 +12617,7 @@ func (w *WebAppsServerTransport) dispatchListDeploymentLog(req *http.Request) (*
 	if w.srv.ListDeploymentLog == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListDeploymentLog not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -12680,7 +12640,7 @@ func (w *WebAppsServerTransport) dispatchListDeploymentLog(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -12694,7 +12654,7 @@ func (w *WebAppsServerTransport) dispatchListDeploymentLogSlot(req *http.Request
 	if w.srv.ListDeploymentLogSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListDeploymentLogSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments/(?P<id>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/log`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments/(?P<id>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/log`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -12721,7 +12681,7 @@ func (w *WebAppsServerTransport) dispatchListDeploymentLogSlot(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Deployment, req)
@@ -12737,7 +12697,7 @@ func (w *WebAppsServerTransport) dispatchNewListDeploymentsPager(req *http.Reque
 	}
 	newListDeploymentsPager := w.newListDeploymentsPager.get(req)
 	if newListDeploymentsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12762,7 +12722,7 @@ func (w *WebAppsServerTransport) dispatchNewListDeploymentsPager(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListDeploymentsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12778,7 +12738,7 @@ func (w *WebAppsServerTransport) dispatchNewListDeploymentsSlotPager(req *http.R
 	}
 	newListDeploymentsSlotPager := w.newListDeploymentsSlotPager.get(req)
 	if newListDeploymentsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deployments`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deployments`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12807,7 +12767,7 @@ func (w *WebAppsServerTransport) dispatchNewListDeploymentsSlotPager(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListDeploymentsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12823,7 +12783,7 @@ func (w *WebAppsServerTransport) dispatchNewListDomainOwnershipIdentifiersPager(
 	}
 	newListDomainOwnershipIdentifiersPager := w.newListDomainOwnershipIdentifiersPager.get(req)
 	if newListDomainOwnershipIdentifiersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -12848,7 +12808,7 @@ func (w *WebAppsServerTransport) dispatchNewListDomainOwnershipIdentifiersPager(
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListDomainOwnershipIdentifiersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12864,7 +12824,7 @@ func (w *WebAppsServerTransport) dispatchNewListDomainOwnershipIdentifiersSlotPa
 	}
 	newListDomainOwnershipIdentifiersSlotPager := w.newListDomainOwnershipIdentifiersSlotPager.get(req)
 	if newListDomainOwnershipIdentifiersSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -12893,7 +12853,7 @@ func (w *WebAppsServerTransport) dispatchNewListDomainOwnershipIdentifiersSlotPa
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListDomainOwnershipIdentifiersSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -12907,7 +12867,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionKeys(req *http.Request) (*h
 	if w.srv.ListFunctionKeys == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListFunctionKeys not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listkeys`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listkeys`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -12930,7 +12890,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionKeys(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -12944,7 +12904,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionKeysSlot(req *http.Request)
 	if w.srv.ListFunctionKeysSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListFunctionKeysSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listkeys`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listkeys`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -12971,7 +12931,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionKeysSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -12985,7 +12945,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionSecrets(req *http.Request) 
 	if w.srv.ListFunctionSecrets == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListFunctionSecrets not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listsecrets`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listsecrets`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -13008,7 +12968,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionSecrets(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionSecrets, req)
@@ -13022,7 +12982,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionSecretsSlot(req *http.Reque
 	if w.srv.ListFunctionSecretsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListFunctionSecretsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions/(?P<functionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listsecrets`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions/(?P<functionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listsecrets`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -13049,7 +13009,7 @@ func (w *WebAppsServerTransport) dispatchListFunctionSecretsSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionSecrets, req)
@@ -13065,7 +13025,7 @@ func (w *WebAppsServerTransport) dispatchNewListFunctionsPager(req *http.Request
 	}
 	newListFunctionsPager := w.newListFunctionsPager.get(req)
 	if newListFunctionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -13090,7 +13050,7 @@ func (w *WebAppsServerTransport) dispatchNewListFunctionsPager(req *http.Request
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListFunctionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13104,7 +13064,7 @@ func (w *WebAppsServerTransport) dispatchListHostKeys(req *http.Request) (*http.
 	if w.srv.ListHostKeys == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListHostKeys not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/listkeys`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/listkeys`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -13123,7 +13083,7 @@ func (w *WebAppsServerTransport) dispatchListHostKeys(req *http.Request) (*http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostKeys, req)
@@ -13137,7 +13097,7 @@ func (w *WebAppsServerTransport) dispatchListHostKeysSlot(req *http.Request) (*h
 	if w.srv.ListHostKeysSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListHostKeysSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/listkeys`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/listkeys`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -13160,7 +13120,7 @@ func (w *WebAppsServerTransport) dispatchListHostKeysSlot(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HostKeys, req)
@@ -13176,7 +13136,7 @@ func (w *WebAppsServerTransport) dispatchNewListHostNameBindingsPager(req *http.
 	}
 	newListHostNameBindingsPager := w.newListHostNameBindingsPager.get(req)
 	if newListHostNameBindingsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -13201,7 +13161,7 @@ func (w *WebAppsServerTransport) dispatchNewListHostNameBindingsPager(req *http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListHostNameBindingsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13217,7 +13177,7 @@ func (w *WebAppsServerTransport) dispatchNewListHostNameBindingsSlotPager(req *h
 	}
 	newListHostNameBindingsSlotPager := w.newListHostNameBindingsSlotPager.get(req)
 	if newListHostNameBindingsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostNameBindings`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostNameBindings`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -13246,7 +13206,7 @@ func (w *WebAppsServerTransport) dispatchNewListHostNameBindingsSlotPager(req *h
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListHostNameBindingsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13260,7 +13220,7 @@ func (w *WebAppsServerTransport) dispatchListHybridConnections(req *http.Request
 	if w.srv.ListHybridConnections == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListHybridConnections not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionRelays`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionRelays`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -13279,7 +13239,7 @@ func (w *WebAppsServerTransport) dispatchListHybridConnections(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -13293,7 +13253,7 @@ func (w *WebAppsServerTransport) dispatchListHybridConnectionsSlot(req *http.Req
 	if w.srv.ListHybridConnectionsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListHybridConnectionsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionRelays`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionRelays`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -13316,7 +13276,7 @@ func (w *WebAppsServerTransport) dispatchListHybridConnectionsSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -13332,7 +13292,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceFunctionsSlotPager(req *
 	}
 	newListInstanceFunctionsSlotPager := w.newListInstanceFunctionsSlotPager.get(req)
 	if newListInstanceFunctionsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/functions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/functions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -13361,7 +13321,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceFunctionsSlotPager(req *
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceFunctionsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13377,7 +13337,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceIdentifiersPager(req *ht
 	}
 	newListInstanceIdentifiersPager := w.newListInstanceIdentifiersPager.get(req)
 	if newListInstanceIdentifiersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -13402,7 +13362,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceIdentifiersPager(req *ht
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceIdentifiersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13418,7 +13378,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceIdentifiersSlotPager(req
 	}
 	newListInstanceIdentifiersSlotPager := w.newListInstanceIdentifiersSlotPager.get(req)
 	if newListInstanceIdentifiersSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -13447,7 +13407,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceIdentifiersSlotPager(req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceIdentifiersSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13463,7 +13423,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessModulesPager(req 
 	}
 	newListInstanceProcessModulesPager := w.newListInstanceProcessModulesPager.get(req)
 	if newListInstanceProcessModulesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -13496,7 +13456,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessModulesPager(req 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessModulesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13512,7 +13472,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessModulesSlotPager(
 	}
 	newListInstanceProcessModulesSlotPager := w.newListInstanceProcessModulesSlotPager.get(req)
 	if newListInstanceProcessModulesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 7 {
@@ -13549,7 +13509,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessModulesSlotPager(
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessModulesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13565,7 +13525,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessThreadsPager(req 
 	}
 	newListInstanceProcessThreadsPager := w.newListInstanceProcessThreadsPager.get(req)
 	if newListInstanceProcessThreadsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/threads`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/threads`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -13598,7 +13558,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessThreadsPager(req 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessThreadsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13614,7 +13574,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessThreadsSlotPager(
 	}
 	newListInstanceProcessThreadsSlotPager := w.newListInstanceProcessThreadsSlotPager.get(req)
 	if newListInstanceProcessThreadsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/threads`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/threads`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 7 {
@@ -13651,7 +13611,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessThreadsSlotPager(
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessThreadsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13667,7 +13627,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessesPager(req *http
 	}
 	newListInstanceProcessesPager := w.newListInstanceProcessesPager.get(req)
 	if newListInstanceProcessesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -13696,7 +13656,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessesPager(req *http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13712,7 +13672,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessesSlotPager(req *
 	}
 	newListInstanceProcessesSlotPager := w.newListInstanceProcessesSlotPager.get(req)
 	if newListInstanceProcessesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/instances/(?P<instanceId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/instances/(?P<instanceId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -13745,7 +13705,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceProcessesSlotPager(req *
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceProcessesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13761,7 +13721,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceWorkflowsSlotPager(req *
 	}
 	newListInstanceWorkflowsSlotPager := w.newListInstanceWorkflowsSlotPager.get(req)
 	if newListInstanceWorkflowsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/workflows`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/workflows`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -13790,7 +13750,7 @@ func (w *WebAppsServerTransport) dispatchNewListInstanceWorkflowsSlotPager(req *
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListInstanceWorkflowsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -13804,7 +13764,7 @@ func (w *WebAppsServerTransport) dispatchListMetadata(req *http.Request) (*http.
 	if w.srv.ListMetadata == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListMetadata not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/metadata/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/metadata/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -13823,7 +13783,7 @@ func (w *WebAppsServerTransport) dispatchListMetadata(req *http.Request) (*http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -13837,7 +13797,7 @@ func (w *WebAppsServerTransport) dispatchListMetadataSlot(req *http.Request) (*h
 	if w.srv.ListMetadataSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListMetadataSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/metadata/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/metadata/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -13860,7 +13820,7 @@ func (w *WebAppsServerTransport) dispatchListMetadataSlot(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -13874,7 +13834,7 @@ func (w *WebAppsServerTransport) dispatchListNetworkFeatures(req *http.Request) 
 	if w.srv.ListNetworkFeatures == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListNetworkFeatures not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkFeatures/(?P<view>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkFeatures/(?P<view>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -13897,7 +13857,7 @@ func (w *WebAppsServerTransport) dispatchListNetworkFeatures(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkFeatures, req)
@@ -13911,7 +13871,7 @@ func (w *WebAppsServerTransport) dispatchListNetworkFeaturesSlot(req *http.Reque
 	if w.srv.ListNetworkFeaturesSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListNetworkFeaturesSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkFeatures/(?P<view>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkFeatures/(?P<view>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -13938,7 +13898,7 @@ func (w *WebAppsServerTransport) dispatchListNetworkFeaturesSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).NetworkFeatures, req)
@@ -13954,7 +13914,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersPager(req *http.R
 	}
 	newListPerfMonCountersPager := w.newListPerfMonCountersPager.get(req)
 	if newListPerfMonCountersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/perfcounters`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/perfcounters`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -13969,11 +13929,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersPager(req *http.R
 		if err != nil {
 			return nil, err
 		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armappservice.WebAppsClientListPerfMonCountersOptions
 		if filterParam != nil {
 			options = &armappservice.WebAppsClientListPerfMonCountersOptions{
@@ -13991,7 +13947,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersPager(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPerfMonCountersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14007,7 +13963,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersSlotPager(req *ht
 	}
 	newListPerfMonCountersSlotPager := w.newListPerfMonCountersSlotPager.get(req)
 	if newListPerfMonCountersSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/perfcounters`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/perfcounters`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14026,11 +13982,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersSlotPager(req *ht
 		if err != nil {
 			return nil, err
 		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armappservice.WebAppsClientListPerfMonCountersSlotOptions
 		if filterParam != nil {
 			options = &armappservice.WebAppsClientListPerfMonCountersSlotOptions{
@@ -14048,7 +14000,7 @@ func (w *WebAppsServerTransport) dispatchNewListPerfMonCountersSlotPager(req *ht
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPerfMonCountersSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14062,7 +14014,7 @@ func (w *WebAppsServerTransport) dispatchListPremierAddOns(req *http.Request) (*
 	if w.srv.ListPremierAddOns == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListPremierAddOns not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -14081,7 +14033,7 @@ func (w *WebAppsServerTransport) dispatchListPremierAddOns(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -14095,7 +14047,7 @@ func (w *WebAppsServerTransport) dispatchListPremierAddOnsSlot(req *http.Request
 	if w.srv.ListPremierAddOnsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListPremierAddOnsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -14118,7 +14070,7 @@ func (w *WebAppsServerTransport) dispatchListPremierAddOnsSlot(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -14134,7 +14086,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessModulesPager(req *http.Re
 	}
 	newListProcessModulesPager := w.newListProcessModulesPager.get(req)
 	if newListProcessModulesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14163,7 +14115,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessModulesPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessModulesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14179,7 +14131,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessModulesSlotPager(req *htt
 	}
 	newListProcessModulesSlotPager := w.newListProcessModulesSlotPager.get(req)
 	if newListProcessModulesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/modules`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/modules`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -14212,7 +14164,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessModulesSlotPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessModulesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14228,7 +14180,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessThreadsPager(req *http.Re
 	}
 	newListProcessThreadsPager := w.newListProcessThreadsPager.get(req)
 	if newListProcessThreadsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/threads`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/threads`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14257,7 +14209,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessThreadsPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessThreadsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14273,7 +14225,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessThreadsSlotPager(req *htt
 	}
 	newListProcessThreadsSlotPager := w.newListProcessThreadsSlotPager.get(req)
 	if newListProcessThreadsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes/(?P<processId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/threads`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes/(?P<processId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/threads`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -14306,7 +14258,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessThreadsSlotPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessThreadsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14322,7 +14274,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessesPager(req *http.Request
 	}
 	newListProcessesPager := w.newListProcessesPager.get(req)
 	if newListProcessesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14347,7 +14299,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessesPager(req *http.Request
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14363,7 +14315,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessesSlotPager(req *http.Req
 	}
 	newListProcessesSlotPager := w.newListProcessesSlotPager.get(req)
 	if newListProcessesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/processes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/processes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14392,7 +14344,7 @@ func (w *WebAppsServerTransport) dispatchNewListProcessesSlotPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProcessesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14408,7 +14360,7 @@ func (w *WebAppsServerTransport) dispatchNewListProductionSiteDeploymentStatuses
 	}
 	newListProductionSiteDeploymentStatusesPager := w.newListProductionSiteDeploymentStatusesPager.get(req)
 	if newListProductionSiteDeploymentStatusesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deploymentStatus`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deploymentStatus`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14433,7 +14385,7 @@ func (w *WebAppsServerTransport) dispatchNewListProductionSiteDeploymentStatuses
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListProductionSiteDeploymentStatusesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14449,7 +14401,7 @@ func (w *WebAppsServerTransport) dispatchNewListPublicCertificatesPager(req *htt
 	}
 	newListPublicCertificatesPager := w.newListPublicCertificatesPager.get(req)
 	if newListPublicCertificatesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14474,7 +14426,7 @@ func (w *WebAppsServerTransport) dispatchNewListPublicCertificatesPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPublicCertificatesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14490,7 +14442,7 @@ func (w *WebAppsServerTransport) dispatchNewListPublicCertificatesSlotPager(req 
 	}
 	newListPublicCertificatesSlotPager := w.newListPublicCertificatesSlotPager.get(req)
 	if newListPublicCertificatesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publicCertificates`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publicCertificates`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14519,7 +14471,7 @@ func (w *WebAppsServerTransport) dispatchNewListPublicCertificatesSlotPager(req 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPublicCertificatesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14535,7 +14487,7 @@ func (w *WebAppsServerTransport) dispatchBeginListPublishingCredentials(req *htt
 	}
 	beginListPublishingCredentials := w.beginListPublishingCredentials.get(req)
 	if beginListPublishingCredentials == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/publishingcredentials/list`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/publishingcredentials/list`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14562,7 +14514,7 @@ func (w *WebAppsServerTransport) dispatchBeginListPublishingCredentials(req *htt
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.beginListPublishingCredentials.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14579,7 +14531,7 @@ func (w *WebAppsServerTransport) dispatchBeginListPublishingCredentialsSlot(req 
 	}
 	beginListPublishingCredentialsSlot := w.beginListPublishingCredentialsSlot.get(req)
 	if beginListPublishingCredentialsSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/publishingcredentials/list`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/publishingcredentials/list`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14610,7 +14562,7 @@ func (w *WebAppsServerTransport) dispatchBeginListPublishingCredentialsSlot(req 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.beginListPublishingCredentialsSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14625,7 +14577,7 @@ func (w *WebAppsServerTransport) dispatchListPublishingProfileXMLWithSecrets(req
 	if w.srv.ListPublishingProfileXMLWithSecrets == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListPublishingProfileXMLWithSecrets not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishxml`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishxml`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -14648,7 +14600,7 @@ func (w *WebAppsServerTransport) dispatchListPublishingProfileXMLWithSecrets(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -14668,7 +14620,7 @@ func (w *WebAppsServerTransport) dispatchListPublishingProfileXMLWithSecretsSlot
 	if w.srv.ListPublishingProfileXMLWithSecretsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListPublishingProfileXMLWithSecretsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishxml`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishxml`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -14695,7 +14647,7 @@ func (w *WebAppsServerTransport) dispatchListPublishingProfileXMLWithSecretsSlot
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, &server.ResponseOptions{
@@ -14715,7 +14667,7 @@ func (w *WebAppsServerTransport) dispatchListRelayServiceConnections(req *http.R
 	if w.srv.ListRelayServiceConnections == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListRelayServiceConnections not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -14734,7 +14686,7 @@ func (w *WebAppsServerTransport) dispatchListRelayServiceConnections(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -14748,7 +14700,7 @@ func (w *WebAppsServerTransport) dispatchListRelayServiceConnectionsSlot(req *ht
 	if w.srv.ListRelayServiceConnectionsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListRelayServiceConnectionsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -14771,7 +14723,7 @@ func (w *WebAppsServerTransport) dispatchListRelayServiceConnectionsSlot(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -14787,7 +14739,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteBackupsPager(req *http.Reque
 	}
 	newListSiteBackupsPager := w.newListSiteBackupsPager.get(req)
 	if newListSiteBackupsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listbackups`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listbackups`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14812,7 +14764,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteBackupsPager(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteBackupsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14828,7 +14780,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteBackupsSlotPager(req *http.R
 	}
 	newListSiteBackupsSlotPager := w.newListSiteBackupsSlotPager.get(req)
 	if newListSiteBackupsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listbackups`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listbackups`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14857,7 +14809,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteBackupsSlotPager(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteBackupsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14873,7 +14825,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteContainersPager(req *http.Re
 	}
 	newListSiteContainersPager := w.newListSiteContainersPager.get(req)
 	if newListSiteContainersPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14898,7 +14850,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteContainersPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteContainersPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14914,7 +14866,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteContainersSlotPager(req *htt
 	}
 	newListSiteContainersSlotPager := w.newListSiteContainersSlotPager.get(req)
 	if newListSiteContainersSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sitecontainers`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sitecontainers`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -14943,7 +14895,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteContainersSlotPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteContainersSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -14959,7 +14911,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteExtensionsPager(req *http.Re
 	}
 	newListSiteExtensionsPager := w.newListSiteExtensionsPager.get(req)
 	if newListSiteExtensionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -14984,7 +14936,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteExtensionsPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteExtensionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15000,7 +14952,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteExtensionsSlotPager(req *htt
 	}
 	newListSiteExtensionsSlotPager := w.newListSiteExtensionsSlotPager.get(req)
 	if newListSiteExtensionsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/siteextensions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/siteextensions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15029,7 +14981,7 @@ func (w *WebAppsServerTransport) dispatchNewListSiteExtensionsSlotPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSiteExtensionsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15043,7 +14995,7 @@ func (w *WebAppsServerTransport) dispatchListSitePushSettings(req *http.Request)
 	if w.srv.ListSitePushSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSitePushSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/pushsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/pushsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -15062,7 +15014,7 @@ func (w *WebAppsServerTransport) dispatchListSitePushSettings(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PushSettings, req)
@@ -15076,7 +15028,7 @@ func (w *WebAppsServerTransport) dispatchListSitePushSettingsSlot(req *http.Requ
 	if w.srv.ListSitePushSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSitePushSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/pushsettings/list`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/pushsettings/list`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -15099,7 +15051,7 @@ func (w *WebAppsServerTransport) dispatchListSitePushSettingsSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PushSettings, req)
@@ -15113,7 +15065,7 @@ func (w *WebAppsServerTransport) dispatchListSlotConfigurationNames(req *http.Re
 	if w.srv.ListSlotConfigurationNames == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSlotConfigurationNames not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/slotConfigNames`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/slotConfigNames`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -15132,7 +15084,7 @@ func (w *WebAppsServerTransport) dispatchListSlotConfigurationNames(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SlotConfigNamesResource, req)
@@ -15148,7 +15100,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotDifferencesFromProductionPag
 	}
 	newListSlotDifferencesFromProductionPager := w.newListSlotDifferencesFromProductionPager.get(req)
 	if newListSlotDifferencesFromProductionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slotsdiffs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slotsdiffs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15177,7 +15129,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotDifferencesFromProductionPag
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSlotDifferencesFromProductionPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15193,7 +15145,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotDifferencesSlotPager(req *ht
 	}
 	newListSlotDifferencesSlotPager := w.newListSlotDifferencesSlotPager.get(req)
 	if newListSlotDifferencesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slotsdiffs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slotsdiffs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15226,7 +15178,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotDifferencesSlotPager(req *ht
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSlotDifferencesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15242,7 +15194,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotSiteDeploymentStatusesSlotPa
 	}
 	newListSlotSiteDeploymentStatusesSlotPager := w.newListSlotSiteDeploymentStatusesSlotPager.get(req)
 	if newListSlotSiteDeploymentStatusesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deploymentStatus`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deploymentStatus`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15271,7 +15223,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotSiteDeploymentStatusesSlotPa
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSlotSiteDeploymentStatusesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15287,7 +15239,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotsPager(req *http.Request) (*
 	}
 	newListSlotsPager := w.newListSlotsPager.get(req)
 	if newListSlotsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15312,7 +15264,7 @@ func (w *WebAppsServerTransport) dispatchNewListSlotsPager(req *http.Request) (*
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSlotsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15328,7 +15280,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsPager(req *http.Request
 	}
 	newListSnapshotsPager := w.newListSnapshotsPager.get(req)
 	if newListSnapshotsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/snapshots`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/snapshots`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15353,7 +15305,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsPager(req *http.Request
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSnapshotsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15369,7 +15321,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsFromDRSecondaryPager(re
 	}
 	newListSnapshotsFromDRSecondaryPager := w.newListSnapshotsFromDRSecondaryPager.get(req)
 	if newListSnapshotsFromDRSecondaryPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/snapshotsdr`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/snapshotsdr`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15394,7 +15346,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsFromDRSecondaryPager(re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSnapshotsFromDRSecondaryPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15410,7 +15362,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsFromDRSecondarySlotPage
 	}
 	newListSnapshotsFromDRSecondarySlotPager := w.newListSnapshotsFromDRSecondarySlotPager.get(req)
 	if newListSnapshotsFromDRSecondarySlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/snapshotsdr`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/snapshotsdr`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15439,7 +15391,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsFromDRSecondarySlotPage
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSnapshotsFromDRSecondarySlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15455,7 +15407,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsSlotPager(req *http.Req
 	}
 	newListSnapshotsSlotPager := w.newListSnapshotsSlotPager.get(req)
 	if newListSnapshotsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/snapshots`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/snapshots`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15484,7 +15436,7 @@ func (w *WebAppsServerTransport) dispatchNewListSnapshotsSlotPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListSnapshotsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15498,7 +15450,7 @@ func (w *WebAppsServerTransport) dispatchListSyncFunctionTriggers(req *http.Requ
 	if w.srv.ListSyncFunctionTriggers == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSyncFunctionTriggers not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listsyncfunctiontriggerstatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listsyncfunctiontriggerstatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -15517,7 +15469,7 @@ func (w *WebAppsServerTransport) dispatchListSyncFunctionTriggers(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionSecrets, req)
@@ -15531,7 +15483,7 @@ func (w *WebAppsServerTransport) dispatchListSyncFunctionTriggersSlot(req *http.
 	if w.srv.ListSyncFunctionTriggersSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSyncFunctionTriggersSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listsyncfunctiontriggerstatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listsyncfunctiontriggerstatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -15554,7 +15506,7 @@ func (w *WebAppsServerTransport) dispatchListSyncFunctionTriggersSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).FunctionSecrets, req)
@@ -15568,7 +15520,7 @@ func (w *WebAppsServerTransport) dispatchListSyncStatus(req *http.Request) (*htt
 	if w.srv.ListSyncStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSyncStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/listsyncstatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/listsyncstatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -15587,7 +15539,7 @@ func (w *WebAppsServerTransport) dispatchListSyncStatus(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -15601,7 +15553,7 @@ func (w *WebAppsServerTransport) dispatchListSyncStatusSlot(req *http.Request) (
 	if w.srv.ListSyncStatusSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSyncStatusSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/listsyncstatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/listsyncstatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -15624,7 +15576,7 @@ func (w *WebAppsServerTransport) dispatchListSyncStatusSlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -15640,7 +15592,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobHistoryPager(req 
 	}
 	newListTriggeredWebJobHistoryPager := w.newListTriggeredWebJobHistoryPager.get(req)
 	if newListTriggeredWebJobHistoryPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/history`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/history`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15669,7 +15621,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobHistoryPager(req 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListTriggeredWebJobHistoryPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15685,7 +15637,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobHistorySlotPager(
 	}
 	newListTriggeredWebJobHistorySlotPager := w.newListTriggeredWebJobHistorySlotPager.get(req)
 	if newListTriggeredWebJobHistorySlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/history`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/history`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -15718,7 +15670,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobHistorySlotPager(
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListTriggeredWebJobHistorySlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15734,7 +15686,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobsPager(req *http.
 	}
 	newListTriggeredWebJobsPager := w.newListTriggeredWebJobsPager.get(req)
 	if newListTriggeredWebJobsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15759,7 +15711,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobsPager(req *http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListTriggeredWebJobsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15775,7 +15727,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobsSlotPager(req *h
 	}
 	newListTriggeredWebJobsSlotPager := w.newListTriggeredWebJobsSlotPager.get(req)
 	if newListTriggeredWebJobsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15804,7 +15756,7 @@ func (w *WebAppsServerTransport) dispatchNewListTriggeredWebJobsSlotPager(req *h
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListTriggeredWebJobsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15820,7 +15772,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesPager(req *http.Request) (
 	}
 	newListUsagesPager := w.newListUsagesPager.get(req)
 	if newListUsagesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/usages`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/usages`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -15835,11 +15787,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesPager(req *http.Request) (
 		if err != nil {
 			return nil, err
 		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armappservice.WebAppsClientListUsagesOptions
 		if filterParam != nil {
 			options = &armappservice.WebAppsClientListUsagesOptions{
@@ -15857,7 +15805,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesPager(req *http.Request) (
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListUsagesPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15873,7 +15821,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesSlotPager(req *http.Reques
 	}
 	newListUsagesSlotPager := w.newListUsagesSlotPager.get(req)
 	if newListUsagesSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/usages`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/usages`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -15892,11 +15840,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesSlotPager(req *http.Reques
 		if err != nil {
 			return nil, err
 		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armappservice.WebAppsClientListUsagesSlotOptions
 		if filterParam != nil {
 			options = &armappservice.WebAppsClientListUsagesSlotOptions{
@@ -15914,7 +15858,7 @@ func (w *WebAppsServerTransport) dispatchNewListUsagesSlotPager(req *http.Reques
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListUsagesSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -15928,7 +15872,7 @@ func (w *WebAppsServerTransport) dispatchListVnetConnections(req *http.Request) 
 	if w.srv.ListVnetConnections == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListVnetConnections not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -15947,7 +15891,7 @@ func (w *WebAppsServerTransport) dispatchListVnetConnections(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResourceArray, req)
@@ -15961,7 +15905,7 @@ func (w *WebAppsServerTransport) dispatchListVnetConnectionsSlot(req *http.Reque
 	if w.srv.ListVnetConnectionsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListVnetConnectionsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -15984,7 +15928,7 @@ func (w *WebAppsServerTransport) dispatchListVnetConnectionsSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResourceArray, req)
@@ -16000,7 +15944,7 @@ func (w *WebAppsServerTransport) dispatchNewListWebJobsPager(req *http.Request) 
 	}
 	newListWebJobsPager := w.newListWebJobsPager.get(req)
 	if newListWebJobsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/webjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/webjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16025,7 +15969,7 @@ func (w *WebAppsServerTransport) dispatchNewListWebJobsPager(req *http.Request) 
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListWebJobsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -16041,7 +15985,7 @@ func (w *WebAppsServerTransport) dispatchNewListWebJobsSlotPager(req *http.Reque
 	}
 	newListWebJobsSlotPager := w.newListWebJobsSlotPager.get(req)
 	if newListWebJobsSlotPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/webjobs`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/webjobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -16070,7 +16014,7 @@ func (w *WebAppsServerTransport) dispatchNewListWebJobsSlotPager(req *http.Reque
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListWebJobsSlotPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -16086,7 +16030,7 @@ func (w *WebAppsServerTransport) dispatchNewListWorkflowsPager(req *http.Request
 	}
 	newListWorkflowsPager := w.newListWorkflowsPager.get(req)
 	if newListWorkflowsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/workflows`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/workflows`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16111,7 +16055,7 @@ func (w *WebAppsServerTransport) dispatchNewListWorkflowsPager(req *http.Request
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListWorkflowsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -16125,7 +16069,7 @@ func (w *WebAppsServerTransport) dispatchListWorkflowsConnections(req *http.Requ
 	if w.srv.ListWorkflowsConnections == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListWorkflowsConnections not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listWorkflowsConnections`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listWorkflowsConnections`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -16144,7 +16088,7 @@ func (w *WebAppsServerTransport) dispatchListWorkflowsConnections(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WorkflowEnvelope, req)
@@ -16158,7 +16102,7 @@ func (w *WebAppsServerTransport) dispatchListWorkflowsConnectionsSlot(req *http.
 	if w.srv.ListWorkflowsConnectionsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListWorkflowsConnectionsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listWorkflowsConnections`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listWorkflowsConnections`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -16181,7 +16125,7 @@ func (w *WebAppsServerTransport) dispatchListWorkflowsConnectionsSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WorkflowEnvelope, req)
@@ -16197,7 +16141,7 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateMySQL(req *http.Request) (*
 	}
 	beginMigrateMySQL := w.beginMigrateMySQL.get(req)
 	if beginMigrateMySQL == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/migratemysql`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/migratemysql`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16228,7 +16172,7 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateMySQL(req *http.Request) (*
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.beginMigrateMySQL.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -16245,7 +16189,7 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateStorage(req *http.Request) 
 	}
 	beginMigrateStorage := w.beginMigrateStorage.get(req)
 	if beginMigrateStorage == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/migrate`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/migrate`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16253,10 +16197,6 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateStorage(req *http.Request) 
 		}
 		qp := req.URL.Query()
 		body, err := server.UnmarshalRequestAsJSON[armappservice.StorageMigrationOptions](req)
-		if err != nil {
-			return nil, err
-		}
-		subscriptionNameParam, err := url.QueryUnescape(qp.Get("subscriptionName"))
 		if err != nil {
 			return nil, err
 		}
@@ -16268,7 +16208,7 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateStorage(req *http.Request) 
 		if err != nil {
 			return nil, err
 		}
-		respr, errRespr := w.srv.BeginMigrateStorage(req.Context(), subscriptionNameParam, resourceGroupNameParam, nameParam, body, nil)
+		respr, errRespr := w.srv.BeginMigrateStorage(req.Context(), qp.Get("subscriptionName"), resourceGroupNameParam, nameParam, body, nil)
 		if respErr := server.GetError(errRespr, req); respErr != nil {
 			return nil, respErr
 		}
@@ -16281,7 +16221,7 @@ func (w *WebAppsServerTransport) dispatchBeginMigrateStorage(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.beginMigrateStorage.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -16296,7 +16236,7 @@ func (w *WebAppsServerTransport) dispatchPutPrivateAccessVnet(req *http.Request)
 	if w.srv.PutPrivateAccessVnet == nil {
 		return nil, &nonRetriableError{errors.New("fake for method PutPrivateAccessVnet not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateAccess/virtualNetworks`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateAccess/virtualNetworks`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -16319,7 +16259,7 @@ func (w *WebAppsServerTransport) dispatchPutPrivateAccessVnet(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateAccess, req)
@@ -16333,7 +16273,7 @@ func (w *WebAppsServerTransport) dispatchPutPrivateAccessVnetSlot(req *http.Requ
 	if w.srv.PutPrivateAccessVnetSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method PutPrivateAccessVnetSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/privateAccess/virtualNetworks`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/privateAccess/virtualNetworks`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -16360,7 +16300,7 @@ func (w *WebAppsServerTransport) dispatchPutPrivateAccessVnetSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrivateAccess, req)
@@ -16374,7 +16314,7 @@ func (w *WebAppsServerTransport) dispatchRecoverSiteConfigurationSnapshot(req *h
 	if w.srv.RecoverSiteConfigurationSnapshot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RecoverSiteConfigurationSnapshot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots/(?P<snapshotId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/recover`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots/(?P<snapshotId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/recover`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -16397,7 +16337,7 @@ func (w *WebAppsServerTransport) dispatchRecoverSiteConfigurationSnapshot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16411,7 +16351,7 @@ func (w *WebAppsServerTransport) dispatchRecoverSiteConfigurationSnapshotSlot(re
 	if w.srv.RecoverSiteConfigurationSnapshotSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RecoverSiteConfigurationSnapshotSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web/snapshots/(?P<snapshotId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/recover`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web/snapshots/(?P<snapshotId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/recover`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -16438,7 +16378,7 @@ func (w *WebAppsServerTransport) dispatchRecoverSiteConfigurationSnapshotSlot(re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16452,7 +16392,7 @@ func (w *WebAppsServerTransport) dispatchResetProductionSlotConfig(req *http.Req
 	if w.srv.ResetProductionSlotConfig == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ResetProductionSlotConfig not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resetSlotConfig`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resetSlotConfig`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -16471,7 +16411,7 @@ func (w *WebAppsServerTransport) dispatchResetProductionSlotConfig(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16485,7 +16425,7 @@ func (w *WebAppsServerTransport) dispatchResetSlotConfigurationSlot(req *http.Re
 	if w.srv.ResetSlotConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ResetSlotConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resetSlotConfig`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resetSlotConfig`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -16508,7 +16448,7 @@ func (w *WebAppsServerTransport) dispatchResetSlotConfigurationSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16522,7 +16462,7 @@ func (w *WebAppsServerTransport) dispatchRestart(req *http.Request) (*http.Respo
 	if w.srv.Restart == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Restart not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restart`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restart`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -16537,19 +16477,11 @@ func (w *WebAppsServerTransport) dispatchRestart(req *http.Request) (*http.Respo
 	if err != nil {
 		return nil, err
 	}
-	softRestartUnescaped, err := url.QueryUnescape(qp.Get("softRestart"))
+	softRestartParam, err := parseOptional(qp.Get("softRestart"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
-	softRestartParam, err := parseOptional(softRestartUnescaped, strconv.ParseBool)
-	if err != nil {
-		return nil, err
-	}
-	synchronousUnescaped, err := url.QueryUnescape(qp.Get("synchronous"))
-	if err != nil {
-		return nil, err
-	}
-	synchronousParam, err := parseOptional(synchronousUnescaped, strconv.ParseBool)
+	synchronousParam, err := parseOptional(qp.Get("synchronous"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -16565,7 +16497,7 @@ func (w *WebAppsServerTransport) dispatchRestart(req *http.Request) (*http.Respo
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16579,7 +16511,7 @@ func (w *WebAppsServerTransport) dispatchRestartSlot(req *http.Request) (*http.R
 	if w.srv.RestartSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RestartSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restart`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restart`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -16598,19 +16530,11 @@ func (w *WebAppsServerTransport) dispatchRestartSlot(req *http.Request) (*http.R
 	if err != nil {
 		return nil, err
 	}
-	softRestartUnescaped, err := url.QueryUnescape(qp.Get("softRestart"))
+	softRestartParam, err := parseOptional(qp.Get("softRestart"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
-	softRestartParam, err := parseOptional(softRestartUnescaped, strconv.ParseBool)
-	if err != nil {
-		return nil, err
-	}
-	synchronousUnescaped, err := url.QueryUnescape(qp.Get("synchronous"))
-	if err != nil {
-		return nil, err
-	}
-	synchronousParam, err := parseOptional(synchronousUnescaped, strconv.ParseBool)
+	synchronousParam, err := parseOptional(qp.Get("synchronous"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -16626,7 +16550,7 @@ func (w *WebAppsServerTransport) dispatchRestartSlot(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -16642,7 +16566,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestore(req *http.Request) (*http.
 	}
 	beginRestore := w.beginRestore.get(req)
 	if beginRestore == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restore`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restore`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -16677,7 +16601,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestore(req *http.Request) (*http.
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestore.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16694,7 +16618,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromBackupBlob(req *http.Re
 	}
 	beginRestoreFromBackupBlob := w.beginRestoreFromBackupBlob.get(req)
 	if beginRestoreFromBackupBlob == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreFromBackupBlob`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreFromBackupBlob`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16725,7 +16649,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromBackupBlob(req *http.Re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreFromBackupBlob.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16742,7 +16666,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromBackupBlobSlot(req *htt
 	}
 	beginRestoreFromBackupBlobSlot := w.beginRestoreFromBackupBlobSlot.get(req)
 	if beginRestoreFromBackupBlobSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreFromBackupBlob`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreFromBackupBlob`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -16777,7 +16701,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromBackupBlobSlot(req *htt
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreFromBackupBlobSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16794,7 +16718,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromDeletedApp(req *http.Re
 	}
 	beginRestoreFromDeletedApp := w.beginRestoreFromDeletedApp.get(req)
 	if beginRestoreFromDeletedApp == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreFromDeletedApp`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreFromDeletedApp`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16825,7 +16749,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromDeletedApp(req *http.Re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreFromDeletedApp.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16842,7 +16766,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromDeletedAppSlot(req *htt
 	}
 	beginRestoreFromDeletedAppSlot := w.beginRestoreFromDeletedAppSlot.get(req)
 	if beginRestoreFromDeletedAppSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreFromDeletedApp`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreFromDeletedApp`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -16877,7 +16801,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreFromDeletedAppSlot(req *htt
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreFromDeletedAppSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16894,7 +16818,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSlot(req *http.Request) (*h
 	}
 	beginRestoreSlot := w.beginRestoreSlot.get(req)
 	if beginRestoreSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/backups/(?P<backupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restore`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/backups/(?P<backupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restore`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -16933,7 +16857,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSlot(req *http.Request) (*h
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16950,7 +16874,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSnapshot(req *http.Request)
 	}
 	beginRestoreSnapshot := w.beginRestoreSnapshot.get(req)
 	if beginRestoreSnapshot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreSnapshot`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreSnapshot`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -16981,7 +16905,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSnapshot(req *http.Request)
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreSnapshot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -16998,7 +16922,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSnapshotSlot(req *http.Requ
 	}
 	beginRestoreSnapshotSlot := w.beginRestoreSnapshotSlot.get(req)
 	if beginRestoreSnapshotSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restoreSnapshot`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restoreSnapshot`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -17033,7 +16957,7 @@ func (w *WebAppsServerTransport) dispatchBeginRestoreSnapshotSlot(req *http.Requ
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginRestoreSnapshotSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -17048,7 +16972,7 @@ func (w *WebAppsServerTransport) dispatchRunTriggeredWebJob(req *http.Request) (
 	if w.srv.RunTriggeredWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RunTriggeredWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/run`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/run`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17071,7 +16995,7 @@ func (w *WebAppsServerTransport) dispatchRunTriggeredWebJob(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17085,7 +17009,7 @@ func (w *WebAppsServerTransport) dispatchRunTriggeredWebJobSlot(req *http.Reques
 	if w.srv.RunTriggeredWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method RunTriggeredWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggeredwebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/run`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggeredwebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/run`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -17112,7 +17036,7 @@ func (w *WebAppsServerTransport) dispatchRunTriggeredWebJobSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17126,7 +17050,7 @@ func (w *WebAppsServerTransport) dispatchStart(req *http.Request) (*http.Respons
 	if w.srv.Start == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Start not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -17145,7 +17069,7 @@ func (w *WebAppsServerTransport) dispatchStart(req *http.Request) (*http.Respons
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17159,7 +17083,7 @@ func (w *WebAppsServerTransport) dispatchStartContinuousWebJob(req *http.Request
 	if w.srv.StartContinuousWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StartContinuousWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17182,7 +17106,7 @@ func (w *WebAppsServerTransport) dispatchStartContinuousWebJob(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17196,7 +17120,7 @@ func (w *WebAppsServerTransport) dispatchStartContinuousWebJobSlot(req *http.Req
 	if w.srv.StartContinuousWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StartContinuousWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -17223,7 +17147,7 @@ func (w *WebAppsServerTransport) dispatchStartContinuousWebJobSlot(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17239,7 +17163,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTrace(req *http.Reques
 	}
 	beginStartNetworkTrace := w.beginStartNetworkTrace.get(req)
 	if beginStartNetworkTrace == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/startNetworkTrace`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/startNetworkTrace`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -17254,11 +17178,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTrace(req *http.Reques
 		if err != nil {
 			return nil, err
 		}
-		durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-		if err != nil {
-			return nil, err
-		}
-		durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+		durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17268,11 +17188,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTrace(req *http.Reques
 		if err != nil {
 			return nil, err
 		}
-		maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-		if err != nil {
-			return nil, err
-		}
-		maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+		maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17282,11 +17198,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTrace(req *http.Reques
 		if err != nil {
 			return nil, err
 		}
-		sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-		if err != nil {
-			return nil, err
-		}
-		sasURLParam := getOptional(sasURLUnescaped)
+		sasURLParam := getOptional(qp.Get("sasUrl"))
 		var options *armappservice.WebAppsClientBeginStartNetworkTraceOptions
 		if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 			options = &armappservice.WebAppsClientBeginStartNetworkTraceOptions{
@@ -17308,9 +17220,9 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTrace(req *http.Reques
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginStartNetworkTrace.remove(req)
-		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
+		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
 	if !server.PollerResponderMore(beginStartNetworkTrace) {
 		w.beginStartNetworkTrace.remove(req)
@@ -17325,7 +17237,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTraceSlot(req *http.Re
 	}
 	beginStartNetworkTraceSlot := w.beginStartNetworkTraceSlot.get(req)
 	if beginStartNetworkTraceSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/startNetworkTrace`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/startNetworkTrace`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -17344,11 +17256,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTraceSlot(req *http.Re
 		if err != nil {
 			return nil, err
 		}
-		durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-		if err != nil {
-			return nil, err
-		}
-		durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+		durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17358,11 +17266,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTraceSlot(req *http.Re
 		if err != nil {
 			return nil, err
 		}
-		maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-		if err != nil {
-			return nil, err
-		}
-		maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+		maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17372,11 +17276,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTraceSlot(req *http.Re
 		if err != nil {
 			return nil, err
 		}
-		sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-		if err != nil {
-			return nil, err
-		}
-		sasURLParam := getOptional(sasURLUnescaped)
+		sasURLParam := getOptional(qp.Get("sasUrl"))
 		var options *armappservice.WebAppsClientBeginStartNetworkTraceSlotOptions
 		if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 			options = &armappservice.WebAppsClientBeginStartNetworkTraceSlotOptions{
@@ -17398,9 +17298,9 @@ func (w *WebAppsServerTransport) dispatchBeginStartNetworkTraceSlot(req *http.Re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginStartNetworkTraceSlot.remove(req)
-		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
+		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
 	if !server.PollerResponderMore(beginStartNetworkTraceSlot) {
 		w.beginStartNetworkTraceSlot.remove(req)
@@ -17413,7 +17313,7 @@ func (w *WebAppsServerTransport) dispatchStartSlot(req *http.Request) (*http.Res
 	if w.srv.StartSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StartSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17436,7 +17336,7 @@ func (w *WebAppsServerTransport) dispatchStartSlot(req *http.Request) (*http.Res
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17450,7 +17350,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTrace(req *http.Requ
 	if w.srv.StartWebSiteNetworkTrace == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StartWebSiteNetworkTrace not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -17465,11 +17365,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTrace(req *http.Requ
 	if err != nil {
 		return nil, err
 	}
-	durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-	if err != nil {
-		return nil, err
-	}
-	durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+	durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -17479,11 +17375,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTrace(req *http.Requ
 	if err != nil {
 		return nil, err
 	}
-	maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-	if err != nil {
-		return nil, err
-	}
-	maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+	maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -17493,11 +17385,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTrace(req *http.Requ
 	if err != nil {
 		return nil, err
 	}
-	sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-	if err != nil {
-		return nil, err
-	}
-	sasURLParam := getOptional(sasURLUnescaped)
+	sasURLParam := getOptional(qp.Get("sasUrl"))
 	var options *armappservice.WebAppsClientStartWebSiteNetworkTraceOptions
 	if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 		options = &armappservice.WebAppsClientStartWebSiteNetworkTraceOptions{
@@ -17511,7 +17399,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTrace(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Value, req)
@@ -17527,7 +17415,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperation(
 	}
 	beginStartWebSiteNetworkTraceOperation := w.beginStartWebSiteNetworkTraceOperation.get(req)
 	if beginStartWebSiteNetworkTraceOperation == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/startOperation`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/startOperation`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -17542,11 +17430,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperation(
 		if err != nil {
 			return nil, err
 		}
-		durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-		if err != nil {
-			return nil, err
-		}
-		durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+		durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17556,11 +17440,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperation(
 		if err != nil {
 			return nil, err
 		}
-		maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-		if err != nil {
-			return nil, err
-		}
-		maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+		maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17570,11 +17450,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperation(
 		if err != nil {
 			return nil, err
 		}
-		sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-		if err != nil {
-			return nil, err
-		}
-		sasURLParam := getOptional(sasURLUnescaped)
+		sasURLParam := getOptional(qp.Get("sasUrl"))
 		var options *armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationOptions
 		if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 			options = &armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationOptions{
@@ -17596,9 +17472,9 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperation(
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginStartWebSiteNetworkTraceOperation.remove(req)
-		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
+		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
 	if !server.PollerResponderMore(beginStartWebSiteNetworkTraceOperation) {
 		w.beginStartWebSiteNetworkTraceOperation.remove(req)
@@ -17613,7 +17489,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperationS
 	}
 	beginStartWebSiteNetworkTraceOperationSlot := w.beginStartWebSiteNetworkTraceOperationSlot.get(req)
 	if beginStartWebSiteNetworkTraceOperationSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/startOperation`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/startOperation`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -17632,11 +17508,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperationS
 		if err != nil {
 			return nil, err
 		}
-		durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-		if err != nil {
-			return nil, err
-		}
-		durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+		durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17646,11 +17518,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperationS
 		if err != nil {
 			return nil, err
 		}
-		maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-		if err != nil {
-			return nil, err
-		}
-		maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+		maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 			p, parseErr := strconv.ParseInt(v, 10, 32)
 			if parseErr != nil {
 				return 0, parseErr
@@ -17660,11 +17528,7 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperationS
 		if err != nil {
 			return nil, err
 		}
-		sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-		if err != nil {
-			return nil, err
-		}
-		sasURLParam := getOptional(sasURLUnescaped)
+		sasURLParam := getOptional(qp.Get("sasUrl"))
 		var options *armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationSlotOptions
 		if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 			options = &armappservice.WebAppsClientBeginStartWebSiteNetworkTraceOperationSlotOptions{
@@ -17686,9 +17550,9 @@ func (w *WebAppsServerTransport) dispatchBeginStartWebSiteNetworkTraceOperationS
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginStartWebSiteNetworkTraceOperationSlot.remove(req)
-		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
+		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
 	if !server.PollerResponderMore(beginStartWebSiteNetworkTraceOperationSlot) {
 		w.beginStartWebSiteNetworkTraceOperationSlot.remove(req)
@@ -17701,7 +17565,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTraceSlot(req *http.
 	if w.srv.StartWebSiteNetworkTraceSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StartWebSiteNetworkTraceSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/start`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/start`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17720,11 +17584,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTraceSlot(req *http.
 	if err != nil {
 		return nil, err
 	}
-	durationInSecondsUnescaped, err := url.QueryUnescape(qp.Get("durationInSeconds"))
-	if err != nil {
-		return nil, err
-	}
-	durationInSecondsParam, err := parseOptional(durationInSecondsUnescaped, func(v string) (int32, error) {
+	durationInSecondsParam, err := parseOptional(qp.Get("durationInSeconds"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -17734,11 +17594,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTraceSlot(req *http.
 	if err != nil {
 		return nil, err
 	}
-	maxFrameLengthUnescaped, err := url.QueryUnescape(qp.Get("maxFrameLength"))
-	if err != nil {
-		return nil, err
-	}
-	maxFrameLengthParam, err := parseOptional(maxFrameLengthUnescaped, func(v string) (int32, error) {
+	maxFrameLengthParam, err := parseOptional(qp.Get("maxFrameLength"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -17748,11 +17604,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTraceSlot(req *http.
 	if err != nil {
 		return nil, err
 	}
-	sasURLUnescaped, err := url.QueryUnescape(qp.Get("sasUrl"))
-	if err != nil {
-		return nil, err
-	}
-	sasURLParam := getOptional(sasURLUnescaped)
+	sasURLParam := getOptional(qp.Get("sasUrl"))
 	var options *armappservice.WebAppsClientStartWebSiteNetworkTraceSlotOptions
 	if durationInSecondsParam != nil || maxFrameLengthParam != nil || sasURLParam != nil {
 		options = &armappservice.WebAppsClientStartWebSiteNetworkTraceSlotOptions{
@@ -17766,7 +17618,7 @@ func (w *WebAppsServerTransport) dispatchStartWebSiteNetworkTraceSlot(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Value, req)
@@ -17780,7 +17632,7 @@ func (w *WebAppsServerTransport) dispatchStop(req *http.Request) (*http.Response
 	if w.srv.Stop == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Stop not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -17799,7 +17651,7 @@ func (w *WebAppsServerTransport) dispatchStop(req *http.Request) (*http.Response
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17813,7 +17665,7 @@ func (w *WebAppsServerTransport) dispatchStopContinuousWebJob(req *http.Request)
 	if w.srv.StopContinuousWebJob == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopContinuousWebJob not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17836,7 +17688,7 @@ func (w *WebAppsServerTransport) dispatchStopContinuousWebJob(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17850,7 +17702,7 @@ func (w *WebAppsServerTransport) dispatchStopContinuousWebJobSlot(req *http.Requ
 	if w.srv.StopContinuousWebJobSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopContinuousWebJobSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continuouswebjobs/(?P<webJobName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continuouswebjobs/(?P<webJobName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -17877,7 +17729,7 @@ func (w *WebAppsServerTransport) dispatchStopContinuousWebJobSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17891,7 +17743,7 @@ func (w *WebAppsServerTransport) dispatchStopNetworkTrace(req *http.Request) (*h
 	if w.srv.StopNetworkTrace == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopNetworkTrace not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stopNetworkTrace`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stopNetworkTrace`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -17910,7 +17762,7 @@ func (w *WebAppsServerTransport) dispatchStopNetworkTrace(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17924,7 +17776,7 @@ func (w *WebAppsServerTransport) dispatchStopNetworkTraceSlot(req *http.Request)
 	if w.srv.StopNetworkTraceSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopNetworkTraceSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stopNetworkTrace`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stopNetworkTrace`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17947,7 +17799,7 @@ func (w *WebAppsServerTransport) dispatchStopNetworkTraceSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17961,7 +17813,7 @@ func (w *WebAppsServerTransport) dispatchStopSlot(req *http.Request) (*http.Resp
 	if w.srv.StopSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -17984,7 +17836,7 @@ func (w *WebAppsServerTransport) dispatchStopSlot(req *http.Request) (*http.Resp
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -17998,7 +17850,7 @@ func (w *WebAppsServerTransport) dispatchStopWebSiteNetworkTrace(req *http.Reque
 	if w.srv.StopWebSiteNetworkTrace == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopWebSiteNetworkTrace not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18017,7 +17869,7 @@ func (w *WebAppsServerTransport) dispatchStopWebSiteNetworkTrace(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18031,7 +17883,7 @@ func (w *WebAppsServerTransport) dispatchStopWebSiteNetworkTraceSlot(req *http.R
 	if w.srv.StopWebSiteNetworkTraceSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method StopWebSiteNetworkTraceSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkTrace/stop`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkTrace/stop`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18054,7 +17906,7 @@ func (w *WebAppsServerTransport) dispatchStopWebSiteNetworkTraceSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18070,7 +17922,7 @@ func (w *WebAppsServerTransport) dispatchBeginSwapSlot(req *http.Request) (*http
 	}
 	beginSwapSlot := w.beginSwapSlot.get(req)
 	if beginSwapSlot == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slotsswap`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slotsswap`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -18105,7 +17957,7 @@ func (w *WebAppsServerTransport) dispatchBeginSwapSlot(req *http.Request) (*http
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginSwapSlot.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -18122,7 +17974,7 @@ func (w *WebAppsServerTransport) dispatchBeginSwapSlotWithProduction(req *http.R
 	}
 	beginSwapSlotWithProduction := w.beginSwapSlotWithProduction.get(req)
 	if beginSwapSlotWithProduction == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slotsswap`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slotsswap`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -18153,7 +18005,7 @@ func (w *WebAppsServerTransport) dispatchBeginSwapSlotWithProduction(req *http.R
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		w.beginSwapSlotWithProduction.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -18168,7 +18020,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionTriggers(req *http.Request)
 	if w.srv.SyncFunctionTriggers == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncFunctionTriggers not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/syncfunctiontriggers`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/syncfunctiontriggers`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18187,7 +18039,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionTriggers(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18201,7 +18053,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionTriggersSlot(req *http.Requ
 	if w.srv.SyncFunctionTriggersSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncFunctionTriggersSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/syncfunctiontriggers`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/syncfunctiontriggers`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18224,7 +18076,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionTriggersSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18238,7 +18090,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctions(req *http.Request) (*http
 	if w.srv.SyncFunctions == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncFunctions not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/sync`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/sync`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18257,7 +18109,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctions(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18271,7 +18123,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionsSlot(req *http.Request) (*
 	if w.srv.SyncFunctionsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncFunctionsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/host/default/sync`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/host/default/sync`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18294,7 +18146,7 @@ func (w *WebAppsServerTransport) dispatchSyncFunctionsSlot(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18308,7 +18160,7 @@ func (w *WebAppsServerTransport) dispatchSyncRepository(req *http.Request) (*htt
 	if w.srv.SyncRepository == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncRepository not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sync`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sync`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18327,7 +18179,7 @@ func (w *WebAppsServerTransport) dispatchSyncRepository(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18341,7 +18193,7 @@ func (w *WebAppsServerTransport) dispatchSyncRepositorySlot(req *http.Request) (
 	if w.srv.SyncRepositorySlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method SyncRepositorySlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sync`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sync`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18364,7 +18216,7 @@ func (w *WebAppsServerTransport) dispatchSyncRepositorySlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -18378,7 +18230,7 @@ func (w *WebAppsServerTransport) dispatchUpdate(req *http.Request) (*http.Respon
 	if w.srv.Update == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Update not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18401,7 +18253,7 @@ func (w *WebAppsServerTransport) dispatchUpdate(req *http.Request) (*http.Respon
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Site, req)
@@ -18415,7 +18267,7 @@ func (w *WebAppsServerTransport) dispatchUpdateApplicationSettings(req *http.Req
 	if w.srv.UpdateApplicationSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateApplicationSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/appsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/appsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18438,7 +18290,7 @@ func (w *WebAppsServerTransport) dispatchUpdateApplicationSettings(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -18452,7 +18304,7 @@ func (w *WebAppsServerTransport) dispatchUpdateApplicationSettingsSlot(req *http
 	if w.srv.UpdateApplicationSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateApplicationSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/appsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/appsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18479,7 +18331,7 @@ func (w *WebAppsServerTransport) dispatchUpdateApplicationSettingsSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -18493,7 +18345,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettings(req *http.Request) (
 	if w.srv.UpdateAuthSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAuthSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18516,7 +18368,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettings(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettings, req)
@@ -18530,7 +18382,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsSlot(req *http.Reques
 	if w.srv.UpdateAuthSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAuthSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18557,7 +18409,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettings, req)
@@ -18571,7 +18423,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsV2(req *http.Request)
 	if w.srv.UpdateAuthSettingsV2 == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAuthSettingsV2 not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18594,7 +18446,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsV2(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -18608,7 +18460,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsV2Slot(req *http.Requ
 	if w.srv.UpdateAuthSettingsV2Slot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAuthSettingsV2Slot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/authsettingsV2`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/authsettingsV2`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18635,7 +18487,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAuthSettingsV2Slot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteAuthSettingsV2, req)
@@ -18649,7 +18501,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAzureStorageAccounts(req *http.Re
 	if w.srv.UpdateAzureStorageAccounts == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAzureStorageAccounts not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/azurestorageaccounts`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/azurestorageaccounts`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18672,7 +18524,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAzureStorageAccounts(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).AzureStoragePropertyDictionaryResource, req)
@@ -18686,7 +18538,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAzureStorageAccountsSlot(req *htt
 	if w.srv.UpdateAzureStorageAccountsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateAzureStorageAccountsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/azurestorageaccounts`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/azurestorageaccounts`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18713,7 +18565,7 @@ func (w *WebAppsServerTransport) dispatchUpdateAzureStorageAccountsSlot(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).AzureStoragePropertyDictionaryResource, req)
@@ -18727,7 +18579,7 @@ func (w *WebAppsServerTransport) dispatchUpdateBackupConfiguration(req *http.Req
 	if w.srv.UpdateBackupConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateBackupConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18750,7 +18602,7 @@ func (w *WebAppsServerTransport) dispatchUpdateBackupConfiguration(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupRequest, req)
@@ -18764,7 +18616,7 @@ func (w *WebAppsServerTransport) dispatchUpdateBackupConfigurationSlot(req *http
 	if w.srv.UpdateBackupConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateBackupConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/backup`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/backup`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18791,7 +18643,7 @@ func (w *WebAppsServerTransport) dispatchUpdateBackupConfigurationSlot(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).BackupRequest, req)
@@ -18805,7 +18657,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConfiguration(req *http.Request) 
 	if w.srv.UpdateConfiguration == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateConfiguration not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18828,7 +18680,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConfiguration(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -18842,7 +18694,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConfigurationSlot(req *http.Reque
 	if w.srv.UpdateConfigurationSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateConfigurationSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18869,7 +18721,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConfigurationSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteConfigResource, req)
@@ -18883,7 +18735,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConnectionStrings(req *http.Reque
 	if w.srv.UpdateConnectionStrings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateConnectionStrings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/connectionstrings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/connectionstrings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18906,7 +18758,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConnectionStrings(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ConnectionStringDictionary, req)
@@ -18920,7 +18772,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConnectionStringsSlot(req *http.R
 	if w.srv.UpdateConnectionStringsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateConnectionStringsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/connectionstrings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/connectionstrings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -18947,7 +18799,7 @@ func (w *WebAppsServerTransport) dispatchUpdateConnectionStringsSlot(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ConnectionStringDictionary, req)
@@ -18961,7 +18813,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDiagnosticLogsConfig(req *http.Re
 	if w.srv.UpdateDiagnosticLogsConfig == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateDiagnosticLogsConfig not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/logs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/logs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -18984,7 +18836,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDiagnosticLogsConfig(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteLogsConfig, req)
@@ -18998,7 +18850,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDiagnosticLogsConfigSlot(req *htt
 	if w.srv.UpdateDiagnosticLogsConfigSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateDiagnosticLogsConfigSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/logs`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/logs`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19025,7 +18877,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDiagnosticLogsConfigSlot(req *htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteLogsConfig, req)
@@ -19039,7 +18891,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDomainOwnershipIdentifier(req *ht
 	if w.srv.UpdateDomainOwnershipIdentifier == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateDomainOwnershipIdentifier not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19066,7 +18918,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDomainOwnershipIdentifier(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -19080,7 +18932,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDomainOwnershipIdentifierSlot(req
 	if w.srv.UpdateDomainOwnershipIdentifierSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateDomainOwnershipIdentifierSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/domainOwnershipIdentifiers/(?P<domainOwnershipIdentifierName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -19111,7 +18963,7 @@ func (w *WebAppsServerTransport) dispatchUpdateDomainOwnershipIdentifierSlot(req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Identifier, req)
@@ -19125,7 +18977,7 @@ func (w *WebAppsServerTransport) dispatchUpdateFtpAllowed(req *http.Request) (*h
 	if w.srv.UpdateFtpAllowed == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateFtpAllowed not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/ftp`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/ftp`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19148,7 +19000,7 @@ func (w *WebAppsServerTransport) dispatchUpdateFtpAllowed(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -19162,7 +19014,7 @@ func (w *WebAppsServerTransport) dispatchUpdateFtpAllowedSlot(req *http.Request)
 	if w.srv.UpdateFtpAllowedSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateFtpAllowedSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/ftp`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/ftp`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19189,7 +19041,7 @@ func (w *WebAppsServerTransport) dispatchUpdateFtpAllowedSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -19203,7 +19055,7 @@ func (w *WebAppsServerTransport) dispatchUpdateHybridConnection(req *http.Reques
 	if w.srv.UpdateHybridConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateHybridConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -19234,7 +19086,7 @@ func (w *WebAppsServerTransport) dispatchUpdateHybridConnection(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -19248,7 +19100,7 @@ func (w *WebAppsServerTransport) dispatchUpdateHybridConnectionSlot(req *http.Re
 	if w.srv.UpdateHybridConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateHybridConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridConnectionNamespaces/(?P<namespaceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/relays/(?P<relayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridConnectionNamespaces/(?P<namespaceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/relays/(?P<relayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -19283,7 +19135,7 @@ func (w *WebAppsServerTransport) dispatchUpdateHybridConnectionSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).HybridConnection, req)
@@ -19297,7 +19149,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMachineKey(req *http.Request) (*h
 	if w.srv.UpdateMachineKey == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateMachineKey not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/updatemachinekey`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/updatemachinekey`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19316,7 +19168,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMachineKey(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Interface, req)
@@ -19330,7 +19182,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMetadata(req *http.Request) (*htt
 	if w.srv.UpdateMetadata == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateMetadata not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/metadata`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/metadata`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19353,7 +19205,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMetadata(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -19367,7 +19219,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMetadataSlot(req *http.Request) (
 	if w.srv.UpdateMetadataSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateMetadataSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/metadata`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/metadata`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19394,7 +19246,7 @@ func (w *WebAppsServerTransport) dispatchUpdateMetadataSlot(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).StringDictionary, req)
@@ -19408,7 +19260,7 @@ func (w *WebAppsServerTransport) dispatchUpdatePremierAddOn(req *http.Request) (
 	if w.srv.UpdatePremierAddOn == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdatePremierAddOn not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19435,7 +19287,7 @@ func (w *WebAppsServerTransport) dispatchUpdatePremierAddOn(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -19449,7 +19301,7 @@ func (w *WebAppsServerTransport) dispatchUpdatePremierAddOnSlot(req *http.Reques
 	if w.srv.UpdatePremierAddOnSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdatePremierAddOnSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/premieraddons/(?P<premierAddOnName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/premieraddons/(?P<premierAddOnName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -19480,7 +19332,7 @@ func (w *WebAppsServerTransport) dispatchUpdatePremierAddOnSlot(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PremierAddOn, req)
@@ -19494,7 +19346,7 @@ func (w *WebAppsServerTransport) dispatchUpdateRelayServiceConnection(req *http.
 	if w.srv.UpdateRelayServiceConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateRelayServiceConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19521,7 +19373,7 @@ func (w *WebAppsServerTransport) dispatchUpdateRelayServiceConnection(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -19535,7 +19387,7 @@ func (w *WebAppsServerTransport) dispatchUpdateRelayServiceConnectionSlot(req *h
 	if w.srv.UpdateRelayServiceConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateRelayServiceConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hybridconnection/(?P<entityName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hybridconnection/(?P<entityName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -19566,7 +19418,7 @@ func (w *WebAppsServerTransport) dispatchUpdateRelayServiceConnectionSlot(req *h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RelayServiceConnectionEntity, req)
@@ -19580,7 +19432,7 @@ func (w *WebAppsServerTransport) dispatchUpdateScmAllowed(req *http.Request) (*h
 	if w.srv.UpdateScmAllowed == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateScmAllowed not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/scm`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/scm`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19603,7 +19455,7 @@ func (w *WebAppsServerTransport) dispatchUpdateScmAllowed(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -19617,7 +19469,7 @@ func (w *WebAppsServerTransport) dispatchUpdateScmAllowedSlot(req *http.Request)
 	if w.srv.UpdateScmAllowedSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateScmAllowedSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/basicPublishingCredentialsPolicies/scm`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/basicPublishingCredentialsPolicies/scm`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19644,7 +19496,7 @@ func (w *WebAppsServerTransport) dispatchUpdateScmAllowedSlot(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CsmPublishingCredentialsPoliciesEntity, req)
@@ -19658,7 +19510,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSitePushSettings(req *http.Reques
 	if w.srv.UpdateSitePushSettings == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSitePushSettings not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/pushsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/pushsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19681,7 +19533,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSitePushSettings(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PushSettings, req)
@@ -19695,7 +19547,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSitePushSettingsSlot(req *http.Re
 	if w.srv.UpdateSitePushSettingsSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSitePushSettingsSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/pushsettings`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/pushsettings`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19722,7 +19574,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSitePushSettingsSlot(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PushSettings, req)
@@ -19736,7 +19588,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSlot(req *http.Request) (*http.Re
 	if w.srv.UpdateSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19763,7 +19615,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSlot(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Site, req)
@@ -19777,7 +19629,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSlotConfigurationNames(req *http.
 	if w.srv.UpdateSlotConfigurationNames == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSlotConfigurationNames not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/config/slotConfigNames`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/config/slotConfigNames`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19800,7 +19652,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSlotConfigurationNames(req *http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SlotConfigNamesResource, req)
@@ -19814,7 +19666,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSourceControl(req *http.Request) 
 	if w.srv.UpdateSourceControl == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSourceControl not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19837,7 +19689,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSourceControl(req *http.Request) 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteSourceControl, req)
@@ -19851,7 +19703,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSourceControlSlot(req *http.Reque
 	if w.srv.UpdateSourceControlSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSourceControlSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sourcecontrols/web`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sourcecontrols/web`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19878,7 +19730,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSourceControlSlot(req *http.Reque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated, http.StatusAccepted}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated, http.StatusAccepted", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SiteSourceControl, req)
@@ -19892,7 +19744,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSwiftVirtualNetworkConnectionWith
 	if w.srv.UpdateSwiftVirtualNetworkConnectionWithCheck == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSwiftVirtualNetworkConnectionWithCheck not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -19915,7 +19767,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSwiftVirtualNetworkConnectionWith
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -19929,7 +19781,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSwiftVirtualNetworkConnectionWith
 	if w.srv.UpdateSwiftVirtualNetworkConnectionWithCheckSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateSwiftVirtualNetworkConnectionWithCheckSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/networkConfig/virtualNetwork`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/networkConfig/virtualNetwork`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19956,7 +19808,7 @@ func (w *WebAppsServerTransport) dispatchUpdateSwiftVirtualNetworkConnectionWith
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SwiftVirtualNetwork, req)
@@ -19970,7 +19822,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnection(req *http.Request)
 	if w.srv.UpdateVnetConnection == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateVnetConnection not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -19997,7 +19849,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnection(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)
@@ -20011,7 +19863,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionGateway(req *http.R
 	if w.srv.UpdateVnetConnectionGateway == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateVnetConnectionGateway not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -20042,7 +19894,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionGateway(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -20056,7 +19908,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionGatewaySlot(req *ht
 	if w.srv.UpdateVnetConnectionGatewaySlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateVnetConnectionGatewaySlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/gateways/(?P<gatewayName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/gateways/(?P<gatewayName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -20091,7 +19943,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionGatewaySlot(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetGateway, req)
@@ -20105,7 +19957,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionSlot(req *http.Requ
 	if w.srv.UpdateVnetConnectionSlot == nil {
 		return nil, &nonRetriableError{errors.New("fake for method UpdateVnetConnectionSlot not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/slots/(?P<slot>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualNetworkConnections/(?P<vnetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/slots/(?P<slot>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualNetworkConnections/(?P<vnetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -20136,7 +19988,7 @@ func (w *WebAppsServerTransport) dispatchUpdateVnetConnectionSlot(req *http.Requ
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VnetInfoResource, req)

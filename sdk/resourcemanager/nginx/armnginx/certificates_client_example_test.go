@@ -28,13 +28,13 @@ func ExampleCertificatesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.CertificatesClientCreateOrUpdateResponse{
-	// 	Certificate: &armnginx.Certificate{
+	// 	Certificate: armnginx.Certificate{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("nginx.nginxplus/nginxdeployments/certificates"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/certificates/default"),
@@ -65,7 +65,7 @@ func ExampleCertificatesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -88,7 +88,7 @@ func ExampleCertificatesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.CertificatesClientGetResponse{
-	// 	Certificate: &armnginx.Certificate{
+	// 	Certificate: armnginx.Certificate{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("nginx.nginxplus/nginxdeployments/certificates"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/certificates/default"),
@@ -98,7 +98,7 @@ func ExampleCertificatesClient_Get() {
 	// 				Message: to.Ptr("The certificate is not yet valid. The certificate is not yet valid. NotBefore: '2020-01-01T00:00:00Z', NotAfter: '2020-01-01T00:00:00Z'"),
 	// 			},
 	// 			CertificateVirtualPath: to.Ptr("/src/cert/somePath.cert"),
-	// 			KeyVaultSecretCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T00:00:00Z"); return t}()),
+	// 			KeyVaultSecretCreated: to.Ptr(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			KeyVaultSecretID: to.Ptr("https://someKV.vault.azure.com/someSecretID"),
 	// 			KeyVaultSecretVersion: to.Ptr("12345678ef9a12345678ef9a12345678"),
 	// 			KeyVirtualPath: to.Ptr("/src/cert/somekey.key"),
@@ -144,7 +144,7 @@ func ExampleCertificatesClient_NewListPager() {
 		// 						Message: to.Ptr("The certificate is not yet valid. The certificate is not yet valid. NotBefore: '2020-01-01T00:00:00Z', NotAfter: '2020-01-01T00:00:00Z'"),
 		// 					},
 		// 					CertificateVirtualPath: to.Ptr("/src/cert/somePath.cert"),
-		// 					KeyVaultSecretCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T00:00:00Z"); return t}()),
+		// 					KeyVaultSecretCreated: to.Ptr(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)),
 		// 					KeyVaultSecretID: to.Ptr("https://someKV.vault.azure.com/someSecretID"),
 		// 					KeyVaultSecretVersion: to.Ptr("12345678ef9a12345678ef9a12345678"),
 		// 					KeyVirtualPath: to.Ptr("/src/cert/somekey.key"),
@@ -158,7 +158,7 @@ func ExampleCertificatesClient_NewListPager() {
 		// 				ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/certificates/cert2"),
 		// 				Properties: &armnginx.CertificateProperties{
 		// 					CertificateVirtualPath: to.Ptr("/src/cert/somePath2.cert"),
-		// 					KeyVaultSecretCreated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T00:00:00Z"); return t}()),
+		// 					KeyVaultSecretCreated: to.Ptr(time.Date(2020, time.January, 1, 0, 0, 0, 0, time.UTC)),
 		// 					KeyVaultSecretID: to.Ptr("https://someKV.vault.azure.com/someSecretID2"),
 		// 					KeyVaultSecretVersion: to.Ptr("12345678ef9a12345678ef9a12345678"),
 		// 					KeyVirtualPath: to.Ptr("/src/cert/somekey2.key"),

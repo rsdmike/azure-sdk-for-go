@@ -18,6 +18,8 @@ import (
 
 // DeletedWebAppsClient contains the methods for the DeletedWebApps group.
 // Don't use this type directly, use NewDeletedWebAppsClient() instead.
+//
+// Generated from API version 2025-05-01
 type DeletedWebAppsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DeletedWebAppsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDeletedWebAppsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DeletedWebAppsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewDeletedWebAppsClient(subscriptionID string, credential azcore.TokenCrede
 //
 // Description for Get deleted app for a subscription at location.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - location - The location name.
 //   - deletedSiteID - The numeric ID of the deleted app, e.g. 12345
 //   - options - DeletedWebAppsClientGetDeletedWebAppByLocationOptions contains the optional parameters for the DeletedWebAppsClient.GetDeletedWebAppByLocation
@@ -63,19 +66,14 @@ func (client *DeletedWebAppsClient) GetDeletedWebAppByLocation(ctx context.Conte
 	if err != nil {
 		return DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}, err
-	}
-	resp, err := client.getDeletedWebAppByLocationHandleResponse(httpResp)
-	return resp, err
+	return client.getDeletedWebAppByLocationHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeletedWebAppByLocationCreateRequest creates the GetDeletedWebAppByLocation request.
 func (client *DeletedWebAppsClient) getDeletedWebAppByLocationCreateRequest(ctx context.Context, location string, deletedSiteID string, _ *DeletedWebAppsClientGetDeletedWebAppByLocationOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/deletedSites/{deletedSiteId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -91,15 +89,18 @@ func (client *DeletedWebAppsClient) getDeletedWebAppByLocationCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeletedWebAppByLocationHandleResponse handles the GetDeletedWebAppByLocation response.
-func (client *DeletedWebAppsClient) getDeletedWebAppByLocationHandleResponse(resp *http.Response) (DeletedWebAppsClientGetDeletedWebAppByLocationResponse, error) {
+func (client *DeletedWebAppsClient) getDeletedWebAppByLocationHandleResponse(resp *http.Response, successCodes ...int) (DeletedWebAppsClientGetDeletedWebAppByLocationResponse, error) {
 	result := DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedSite); err != nil {
 		return DeletedWebAppsClientGetDeletedWebAppByLocationResponse{}, err
 	}
@@ -109,8 +110,6 @@ func (client *DeletedWebAppsClient) getDeletedWebAppByLocationHandleResponse(res
 // NewListPager - Get all deleted apps for a subscription.
 //
 // Description for Get all deleted apps for a subscription.
-//
-// Generated from API version 2025-05-01
 //   - options - DeletedWebAppsClientListOptions contains the optional parameters for the DeletedWebAppsClient.NewListPager method.
 func (client *DeletedWebAppsClient) NewListPager(options *DeletedWebAppsClientListOptions) *runtime.Pager[DeletedWebAppsClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[DeletedWebAppsClientListResponse]{
@@ -123,39 +122,53 @@ func (client *DeletedWebAppsClient) NewListPager(options *DeletedWebAppsClientLi
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DeletedWebAppsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DeletedWebAppsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DeletedWebAppsClient) listCreateRequest(ctx context.Context, _ *DeletedWebAppsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DeletedWebAppsClient) listCreateRequest(ctx context.Context, nextLink string, _ *DeletedWebAppsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DeletedWebAppsClient) listHandleResponse(resp *http.Response) (DeletedWebAppsClientListResponse, error) {
+func (client *DeletedWebAppsClient) listHandleResponse(resp *http.Response, successCodes ...int) (DeletedWebAppsClientListResponse, error) {
 	result := DeletedWebAppsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedWebAppCollection); err != nil {
 		return DeletedWebAppsClientListResponse{}, err
 	}
@@ -164,9 +177,7 @@ func (client *DeletedWebAppsClient) listHandleResponse(resp *http.Response) (Del
 
 // NewListByLocationPager - Get all deleted apps for a subscription at location
 //
-// # Description for Get all deleted apps for a subscription at location
-//
-// Generated from API version 2025-05-01
+// Description for Get all deleted apps for a subscription at location
 //   - location - The location name.
 //   - options - DeletedWebAppsClientListByLocationOptions contains the optional parameters for the DeletedWebAppsClient.NewListByLocationPager
 //     method.
@@ -181,43 +192,57 @@ func (client *DeletedWebAppsClient) NewListByLocationPager(location string, opti
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByLocationCreateRequest(ctx, location, options)
-			}, nil)
+			req, err := client.listByLocationCreateRequest(ctx, location, nextLink, options)
 			if err != nil {
 				return DeletedWebAppsClientListByLocationResponse{}, err
 			}
-			return client.listByLocationHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DeletedWebAppsClientListByLocationResponse{}, err
+			}
+			return client.listByLocationHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByLocationCreateRequest creates the ListByLocation request.
-func (client *DeletedWebAppsClient) listByLocationCreateRequest(ctx context.Context, location string, _ *DeletedWebAppsClientListByLocationOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/deletedSites"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DeletedWebAppsClient) listByLocationCreateRequest(ctx context.Context, location string, nextLink string, _ *DeletedWebAppsClientListByLocationOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/deletedSites"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if location == "" {
+			return nil, errors.New("parameter location cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if location == "" {
-		return nil, errors.New("parameter location cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByLocationHandleResponse handles the ListByLocation response.
-func (client *DeletedWebAppsClient) listByLocationHandleResponse(resp *http.Response) (DeletedWebAppsClientListByLocationResponse, error) {
+func (client *DeletedWebAppsClient) listByLocationHandleResponse(resp *http.Response, successCodes ...int) (DeletedWebAppsClientListByLocationResponse, error) {
 	result := DeletedWebAppsClientListByLocationResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedWebAppCollection); err != nil {
 		return DeletedWebAppsClientListByLocationResponse{}, err
 	}

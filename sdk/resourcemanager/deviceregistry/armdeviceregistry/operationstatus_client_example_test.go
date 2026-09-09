@@ -30,13 +30,13 @@ func ExampleOperationStatusClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.OperationStatusClientGetResponse{
-	// 	OperationStatusResult: &armdeviceregistry.OperationStatusResult{
+	// 	OperationStatusResult: armdeviceregistry.OperationStatusResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.DeviceRegistry/locations/testLocation/operationStatuses/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"),
 	// 		Name: to.Ptr("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"),
 	// 		Status: to.Ptr("Succeeded"),
 	// 		PercentComplete: to.Ptr[float64](100),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-21T13:27:03.8980869Z"); return t}()),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-21T13:28:03.8980869Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2022, time.November, 21, 13, 27, 3, 898086900, time.UTC)),
+	// 		EndTime: to.Ptr(time.Date(2022, time.November, 21, 13, 28, 3, 898086900, time.UTC)),
 	// 	},
 	// }
 }

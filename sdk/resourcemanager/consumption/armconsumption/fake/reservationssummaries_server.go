@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ReservationsSummariesServer is a fake server for instances of the armconsumption.ReservationsSummariesClient type.
@@ -65,9 +66,7 @@ func (r *ReservationsSummariesServerTransport) Do(req *http.Request) (*http.Resp
 }
 
 func (r *ReservationsSummariesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -87,10 +86,7 @@ func (r *ReservationsSummariesServerTransport) dispatchToMethodFake(req *http.Re
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -107,7 +103,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListPager(req *http.Re
 	}
 	newListPager := r.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/(?P<resourceScope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationSummaries`
+		const regexStr = `/(?P<resourceScope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Consumption/reservationSummaries`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -118,41 +114,11 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListPager(req *http.Re
 		if err != nil {
 			return nil, err
 		}
-		grainParam, err := parseWithCast(qp.Get("grain"), func(v string) (armconsumption.Datagrain, error) {
-			p, unescapeErr := url.QueryUnescape(v)
-			if unescapeErr != nil {
-				return "", unescapeErr
-			}
-			return armconsumption.Datagrain(p), nil
-		})
-		if err != nil {
-			return nil, err
-		}
-		startDateUnescaped, err := url.QueryUnescape(qp.Get("startDate"))
-		if err != nil {
-			return nil, err
-		}
-		startDateParam := getOptional(startDateUnescaped)
-		endDateUnescaped, err := url.QueryUnescape(qp.Get("endDate"))
-		if err != nil {
-			return nil, err
-		}
-		endDateParam := getOptional(endDateUnescaped)
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
-		reservationIDUnescaped, err := url.QueryUnescape(qp.Get("reservationId"))
-		if err != nil {
-			return nil, err
-		}
-		reservationIDParam := getOptional(reservationIDUnescaped)
-		reservationOrderIDUnescaped, err := url.QueryUnescape(qp.Get("reservationOrderId"))
-		if err != nil {
-			return nil, err
-		}
-		reservationOrderIDParam := getOptional(reservationOrderIDUnescaped)
+		startDateParam := getOptional(qp.Get("startDate"))
+		endDateParam := getOptional(qp.Get("endDate"))
+		filterParam := getOptional(qp.Get("$filter"))
+		reservationIDParam := getOptional(qp.Get("reservationId"))
+		reservationOrderIDParam := getOptional(qp.Get("reservationOrderId"))
 		var options *armconsumption.ReservationsSummariesClientListOptions
 		if startDateParam != nil || endDateParam != nil || filterParam != nil || reservationIDParam != nil || reservationOrderIDParam != nil {
 			options = &armconsumption.ReservationsSummariesClientListOptions{
@@ -163,7 +129,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListPager(req *http.Re
 				ReservationOrderID: reservationOrderIDParam,
 			}
 		}
-		resp := r.srv.NewListPager(resourceScopeParam, grainParam, options)
+		resp := r.srv.NewListPager(resourceScopeParam, armconsumption.Datagrain(qp.Get("grain")), options)
 		newListPager = &resp
 		r.newListPager.add(req, newListPager)
 		server.PagerResponderInjectNextLinks(newListPager, req, func(page *armconsumption.ReservationsSummariesClientListResponse, createLink func() string) {
@@ -174,7 +140,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListPager(req *http.Re
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -190,7 +156,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 	}
 	newListByReservationOrderPager := r.newListByReservationOrderPager.get(req)
 	if newListByReservationOrderPager == nil {
-		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationSummaries`
+		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/reservationSummaries`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -201,28 +167,14 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 		if err != nil {
 			return nil, err
 		}
-		grainParam, err := parseWithCast(qp.Get("grain"), func(v string) (armconsumption.Datagrain, error) {
-			p, unescapeErr := url.QueryUnescape(v)
-			if unescapeErr != nil {
-				return "", unescapeErr
-			}
-			return armconsumption.Datagrain(p), nil
-		})
-		if err != nil {
-			return nil, err
-		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armconsumption.ReservationsSummariesClientListByReservationOrderOptions
 		if filterParam != nil {
 			options = &armconsumption.ReservationsSummariesClientListByReservationOrderOptions{
 				Filter: filterParam,
 			}
 		}
-		resp := r.srv.NewListByReservationOrderPager(reservationOrderIDParam, grainParam, options)
+		resp := r.srv.NewListByReservationOrderPager(reservationOrderIDParam, armconsumption.Datagrain(qp.Get("grain")), options)
 		newListByReservationOrderPager = &resp
 		r.newListByReservationOrderPager.add(req, newListByReservationOrderPager)
 		server.PagerResponderInjectNextLinks(newListByReservationOrderPager, req, func(page *armconsumption.ReservationsSummariesClientListByReservationOrderResponse, createLink func() string) {
@@ -233,7 +185,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListByReservationOrderPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -249,7 +201,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 	}
 	newListByReservationOrderAndReservationPager := r.newListByReservationOrderAndReservationPager.get(req)
 	if newListByReservationOrderAndReservationPager == nil {
-		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/reservations/(?P<reservationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationSummaries`
+		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/reservations/(?P<reservationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/reservationSummaries`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -264,28 +216,14 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 		if err != nil {
 			return nil, err
 		}
-		grainParam, err := parseWithCast(qp.Get("grain"), func(v string) (armconsumption.Datagrain, error) {
-			p, unescapeErr := url.QueryUnescape(v)
-			if unescapeErr != nil {
-				return "", unescapeErr
-			}
-			return armconsumption.Datagrain(p), nil
-		})
-		if err != nil {
-			return nil, err
-		}
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
+		filterParam := getOptional(qp.Get("$filter"))
 		var options *armconsumption.ReservationsSummariesClientListByReservationOrderAndReservationOptions
 		if filterParam != nil {
 			options = &armconsumption.ReservationsSummariesClientListByReservationOrderAndReservationOptions{
 				Filter: filterParam,
 			}
 		}
-		resp := r.srv.NewListByReservationOrderAndReservationPager(reservationOrderIDParam, reservationIDParam, grainParam, options)
+		resp := r.srv.NewListByReservationOrderAndReservationPager(reservationOrderIDParam, reservationIDParam, armconsumption.Datagrain(qp.Get("grain")), options)
 		newListByReservationOrderAndReservationPager = &resp
 		r.newListByReservationOrderAndReservationPager.add(req, newListByReservationOrderAndReservationPager)
 		server.PagerResponderInjectNextLinks(newListByReservationOrderAndReservationPager, req, func(page *armconsumption.ReservationsSummariesClientListByReservationOrderAndReservationResponse, createLink func() string) {
@@ -296,7 +234,7 @@ func (r *ReservationsSummariesServerTransport) dispatchNewListByReservationOrder
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListByReservationOrderAndReservationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

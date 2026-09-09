@@ -37,13 +37,13 @@ func ExampleAppliancesClient_BeginCreateOrUpdate_createUpdateAppliance() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientCreateOrUpdateResponse{
-	// 	Appliance: &armresourceconnector.Appliance{
+	// 	Appliance: armresourceconnector.Appliance{
 	// 		ID: to.Ptr("/subscriptions/11111111-2222-3333-4444-555555555555/resourceGroups/testrg/providers/Microsoft.ResourceConnector/appliances/appliance01"),
 	// 		Name: to.Ptr("appliance01"),
 	// 		Type: to.Ptr("Microsoft.ResourceConnector/appliances"),
@@ -77,10 +77,10 @@ func ExampleAppliancesClient_BeginCreateOrUpdate_createUpdateAppliance() {
 	// 		SystemData: &armresourceconnector.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -117,13 +117,13 @@ func ExampleAppliancesClient_BeginCreateOrUpdate_updateApplianceProxyConfigurati
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientCreateOrUpdateResponse{
-	// 	Appliance: &armresourceconnector.Appliance{
+	// 	Appliance: armresourceconnector.Appliance{
 	// 		ID: to.Ptr("/subscriptions/11111111-2222-3333-4444-555555555555/resourceGroups/testrg/providers/Microsoft.ResourceConnector/appliances/appliance01"),
 	// 		Name: to.Ptr("appliance01"),
 	// 		Type: to.Ptr("Microsoft.ResourceConnector/appliances"),
@@ -157,10 +157,10 @@ func ExampleAppliancesClient_BeginCreateOrUpdate_updateApplianceProxyConfigurati
 	// 		SystemData: &armresourceconnector.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T00:05:15.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 21, 0, 5, 15, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -183,7 +183,7 @@ func ExampleAppliancesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -206,7 +206,7 @@ func ExampleAppliancesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientGetResponse{
-	// 	Appliance: &armresourceconnector.Appliance{
+	// 	Appliance: armresourceconnector.Appliance{
 	// 		ID: to.Ptr("/subscriptions/11111111-2222-3333-4444-555555555555/resourceGroups/testresourcegroup/providers/Microsoft.ResourceConnector/appliances/appliance01"),
 	// 		Name: to.Ptr("appliance01"),
 	// 		Type: to.Ptr("Microsoft.ResourceConnector/appliances"),
@@ -238,7 +238,7 @@ func ExampleAppliancesClient_Get() {
 	// 					Status: to.Ptr("Failed"),
 	// 					Message: to.Ptr("Cloud managed upgrade failed with error: InvalidLogin"),
 	// 					Severity: to.Ptr("Error"),
-	// 					Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25Z"); return t}()),
+	// 					Timestamp: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 0, time.UTC)),
 	// 				},
 	// 				{
 	// 					Type: to.Ptr("Unplanned"),
@@ -246,7 +246,7 @@ func ExampleAppliancesClient_Get() {
 	// 					Status: to.Ptr("Failed"),
 	// 					Message: to.Ptr("VCenter is not reachable from the resource bridge. Please check the network connectivity."),
 	// 					Severity: to.Ptr("Error"),
-	// 					Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25Z"); return t}()),
+	// 					Timestamp: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 0, time.UTC)),
 	// 				},
 	// 			},
 	// 		},
@@ -258,10 +258,10 @@ func ExampleAppliancesClient_Get() {
 	// 		SystemData: &armresourceconnector.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -286,7 +286,7 @@ func ExampleAppliancesClient_GetTelemetryConfig() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientGetTelemetryConfigResponse{
-	// 	ApplianceGetTelemetryConfigResult: &armresourceconnector.ApplianceGetTelemetryConfigResult{
+	// 	ApplianceGetTelemetryConfigResult: armresourceconnector.ApplianceGetTelemetryConfigResult{
 	// 		TelemetryInstrumentationKey: to.Ptr("xxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 	// 	},
 	// }
@@ -311,7 +311,7 @@ func ExampleAppliancesClient_GetUpgradeGraph() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientGetUpgradeGraphResponse{
-	// 	UpgradeGraph: &armresourceconnector.UpgradeGraph{
+	// 	UpgradeGraph: armresourceconnector.UpgradeGraph{
 	// 		ID: to.Ptr("/subscriptions/11111111-2222-3333-4444-555555555555/resourceGroups/testresourcegroup/providers/Microsoft.ResourceConnector/appliances/appliance01"),
 	// 		Name: to.Ptr("stable"),
 	// 		Properties: &armresourceconnector.UpgradeGraphProperties{
@@ -392,10 +392,10 @@ func ExampleAppliancesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armresourceconnector.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 				},
 		// 			},
 		// 			{
@@ -427,10 +427,10 @@ func ExampleAppliancesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armresourceconnector.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -493,10 +493,10 @@ func ExampleAppliancesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armresourceconnector.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 				},
 		// 			},
 		// 			{
@@ -528,10 +528,10 @@ func ExampleAppliancesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armresourceconnector.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armresourceconnector.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-04-09T17:52:25.0928001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.April, 9, 17, 52, 25, 92800100, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -559,7 +559,7 @@ func ExampleAppliancesClient_ListClusterUserCredential() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientListClusterUserCredentialResponse{
-	// 	ApplianceListCredentialResults: &armresourceconnector.ApplianceListCredentialResults{
+	// 	ApplianceListCredentialResults: armresourceconnector.ApplianceListCredentialResults{
 	// 		HybridConnectionConfig: &armresourceconnector.HybridConnectionConfig{
 	// 			ExpirationTime: to.Ptr[int64](123456789),
 	// 			HybridConnectionName: to.Ptr("provider/type/bc36ffcf318d5bedfc05ba8b0628dba"),
@@ -595,7 +595,7 @@ func ExampleAppliancesClient_ListKeys() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientListKeysResponse{
-	// 	ApplianceListKeysResults: &armresourceconnector.ApplianceListKeysResults{
+	// 	ApplianceListKeysResults: armresourceconnector.ApplianceListKeysResults{
 	// 		ArtifactProfiles: map[string]*armresourceconnector.ArtifactProfile{
 	// 			"LogsArtifactType": &armresourceconnector.ArtifactProfile{
 	// 				Endpoint: to.Ptr("https://<storage-account-name>.blob.core.windows.net/<container-name>?<SAS-token>"),
@@ -780,7 +780,7 @@ func ExampleAppliancesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armresourceconnector.AppliancesClientUpdateResponse{
-	// 	Appliance: &armresourceconnector.Appliance{
+	// 	Appliance: armresourceconnector.Appliance{
 	// 		ID: to.Ptr("/subscriptions/11111111-2222-3333-4444-555555555555/resourceGroups/testresourcegroup/providers/Microsoft.ResourceConnector/appliances/appliance01"),
 	// 		Name: to.Ptr("appliance01"),
 	// 		Type: to.Ptr("Microsoft.ResourceConnector/appliances"),

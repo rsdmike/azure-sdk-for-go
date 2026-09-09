@@ -19,6 +19,8 @@ import (
 
 // TicketsClient contains the methods for the Tickets group.
 // Don't use this type directly, use NewTicketsClient() instead.
+//
+// Generated from API version 2024-04-01
 type TicketsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type TicketsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewTicketsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*TicketsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewTicketsClient(subscriptionID string, credential azcore.TokenCredential, 
 // CheckNameAvailability - Check the availability of a resource name. This API should be used to check the uniqueness of the
 // name for support ticket creation for the selected subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - checkNameAvailabilityInput - The request body
 //   - options - TicketsClientCheckNameAvailabilityOptions contains the optional parameters for the TicketsClient.CheckNameAvailability
 //     method.
@@ -62,19 +65,14 @@ func (client *TicketsClient) CheckNameAvailability(ctx context.Context, checkNam
 	if err != nil {
 		return TicketsClientCheckNameAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TicketsClientCheckNameAvailabilityResponse{}, err
-	}
-	resp, err := client.checkNameAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkNameAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkNameAvailabilityCreateRequest creates the CheckNameAvailability request.
 func (client *TicketsClient) checkNameAvailabilityCreateRequest(ctx context.Context, checkNameAvailabilityInput CheckNameAvailabilityInput, _ *TicketsClientCheckNameAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/checkNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -82,8 +80,8 @@ func (client *TicketsClient) checkNameAvailabilityCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, checkNameAvailabilityInput); err != nil {
@@ -93,8 +91,11 @@ func (client *TicketsClient) checkNameAvailabilityCreateRequest(ctx context.Cont
 }
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
-func (client *TicketsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (TicketsClientCheckNameAvailabilityResponse, error) {
+func (client *TicketsClient) checkNameAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (TicketsClientCheckNameAvailabilityResponse, error) {
 	result := TicketsClientCheckNameAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityOutput); err != nil {
 		return TicketsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -114,8 +115,6 @@ func (client *TicketsClient) checkNameAvailabilityHandleResponse(resp *http.Resp
 // The primary token will be from the tenant for whom a support ticket is being raised against the subscription, i.e. Cloud
 // solution provider (CSP) customer tenant. The auxiliary token will be from the Cloud solution provider (CSP) partner tenant.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - supportTicketName - The name of the SupportTicketDetails
 //   - createSupportTicketParameters - Support ticket request payload.
 //   - options - TicketsClientBeginCreateOptions contains the optional parameters for the TicketsClient.BeginCreate method.
@@ -150,8 +149,6 @@ func (client *TicketsClient) BeginCreate(ctx context.Context, supportTicketName 
 // The primary token will be from the tenant for whom a support ticket is being raised against the subscription, i.e. Cloud
 // solution provider (CSP) customer tenant. The auxiliary token will be from the Cloud solution provider (CSP) partner tenant.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 func (client *TicketsClient) create(ctx context.Context, supportTicketName string, createSupportTicketParameters TicketDetails, options *TicketsClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "TicketsClient.BeginCreate"
@@ -167,8 +164,7 @@ func (client *TicketsClient) create(ctx context.Context, supportTicketName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -177,7 +173,7 @@ func (client *TicketsClient) create(ctx context.Context, supportTicketName strin
 func (client *TicketsClient) createCreateRequest(ctx context.Context, supportTicketName string, createSupportTicketParameters TicketDetails, _ *TicketsClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/supportTickets/{supportTicketName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if supportTicketName == "" {
@@ -189,8 +185,8 @@ func (client *TicketsClient) createCreateRequest(ctx context.Context, supportTic
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, createSupportTicketParameters); err != nil {
@@ -202,8 +198,6 @@ func (client *TicketsClient) createCreateRequest(ctx context.Context, supportTic
 // Get - Get ticket details for an Azure subscription. Support ticket data is available for 18 months after ticket creation.
 // If a ticket was created more than 18 months ago, a request for data might cause an error.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - supportTicketName - The name of the SupportTicketDetails
 //   - options - TicketsClientGetOptions contains the optional parameters for the TicketsClient.Get method.
 func (client *TicketsClient) Get(ctx context.Context, supportTicketName string, options *TicketsClientGetOptions) (TicketsClientGetResponse, error) {
@@ -220,19 +214,14 @@ func (client *TicketsClient) Get(ctx context.Context, supportTicketName string, 
 	if err != nil {
 		return TicketsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TicketsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *TicketsClient) getCreateRequest(ctx context.Context, supportTicketName string, _ *TicketsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/supportTickets/{supportTicketName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if supportTicketName == "" {
@@ -244,15 +233,18 @@ func (client *TicketsClient) getCreateRequest(ctx context.Context, supportTicket
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *TicketsClient) getHandleResponse(resp *http.Response) (TicketsClientGetResponse, error) {
+func (client *TicketsClient) getHandleResponse(resp *http.Response, successCodes ...int) (TicketsClientGetResponse, error) {
 	result := TicketsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketDetails); err != nil {
 		return TicketsClientGetResponse{}, err
 	}
@@ -263,8 +255,6 @@ func (client *TicketsClient) getHandleResponse(resp *http.Response) (TicketsClie
 // _CreatedDate_, _ServiceId_, and _ProblemClassificationId_ using the $filter parameter. Output will be a paged result with
 // _nextLink_, using which you can retrieve the next set of support tickets. <br/><br/>Support ticket data is available for
 // 18 months after ticket creation. If a ticket was created more than 18 months ago, a request for data might cause an error.
-//
-// Generated from API version 2024-04-01
 //   - options - TicketsClientListOptions contains the optional parameters for the TicketsClient.NewListPager method.
 func (client *TicketsClient) NewListPager(options *TicketsClientListOptions) *runtime.Pager[TicketsClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[TicketsClientListResponse]{
@@ -277,45 +267,59 @@ func (client *TicketsClient) NewListPager(options *TicketsClientListOptions) *ru
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return TicketsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return TicketsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *TicketsClient) listCreateRequest(ctx context.Context, options *TicketsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/supportTickets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *TicketsClient) listCreateRequest(ctx context.Context, nextLink string, options *TicketsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/supportTickets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20240401)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *TicketsClient) listHandleResponse(resp *http.Response) (TicketsClientListResponse, error) {
+func (client *TicketsClient) listHandleResponse(resp *http.Response, successCodes ...int) (TicketsClientListResponse, error) {
 	result := TicketsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketsListResult); err != nil {
 		return TicketsClientListResponse{}, err
 	}
@@ -327,8 +331,6 @@ func (client *TicketsClient) listHandleResponse(resp *http.Response) (TicketsCli
 // being worked upon by an Azure support engineer. In such a case, contact your support engineer to request severity update
 // by adding a new communication using the Communications API.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - supportTicketName - The name of the SupportTicketDetails
 //   - updateSupportTicket - UpdateSupportTicket object.
 //   - options - TicketsClientUpdateOptions contains the optional parameters for the TicketsClient.Update method.
@@ -346,19 +348,14 @@ func (client *TicketsClient) Update(ctx context.Context, supportTicketName strin
 	if err != nil {
 		return TicketsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TicketsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *TicketsClient) updateCreateRequest(ctx context.Context, supportTicketName string, updateSupportTicket UpdateSupportTicket, _ *TicketsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/supportTickets/{supportTicketName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if supportTicketName == "" {
@@ -370,8 +367,8 @@ func (client *TicketsClient) updateCreateRequest(ctx context.Context, supportTic
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, updateSupportTicket); err != nil {
@@ -381,8 +378,11 @@ func (client *TicketsClient) updateCreateRequest(ctx context.Context, supportTic
 }
 
 // updateHandleResponse handles the Update response.
-func (client *TicketsClient) updateHandleResponse(resp *http.Response) (TicketsClientUpdateResponse, error) {
+func (client *TicketsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (TicketsClientUpdateResponse, error) {
 	result := TicketsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TicketDetails); err != nil {
 		return TicketsClientUpdateResponse{}, err
 	}

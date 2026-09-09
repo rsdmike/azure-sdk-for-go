@@ -19,6 +19,8 @@ import (
 
 // ZonesClient contains the methods for the Zones group.
 // Don't use this type directly, use NewZonesClient() instead.
+//
+// Generated from API version 2023-07-01-preview
 type ZonesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type ZonesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewZonesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ZonesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewZonesClient(subscriptionID string, credential azcore.TokenCredential, op
 
 // CreateOrUpdate - Creates or updates a DNS zone. Does not modify DNS records within the zone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-07-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - zoneName - The name of the DNS zone (without a terminating dot).
 //   - parameters - Parameters supplied to the CreateOrUpdate operation.
@@ -62,19 +65,14 @@ func (client *ZonesClient) CreateOrUpdate(ctx context.Context, resourceGroupName
 	if err != nil {
 		return ZonesClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ZonesClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ZonesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, zoneName string, parameters Zone, options *ZonesClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -90,8 +88,8 @@ func (client *ZonesClient) createOrUpdateCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230701Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -107,8 +105,11 @@ func (client *ZonesClient) createOrUpdateCreateRequest(ctx context.Context, reso
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ZonesClient) createOrUpdateHandleResponse(resp *http.Response) (ZonesClientCreateOrUpdateResponse, error) {
+func (client *ZonesClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ZonesClientCreateOrUpdateResponse, error) {
 	result := ZonesClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientCreateOrUpdateResponse{}, err
 	}
@@ -117,8 +118,6 @@ func (client *ZonesClient) createOrUpdateHandleResponse(resp *http.Response) (Zo
 
 // BeginDelete - Deletes a DNS zone. WARNING: All DNS records in the zone will also be deleted. This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-07-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - zoneName - The name of the DNS zone (without a terminating dot).
 //   - options - ZonesClientBeginDeleteOptions contains the optional parameters for the ZonesClient.BeginDelete method.
@@ -141,8 +140,6 @@ func (client *ZonesClient) BeginDelete(ctx context.Context, resourceGroupName st
 
 // Delete - Deletes a DNS zone. WARNING: All DNS records in the zone will also be deleted. This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-07-01-preview
 func (client *ZonesClient) deleteOperation(ctx context.Context, resourceGroupName string, zoneName string, options *ZonesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ZonesClient.BeginDelete"
@@ -158,8 +155,7 @@ func (client *ZonesClient) deleteOperation(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -168,7 +164,7 @@ func (client *ZonesClient) deleteOperation(ctx context.Context, resourceGroupNam
 func (client *ZonesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, zoneName string, options *ZonesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -184,8 +180,8 @@ func (client *ZonesClient) deleteCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230701Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -194,8 +190,6 @@ func (client *ZonesClient) deleteCreateRequest(ctx context.Context, resourceGrou
 
 // Get - Gets a DNS zone. Retrieves the zone properties, but not the record sets within the zone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-07-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - zoneName - The name of the DNS zone (without a terminating dot).
 //   - options - ZonesClientGetOptions contains the optional parameters for the ZonesClient.Get method.
@@ -213,19 +207,14 @@ func (client *ZonesClient) Get(ctx context.Context, resourceGroupName string, zo
 	if err != nil {
 		return ZonesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ZonesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ZonesClient) getCreateRequest(ctx context.Context, resourceGroupName string, zoneName string, _ *ZonesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -241,15 +230,18 @@ func (client *ZonesClient) getCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230701Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ZonesClient) getHandleResponse(resp *http.Response) (ZonesClientGetResponse, error) {
+func (client *ZonesClient) getHandleResponse(resp *http.Response, successCodes ...int) (ZonesClientGetResponse, error) {
 	result := ZonesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientGetResponse{}, err
 	}
@@ -257,8 +249,6 @@ func (client *ZonesClient) getHandleResponse(resp *http.Response) (ZonesClientGe
 }
 
 // NewListPager - Lists the DNS zones in all resource groups in a subscription.
-//
-// Generated from API version 2023-07-01-preview
 //   - options - ZonesClientListOptions contains the optional parameters for the ZonesClient.NewListPager method.
 func (client *ZonesClient) NewListPager(options *ZonesClientListOptions) *runtime.Pager[ZonesClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[ZonesClientListResponse]{
@@ -271,42 +261,56 @@ func (client *ZonesClient) NewListPager(options *ZonesClientListOptions) *runtim
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ZonesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ZonesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ZonesClient) listCreateRequest(ctx context.Context, options *ZonesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/dnszones"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ZonesClient) listCreateRequest(ctx context.Context, nextLink string, options *ZonesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/dnszones"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20230701Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ZonesClient) listHandleResponse(resp *http.Response) (ZonesClientListResponse, error) {
+func (client *ZonesClient) listHandleResponse(resp *http.Response, successCodes ...int) (ZonesClientListResponse, error) {
 	result := ZonesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ZoneListResult); err != nil {
 		return ZonesClientListResponse{}, err
 	}
@@ -314,8 +318,6 @@ func (client *ZonesClient) listHandleResponse(resp *http.Response) (ZonesClientL
 }
 
 // NewListByResourceGroupPager - Lists the DNS zones within a resource group.
-//
-// Generated from API version 2023-07-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - ZonesClientListByResourceGroupOptions contains the optional parameters for the ZonesClient.NewListByResourceGroupPager
 //     method.
@@ -330,46 +332,60 @@ func (client *ZonesClient) NewListByResourceGroupPager(resourceGroupName string,
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return ZonesClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ZonesClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *ZonesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *ZonesClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ZonesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *ZonesClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20230701Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *ZonesClient) listByResourceGroupHandleResponse(resp *http.Response) (ZonesClientListByResourceGroupResponse, error) {
+func (client *ZonesClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (ZonesClientListByResourceGroupResponse, error) {
 	result := ZonesClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ZoneListResult); err != nil {
 		return ZonesClientListByResourceGroupResponse{}, err
 	}
@@ -378,8 +394,6 @@ func (client *ZonesClient) listByResourceGroupHandleResponse(resp *http.Response
 
 // Update - Updates a DNS zone. Does not modify DNS records within the zone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-07-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - zoneName - The name of the DNS zone (without a terminating dot).
 //   - parameters - Parameters supplied to the Update operation.
@@ -398,19 +412,14 @@ func (client *ZonesClient) Update(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ZonesClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ZonesClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *ZonesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, zoneName string, parameters ZoneUpdate, options *ZonesClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsZones/{zoneName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -426,8 +435,8 @@ func (client *ZonesClient) updateCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-07-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230701Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -440,8 +449,11 @@ func (client *ZonesClient) updateCreateRequest(ctx context.Context, resourceGrou
 }
 
 // updateHandleResponse handles the Update response.
-func (client *ZonesClient) updateHandleResponse(resp *http.Response) (ZonesClientUpdateResponse, error) {
+func (client *ZonesClient) updateHandleResponse(resp *http.Response, successCodes ...int) (ZonesClientUpdateResponse, error) {
 	result := ZonesClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Zone); err != nil {
 		return ZonesClientUpdateResponse{}, err
 	}

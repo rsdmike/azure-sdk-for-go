@@ -58,13 +58,13 @@ func ExampleOperatorAPIConnectionsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armprogrammableconnectivity.OperatorAPIConnectionsClientCreateResponse{
-	// 	OperatorAPIConnection: &armprogrammableconnectivity.OperatorAPIConnection{
+	// 	OperatorAPIConnection: armprogrammableconnectivity.OperatorAPIConnection{
 	// 		Properties: &armprogrammableconnectivity.OperatorAPIConnectionProperties{
 	// 			OperatorAPIPlanID: to.Ptr("/subscriptions/00000000-0000-0000-0000-00000000000/providers/Microsoft.ProgrammableConnectivity/operatorApiPlans/livmzrh"),
 	// 			SaasProperties: &armprogrammableconnectivity.SaasProperties{
@@ -101,10 +101,10 @@ func ExampleOperatorAPIConnectionsClient_BeginCreate() {
 	// 		SystemData: &armprogrammableconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("kuprrapuolhnvju"),
 	// 			CreatedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lsmrhxnvkpmrxncylgqpkr"),
 	// 			LastModifiedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -127,7 +127,7 @@ func ExampleOperatorAPIConnectionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -150,7 +150,7 @@ func ExampleOperatorAPIConnectionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armprogrammableconnectivity.OperatorAPIConnectionsClientGetResponse{
-	// 	OperatorAPIConnection: &armprogrammableconnectivity.OperatorAPIConnection{
+	// 	OperatorAPIConnection: armprogrammableconnectivity.OperatorAPIConnection{
 	// 		Properties: &armprogrammableconnectivity.OperatorAPIConnectionProperties{
 	// 			OperatorAPIPlanID: to.Ptr("/subscriptions/00000000-0000-0000-0000-00000000000/providers/Microsoft.ProgrammableConnectivity/operatorApiPlans/livmzrh"),
 	// 			SaasProperties: &armprogrammableconnectivity.SaasProperties{
@@ -187,10 +187,10 @@ func ExampleOperatorAPIConnectionsClient_Get() {
 	// 		SystemData: &armprogrammableconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("kuprrapuolhnvju"),
 	// 			CreatedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lsmrhxnvkpmrxncylgqpkr"),
 	// 			LastModifiedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -258,10 +258,10 @@ func ExampleOperatorAPIConnectionsClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armprogrammableconnectivity.SystemData{
 		// 					CreatedBy: to.Ptr("kuprrapuolhnvju"),
 		// 					CreatedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("lsmrhxnvkpmrxncylgqpkr"),
 		// 					LastModifiedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -333,10 +333,10 @@ func ExampleOperatorAPIConnectionsClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armprogrammableconnectivity.SystemData{
 		// 					CreatedBy: to.Ptr("kuprrapuolhnvju"),
 		// 					CreatedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("lsmrhxnvkpmrxncylgqpkr"),
 		// 					LastModifiedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -385,13 +385,13 @@ func ExampleOperatorAPIConnectionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armprogrammableconnectivity.OperatorAPIConnectionsClientUpdateResponse{
-	// 	OperatorAPIConnection: &armprogrammableconnectivity.OperatorAPIConnection{
+	// 	OperatorAPIConnection: armprogrammableconnectivity.OperatorAPIConnection{
 	// 		Properties: &armprogrammableconnectivity.OperatorAPIConnectionProperties{
 	// 			OperatorAPIPlanID: to.Ptr("/subscriptions/00000000-0000-0000-0000-00000000000/providers/Microsoft.ProgrammableConnectivity/operatorApiPlans/yhlygxdwvrzgazbfzyz"),
 	// 			SaasProperties: &armprogrammableconnectivity.SaasProperties{
@@ -428,10 +428,10 @@ func ExampleOperatorAPIConnectionsClient_BeginUpdate() {
 	// 		SystemData: &armprogrammableconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("kuprrapuolhnvju"),
 	// 			CreatedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lsmrhxnvkpmrxncylgqpkr"),
 	// 			LastModifiedByType: to.Ptr(armprogrammableconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-30T16:41:38.838Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 30, 16, 41, 38, 838000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

@@ -18,6 +18,8 @@ import (
 
 // ExternalUserClient contains the methods for the ExternalUser group.
 // Don't use this type directly, use NewExternalUserClient() instead.
+//
+// Generated from API version 2025-06-01
 type ExternalUserClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ExternalUserClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewExternalUserClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ExternalUserClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewExternalUserClient(subscriptionID string, credential azcore.TokenCredent
 // CreateOrUpdate - Create or update external user configurations for your Elastic monitor resource, enabling access and management
 // by external users.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - ExternalUserClientCreateOrUpdateOptions contains the optional parameters for the ExternalUserClient.CreateOrUpdate
@@ -62,19 +65,14 @@ func (client *ExternalUserClient) CreateOrUpdate(ctx context.Context, resourceGr
 	if err != nil {
 		return ExternalUserClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ExternalUserClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ExternalUserClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, options *ExternalUserClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/createOrUpdateExternalUser"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -90,8 +88,8 @@ func (client *ExternalUserClient) createOrUpdateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.Body != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -104,8 +102,11 @@ func (client *ExternalUserClient) createOrUpdateCreateRequest(ctx context.Contex
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ExternalUserClient) createOrUpdateHandleResponse(resp *http.Response) (ExternalUserClientCreateOrUpdateResponse, error) {
+func (client *ExternalUserClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ExternalUserClientCreateOrUpdateResponse, error) {
 	result := ExternalUserClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ExternalUserCreationResponse); err != nil {
 		return ExternalUserClientCreateOrUpdateResponse{}, err
 	}

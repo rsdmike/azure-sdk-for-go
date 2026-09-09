@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ReservationsDetailsServer is a fake server for instances of the armconsumption.ReservationsDetailsClient type.
@@ -65,9 +66,7 @@ func (r *ReservationsDetailsServerTransport) Do(req *http.Request) (*http.Respon
 }
 
 func (r *ReservationsDetailsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -87,10 +86,7 @@ func (r *ReservationsDetailsServerTransport) dispatchToMethodFake(req *http.Requ
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -107,7 +103,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListPager(req *http.Requ
 	}
 	newListPager := r.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/(?P<resourceScope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationDetails`
+		const regexStr = `/(?P<resourceScope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Consumption/reservationDetails`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -118,31 +114,11 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListPager(req *http.Requ
 		if err != nil {
 			return nil, err
 		}
-		startDateUnescaped, err := url.QueryUnescape(qp.Get("startDate"))
-		if err != nil {
-			return nil, err
-		}
-		startDateParam := getOptional(startDateUnescaped)
-		endDateUnescaped, err := url.QueryUnescape(qp.Get("endDate"))
-		if err != nil {
-			return nil, err
-		}
-		endDateParam := getOptional(endDateUnescaped)
-		filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		filterParam := getOptional(filterUnescaped)
-		reservationIDUnescaped, err := url.QueryUnescape(qp.Get("reservationId"))
-		if err != nil {
-			return nil, err
-		}
-		reservationIDParam := getOptional(reservationIDUnescaped)
-		reservationOrderIDUnescaped, err := url.QueryUnescape(qp.Get("reservationOrderId"))
-		if err != nil {
-			return nil, err
-		}
-		reservationOrderIDParam := getOptional(reservationOrderIDUnescaped)
+		startDateParam := getOptional(qp.Get("startDate"))
+		endDateParam := getOptional(qp.Get("endDate"))
+		filterParam := getOptional(qp.Get("$filter"))
+		reservationIDParam := getOptional(qp.Get("reservationId"))
+		reservationOrderIDParam := getOptional(qp.Get("reservationOrderId"))
 		var options *armconsumption.ReservationsDetailsClientListOptions
 		if startDateParam != nil || endDateParam != nil || filterParam != nil || reservationIDParam != nil || reservationOrderIDParam != nil {
 			options = &armconsumption.ReservationsDetailsClientListOptions{
@@ -164,7 +140,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListPager(req *http.Requ
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -180,7 +156,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderPa
 	}
 	newListByReservationOrderPager := r.newListByReservationOrderPager.get(req)
 	if newListByReservationOrderPager == nil {
-		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationDetails`
+		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/reservationDetails`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -191,11 +167,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderPa
 		if err != nil {
 			return nil, err
 		}
-		filterParam, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		resp := r.srv.NewListByReservationOrderPager(reservationOrderIDParam, filterParam, nil)
+		resp := r.srv.NewListByReservationOrderPager(reservationOrderIDParam, qp.Get("$filter"), nil)
 		newListByReservationOrderPager = &resp
 		r.newListByReservationOrderPager.add(req, newListByReservationOrderPager)
 		server.PagerResponderInjectNextLinks(newListByReservationOrderPager, req, func(page *armconsumption.ReservationsDetailsClientListByReservationOrderResponse, createLink func() string) {
@@ -206,7 +178,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderPa
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListByReservationOrderPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -222,7 +194,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderAn
 	}
 	newListByReservationOrderAndReservationPager := r.newListByReservationOrderAndReservationPager.get(req)
 	if newListByReservationOrderAndReservationPager == nil {
-		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/reservations/(?P<reservationId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/reservationDetails`
+		const regexStr = `/providers/Microsoft\.Capacity/reservationorders/(?P<reservationOrderId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/reservations/(?P<reservationId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/reservationDetails`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -237,11 +209,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderAn
 		if err != nil {
 			return nil, err
 		}
-		filterParam, err := url.QueryUnescape(qp.Get("$filter"))
-		if err != nil {
-			return nil, err
-		}
-		resp := r.srv.NewListByReservationOrderAndReservationPager(reservationOrderIDParam, reservationIDParam, filterParam, nil)
+		resp := r.srv.NewListByReservationOrderAndReservationPager(reservationOrderIDParam, reservationIDParam, qp.Get("$filter"), nil)
 		newListByReservationOrderAndReservationPager = &resp
 		r.newListByReservationOrderAndReservationPager.add(req, newListByReservationOrderAndReservationPager)
 		server.PagerResponderInjectNextLinks(newListByReservationOrderAndReservationPager, req, func(page *armconsumption.ReservationsDetailsClientListByReservationOrderAndReservationResponse, createLink func() string) {
@@ -252,7 +220,7 @@ func (r *ReservationsDetailsServerTransport) dispatchNewListByReservationOrderAn
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newListByReservationOrderAndReservationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

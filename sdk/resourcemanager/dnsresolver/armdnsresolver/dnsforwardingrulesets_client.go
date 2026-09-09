@@ -19,6 +19,8 @@ import (
 
 // DNSForwardingRulesetsClient contains the methods for the DNSForwardingRulesets group.
 // Don't use this type directly, use NewDNSForwardingRulesetsClient() instead.
+//
+// Generated from API version 2025-10-01-preview
 type DNSForwardingRulesetsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type DNSForwardingRulesetsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDNSForwardingRulesetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DNSForwardingRulesetsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewDNSForwardingRulesetsClient(subscriptionID string, credential azcore.Tok
 
 // BeginCreateOrUpdate - Creates or updates a DNS forwarding ruleset.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsForwardingRulesetName - The name of the DNS forwarding ruleset.
 //   - parameters - Parameters supplied to the CreateOrUpdate operation.
@@ -68,8 +71,6 @@ func (client *DNSForwardingRulesetsClient) BeginCreateOrUpdate(ctx context.Conte
 
 // CreateOrUpdate - Creates or updates a DNS forwarding ruleset.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSForwardingRulesetsClient) createOrUpdate(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, parameters DNSForwardingRuleset, options *DNSForwardingRulesetsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSForwardingRulesetsClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *DNSForwardingRulesetsClient) createOrUpdate(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *DNSForwardingRulesetsClient) createOrUpdate(ctx context.Context, r
 func (client *DNSForwardingRulesetsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, parameters DNSForwardingRuleset, options *DNSForwardingRulesetsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets/{dnsForwardingRulesetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -111,8 +111,8 @@ func (client *DNSForwardingRulesetsClient) createOrUpdateCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
@@ -130,8 +130,6 @@ func (client *DNSForwardingRulesetsClient) createOrUpdateCreateRequest(ctx conte
 // BeginDelete - Deletes a DNS forwarding ruleset. WARNING: This operation cannot be undone. All forwarding rules within the
 // ruleset will be deleted.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsForwardingRulesetName - The name of the DNS forwarding ruleset.
 //   - options - DNSForwardingRulesetsClientBeginDeleteOptions contains the optional parameters for the DNSForwardingRulesetsClient.BeginDelete
@@ -156,8 +154,6 @@ func (client *DNSForwardingRulesetsClient) BeginDelete(ctx context.Context, reso
 // Delete - Deletes a DNS forwarding ruleset. WARNING: This operation cannot be undone. All forwarding rules within the ruleset
 // will be deleted.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSForwardingRulesetsClient) deleteOperation(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, options *DNSForwardingRulesetsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSForwardingRulesetsClient.BeginDelete"
@@ -173,8 +169,7 @@ func (client *DNSForwardingRulesetsClient) deleteOperation(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -183,7 +178,7 @@ func (client *DNSForwardingRulesetsClient) deleteOperation(ctx context.Context, 
 func (client *DNSForwardingRulesetsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, options *DNSForwardingRulesetsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets/{dnsForwardingRulesetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -199,8 +194,8 @@ func (client *DNSForwardingRulesetsClient) deleteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
 	}
@@ -209,8 +204,6 @@ func (client *DNSForwardingRulesetsClient) deleteCreateRequest(ctx context.Conte
 
 // Get - Gets a DNS forwarding ruleset properties.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsForwardingRulesetName - The name of the DNS forwarding ruleset.
 //   - options - DNSForwardingRulesetsClientGetOptions contains the optional parameters for the DNSForwardingRulesetsClient.Get
@@ -229,19 +222,14 @@ func (client *DNSForwardingRulesetsClient) Get(ctx context.Context, resourceGrou
 	if err != nil {
 		return DNSForwardingRulesetsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DNSForwardingRulesetsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DNSForwardingRulesetsClient) getCreateRequest(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, _ *DNSForwardingRulesetsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets/{dnsForwardingRulesetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -257,15 +245,18 @@ func (client *DNSForwardingRulesetsClient) getCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DNSForwardingRulesetsClient) getHandleResponse(resp *http.Response) (DNSForwardingRulesetsClientGetResponse, error) {
+func (client *DNSForwardingRulesetsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DNSForwardingRulesetsClientGetResponse, error) {
 	result := DNSForwardingRulesetsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DNSForwardingRuleset); err != nil {
 		return DNSForwardingRulesetsClientGetResponse{}, err
 	}
@@ -273,8 +264,6 @@ func (client *DNSForwardingRulesetsClient) getHandleResponse(resp *http.Response
 }
 
 // NewListPager - Lists DNS forwarding rulesets in all resource groups of a subscription.
-//
-// Generated from API version 2025-10-01-preview
 //   - options - DNSForwardingRulesetsClientListOptions contains the optional parameters for the DNSForwardingRulesetsClient.NewListPager
 //     method.
 func (client *DNSForwardingRulesetsClient) NewListPager(options *DNSForwardingRulesetsClientListOptions) *runtime.Pager[DNSForwardingRulesetsClientListResponse] {
@@ -288,42 +277,56 @@ func (client *DNSForwardingRulesetsClient) NewListPager(options *DNSForwardingRu
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DNSForwardingRulesetsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DNSForwardingRulesetsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DNSForwardingRulesetsClient) listCreateRequest(ctx context.Context, options *DNSForwardingRulesetsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/dnsForwardingRulesets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DNSForwardingRulesetsClient) listCreateRequest(ctx context.Context, nextLink string, options *DNSForwardingRulesetsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/dnsForwardingRulesets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DNSForwardingRulesetsClient) listHandleResponse(resp *http.Response) (DNSForwardingRulesetsClientListResponse, error) {
+func (client *DNSForwardingRulesetsClient) listHandleResponse(resp *http.Response, successCodes ...int) (DNSForwardingRulesetsClientListResponse, error) {
 	result := DNSForwardingRulesetsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DNSForwardingRulesetListResult); err != nil {
 		return DNSForwardingRulesetsClientListResponse{}, err
 	}
@@ -331,8 +334,6 @@ func (client *DNSForwardingRulesetsClient) listHandleResponse(resp *http.Respons
 }
 
 // NewListByResourceGroupPager - Lists DNS forwarding rulesets within a resource group.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DNSForwardingRulesetsClientListByResourceGroupOptions contains the optional parameters for the DNSForwardingRulesetsClient.NewListByResourceGroupPager
 //     method.
@@ -347,46 +348,60 @@ func (client *DNSForwardingRulesetsClient) NewListByResourceGroupPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return DNSForwardingRulesetsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DNSForwardingRulesetsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *DNSForwardingRulesetsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *DNSForwardingRulesetsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DNSForwardingRulesetsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *DNSForwardingRulesetsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *DNSForwardingRulesetsClient) listByResourceGroupHandleResponse(resp *http.Response) (DNSForwardingRulesetsClientListByResourceGroupResponse, error) {
+func (client *DNSForwardingRulesetsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (DNSForwardingRulesetsClientListByResourceGroupResponse, error) {
 	result := DNSForwardingRulesetsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DNSForwardingRulesetListResult); err != nil {
 		return DNSForwardingRulesetsClientListByResourceGroupResponse{}, err
 	}
@@ -394,8 +409,6 @@ func (client *DNSForwardingRulesetsClient) listByResourceGroupHandleResponse(res
 }
 
 // NewListByVirtualNetworkPager - Lists DNS forwarding ruleset resource IDs attached to a virtual network.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - virtualNetworkName - The name of the VirtualNetwork
 //   - options - DNSForwardingRulesetsClientListByVirtualNetworkOptions contains the optional parameters for the DNSForwardingRulesetsClient.NewListByVirtualNetworkPager
@@ -411,50 +424,64 @@ func (client *DNSForwardingRulesetsClient) NewListByVirtualNetworkPager(resource
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByVirtualNetworkCreateRequest(ctx, resourceGroupName, virtualNetworkName, options)
-			}, nil)
+			req, err := client.listByVirtualNetworkCreateRequest(ctx, resourceGroupName, virtualNetworkName, nextLink, options)
 			if err != nil {
 				return DNSForwardingRulesetsClientListByVirtualNetworkResponse{}, err
 			}
-			return client.listByVirtualNetworkHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DNSForwardingRulesetsClientListByVirtualNetworkResponse{}, err
+			}
+			return client.listByVirtualNetworkHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByVirtualNetworkCreateRequest creates the ListByVirtualNetwork request.
-func (client *DNSForwardingRulesetsClient) listByVirtualNetworkCreateRequest(ctx context.Context, resourceGroupName string, virtualNetworkName string, options *DNSForwardingRulesetsClientListByVirtualNetworkOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/listDnsForwardingRulesets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DNSForwardingRulesetsClient) listByVirtualNetworkCreateRequest(ctx context.Context, resourceGroupName string, virtualNetworkName string, nextLink string, options *DNSForwardingRulesetsClientListByVirtualNetworkOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{virtualNetworkName}/listDnsForwardingRulesets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if virtualNetworkName == "" {
+			return nil, errors.New("parameter virtualNetworkName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{virtualNetworkName}", url.PathEscape(virtualNetworkName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if virtualNetworkName == "" {
-		return nil, errors.New("parameter virtualNetworkName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{virtualNetworkName}", url.PathEscape(virtualNetworkName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByVirtualNetworkHandleResponse handles the ListByVirtualNetwork response.
-func (client *DNSForwardingRulesetsClient) listByVirtualNetworkHandleResponse(resp *http.Response) (DNSForwardingRulesetsClientListByVirtualNetworkResponse, error) {
+func (client *DNSForwardingRulesetsClient) listByVirtualNetworkHandleResponse(resp *http.Response, successCodes ...int) (DNSForwardingRulesetsClientListByVirtualNetworkResponse, error) {
 	result := DNSForwardingRulesetsClientListByVirtualNetworkResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkDNSForwardingRulesetListResult); err != nil {
 		return DNSForwardingRulesetsClientListByVirtualNetworkResponse{}, err
 	}
@@ -463,8 +490,6 @@ func (client *DNSForwardingRulesetsClient) listByVirtualNetworkHandleResponse(re
 
 // BeginUpdate - Updates a DNS forwarding ruleset.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsForwardingRulesetName - The name of the DNS forwarding ruleset.
 //   - parameters - Parameters supplied to the Update operation.
@@ -489,8 +514,6 @@ func (client *DNSForwardingRulesetsClient) BeginUpdate(ctx context.Context, reso
 
 // Update - Updates a DNS forwarding ruleset.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSForwardingRulesetsClient) update(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, parameters DNSForwardingRulesetPatch, options *DNSForwardingRulesetsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSForwardingRulesetsClient.BeginUpdate"
@@ -506,8 +529,7 @@ func (client *DNSForwardingRulesetsClient) update(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -516,7 +538,7 @@ func (client *DNSForwardingRulesetsClient) update(ctx context.Context, resourceG
 func (client *DNSForwardingRulesetsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, dnsForwardingRulesetName string, parameters DNSForwardingRulesetPatch, options *DNSForwardingRulesetsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsForwardingRulesets/{dnsForwardingRulesetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -532,8 +554,8 @@ func (client *DNSForwardingRulesetsClient) updateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}

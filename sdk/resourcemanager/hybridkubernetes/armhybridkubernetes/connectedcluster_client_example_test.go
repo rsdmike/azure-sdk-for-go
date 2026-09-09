@@ -41,13 +41,13 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterAgentlessKi
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientCreateOrReplaceResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -70,10 +70,10 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterAgentlessKi
 	// 			ProvisioningState: to.Ptr(armhybridkubernetes.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 	// 		},
@@ -112,13 +112,13 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterExample() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientCreateOrReplaceResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -137,10 +137,10 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterExample() {
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 	// 		},
@@ -181,13 +181,13 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterPrivateLink
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientCreateOrReplaceResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -208,10 +208,10 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterPrivateLink
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 	// 		},
@@ -272,13 +272,13 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterKindExample
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientCreateOrReplaceResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -322,10 +322,10 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_createClusterKindExample
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 	// 		},
@@ -368,13 +368,13 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_updateClusterByPutExampl
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientCreateOrReplaceResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -397,10 +397,10 @@ func ExampleConnectedClusterClient_BeginCreateOrReplace_updateClusterByPutExampl
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 	// 		},
@@ -427,7 +427,7 @@ func ExampleConnectedClusterClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -455,7 +455,7 @@ func ExampleConnectedClusterClient_Get_getClusterExample() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientGetResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -475,7 +475,7 @@ func ExampleConnectedClusterClient_Get_getClusterExample() {
 	// 						Component: to.Ptr("Strato"),
 	// 						Message: to.Ptr("Upgrade failed for agent extension Strato, version not found"),
 	// 						Severity: to.Ptr("Error"),
-	// 						Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:14:58.865041Z"); return t}()),
+	// 						Time: to.Ptr(time.Date(2020, time.December, 17, 7, 14, 58, 865041000, time.UTC)),
 	// 					},
 	// 				},
 	// 				AgentState: to.Ptr("Failed"),
@@ -510,10 +510,10 @@ func ExampleConnectedClusterClient_Get_getClusterExample() {
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:14:58.865041Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 14, 58, 865041000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("2d2a754c-cade-4935-83d4-ce413c5a3910"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeApplication),
 	// 		},
@@ -542,7 +542,7 @@ func ExampleConnectedClusterClient_Get_getProvisionedClusterExample() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientGetResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -589,10 +589,10 @@ func ExampleConnectedClusterClient_Get_getProvisionedClusterExample() {
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:14:58.865041Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 14, 58, 865041000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("2d2a754c-cade-4935-83d4-ce413c5a3910"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeApplication),
 	// 		},
@@ -654,10 +654,10 @@ func ExampleConnectedClusterClient_NewListByResourceGroupPager() {
 		// 					TotalNodeCount: to.Ptr[int32](2),
 		// 				},
 		// 				SystemData: &armhybridkubernetes.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					CreatedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 		// 				},
@@ -691,10 +691,10 @@ func ExampleConnectedClusterClient_NewListByResourceGroupPager() {
 		// 					TotalNodeCount: to.Ptr[int32](2),
 		// 				},
 		// 				SystemData: &armhybridkubernetes.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					CreatedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 		// 				},
@@ -759,10 +759,10 @@ func ExampleConnectedClusterClient_NewListBySubscriptionPager() {
 		// 					TotalNodeCount: to.Ptr[int32](2),
 		// 				},
 		// 				SystemData: &armhybridkubernetes.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					CreatedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 		// 				},
@@ -796,10 +796,10 @@ func ExampleConnectedClusterClient_NewListBySubscriptionPager() {
 		// 					TotalNodeCount: to.Ptr[int32](4),
 		// 				},
 		// 				SystemData: &armhybridkubernetes.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					CreatedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("sikasire@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
 		// 				},
@@ -834,7 +834,7 @@ func ExampleConnectedClusterClient_ListClusterUserCredential_listClusterUserCred
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientListClusterUserCredentialResponse{
-	// 	CredentialResults: &armhybridkubernetes.CredentialResults{
+	// 	CredentialResults: armhybridkubernetes.CredentialResults{
 	// 		HybridConnectionConfig: &armhybridkubernetes.HybridConnectionConfig{
 	// 			ExpirationTime: to.Ptr[int64](1631196183),
 	// 			HybridConnectionName: to.Ptr("microsoft.kubernetes/connectedclusters/229dc73f7b07196c79a93d4362d9c7fc4ed34df3e95290d27c56cec2dbb82865/1631185383340987904"),
@@ -875,7 +875,7 @@ func ExampleConnectedClusterClient_ListClusterUserCredential_listClusterUserCred
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientListClusterUserCredentialResponse{
-	// 	CredentialResults: &armhybridkubernetes.CredentialResults{
+	// 	CredentialResults: armhybridkubernetes.CredentialResults{
 	// 		HybridConnectionConfig: &armhybridkubernetes.HybridConnectionConfig{
 	// 			ExpirationTime: to.Ptr[int64](1631196183),
 	// 			HybridConnectionName: to.Ptr("microsoft.kubernetes/connectedclusters/229dc73f7b07196c79a93d4362d9c7fc4ed34df3e95290d27c56cec2dbb82865/1631185383340987904"),
@@ -916,7 +916,7 @@ func ExampleConnectedClusterClient_ListClusterUserCredential_listClusterUserCred
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientListClusterUserCredentialResponse{
-	// 	CredentialResults: &armhybridkubernetes.CredentialResults{
+	// 	CredentialResults: armhybridkubernetes.CredentialResults{
 	// 		Kubeconfigs: []*armhybridkubernetes.CredentialResult{
 	// 			{
 	// 				Name: to.Ptr("credentialName1"),
@@ -949,7 +949,7 @@ func ExampleConnectedClusterClient_ListClusterUserCredential_listClusterUserCred
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientListClusterUserCredentialResponse{
-	// 	CredentialResults: &armhybridkubernetes.CredentialResults{
+	// 	CredentialResults: armhybridkubernetes.CredentialResults{
 	// 		Kubeconfigs: []*armhybridkubernetes.CredentialResult{
 	// 			{
 	// 				Name: to.Ptr("credentialName1"),
@@ -989,7 +989,7 @@ func ExampleConnectedClusterClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridkubernetes.ConnectedClusterClientUpdateResponse{
-	// 	ConnectedCluster: &armhybridkubernetes.ConnectedCluster{
+	// 	ConnectedCluster: armhybridkubernetes.ConnectedCluster{
 	// 		Name: to.Ptr("connectedCluster1"),
 	// 		Type: to.Ptr("Microsoft.Kubernetes/connectedClusters"),
 	// 		ID: to.Ptr("/subscriptions/1bfbb5d0-917e-4346-9026-1d3b344417f5/resourceGroups/akkeshar/providers/Microsoft.Kubernetes/connectedClusters/connectedCluster1"),
@@ -1012,10 +1012,10 @@ func ExampleConnectedClusterClient_Update() {
 	// 			TotalNodeCount: to.Ptr[int32](2),
 	// 		},
 	// 		SystemData: &armhybridkubernetes.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:06:33.9173186Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 6, 33, 917318600, time.UTC)),
 	// 			CreatedBy: to.Ptr("sikasire@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armhybridkubernetes.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-12-17T07:14:58.865041Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.December, 17, 7, 14, 58, 865041000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("2d2a754c-cade-4935-83d4-ce413c5a3910"),
 	// 			LastModifiedByType: to.Ptr(armhybridkubernetes.CreatedByTypeApplication),
 	// 		},

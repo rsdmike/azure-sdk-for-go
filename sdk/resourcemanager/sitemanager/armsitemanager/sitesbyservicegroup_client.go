@@ -18,6 +18,8 @@ import (
 
 // SitesByServiceGroupClient contains the methods for the SitesByServiceGroup group.
 // Don't use this type directly, use NewSitesByServiceGroupClient() instead.
+//
+// Generated from API version 2025-06-01
 type SitesByServiceGroupClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewSitesByServiceGroupClient(credential azcore.TokenCredential, options *ar
 
 // BeginCreateOrUpdate - create or update Site at SG scope
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - servicegroupName - The name of the service group
 //   - siteName - The name of the Site
 //   - resource - Resource create parameters.
@@ -64,8 +64,6 @@ func (client *SitesByServiceGroupClient) BeginCreateOrUpdate(ctx context.Context
 
 // CreateOrUpdate - create or update Site at SG scope
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *SitesByServiceGroupClient) createOrUpdate(ctx context.Context, servicegroupName string, siteName string, resource Site, options *SitesByServiceGroupClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SitesByServiceGroupClient.BeginCreateOrUpdate"
@@ -81,8 +79,7 @@ func (client *SitesByServiceGroupClient) createOrUpdate(ctx context.Context, ser
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -103,8 +100,8 @@ func (client *SitesByServiceGroupClient) createOrUpdateCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -115,8 +112,6 @@ func (client *SitesByServiceGroupClient) createOrUpdateCreateRequest(ctx context
 
 // Delete - delete Site at SG scope
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - servicegroupName - The name of the service group
 //   - siteName - The name of the Site
 //   - options - SitesByServiceGroupClientDeleteOptions contains the optional parameters for the SitesByServiceGroupClient.Delete
@@ -136,8 +131,7 @@ func (client *SitesByServiceGroupClient) Delete(ctx context.Context, servicegrou
 		return SitesByServiceGroupClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesByServiceGroupClientDeleteResponse{}, err
+		return SitesByServiceGroupClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return SitesByServiceGroupClientDeleteResponse{}, nil
 }
@@ -158,15 +152,13 @@ func (client *SitesByServiceGroupClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get Site at SG scope
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - servicegroupName - The name of the service group
 //   - siteName - The name of the Site
 //   - options - SitesByServiceGroupClientGetOptions contains the optional parameters for the SitesByServiceGroupClient.Get method.
@@ -184,12 +176,7 @@ func (client *SitesByServiceGroupClient) Get(ctx context.Context, servicegroupNa
 	if err != nil {
 		return SitesByServiceGroupClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesByServiceGroupClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -208,15 +195,18 @@ func (client *SitesByServiceGroupClient) getCreateRequest(ctx context.Context, s
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SitesByServiceGroupClient) getHandleResponse(resp *http.Response) (SitesByServiceGroupClientGetResponse, error) {
+func (client *SitesByServiceGroupClient) getHandleResponse(resp *http.Response, successCodes ...int) (SitesByServiceGroupClientGetResponse, error) {
 	result := SitesByServiceGroupClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return SitesByServiceGroupClientGetResponse{}, err
 	}
@@ -224,8 +214,6 @@ func (client *SitesByServiceGroupClient) getHandleResponse(resp *http.Response) 
 }
 
 // NewListByServiceGroupPager - list Site at SG scope
-//
-// Generated from API version 2025-06-01
 //   - servicegroupName - The name of the service group
 //   - options - SitesByServiceGroupClientListByServiceGroupOptions contains the optional parameters for the SitesByServiceGroupClient.NewListByServiceGroupPager
 //     method.
@@ -240,39 +228,53 @@ func (client *SitesByServiceGroupClient) NewListByServiceGroupPager(servicegroup
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByServiceGroupCreateRequest(ctx, servicegroupName, options)
-			}, nil)
+			req, err := client.listByServiceGroupCreateRequest(ctx, servicegroupName, nextLink, options)
 			if err != nil {
 				return SitesByServiceGroupClientListByServiceGroupResponse{}, err
 			}
-			return client.listByServiceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return SitesByServiceGroupClientListByServiceGroupResponse{}, err
+			}
+			return client.listByServiceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByServiceGroupCreateRequest creates the ListByServiceGroup request.
-func (client *SitesByServiceGroupClient) listByServiceGroupCreateRequest(ctx context.Context, servicegroupName string, _ *SitesByServiceGroupClientListByServiceGroupOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Management/serviceGroups/{servicegroupName}/providers/Microsoft.Edge/sites"
-	if servicegroupName == "" {
-		return nil, errors.New("parameter servicegroupName cannot be empty")
+func (client *SitesByServiceGroupClient) listByServiceGroupCreateRequest(ctx context.Context, servicegroupName string, nextLink string, _ *SitesByServiceGroupClientListByServiceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Management/serviceGroups/{servicegroupName}/providers/Microsoft.Edge/sites"
+		if servicegroupName == "" {
+			return nil, errors.New("parameter servicegroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{servicegroupName}", url.PathEscape(servicegroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{servicegroupName}", url.PathEscape(servicegroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByServiceGroupHandleResponse handles the ListByServiceGroup response.
-func (client *SitesByServiceGroupClient) listByServiceGroupHandleResponse(resp *http.Response) (SitesByServiceGroupClientListByServiceGroupResponse, error) {
+func (client *SitesByServiceGroupClient) listByServiceGroupHandleResponse(resp *http.Response, successCodes ...int) (SitesByServiceGroupClientListByServiceGroupResponse, error) {
 	result := SitesByServiceGroupClientListByServiceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteListResult); err != nil {
 		return SitesByServiceGroupClientListByServiceGroupResponse{}, err
 	}
@@ -281,8 +283,6 @@ func (client *SitesByServiceGroupClient) listByServiceGroupHandleResponse(resp *
 
 // Update - update Site at SG scope
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - servicegroupName - The name of the service group
 //   - siteName - The name of the Site
 //   - properties - Resource create parameters.
@@ -302,12 +302,7 @@ func (client *SitesByServiceGroupClient) Update(ctx context.Context, servicegrou
 	if err != nil {
 		return SitesByServiceGroupClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesByServiceGroupClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
@@ -326,8 +321,8 @@ func (client *SitesByServiceGroupClient) updateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -337,8 +332,11 @@ func (client *SitesByServiceGroupClient) updateCreateRequest(ctx context.Context
 }
 
 // updateHandleResponse handles the Update response.
-func (client *SitesByServiceGroupClient) updateHandleResponse(resp *http.Response) (SitesByServiceGroupClientUpdateResponse, error) {
+func (client *SitesByServiceGroupClient) updateHandleResponse(resp *http.Response, successCodes ...int) (SitesByServiceGroupClientUpdateResponse, error) {
 	result := SitesByServiceGroupClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return SitesByServiceGroupClientUpdateResponse{}, err
 	}

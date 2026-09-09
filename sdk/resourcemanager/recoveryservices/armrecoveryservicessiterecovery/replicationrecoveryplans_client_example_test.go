@@ -6,11 +6,10 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/ReplicationRecoveryPlans_Create.json
@@ -49,13 +48,13 @@ func ExampleReplicationRecoveryPlansClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientCreateResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -129,7 +128,7 @@ func ExampleReplicationRecoveryPlansClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -150,13 +149,13 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCancel() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientFailoverCancelResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -167,7 +166,7 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCancel() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/5276a7bc-12a3-43a1-bc53-9bf80e0be87b"),
 	// 				ScenarioName: to.Ptr("CancelFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-02-24T08:52:42.1587592Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2021, time.February, 24, 8, 52, 42, 158759200, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -175,8 +174,8 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCancel() {
 	// 			FriendlyName: to.Ptr("RPtest1"),
 	// 			Groups: []*armrecoveryservicessiterecovery.RecoveryPlanGroup{
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-02-24T07:33:49.1372448Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1601-01-01T00:00:00.0000000Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2021, time.February, 24, 7, 33, 49, 137244800, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(1601, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("cloud1"),
@@ -206,13 +205,13 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCommit() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientFailoverCommitResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -225,7 +224,7 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCommit() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/5276a7bc-12a3-43a1-bc53-9bf80e0be87b"),
 	// 				ScenarioName: to.Ptr("CommitFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T08:52:42.1587592Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 8, 52, 42, 158759200, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -277,8 +276,8 @@ func ExampleReplicationRecoveryPlansClient_BeginFailoverCommit() {
 	// 					},
 	// 				},
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:33:49.1372448Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:27.8354747Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 33, 49, 137244800, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 27, 835474700, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("Microsoft Azure"),
@@ -310,7 +309,7 @@ func ExampleReplicationRecoveryPlansClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientGetResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -460,13 +459,13 @@ func ExampleReplicationRecoveryPlansClient_BeginPlannedFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientPlannedFailoverResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -480,7 +479,7 @@ func ExampleReplicationRecoveryPlansClient_BeginPlannedFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/d4821a53-90da-4fcb-bc11-a280d13e3350"),
 	// 				ScenarioName: to.Ptr("PlannedFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:34:02.6176524Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 7, 34, 2, 617652400, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -532,8 +531,8 @@ func ExampleReplicationRecoveryPlansClient_BeginPlannedFailover() {
 	// 					},
 	// 				},
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:33:49.1372448Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:27.8354747Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 33, 49, 137244800, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 27, 835474700, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("Microsoft Azure"),
@@ -563,13 +562,13 @@ func ExampleReplicationRecoveryPlansClient_BeginReprotect() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientReprotectResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -582,7 +581,7 @@ func ExampleReplicationRecoveryPlansClient_BeginReprotect() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/edf01dfb-b649-4802-91e4-3d55ce3bebf0"),
 	// 				ScenarioName: to.Ptr("ReverseReplication"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T09:52:16.9818841Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 9, 52, 16, 981884100, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -634,8 +633,8 @@ func ExampleReplicationRecoveryPlansClient_BeginReprotect() {
 	// 					},
 	// 				},
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T08:58:35.9062813Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:27.8354747Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 8, 58, 35, 906281300, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 27, 835474700, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("Microsoft Azure"),
@@ -676,13 +675,13 @@ func ExampleReplicationRecoveryPlansClient_BeginTestFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientTestFailoverResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -693,7 +692,7 @@ func ExampleReplicationRecoveryPlansClient_BeginTestFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/d40bfb40-aaaa-4c0d-87d3-41b15439a84b"),
 	// 				ScenarioName: to.Ptr("TestFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:58.8191916Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 58, 819191600, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Suspended"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("WaitingForStopTestFailover"),
@@ -778,13 +777,13 @@ func ExampleReplicationRecoveryPlansClient_BeginTestFailoverCleanup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientTestFailoverCleanupResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -797,7 +796,7 @@ func ExampleReplicationRecoveryPlansClient_BeginTestFailoverCleanup() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/4ae8eaa8-a384-42cb-9768-152cb5b8a1ff"),
 	// 				ScenarioName: to.Ptr("TestFailoverCleanup"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:10:52.8424747Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 7, 10, 52, 842474700, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -849,8 +848,8 @@ func ExampleReplicationRecoveryPlansClient_BeginTestFailoverCleanup() {
 	// 					},
 	// 				},
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:33:49.1372448Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:27.8354747Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 33, 49, 137244800, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 27, 835474700, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("Microsoft Azure"),
@@ -890,13 +889,13 @@ func ExampleReplicationRecoveryPlansClient_BeginUnplannedFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientUnplannedFailoverResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),
@@ -910,7 +909,7 @@ func ExampleReplicationRecoveryPlansClient_BeginUnplannedFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/60b84068-9adb-4867-a49d-88be40bff14b"),
 	// 				ScenarioName: to.Ptr("UnplannedFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T10:03:03.2206946Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 27, 10, 3, 3, 220694600, time.UTC)),
 	// 			},
 	// 			CurrentScenarioStatus: to.Ptr("Succeeded"),
 	// 			CurrentScenarioStatusDescription: to.Ptr("Completed"),
@@ -962,8 +961,8 @@ func ExampleReplicationRecoveryPlansClient_BeginUnplannedFailover() {
 	// 					},
 	// 				},
 	// 			},
-	// 			LastPlannedFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T08:58:35.9062813Z"); return t}()),
-	// 			LastTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-27T07:00:27.8354747Z"); return t}()),
+	// 			LastPlannedFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 8, 58, 35, 906281300, time.UTC)),
+	// 			LastTestFailoverTime: to.Ptr(time.Date(2017, time.April, 27, 7, 0, 27, 835474700, time.UTC)),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
 	// 			PrimaryFabricID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1"),
 	// 			RecoveryFabricFriendlyName: to.Ptr("Microsoft Azure"),
@@ -1032,13 +1031,13 @@ func ExampleReplicationRecoveryPlansClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationRecoveryPlansClientUpdateResponse{
-	// 	RecoveryPlan: &armrecoveryservicessiterecovery.RecoveryPlan{
+	// 	RecoveryPlan: armrecoveryservicessiterecovery.RecoveryPlan{
 	// 		Name: to.Ptr("RPtest1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationRecoveryPlans"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationRecoveryPlans/RPtest1"),

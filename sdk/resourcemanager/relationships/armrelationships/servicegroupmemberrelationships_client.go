@@ -18,6 +18,8 @@ import (
 
 // ServiceGroupMemberRelationshipsClient contains the methods for the ServiceGroupMemberRelationships group.
 // Don't use this type directly, use NewServiceGroupMemberRelationshipsClient() instead.
+//
+// Generated from API version 2023-09-01-preview
 type ServiceGroupMemberRelationshipsClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewServiceGroupMemberRelationshipsClient(credential azcore.TokenCredential,
 
 // BeginCreateOrUpdate - Create a ServiceGroupMemberRelationship
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-09-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - name - Name of ServiceGroupMember relationship.
 //   - resource - Resource create parameters.
@@ -64,8 +64,6 @@ func (client *ServiceGroupMemberRelationshipsClient) BeginCreateOrUpdate(ctx con
 
 // CreateOrUpdate - Create a ServiceGroupMemberRelationship
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-09-01-preview
 func (client *ServiceGroupMemberRelationshipsClient) createOrUpdate(ctx context.Context, resourceURI string, name string, resource ServiceGroupMemberRelationship, options *ServiceGroupMemberRelationshipsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ServiceGroupMemberRelationshipsClient.BeginCreateOrUpdate"
@@ -81,8 +79,7 @@ func (client *ServiceGroupMemberRelationshipsClient) createOrUpdate(ctx context.
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -103,8 +100,8 @@ func (client *ServiceGroupMemberRelationshipsClient) createOrUpdateCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-09-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230901Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -115,8 +112,6 @@ func (client *ServiceGroupMemberRelationshipsClient) createOrUpdateCreateRequest
 
 // BeginDelete - Delete a ServiceGroupMemberRelationship
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-09-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - name - Name of ServiceGroupMember relationship.
 //   - options - ServiceGroupMemberRelationshipsClientBeginDeleteOptions contains the optional parameters for the ServiceGroupMemberRelationshipsClient.BeginDelete
@@ -140,8 +135,6 @@ func (client *ServiceGroupMemberRelationshipsClient) BeginDelete(ctx context.Con
 
 // Delete - Delete a ServiceGroupMemberRelationship
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-09-01-preview
 func (client *ServiceGroupMemberRelationshipsClient) deleteOperation(ctx context.Context, resourceURI string, name string, options *ServiceGroupMemberRelationshipsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ServiceGroupMemberRelationshipsClient.BeginDelete"
@@ -157,8 +150,7 @@ func (client *ServiceGroupMemberRelationshipsClient) deleteOperation(ctx context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -179,15 +171,13 @@ func (client *ServiceGroupMemberRelationshipsClient) deleteCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-09-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230901Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a ServiceGroupMemberRelationship
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-09-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - name - Name of ServiceGroupMember relationship.
 //   - options - ServiceGroupMemberRelationshipsClientGetOptions contains the optional parameters for the ServiceGroupMemberRelationshipsClient.Get
@@ -206,12 +196,7 @@ func (client *ServiceGroupMemberRelationshipsClient) Get(ctx context.Context, re
 	if err != nil {
 		return ServiceGroupMemberRelationshipsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ServiceGroupMemberRelationshipsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -230,15 +215,18 @@ func (client *ServiceGroupMemberRelationshipsClient) getCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-09-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230901Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ServiceGroupMemberRelationshipsClient) getHandleResponse(resp *http.Response) (ServiceGroupMemberRelationshipsClientGetResponse, error) {
+func (client *ServiceGroupMemberRelationshipsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ServiceGroupMemberRelationshipsClientGetResponse, error) {
 	result := ServiceGroupMemberRelationshipsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ServiceGroupMemberRelationship); err != nil {
 		return ServiceGroupMemberRelationshipsClientGetResponse{}, err
 	}

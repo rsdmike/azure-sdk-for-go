@@ -6,10 +6,9 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/RecoveryPoints_Get.json
@@ -31,12 +30,12 @@ func ExampleRecoveryPointsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.RecoveryPointsClientGetResponse{
-	// 	RecoveryPoint: &armrecoveryservicessiterecovery.RecoveryPoint{
+	// 	RecoveryPoint: armrecoveryservicessiterecovery.RecoveryPoint{
 	// 		Name: to.Ptr("b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems/recoveryPoints"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 		Properties: &armrecoveryservicessiterecovery.RecoveryPointProperties{
-	// 			RecoveryPointTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:50.8082715Z"); return t}()),
+	// 			RecoveryPointTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 50, 808271500, time.UTC)),
 	// 			RecoveryPointType: to.Ptr("CrashConsistent"),
 	// 		},
 	// 	},
@@ -73,7 +72,7 @@ func ExampleRecoveryPointsClient_NewListByReplicationProtectedItemsPager() {
 		// 				Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems/recoveryPoints"),
 		// 				ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 		// 				Properties: &armrecoveryservicessiterecovery.RecoveryPointProperties{
-		// 					RecoveryPointTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:50.8082715Z"); return t}()),
+		// 					RecoveryPointTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 50, 808271500, time.UTC)),
 		// 					RecoveryPointType: to.Ptr("CrashConsistent"),
 		// 				},
 		// 			},
@@ -82,7 +81,7 @@ func ExampleRecoveryPointsClient_NewListByReplicationProtectedItemsPager() {
 		// 				Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems/recoveryPoints"),
 		// 				ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/34cb2d05-e730-4d3f-b96b-a60a5e92acb2"),
 		// 				Properties: &armrecoveryservicessiterecovery.RecoveryPointProperties{
-		// 					RecoveryPointTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T07:37:30.9722019Z"); return t}()),
+		// 					RecoveryPointTime: to.Ptr(time.Date(2017, time.April, 26, 7, 37, 30, 972201900, time.UTC)),
 		// 					RecoveryPointType: to.Ptr("CrashConsistent"),
 		// 				},
 		// 			},

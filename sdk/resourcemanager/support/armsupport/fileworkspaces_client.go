@@ -18,6 +18,8 @@ import (
 
 // FileWorkspacesClient contains the methods for the FileWorkspaces group.
 // Don't use this type directly, use NewFileWorkspacesClient() instead.
+//
+// Generated from API version 2024-04-01
 type FileWorkspacesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type FileWorkspacesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewFileWorkspacesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*FileWorkspacesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewFileWorkspacesClient(subscriptionID string, credential azcore.TokenCrede
 
 // Create - Creates a new file workspace for the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - options - FileWorkspacesClientCreateOptions contains the optional parameters for the FileWorkspacesClient.Create method.
 func (client *FileWorkspacesClient) Create(ctx context.Context, fileWorkspaceName string, options *FileWorkspacesClientCreateOptions) (FileWorkspacesClientCreateResponse, error) {
@@ -59,19 +62,14 @@ func (client *FileWorkspacesClient) Create(ctx context.Context, fileWorkspaceNam
 	if err != nil {
 		return FileWorkspacesClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return FileWorkspacesClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusCreated)
 }
 
 // createCreateRequest creates the Create request.
 func (client *FileWorkspacesClient) createCreateRequest(ctx context.Context, fileWorkspaceName string, _ *FileWorkspacesClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if fileWorkspaceName == "" {
@@ -83,15 +81,18 @@ func (client *FileWorkspacesClient) createCreateRequest(ctx context.Context, fil
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // createHandleResponse handles the Create response.
-func (client *FileWorkspacesClient) createHandleResponse(resp *http.Response) (FileWorkspacesClientCreateResponse, error) {
+func (client *FileWorkspacesClient) createHandleResponse(resp *http.Response, successCodes ...int) (FileWorkspacesClientCreateResponse, error) {
 	result := FileWorkspacesClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileWorkspaceDetails); err != nil {
 		return FileWorkspacesClientCreateResponse{}, err
 	}
@@ -100,8 +101,6 @@ func (client *FileWorkspacesClient) createHandleResponse(resp *http.Response) (F
 
 // Get - Gets details for a specific file workspace in an Azure subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - options - FileWorkspacesClientGetOptions contains the optional parameters for the FileWorkspacesClient.Get method.
 func (client *FileWorkspacesClient) Get(ctx context.Context, fileWorkspaceName string, options *FileWorkspacesClientGetOptions) (FileWorkspacesClientGetResponse, error) {
@@ -118,19 +117,14 @@ func (client *FileWorkspacesClient) Get(ctx context.Context, fileWorkspaceName s
 	if err != nil {
 		return FileWorkspacesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FileWorkspacesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *FileWorkspacesClient) getCreateRequest(ctx context.Context, fileWorkspaceName string, _ *FileWorkspacesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if fileWorkspaceName == "" {
@@ -142,15 +136,18 @@ func (client *FileWorkspacesClient) getCreateRequest(ctx context.Context, fileWo
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *FileWorkspacesClient) getHandleResponse(resp *http.Response) (FileWorkspacesClientGetResponse, error) {
+func (client *FileWorkspacesClient) getHandleResponse(resp *http.Response, successCodes ...int) (FileWorkspacesClientGetResponse, error) {
 	result := FileWorkspacesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileWorkspaceDetails); err != nil {
 		return FileWorkspacesClientGetResponse{}, err
 	}

@@ -38,13 +38,13 @@ func ExampleAutonomousDatabaseBackupsClient_BeginCreateOrUpdate_createAutonomous
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientCreateOrUpdateResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{
 	// 			AutonomousDatabaseOcid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			DisplayName: to.Ptr("Nightly Backup"),
@@ -57,7 +57,7 @@ func ExampleAutonomousDatabaseBackupsClient_BeginCreateOrUpdate_createAutonomous
 	// 			LifecycleDetails: to.Ptr("Backup completed successfully"),
 	// 			LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 	// 			SizeInTbs: to.Ptr[float64](2),
-	// 			TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+	// 			TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 	// 			TimeStarted: to.Ptr("lcogiebqmxudyzo"),
 	// 			TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 	// 			BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
@@ -69,10 +69,10 @@ func ExampleAutonomousDatabaseBackupsClient_BeginCreateOrUpdate_createAutonomous
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -101,13 +101,13 @@ func ExampleAutonomousDatabaseBackupsClient_BeginCreateOrUpdate_autonomousDataba
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientCreateOrUpdateResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/autonomousDatabases/databasedb1/autonomousDatabaseBackups/1711644130"),
 	// 		Type: to.Ptr("Oracle.Database/autonomousDatabases/autonomousDatabaseBackups"),
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{
@@ -122,7 +122,7 @@ func ExampleAutonomousDatabaseBackupsClient_BeginCreateOrUpdate_autonomousDataba
 	// 			LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 	// 			RetentionPeriodInDays: to.Ptr[int32](365),
 	// 			SizeInTbs: to.Ptr[float64](2),
-	// 			TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+	// 			TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 	// 			TimeStarted: to.Ptr("2024-01-09T19:44:09.466Z"),
 	// 			TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 	// 			BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
@@ -149,7 +149,7 @@ func ExampleAutonomousDatabaseBackupsClient_BeginDelete_deleteAutonomousDatabase
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -170,7 +170,7 @@ func ExampleAutonomousDatabaseBackupsClient_BeginDelete_autonomousDatabaseBackup
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -193,7 +193,7 @@ func ExampleAutonomousDatabaseBackupsClient_Get_getAutonomousDatabaseBackupGener
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientGetResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{
 	// 			AutonomousDatabaseOcid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			DisplayName: to.Ptr("Nightly Backup"),
@@ -206,7 +206,7 @@ func ExampleAutonomousDatabaseBackupsClient_Get_getAutonomousDatabaseBackupGener
 	// 			LifecycleDetails: to.Ptr("Backup completed successfully"),
 	// 			LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 	// 			SizeInTbs: to.Ptr[float64](2),
-	// 			TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+	// 			TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 	// 			TimeStarted: to.Ptr("lcogiebqmxudyzo"),
 	// 			TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 	// 			BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
@@ -218,10 +218,10 @@ func ExampleAutonomousDatabaseBackupsClient_Get_getAutonomousDatabaseBackupGener
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -246,7 +246,7 @@ func ExampleAutonomousDatabaseBackupsClient_Get_autonomousDatabaseBackupsGet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientGetResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/autonomousDatabases/databasedb1/autonomousDatabaseBackups/1711644130"),
 	// 		Type: to.Ptr("Oracle.Database/autonomousDatabases/autonomousDatabaseBackups"),
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{
@@ -261,7 +261,7 @@ func ExampleAutonomousDatabaseBackupsClient_Get_autonomousDatabaseBackupsGet() {
 	// 			LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 	// 			RetentionPeriodInDays: to.Ptr[int32](365),
 	// 			SizeInTbs: to.Ptr[float64](2),
-	// 			TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+	// 			TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 	// 			TimeStarted: to.Ptr("2024-01-09T19:44:09.466Z"),
 	// 			TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 	// 			BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
@@ -271,7 +271,7 @@ func ExampleAutonomousDatabaseBackupsClient_Get_autonomousDatabaseBackupsGet() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/autonomousDatabaseBackup_listByParent.json
+// Generated from example definition: 2025-09-01/AutonomousDatabaseBackups_ListByParent_MaximumSet_Gen.json
 func ExampleAutonomousDatabaseBackupsClient_NewListByAutonomousDatabasePager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -282,7 +282,7 @@ func ExampleAutonomousDatabaseBackupsClient_NewListByAutonomousDatabasePager() {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
-	pager := clientFactory.NewAutonomousDatabaseBackupsClient().NewListByAutonomousDatabasePager("rg000", "databasedb1", nil)
+	pager := clientFactory.NewAutonomousDatabaseBackupsClient().NewListByAutonomousDatabasePager("rgopenapi", "databasedb1", nil)
 	for pager.More() {
 		page, err := pager.NextPage(ctx)
 		if err != nil {
@@ -311,13 +311,24 @@ func ExampleAutonomousDatabaseBackupsClient_NewListByAutonomousDatabasePager() {
 		// 					LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 		// 					RetentionPeriodInDays: to.Ptr[int32](365),
 		// 					SizeInTbs: to.Ptr[float64](2),
-		// 					TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+		// 					TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 		// 					TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 		// 					BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
 		// 					ProvisioningState: to.Ptr(armoracledatabase.AzureResourceProvisioningStateSucceeded),
+		// 					TimeStarted: to.Ptr("krhgmxolymoepnkghvd"),
+		// 				},
+		// 				Name: to.Ptr("oqossvyqkeitdj"),
+		// 				SystemData: &armoracledatabase.SystemData{
+		// 					CreatedBy: to.Ptr("sqehacivpuim"),
+		// 					CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
+		// 					LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
+		// 					LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
+		// 		NextLink: to.Ptr("https://microsoft.com/a"),
 		// 	},
 		// }
 	}
@@ -344,13 +355,13 @@ func ExampleAutonomousDatabaseBackupsClient_BeginUpdate_patchAutonomousDatabaseB
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientUpdateResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{
 	// 			AutonomousDatabaseOcid: to.Ptr("ocid1.autonomousdatabase.oc1..aaaaa3klq"),
 	// 			DisplayName: to.Ptr("Nightly Backup"),
@@ -363,7 +374,7 @@ func ExampleAutonomousDatabaseBackupsClient_BeginUpdate_patchAutonomousDatabaseB
 	// 			LifecycleDetails: to.Ptr("Backup completed successfully"),
 	// 			LifecycleState: to.Ptr(armoracledatabase.AutonomousDatabaseBackupLifecycleStateActive),
 	// 			SizeInTbs: to.Ptr[float64](2),
-	// 			TimeAvailableTil: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-09T20:44:09.466Z"); return t}()),
+	// 			TimeAvailableTil: to.Ptr(time.Date(2025, time.January, 9, 20, 44, 9, 466000000, time.UTC)),
 	// 			TimeStarted: to.Ptr("lcogiebqmxudyzo"),
 	// 			TimeEnded: to.Ptr("2024-01-09T20:44:09.466Z"),
 	// 			BackupType: to.Ptr(armoracledatabase.AutonomousDatabaseBackupTypeFull),
@@ -375,10 +386,10 @@ func ExampleAutonomousDatabaseBackupsClient_BeginUpdate_patchAutonomousDatabaseB
 	// 		SystemData: &armoracledatabase.SystemData{
 	// 			CreatedBy: to.Ptr("sqehacivpuim"),
 	// 			CreatedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("axrqfdkqylvjv"),
 	// 			LastModifiedByType: to.Ptr(armoracledatabase.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-01T04:32:58.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 1, 4, 32, 58, 716000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -401,13 +412,13 @@ func ExampleAutonomousDatabaseBackupsClient_BeginUpdate_autonomousDatabaseBackup
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armoracledatabase.AutonomousDatabaseBackupsClientUpdateResponse{
-	// 	AutonomousDatabaseBackup: &armoracledatabase.AutonomousDatabaseBackup{
+	// 	AutonomousDatabaseBackup: armoracledatabase.AutonomousDatabaseBackup{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg000/providers/Oracle.Database/autonomousDatabases/databasedb1/autonomousDatabaseBackups/1711644130"),
 	// 		Type: to.Ptr("Oracle.Database/autonomousDatabases/autonomousDatabaseBackups"),
 	// 		Properties: &armoracledatabase.AutonomousDatabaseBackupProperties{

@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // CapabilitiesByServerServer is a fake server for instances of the armpostgresqlflexibleservers.CapabilitiesByServerClient type.
@@ -53,14 +54,12 @@ func (c *CapabilitiesByServerServerTransport) Do(req *http.Request) (*http.Respo
 }
 
 func (c *CapabilitiesByServerServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
-		if capabilitiesByServerTransportInterceptor != nil {
-			res.resp, res.err, intercepted = capabilitiesByServerTransportInterceptor.Do(req)
+		if capabilitiesByServerServerTransportInterceptor != nil {
+			res.resp, res.err, intercepted = capabilitiesByServerServerTransportInterceptor.Do(req)
 		}
 		if !intercepted {
 			switch method {
@@ -71,10 +70,7 @@ func (c *CapabilitiesByServerServerTransport) dispatchToMethodFake(req *http.Req
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -91,7 +87,7 @@ func (c *CapabilitiesByServerServerTransport) dispatchNewListPager(req *http.Req
 	}
 	newListPager := c.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DBforPostgreSQL/flexibleServers/(?P<serverName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/capabilities`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DBforPostgreSQL/flexibleServers/(?P<serverName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/capabilities`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -116,7 +112,7 @@ func (c *CapabilitiesByServerServerTransport) dispatchNewListPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		c.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -127,7 +123,7 @@ func (c *CapabilitiesByServerServerTransport) dispatchNewListPager(req *http.Req
 }
 
 // set this to conditionally intercept incoming requests to CapabilitiesByServerServerTransport
-var capabilitiesByServerTransportInterceptor interface {
+var capabilitiesByServerServerTransportInterceptor interface {
 	// Do returns true if the server transport should use the returned response/error
 	Do(*http.Request) (*http.Response, error, bool)
 }

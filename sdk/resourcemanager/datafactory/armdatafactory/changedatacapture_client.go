@@ -18,6 +18,8 @@ import (
 
 // ChangeDataCaptureClient contains the methods for the ChangeDataCapture group.
 // Don't use this type directly, use NewChangeDataCaptureClient() instead.
+//
+// Generated from API version 2018-06-01
 type ChangeDataCaptureClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ChangeDataCaptureClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewChangeDataCaptureClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ChangeDataCaptureClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewChangeDataCaptureClient(subscriptionID string, credential azcore.TokenCr
 
 // CreateOrUpdate - Creates or updates a change data capture resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -63,19 +66,14 @@ func (client *ChangeDataCaptureClient) CreateOrUpdate(ctx context.Context, resou
 	if err != nil {
 		return ChangeDataCaptureClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ChangeDataCaptureClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, changeDataCapture ChangeDataCaptureResource, options *ChangeDataCaptureClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -95,8 +93,8 @@ func (client *ChangeDataCaptureClient) createOrUpdateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
@@ -109,8 +107,11 @@ func (client *ChangeDataCaptureClient) createOrUpdateCreateRequest(ctx context.C
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ChangeDataCaptureClient) createOrUpdateHandleResponse(resp *http.Response) (ChangeDataCaptureClientCreateOrUpdateResponse, error) {
+func (client *ChangeDataCaptureClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ChangeDataCaptureClientCreateOrUpdateResponse, error) {
 	result := ChangeDataCaptureClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeDataCaptureResource); err != nil {
 		return ChangeDataCaptureClientCreateOrUpdateResponse{}, err
 	}
@@ -119,8 +120,6 @@ func (client *ChangeDataCaptureClient) createOrUpdateHandleResponse(resp *http.R
 
 // Delete - Deletes a change data capture.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -141,8 +140,7 @@ func (client *ChangeDataCaptureClient) Delete(ctx context.Context, resourceGroup
 		return ChangeDataCaptureClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientDeleteResponse{}, err
+		return ChangeDataCaptureClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ChangeDataCaptureClientDeleteResponse{}, nil
 }
@@ -151,7 +149,7 @@ func (client *ChangeDataCaptureClient) Delete(ctx context.Context, resourceGroup
 func (client *ChangeDataCaptureClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, _ *ChangeDataCaptureClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -171,16 +169,13 @@ func (client *ChangeDataCaptureClient) deleteCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets a change data capture.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -199,19 +194,14 @@ func (client *ChangeDataCaptureClient) Get(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return ChangeDataCaptureClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ChangeDataCaptureClient) getCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, options *ChangeDataCaptureClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -231,8 +221,8 @@ func (client *ChangeDataCaptureClient) getCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfNoneMatch != nil {
 		req.Raw().Header["if-none-match"] = []string{*options.IfNoneMatch}
@@ -241,8 +231,11 @@ func (client *ChangeDataCaptureClient) getCreateRequest(ctx context.Context, res
 }
 
 // getHandleResponse handles the Get response.
-func (client *ChangeDataCaptureClient) getHandleResponse(resp *http.Response) (ChangeDataCaptureClientGetResponse, error) {
+func (client *ChangeDataCaptureClient) getHandleResponse(resp *http.Response, successCodes ...int) (ChangeDataCaptureClientGetResponse, error) {
 	result := ChangeDataCaptureClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeDataCaptureResource); err != nil {
 		return ChangeDataCaptureClientGetResponse{}, err
 	}
@@ -250,8 +243,6 @@ func (client *ChangeDataCaptureClient) getHandleResponse(resp *http.Response) (C
 }
 
 // NewListByFactoryPager - Lists all resources of type change data capture.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - options - ChangeDataCaptureClientListByFactoryOptions contains the optional parameters for the ChangeDataCaptureClient.NewListByFactoryPager
@@ -267,47 +258,61 @@ func (client *ChangeDataCaptureClient) NewListByFactoryPager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, options)
-			}, nil)
+			req, err := client.listByFactoryCreateRequest(ctx, resourceGroupName, factoryName, nextLink, options)
 			if err != nil {
 				return ChangeDataCaptureClientListByFactoryResponse{}, err
 			}
-			return client.listByFactoryHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ChangeDataCaptureClientListByFactoryResponse{}, err
+			}
+			return client.listByFactoryHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByFactoryCreateRequest creates the ListByFactory request.
-func (client *ChangeDataCaptureClient) listByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, _ *ChangeDataCaptureClientListByFactoryOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ChangeDataCaptureClient) listByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, nextLink string, _ *ChangeDataCaptureClientListByFactoryOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if factoryName == "" {
+			return nil, errors.New("parameter factoryName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{factoryName}", url.PathEscape(factoryName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if factoryName == "" {
-		return nil, errors.New("parameter factoryName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{factoryName}", url.PathEscape(factoryName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20180601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByFactoryHandleResponse handles the ListByFactory response.
-func (client *ChangeDataCaptureClient) listByFactoryHandleResponse(resp *http.Response) (ChangeDataCaptureClientListByFactoryResponse, error) {
+func (client *ChangeDataCaptureClient) listByFactoryHandleResponse(resp *http.Response, successCodes ...int) (ChangeDataCaptureClientListByFactoryResponse, error) {
 	result := ChangeDataCaptureClientListByFactoryResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChangeDataCaptureListResponse); err != nil {
 		return ChangeDataCaptureClientListByFactoryResponse{}, err
 	}
@@ -316,8 +321,6 @@ func (client *ChangeDataCaptureClient) listByFactoryHandleResponse(resp *http.Re
 
 // Start - Starts a change data capture.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -337,8 +340,7 @@ func (client *ChangeDataCaptureClient) Start(ctx context.Context, resourceGroupN
 		return ChangeDataCaptureClientStartResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientStartResponse{}, err
+		return ChangeDataCaptureClientStartResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ChangeDataCaptureClientStartResponse{}, nil
 }
@@ -347,7 +349,7 @@ func (client *ChangeDataCaptureClient) Start(ctx context.Context, resourceGroupN
 func (client *ChangeDataCaptureClient) startCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, _ *ChangeDataCaptureClientStartOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}/start"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -367,16 +369,13 @@ func (client *ChangeDataCaptureClient) startCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Status - Gets the current status for the change data capture resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -396,19 +395,14 @@ func (client *ChangeDataCaptureClient) Status(ctx context.Context, resourceGroup
 	if err != nil {
 		return ChangeDataCaptureClientStatusResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientStatusResponse{}, err
-	}
-	resp, err := client.statusHandleResponse(httpResp)
-	return resp, err
+	return client.statusHandleResponse(httpResp, http.StatusOK)
 }
 
 // statusCreateRequest creates the Status request.
 func (client *ChangeDataCaptureClient) statusCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, _ *ChangeDataCaptureClientStatusOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}/status"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -428,15 +422,18 @@ func (client *ChangeDataCaptureClient) statusCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // statusHandleResponse handles the Status response.
-func (client *ChangeDataCaptureClient) statusHandleResponse(resp *http.Response) (ChangeDataCaptureClientStatusResponse, error) {
+func (client *ChangeDataCaptureClient) statusHandleResponse(resp *http.Response, successCodes ...int) (ChangeDataCaptureClientStatusResponse, error) {
 	result := ChangeDataCaptureClientStatusResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Value); err != nil {
 		return ChangeDataCaptureClientStatusResponse{}, err
 	}
@@ -445,8 +442,6 @@ func (client *ChangeDataCaptureClient) statusHandleResponse(resp *http.Response)
 
 // Stop - Stops a change data capture.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - changeDataCaptureName - The change data capture name.
@@ -466,8 +461,7 @@ func (client *ChangeDataCaptureClient) Stop(ctx context.Context, resourceGroupNa
 		return ChangeDataCaptureClientStopResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChangeDataCaptureClientStopResponse{}, err
+		return ChangeDataCaptureClientStopResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ChangeDataCaptureClientStopResponse{}, nil
 }
@@ -476,7 +470,7 @@ func (client *ChangeDataCaptureClient) Stop(ctx context.Context, resourceGroupNa
 func (client *ChangeDataCaptureClient) stopCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, changeDataCaptureName string, _ *ChangeDataCaptureClientStopOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/adfcdcs/{changeDataCaptureName}/stop"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -496,8 +490,7 @@ func (client *ChangeDataCaptureClient) stopCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }

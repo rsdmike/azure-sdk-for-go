@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2025-02-01/PUTVaultCred.json
+// Generated from example definition: 2026-07-01/PUTVaultCred.json
 func ExampleVaultCertificatesClient_Create() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -36,7 +36,7 @@ func ExampleVaultCertificatesClient_Create() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservices.VaultCertificatesClientCreateResponse{
-	// 	VaultCertificateResponse: &armrecoveryservices.VaultCertificateResponse{
+	// 	VaultCertificateResponse: armrecoveryservices.VaultCertificateResponse{
 	// 		Name: to.Ptr("BCDRIbzVault77777777-d41f-4550-9f70-7708a3a2283b-12-18-2017-vaultcredentials"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/certificates"),
 	// 		ID: to.Ptr("/Subscriptions/77777777-d41f-4550-9f70-7708a3a2283b/resourceGroups/BCDRIbzRG/providers/Microsoft.RecoveryServices/vaults/BCDRIbzVault/certificates/BCDRIbzVault77777777-d41f-4550-9f70-7708a3a2283b-12-18-2017-vaultcredentials"),
@@ -54,8 +54,8 @@ func ExampleVaultCertificatesClient_Create() {
 	// 			ServicePrincipalObjectID: to.Ptr("2d60221e-cef5-4e13-ba66-b33701a533bb"),
 	// 			Subject: to.Ptr("CN=Windows Azure Tools"),
 	// 			Thumbprint: to.Ptr("019FE9BAD18A5A09A5CA53B593AF66331F3054AF"),
-	// 			ValidFrom: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-12-18T14:47:53+05:30"); return t}()),
-	// 			ValidTo: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-12-23T14:57:53+05:30"); return t}()),
+	// 			ValidFrom: to.Ptr(time.Date(2017, time.December, 18, 9, 17, 53, 0, time.UTC)),
+	// 			ValidTo: to.Ptr(time.Date(2017, time.December, 23, 9, 27, 53, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }

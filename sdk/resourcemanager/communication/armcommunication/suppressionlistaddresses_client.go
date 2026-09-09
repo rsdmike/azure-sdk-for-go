@@ -18,6 +18,8 @@ import (
 
 // SuppressionListAddressesClient contains the methods for the SuppressionListAddresses group.
 // Don't use this type directly, use NewSuppressionListAddressesClient() instead.
+//
+// Generated from API version 2025-09-01
 type SuppressionListAddressesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type SuppressionListAddressesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSuppressionListAddressesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SuppressionListAddressesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewSuppressionListAddressesClient(subscriptionID string, credential azcore.
 //
 // Create or update a SuppressionListAddress.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - domainName - The name of the Domains resource.
@@ -67,19 +70,14 @@ func (client *SuppressionListAddressesClient) CreateOrUpdate(ctx context.Context
 	if err != nil {
 		return SuppressionListAddressesClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return SuppressionListAddressesClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *SuppressionListAddressesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, domainName string, suppressionListName string, addressID string, parameters SuppressionListAddressResource, _ *SuppressionListAddressesClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}/domains/{domainName}/suppressionLists/{suppressionListName}/suppressionListAddresses/{addressId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -107,8 +105,8 @@ func (client *SuppressionListAddressesClient) createOrUpdateCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -118,8 +116,11 @@ func (client *SuppressionListAddressesClient) createOrUpdateCreateRequest(ctx co
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *SuppressionListAddressesClient) createOrUpdateHandleResponse(resp *http.Response) (SuppressionListAddressesClientCreateOrUpdateResponse, error) {
+func (client *SuppressionListAddressesClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (SuppressionListAddressesClientCreateOrUpdateResponse, error) {
 	result := SuppressionListAddressesClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionListAddressResource); err != nil {
 		return SuppressionListAddressesClientCreateOrUpdateResponse{}, err
 	}
@@ -130,8 +131,6 @@ func (client *SuppressionListAddressesClient) createOrUpdateHandleResponse(resp 
 //
 // Operation to delete a single address from a suppression list.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - domainName - The name of the Domains resource.
@@ -154,8 +153,7 @@ func (client *SuppressionListAddressesClient) Delete(ctx context.Context, resour
 		return SuppressionListAddressesClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return SuppressionListAddressesClientDeleteResponse{}, err
+		return SuppressionListAddressesClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return SuppressionListAddressesClientDeleteResponse{}, nil
 }
@@ -164,7 +162,7 @@ func (client *SuppressionListAddressesClient) Delete(ctx context.Context, resour
 func (client *SuppressionListAddressesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, domainName string, suppressionListName string, addressID string, _ *SuppressionListAddressesClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}/domains/{domainName}/suppressionLists/{suppressionListName}/suppressionListAddresses/{addressId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -192,8 +190,8 @@ func (client *SuppressionListAddressesClient) deleteCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -201,8 +199,6 @@ func (client *SuppressionListAddressesClient) deleteCreateRequest(ctx context.Co
 //
 // Get a SuppressionListAddress.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - domainName - The name of the Domains resource.
@@ -224,19 +220,14 @@ func (client *SuppressionListAddressesClient) Get(ctx context.Context, resourceG
 	if err != nil {
 		return SuppressionListAddressesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SuppressionListAddressesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *SuppressionListAddressesClient) getCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, domainName string, suppressionListName string, addressID string, _ *SuppressionListAddressesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}/domains/{domainName}/suppressionLists/{suppressionListName}/suppressionListAddresses/{addressId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -264,15 +255,18 @@ func (client *SuppressionListAddressesClient) getCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SuppressionListAddressesClient) getHandleResponse(resp *http.Response) (SuppressionListAddressesClientGetResponse, error) {
+func (client *SuppressionListAddressesClient) getHandleResponse(resp *http.Response, successCodes ...int) (SuppressionListAddressesClientGetResponse, error) {
 	result := SuppressionListAddressesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionListAddressResource); err != nil {
 		return SuppressionListAddressesClientGetResponse{}, err
 	}
@@ -282,8 +276,6 @@ func (client *SuppressionListAddressesClient) getHandleResponse(resp *http.Respo
 // NewListPager - Get
 //
 // Get all the addresses in a suppression list.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - emailServiceName - The name of the EmailService resource.
 //   - domainName - The name of the Domains resource.
@@ -301,55 +293,69 @@ func (client *SuppressionListAddressesClient) NewListPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, emailServiceName, domainName, suppressionListName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, emailServiceName, domainName, suppressionListName, nextLink, options)
 			if err != nil {
 				return SuppressionListAddressesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return SuppressionListAddressesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *SuppressionListAddressesClient) listCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, domainName string, suppressionListName string, _ *SuppressionListAddressesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}/domains/{domainName}/suppressionLists/{suppressionListName}/suppressionListAddresses"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *SuppressionListAddressesClient) listCreateRequest(ctx context.Context, resourceGroupName string, emailServiceName string, domainName string, suppressionListName string, nextLink string, _ *SuppressionListAddressesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Communication/emailServices/{emailServiceName}/domains/{domainName}/suppressionLists/{suppressionListName}/suppressionListAddresses"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if emailServiceName == "" {
+			return nil, errors.New("parameter emailServiceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{emailServiceName}", url.PathEscape(emailServiceName))
+		if domainName == "" {
+			return nil, errors.New("parameter domainName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
+		if suppressionListName == "" {
+			return nil, errors.New("parameter suppressionListName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{suppressionListName}", url.PathEscape(suppressionListName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if emailServiceName == "" {
-		return nil, errors.New("parameter emailServiceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{emailServiceName}", url.PathEscape(emailServiceName))
-	if domainName == "" {
-		return nil, errors.New("parameter domainName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
-	if suppressionListName == "" {
-		return nil, errors.New("parameter suppressionListName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{suppressionListName}", url.PathEscape(suppressionListName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *SuppressionListAddressesClient) listHandleResponse(resp *http.Response) (SuppressionListAddressesClientListResponse, error) {
+func (client *SuppressionListAddressesClient) listHandleResponse(resp *http.Response, successCodes ...int) (SuppressionListAddressesClientListResponse, error) {
 	result := SuppressionListAddressesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SuppressionListAddressResourceCollection); err != nil {
 		return SuppressionListAddressesClientListResponse{}, err
 	}

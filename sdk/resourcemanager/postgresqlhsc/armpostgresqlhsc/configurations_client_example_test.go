@@ -31,7 +31,7 @@ func ExampleConfigurationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ConfigurationsClientGetResponse{
-	// 	Configuration: &armpostgresqlhsc.Configuration{
+	// 	Configuration: armpostgresqlhsc.Configuration{
 	// 		Name: to.Ptr("client_encoding"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/configurations"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/configurations/client_encoding"),
@@ -55,10 +55,10 @@ func ExampleConfigurationsClient_Get() {
 	// 			},
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -85,17 +85,17 @@ func ExampleConfigurationsClient_GetCoordinator() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ConfigurationsClientGetCoordinatorResponse{
-	// 	ServerConfiguration: &armpostgresqlhsc.ServerConfiguration{
+	// 	ServerConfiguration: armpostgresqlhsc.ServerConfiguration{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/coordinatorConfigurations/array_nulls"),
 	// 		Name: to.Ptr("array_nulls"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/coordinatorConfigurations"),
 	// 		SystemData: &armpostgresqlhsc.SystemData{
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 		},
 	// 		Properties: &armpostgresqlhsc.ServerConfigurationProperties{
 	// 			Value: to.Ptr("on"),
@@ -123,7 +123,7 @@ func ExampleConfigurationsClient_GetNode() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ConfigurationsClientGetNodeResponse{
-	// 	ServerConfiguration: &armpostgresqlhsc.ServerConfiguration{
+	// 	ServerConfiguration: armpostgresqlhsc.ServerConfiguration{
 	// 		Name: to.Ptr("array_nulls"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/nodeConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/nodeConfigurations/array_nulls"),
@@ -131,10 +131,10 @@ func ExampleConfigurationsClient_GetNode() {
 	// 			Value: to.Ptr("off"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -192,10 +192,10 @@ func ExampleConfigurationsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -225,10 +225,10 @@ func ExampleConfigurationsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -258,10 +258,10 @@ func ExampleConfigurationsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -291,10 +291,10 @@ func ExampleConfigurationsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -337,10 +337,10 @@ func ExampleConfigurationsClient_NewListByServerPager() {
 		// 				SystemData: &armpostgresqlhsc.SystemData{
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 				},
 		// 				Properties: &armpostgresqlhsc.ServerConfigurationProperties{
 		// 					Value: to.Ptr(""),
@@ -359,10 +359,10 @@ func ExampleConfigurationsClient_NewListByServerPager() {
 		// 				SystemData: &armpostgresqlhsc.SystemData{
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 				},
 		// 				Properties: &armpostgresqlhsc.ServerConfigurationProperties{
 		// 					Value: to.Ptr("on"),
@@ -381,10 +381,10 @@ func ExampleConfigurationsClient_NewListByServerPager() {
 		// 				SystemData: &armpostgresqlhsc.SystemData{
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 				},
 		// 				Properties: &armpostgresqlhsc.ServerConfigurationProperties{
 		// 					Value: to.Ptr("on"),
@@ -423,23 +423,23 @@ func ExampleConfigurationsClient_BeginUpdateOnCoordinator() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ConfigurationsClientUpdateOnCoordinatorResponse{
-	// 	ServerConfiguration: &armpostgresqlhsc.ServerConfiguration{
+	// 	ServerConfiguration: armpostgresqlhsc.ServerConfiguration{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/configurations/array_nulls"),
 	// 		Name: to.Ptr("array_nulls"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/configurations/coordinator"),
 	// 		SystemData: &armpostgresqlhsc.SystemData{
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 		},
 	// 		Properties: &armpostgresqlhsc.ServerConfigurationProperties{
 	// 			AllowedValues: to.Ptr("on,off"),
@@ -476,13 +476,13 @@ func ExampleConfigurationsClient_BeginUpdateOnNode() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ConfigurationsClientUpdateOnNodeResponse{
-	// 	ServerConfiguration: &armpostgresqlhsc.ServerConfiguration{
+	// 	ServerConfiguration: armpostgresqlhsc.ServerConfiguration{
 	// 		Name: to.Ptr("array_nulls"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/configurations/node"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/configurations/array_nulls"),
@@ -497,10 +497,10 @@ func ExampleConfigurationsClient_BeginUpdateOnNode() {
 	// 			Value: to.Ptr("off"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},

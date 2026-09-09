@@ -30,17 +30,17 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteAnalysisResponse{
-	// 	DiagnosticAnalysis: &armappservice.DiagnosticAnalysis{
+	// 	DiagnosticAnalysis: armappservice.DiagnosticAnalysis{
 	// 		Name: to.Ptr("apprestartanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability/analyses/apprestartanalyses"),
 	// 		Properties: &armappservice.DiagnosticAnalysisProperties{
 	// 			AbnormalTimePeriods: []*armappservice.AbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Events: []*armappservice.DetectorAbnormalTimePeriod{
 	// 						{
 	// 							Type: to.Ptr(armappservice.IssueTypeServiceIncident),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:48Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 48, 0, time.UTC)),
 	// 							Message: to.Ptr("Your application process was restarted as application environment variables changed. This can most likely occur due to update in app settings or swap operation. This event occurred multiple times during the day."),
 	// 							MetaData: [][]*armappservice.NameValuePair{
 	// 								[]*armappservice.NameValuePair{
@@ -57,15 +57,15 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteAnalysis() {
 	// 							Priority: to.Ptr[float64](0),
 	// 							Solutions: []*armappservice.Solution{
 	// 							},
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:50Z"); return t}()),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 50, 0, time.UTC)),
 	// 						},
 	// 					},
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 			NonCorrelatedDetectors: []*armappservice.DetectorDefinition{
 	// 			},
 	// 			Payload: []*armappservice.AnalysisData{
@@ -75,62 +75,62 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteAnalysis() {
 	// 					Metrics: []*armappservice.DiagnosticMetricSet{
 	// 						{
 	// 							Name: to.Ptr("All Application Stop Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15BE"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15C1"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3BE0FB"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](4),
 	// 								},
 	// 							},
 	// 						},
 	// 						{
 	// 							Name: to.Ptr("User Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Unit: to.Ptr(""),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](3),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C09FC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C2ADC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C214E"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 							},
@@ -139,7 +139,7 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteAnalysis() {
 	// 					Source: to.Ptr("workerprocessrecycle"),
 	// 				},
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -164,17 +164,17 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteSlotAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteAnalysisResponse{
-	// 	DiagnosticAnalysis: &armappservice.DiagnosticAnalysis{
+	// 	DiagnosticAnalysis: armappservice.DiagnosticAnalysis{
 	// 		Name: to.Ptr("apprestartanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/apprestartanalyses"),
 	// 		Properties: &armappservice.DiagnosticAnalysisProperties{
 	// 			AbnormalTimePeriods: []*armappservice.AbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Events: []*armappservice.DetectorAbnormalTimePeriod{
 	// 						{
 	// 							Type: to.Ptr(armappservice.IssueTypeServiceIncident),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:48Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 48, 0, time.UTC)),
 	// 							Message: to.Ptr("Your application process was restarted as application environment variables changed. This can most likely occur due to update in app settings or swap operation. This event occurred multiple times during the day."),
 	// 							MetaData: [][]*armappservice.NameValuePair{
 	// 								[]*armappservice.NameValuePair{
@@ -191,15 +191,15 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteSlotAnalysis() {
 	// 							Priority: to.Ptr[float64](0),
 	// 							Solutions: []*armappservice.Solution{
 	// 							},
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:50Z"); return t}()),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 50, 0, time.UTC)),
 	// 						},
 	// 					},
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 			NonCorrelatedDetectors: []*armappservice.DetectorDefinition{
 	// 			},
 	// 			Payload: []*armappservice.AnalysisData{
@@ -209,62 +209,62 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteSlotAnalysis() {
 	// 					Metrics: []*armappservice.DiagnosticMetricSet{
 	// 						{
 	// 							Name: to.Ptr("All Application Stop Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15BE"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15C1"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3BE0FB"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](4),
 	// 								},
 	// 							},
 	// 						},
 	// 						{
 	// 							Name: to.Ptr("User Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Unit: to.Ptr(""),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](3),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C09FC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C2ADC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C214E"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 							},
@@ -273,7 +273,7 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysis_executeSiteSlotAnalysis() {
 	// 					Source: to.Ptr("workerprocessrecycle"),
 	// 				},
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -298,17 +298,17 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteSlotAnalysis() 
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteAnalysisSlotResponse{
-	// 	DiagnosticAnalysis: &armappservice.DiagnosticAnalysis{
+	// 	DiagnosticAnalysis: armappservice.DiagnosticAnalysis{
 	// 		Name: to.Ptr("apprestartanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/apprestartanalyses"),
 	// 		Properties: &armappservice.DiagnosticAnalysisProperties{
 	// 			AbnormalTimePeriods: []*armappservice.AbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Events: []*armappservice.DetectorAbnormalTimePeriod{
 	// 						{
 	// 							Type: to.Ptr(armappservice.IssueTypeServiceIncident),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:48Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 48, 0, time.UTC)),
 	// 							Message: to.Ptr("Your application process was restarted as application environment variables changed. This can most likely occur due to update in app settings or swap operation. This event occurred multiple times during the day."),
 	// 							MetaData: [][]*armappservice.NameValuePair{
 	// 								[]*armappservice.NameValuePair{
@@ -325,15 +325,15 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteSlotAnalysis() 
 	// 							Priority: to.Ptr[float64](0),
 	// 							Solutions: []*armappservice.Solution{
 	// 							},
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:50Z"); return t}()),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 50, 0, time.UTC)),
 	// 						},
 	// 					},
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 			NonCorrelatedDetectors: []*armappservice.DetectorDefinition{
 	// 			},
 	// 			Payload: []*armappservice.AnalysisData{
@@ -343,62 +343,62 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteSlotAnalysis() 
 	// 					Metrics: []*armappservice.DiagnosticMetricSet{
 	// 						{
 	// 							Name: to.Ptr("All Application Stop Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15BE"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15C1"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3BE0FB"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](4),
 	// 								},
 	// 							},
 	// 						},
 	// 						{
 	// 							Name: to.Ptr("User Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Unit: to.Ptr(""),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](3),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C09FC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C2ADC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C214E"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 							},
@@ -407,7 +407,7 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteSlotAnalysis() 
 	// 					Source: to.Ptr("workerprocessrecycle"),
 	// 				},
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -432,17 +432,17 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteAnalysisSlotResponse{
-	// 	DiagnosticAnalysis: &armappservice.DiagnosticAnalysis{
+	// 	DiagnosticAnalysis: armappservice.DiagnosticAnalysis{
 	// 		Name: to.Ptr("apprestartanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability/analyses/apprestartanalyses"),
 	// 		Properties: &armappservice.DiagnosticAnalysisProperties{
 	// 			AbnormalTimePeriods: []*armappservice.AbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Events: []*armappservice.DetectorAbnormalTimePeriod{
 	// 						{
 	// 							Type: to.Ptr(armappservice.IssueTypeServiceIncident),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:48Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 48, 0, time.UTC)),
 	// 							Message: to.Ptr("Your application process was restarted as application environment variables changed. This can most likely occur due to update in app settings or swap operation. This event occurred multiple times during the day."),
 	// 							MetaData: [][]*armappservice.NameValuePair{
 	// 								[]*armappservice.NameValuePair{
@@ -459,15 +459,15 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteAnalysis() {
 	// 							Priority: to.Ptr[float64](0),
 	// 							Solutions: []*armappservice.Solution{
 	// 							},
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:21:50Z"); return t}()),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 6, 22, 21, 50, 0, time.UTC)),
 	// 						},
 	// 					},
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 			NonCorrelatedDetectors: []*armappservice.DetectorDefinition{
 	// 			},
 	// 			Payload: []*armappservice.AnalysisData{
@@ -477,62 +477,62 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteAnalysis() {
 	// 					Metrics: []*armappservice.DiagnosticMetricSet{
 	// 						{
 	// 							Name: to.Ptr("All Application Stop Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15BE"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:00:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 0, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C15C1"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3BE0FB"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](2),
 	// 								},
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T00:10:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 0, 10, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](4),
 	// 								},
 	// 							},
 	// 						},
 	// 						{
 	// 							Name: to.Ptr("User Events"),
-	// 							EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 							StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 							EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 							StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 							TimeGrain: to.Ptr("00:05:00"),
 	// 							Unit: to.Ptr(""),
 	// 							Values: []*armappservice.DiagnosticMetricSample{
 	// 								{
 	// 									IsAggregated: to.Ptr(true),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](3),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C09FC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C2ADC"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 								{
 	// 									RoleInstance: to.Ptr("RD00155D3C214E"),
-	// 									Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:20:00Z"); return t}()),
+	// 									Timestamp: to.Ptr(time.Date(2017, time.November, 6, 22, 20, 0, 0, time.UTC)),
 	// 									Total: to.Ptr[float64](1),
 	// 								},
 	// 							},
@@ -541,7 +541,7 @@ func ExampleDiagnosticsClient_ExecuteSiteAnalysisSlot_executeSiteAnalysis() {
 	// 					Source: to.Ptr("workerprocessrecycle"),
 	// 				},
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -566,20 +566,20 @@ func ExampleDiagnosticsClient_ExecuteSiteDetector_executeSiteDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteDetectorResponse{
-	// 	DiagnosticDetectorResponse: &armappservice.DiagnosticDetectorResponse{
+	// 	DiagnosticDetectorResponse: armappservice.DiagnosticDetectorResponse{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DiagnosticDetectorResponseProperties{
 	// 			AbnormalTimePeriods: []*armappservice.DetectorAbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -604,20 +604,20 @@ func ExampleDiagnosticsClient_ExecuteSiteDetector_executeSiteSlotDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteDetectorResponse{
-	// 	DiagnosticDetectorResponse: &armappservice.DiagnosticDetectorResponse{
+	// 	DiagnosticDetectorResponse: armappservice.DiagnosticDetectorResponse{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DiagnosticDetectorResponseProperties{
 	// 			AbnormalTimePeriods: []*armappservice.DetectorAbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -642,20 +642,20 @@ func ExampleDiagnosticsClient_ExecuteSiteDetectorSlot_executeSiteSlotDetector() 
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteDetectorSlotResponse{
-	// 	DiagnosticDetectorResponse: &armappservice.DiagnosticDetectorResponse{
+	// 	DiagnosticDetectorResponse: armappservice.DiagnosticDetectorResponse{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DiagnosticDetectorResponseProperties{
 	// 			AbnormalTimePeriods: []*armappservice.DetectorAbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -680,20 +680,20 @@ func ExampleDiagnosticsClient_ExecuteSiteDetectorSlot_executeSiteDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientExecuteSiteDetectorSlotResponse{
-	// 	DiagnosticDetectorResponse: &armappservice.DiagnosticDetectorResponse{
+	// 	DiagnosticDetectorResponse: armappservice.DiagnosticDetectorResponse{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DiagnosticDetectorResponseProperties{
 	// 			AbnormalTimePeriods: []*armappservice.DetectorAbnormalTimePeriod{
 	// 				{
-	// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
+	// 					EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
 	// 					Solutions: []*armappservice.Solution{
 	// 					},
-	// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 					StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 				},
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-06T22:50:00Z"); return t}()),
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-11-05T22:50:00Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2017, time.November, 6, 22, 50, 0, 0, time.UTC)),
+	// 			StartTime: to.Ptr(time.Date(2017, time.November, 5, 22, 50, 0, 0, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -718,7 +718,7 @@ func ExampleDiagnosticsClient_GetHostingEnvironmentDetectorResponse() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetHostingEnvironmentDetectorResponseResponse{
-	// 	DetectorResponse: &armappservice.DetectorResponse{
+	// 	DetectorResponse: armappservice.DetectorResponse{
 	// 		Name: to.Ptr("runtimeavailability"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/hostingEnvironments/SampleAppServiceEnvironment/detectors/runtimeavailability"),
 	// 		Properties: &armappservice.DetectorResponseProperties{
@@ -860,7 +860,7 @@ func ExampleDiagnosticsClient_GetSiteAnalysis_getAppAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteAnalysisResponse{
-	// 	AnalysisDefinition: &armappservice.AnalysisDefinition{
+	// 	AnalysisDefinition: armappservice.AnalysisDefinition{
 	// 		Name: to.Ptr("appanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/appanalysis"),
 	// 		Properties: &armappservice.AnalysisDefinitionProperties{
@@ -889,7 +889,7 @@ func ExampleDiagnosticsClient_GetSiteAnalysis_getAppSlotAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteAnalysisResponse{
-	// 	AnalysisDefinition: &armappservice.AnalysisDefinition{
+	// 	AnalysisDefinition: armappservice.AnalysisDefinition{
 	// 		Name: to.Ptr("appanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/appanalysis"),
 	// 		Properties: &armappservice.AnalysisDefinitionProperties{
@@ -918,7 +918,7 @@ func ExampleDiagnosticsClient_GetSiteAnalysisSlot_getAppSlotAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteAnalysisSlotResponse{
-	// 	AnalysisDefinition: &armappservice.AnalysisDefinition{
+	// 	AnalysisDefinition: armappservice.AnalysisDefinition{
 	// 		Name: to.Ptr("appanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/appanalysis"),
 	// 		Properties: &armappservice.AnalysisDefinitionProperties{
@@ -947,7 +947,7 @@ func ExampleDiagnosticsClient_GetSiteAnalysisSlot_getAppAnalysis() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteAnalysisSlotResponse{
-	// 	AnalysisDefinition: &armappservice.AnalysisDefinition{
+	// 	AnalysisDefinition: armappservice.AnalysisDefinition{
 	// 		Name: to.Ptr("appanalysis"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/slots/staging/diagnostics/availability/analyses/appanalysis"),
 	// 		Properties: &armappservice.AnalysisDefinitionProperties{
@@ -976,7 +976,7 @@ func ExampleDiagnosticsClient_GetSiteDetector_getAppDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponse{
-	// 	DetectorDefinitionResource: &armappservice.DetectorDefinitionResource{
+	// 	DetectorDefinitionResource: armappservice.DetectorDefinitionResource{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DetectorDefinition{
@@ -1007,7 +1007,7 @@ func ExampleDiagnosticsClient_GetSiteDetector_getAppSlotDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponse{
-	// 	DetectorDefinitionResource: &armappservice.DetectorDefinitionResource{
+	// 	DetectorDefinitionResource: armappservice.DetectorDefinitionResource{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/slots/staging/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DetectorDefinition{
@@ -1038,7 +1038,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorResponse_getAppDetectorResponse() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponseResponse{
-	// 	DetectorResponse: &armappservice.DetectorResponse{
+	// 	DetectorResponse: armappservice.DetectorResponse{
 	// 		Name: to.Ptr("runtimeavailability"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/detectors/runtimeavailability"),
 	// 		Properties: &armappservice.DetectorResponseProperties{
@@ -1180,7 +1180,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorResponse_getAppSlotDetectorResponse
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponseResponse{
-	// 	DetectorResponse: &armappservice.DetectorResponse{
+	// 	DetectorResponse: armappservice.DetectorResponse{
 	// 		Name: to.Ptr("runtimeavailability"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/slots/staging/detectors/runtimeavailability"),
 	// 		Properties: &armappservice.DetectorResponseProperties{
@@ -1322,7 +1322,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorResponseSlot_getAppSlotDetectorResp
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponseSlotResponse{
-	// 	DetectorResponse: &armappservice.DetectorResponse{
+	// 	DetectorResponse: armappservice.DetectorResponse{
 	// 		Name: to.Ptr("runtimeavailability"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/slots/staging/detectors/runtimeavailability"),
 	// 		Properties: &armappservice.DetectorResponseProperties{
@@ -1464,7 +1464,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorResponseSlot_getAppDetectorResponse
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorResponseSlotResponse{
-	// 	DetectorResponse: &armappservice.DetectorResponse{
+	// 	DetectorResponse: armappservice.DetectorResponse{
 	// 		Name: to.Ptr("runtimeavailability"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/detectors/runtimeavailability"),
 	// 		Properties: &armappservice.DetectorResponseProperties{
@@ -1606,7 +1606,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorSlot_getAppSlotDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorSlotResponse{
-	// 	DetectorDefinitionResource: &armappservice.DetectorDefinitionResource{
+	// 	DetectorDefinitionResource: armappservice.DetectorDefinitionResource{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/slots/staging/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DetectorDefinition{
@@ -1637,7 +1637,7 @@ func ExampleDiagnosticsClient_GetSiteDetectorSlot_getAppDetector() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDetectorSlotResponse{
-	// 	DetectorDefinitionResource: &armappservice.DetectorDefinitionResource{
+	// 	DetectorDefinitionResource: armappservice.DetectorDefinitionResource{
 	// 		Name: to.Ptr("sitecrashes"),
 	// 		ID: to.Ptr("/subscriptions/ef90e930-9d7f-4a60-8a99-748e0eea69de/resourceGroups/Build2015DemoRG/providers/Microsoft.Web/sites/BuggyBakery/diagnostics/availability/detectors/sitecrashes"),
 	// 		Properties: &armappservice.DetectorDefinition{
@@ -1668,7 +1668,7 @@ func ExampleDiagnosticsClient_GetSiteDiagnosticCategory_getAppDiagnosticCategory
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDiagnosticCategoryResponse{
-	// 	DiagnosticCategory: &armappservice.DiagnosticCategory{
+	// 	DiagnosticCategory: armappservice.DiagnosticCategory{
 	// 		Name: to.Ptr("availability"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability"),
 	// 		Properties: &armappservice.DiagnosticCategoryProperties{
@@ -1697,7 +1697,7 @@ func ExampleDiagnosticsClient_GetSiteDiagnosticCategory_getAppSlotDiagnosticCate
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDiagnosticCategoryResponse{
-	// 	DiagnosticCategory: &armappservice.DiagnosticCategory{
+	// 	DiagnosticCategory: armappservice.DiagnosticCategory{
 	// 		Name: to.Ptr("availability"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability"),
 	// 		Properties: &armappservice.DiagnosticCategoryProperties{
@@ -1726,7 +1726,7 @@ func ExampleDiagnosticsClient_GetSiteDiagnosticCategorySlot_getAppSlotDiagnostic
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDiagnosticCategorySlotResponse{
-	// 	DiagnosticCategory: &armappservice.DiagnosticCategory{
+	// 	DiagnosticCategory: armappservice.DiagnosticCategory{
 	// 		Name: to.Ptr("availability"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability"),
 	// 		Properties: &armappservice.DiagnosticCategoryProperties{
@@ -1755,7 +1755,7 @@ func ExampleDiagnosticsClient_GetSiteDiagnosticCategorySlot_getAppDiagnosticCate
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.DiagnosticsClientGetSiteDiagnosticCategorySlotResponse{
-	// 	DiagnosticCategory: &armappservice.DiagnosticCategory{
+	// 	DiagnosticCategory: armappservice.DiagnosticCategory{
 	// 		Name: to.Ptr("availability"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/Sample-WestUSResourceGroup/providers/Microsoft.Web/sites/SampleApp/diagnostics/availability"),
 	// 		Properties: &armappservice.DiagnosticCategoryProperties{

@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // EdgeDeviceJobsServer is a fake server for instances of the armazurestackhci.EdgeDeviceJobsClient type.
@@ -70,9 +71,7 @@ func (e *EdgeDeviceJobsServerTransport) Do(req *http.Request) (*http.Response, e
 }
 
 func (e *EdgeDeviceJobsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -94,10 +93,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchToMethodFake(req *http.Request, 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -114,7 +110,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchBeginCreateOrUpdate(req *http.Re
 	}
 	beginCreateOrUpdate := e.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobs/(?P<jobsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobs/(?P<jobsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -153,7 +149,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchBeginCreateOrUpdate(req *http.Re
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		e.beginCreateOrUpdate.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -170,7 +166,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchBeginDelete(req *http.Request) (
 	}
 	beginDelete := e.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobs/(?P<jobsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobs/(?P<jobsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -201,7 +197,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchBeginDelete(req *http.Request) (
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		e.beginDelete.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -216,7 +212,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchGet(req *http.Request) (*http.Re
 	if e.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobs/(?P<jobsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobs/(?P<jobsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -239,7 +235,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchGet(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).EdgeDeviceJobClassification, req)
@@ -255,7 +251,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchNewListByEdgeDevicePager(req *ht
 	}
 	newListByEdgeDevicePager := e.newListByEdgeDevicePager.get(req)
 	if newListByEdgeDevicePager == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/jobs`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.AzureStackHCI/edgeDevices/(?P<edgeDeviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/jobs`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -280,7 +276,7 @@ func (e *EdgeDeviceJobsServerTransport) dispatchNewListByEdgeDevicePager(req *ht
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		e.newListByEdgeDevicePager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

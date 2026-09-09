@@ -18,8 +18,6 @@ import (
 	"strings"
 )
 
-const defaultInvoicesClientVersion string = "2024-04-01"
-
 // InvoicesClient contains the methods for the Invoices group.
 // Don't use this type directly, use NewInvoicesClient() instead.
 //
@@ -34,6 +32,9 @@ type InvoicesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewInvoicesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*InvoicesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -86,8 +87,7 @@ func (client *InvoicesClient) amend(ctx context.Context, billingAccountName stri
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -108,7 +108,7 @@ func (client *InvoicesClient) amendCreateRequest(ctx context.Context, billingAcc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
@@ -155,8 +155,7 @@ func (client *InvoicesClient) downloadByBillingAccount(ctx context.Context, bill
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -177,7 +176,7 @@ func (client *InvoicesClient) downloadByBillingAccountCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	if options != nil && options.DocumentName != nil {
 		reqQP.Set("documentName", *options.DocumentName)
 	}
@@ -227,8 +226,7 @@ func (client *InvoicesClient) downloadByBillingSubscription(ctx context.Context,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -237,7 +235,7 @@ func (client *InvoicesClient) downloadByBillingSubscription(ctx context.Context,
 func (client *InvoicesClient) downloadByBillingSubscriptionCreateRequest(ctx context.Context, invoiceName string, options *InvoicesClientBeginDownloadByBillingSubscriptionOptions) (*policy.Request, error) {
 	urlPath := "/providers/Microsoft.Billing/billingAccounts/default/billingSubscriptions/{subscriptionId}/invoices/{invoiceName}/download"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if invoiceName == "" {
@@ -249,7 +247,7 @@ func (client *InvoicesClient) downloadByBillingSubscriptionCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	if options != nil && options.DocumentName != nil {
 		reqQP.Set("documentName", *options.DocumentName)
 	}
@@ -302,8 +300,7 @@ func (client *InvoicesClient) downloadDocumentsByBillingAccount(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -320,7 +317,7 @@ func (client *InvoicesClient) downloadDocumentsByBillingAccountCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -373,8 +370,7 @@ func (client *InvoicesClient) downloadDocumentsByBillingSubscription(ctx context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -383,7 +379,7 @@ func (client *InvoicesClient) downloadDocumentsByBillingSubscription(ctx context
 func (client *InvoicesClient) downloadDocumentsByBillingSubscriptionCreateRequest(ctx context.Context, parameters []*DocumentDownloadRequest, _ *InvoicesClientBeginDownloadDocumentsByBillingSubscriptionOptions) (*policy.Request, error) {
 	urlPath := "/providers/Microsoft.Billing/billingAccounts/default/billingSubscriptions/{subscriptionId}/downloadDocuments"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -391,7 +387,7 @@ func (client *InvoicesClient) downloadDocumentsByBillingSubscriptionCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -443,8 +439,7 @@ func (client *InvoicesClient) downloadSummaryByBillingAccount(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -465,7 +460,7 @@ func (client *InvoicesClient) downloadSummaryByBillingAccountCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
@@ -490,12 +485,7 @@ func (client *InvoicesClient) Get(ctx context.Context, invoiceName string, optio
 	if err != nil {
 		return InvoicesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InvoicesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -510,15 +500,18 @@ func (client *InvoicesClient) getCreateRequest(ctx context.Context, invoiceName 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *InvoicesClient) getHandleResponse(resp *http.Response) (InvoicesClientGetResponse, error) {
+func (client *InvoicesClient) getHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientGetResponse, error) {
 	result := InvoicesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetResponse{}, err
 	}
@@ -546,12 +539,7 @@ func (client *InvoicesClient) GetByBillingAccount(ctx context.Context, billingAc
 	if err != nil {
 		return InvoicesClientGetByBillingAccountResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InvoicesClientGetByBillingAccountResponse{}, err
-	}
-	resp, err := client.getByBillingAccountHandleResponse(httpResp)
-	return resp, err
+	return client.getByBillingAccountHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByBillingAccountCreateRequest creates the GetByBillingAccount request.
@@ -570,15 +558,18 @@ func (client *InvoicesClient) getByBillingAccountCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByBillingAccountHandleResponse handles the GetByBillingAccount response.
-func (client *InvoicesClient) getByBillingAccountHandleResponse(resp *http.Response) (InvoicesClientGetByBillingAccountResponse, error) {
+func (client *InvoicesClient) getByBillingAccountHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientGetByBillingAccountResponse, error) {
 	result := InvoicesClientGetByBillingAccountResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetByBillingAccountResponse{}, err
 	}
@@ -605,19 +596,14 @@ func (client *InvoicesClient) GetByBillingSubscription(ctx context.Context, invo
 	if err != nil {
 		return InvoicesClientGetByBillingSubscriptionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InvoicesClientGetByBillingSubscriptionResponse{}, err
-	}
-	resp, err := client.getByBillingSubscriptionHandleResponse(httpResp)
-	return resp, err
+	return client.getByBillingSubscriptionHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByBillingSubscriptionCreateRequest creates the GetByBillingSubscription request.
 func (client *InvoicesClient) getByBillingSubscriptionCreateRequest(ctx context.Context, invoiceName string, _ *InvoicesClientGetByBillingSubscriptionOptions) (*policy.Request, error) {
 	urlPath := "/providers/Microsoft.Billing/billingAccounts/default/billingSubscriptions/{subscriptionId}/invoices/{invoiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if invoiceName == "" {
@@ -629,15 +615,18 @@ func (client *InvoicesClient) getByBillingSubscriptionCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByBillingSubscriptionHandleResponse handles the GetByBillingSubscription response.
-func (client *InvoicesClient) getByBillingSubscriptionHandleResponse(resp *http.Response) (InvoicesClientGetByBillingSubscriptionResponse, error) {
+func (client *InvoicesClient) getByBillingSubscriptionHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientGetByBillingSubscriptionResponse, error) {
 	result := InvoicesClientGetByBillingSubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Invoice); err != nil {
 		return InvoicesClientGetByBillingSubscriptionResponse{}, err
 	}
@@ -660,63 +649,77 @@ func (client *InvoicesClient) NewListByBillingAccountPager(billingAccountName st
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByBillingAccountCreateRequest(ctx, billingAccountName, options)
-			}, nil)
+			req, err := client.listByBillingAccountCreateRequest(ctx, billingAccountName, nextLink, options)
 			if err != nil {
 				return InvoicesClientListByBillingAccountResponse{}, err
 			}
-			return client.listByBillingAccountHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingAccountResponse{}, err
+			}
+			return client.listByBillingAccountHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByBillingAccountCreateRequest creates the ListByBillingAccount request.
-func (client *InvoicesClient) listByBillingAccountCreateRequest(ctx context.Context, billingAccountName string, options *InvoicesClientListByBillingAccountOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/invoices"
-	if billingAccountName == "" {
-		return nil, errors.New("parameter billingAccountName cannot be empty")
+func (client *InvoicesClient) listByBillingAccountCreateRequest(ctx context.Context, billingAccountName string, nextLink string, options *InvoicesClientListByBillingAccountOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/invoices"
+		if billingAccountName == "" {
+			return nil, errors.New("parameter billingAccountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
-	if options != nil && options.Count != nil {
-		reqQP.Set("count", strconv.FormatBool(*options.Count))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		if options != nil && options.Count != nil {
+			reqQP.Set("count", strconv.FormatBool(*options.Count))
+		}
+		if options != nil && options.Filter != nil {
+			reqQP.Set("filter", *options.Filter)
+		}
+		if options != nil && options.OrderBy != nil {
+			reqQP.Set("orderBy", *options.OrderBy)
+		}
+		if options != nil && options.PeriodEndDate != nil {
+			reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
+		}
+		if options != nil && options.PeriodStartDate != nil {
+			reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
+		}
+		if options != nil && options.Search != nil {
+			reqQP.Set("search", *options.Search)
+		}
+		if options != nil && options.Skip != nil {
+			reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Filter != nil {
-		reqQP.Set("filter", *options.Filter)
-	}
-	if options != nil && options.OrderBy != nil {
-		reqQP.Set("orderBy", *options.OrderBy)
-	}
-	if options != nil && options.PeriodEndDate != nil {
-		reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
-	}
-	if options != nil && options.PeriodStartDate != nil {
-		reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
-	}
-	if options != nil && options.Search != nil {
-		reqQP.Set("search", *options.Search)
-	}
-	if options != nil && options.Skip != nil {
-		reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
-	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
-	}
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByBillingAccountHandleResponse handles the ListByBillingAccount response.
-func (client *InvoicesClient) listByBillingAccountHandleResponse(resp *http.Response) (InvoicesClientListByBillingAccountResponse, error) {
+func (client *InvoicesClient) listByBillingAccountHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientListByBillingAccountResponse, error) {
 	result := InvoicesClientListByBillingAccountResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingAccountResponse{}, err
 	}
@@ -740,67 +743,81 @@ func (client *InvoicesClient) NewListByBillingProfilePager(billingAccountName st
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, options)
-			}, nil)
+			req, err := client.listByBillingProfileCreateRequest(ctx, billingAccountName, billingProfileName, nextLink, options)
 			if err != nil {
 				return InvoicesClientListByBillingProfileResponse{}, err
 			}
-			return client.listByBillingProfileHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingProfileResponse{}, err
+			}
+			return client.listByBillingProfileHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByBillingProfileCreateRequest creates the ListByBillingProfile request.
-func (client *InvoicesClient) listByBillingProfileCreateRequest(ctx context.Context, billingAccountName string, billingProfileName string, options *InvoicesClientListByBillingProfileOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/billingProfiles/{billingProfileName}/invoices"
-	if billingAccountName == "" {
-		return nil, errors.New("parameter billingAccountName cannot be empty")
+func (client *InvoicesClient) listByBillingProfileCreateRequest(ctx context.Context, billingAccountName string, billingProfileName string, nextLink string, options *InvoicesClientListByBillingProfileOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/billingProfiles/{billingProfileName}/invoices"
+		if billingAccountName == "" {
+			return nil, errors.New("parameter billingAccountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
+		if billingProfileName == "" {
+			return nil, errors.New("parameter billingProfileName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{billingProfileName}", url.PathEscape(billingProfileName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
-	if billingProfileName == "" {
-		return nil, errors.New("parameter billingProfileName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{billingProfileName}", url.PathEscape(billingProfileName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
-	if options != nil && options.Count != nil {
-		reqQP.Set("count", strconv.FormatBool(*options.Count))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		if options != nil && options.Count != nil {
+			reqQP.Set("count", strconv.FormatBool(*options.Count))
+		}
+		if options != nil && options.Filter != nil {
+			reqQP.Set("filter", *options.Filter)
+		}
+		if options != nil && options.OrderBy != nil {
+			reqQP.Set("orderBy", *options.OrderBy)
+		}
+		if options != nil && options.PeriodEndDate != nil {
+			reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
+		}
+		if options != nil && options.PeriodStartDate != nil {
+			reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
+		}
+		if options != nil && options.Search != nil {
+			reqQP.Set("search", *options.Search)
+		}
+		if options != nil && options.Skip != nil {
+			reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Filter != nil {
-		reqQP.Set("filter", *options.Filter)
-	}
-	if options != nil && options.OrderBy != nil {
-		reqQP.Set("orderBy", *options.OrderBy)
-	}
-	if options != nil && options.PeriodEndDate != nil {
-		reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
-	}
-	if options != nil && options.PeriodStartDate != nil {
-		reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
-	}
-	if options != nil && options.Search != nil {
-		reqQP.Set("search", *options.Search)
-	}
-	if options != nil && options.Skip != nil {
-		reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
-	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
-	}
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByBillingProfileHandleResponse handles the ListByBillingProfile response.
-func (client *InvoicesClient) listByBillingProfileHandleResponse(resp *http.Response) (InvoicesClientListByBillingProfileResponse, error) {
+func (client *InvoicesClient) listByBillingProfileHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientListByBillingProfileResponse, error) {
 	result := InvoicesClientListByBillingProfileResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingProfileResponse{}, err
 	}
@@ -822,63 +839,77 @@ func (client *InvoicesClient) NewListByBillingSubscriptionPager(options *Invoice
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByBillingSubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listByBillingSubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return InvoicesClientListByBillingSubscriptionResponse{}, err
 			}
-			return client.listByBillingSubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return InvoicesClientListByBillingSubscriptionResponse{}, err
+			}
+			return client.listByBillingSubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByBillingSubscriptionCreateRequest creates the ListByBillingSubscription request.
-func (client *InvoicesClient) listByBillingSubscriptionCreateRequest(ctx context.Context, options *InvoicesClientListByBillingSubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Billing/billingAccounts/default/billingSubscriptions/{subscriptionId}/invoices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *InvoicesClient) listByBillingSubscriptionCreateRequest(ctx context.Context, nextLink string, options *InvoicesClientListByBillingSubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Billing/billingAccounts/default/billingSubscriptions/{subscriptionId}/invoices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultInvoicesClientVersion)
-	if options != nil && options.Count != nil {
-		reqQP.Set("count", strconv.FormatBool(*options.Count))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		if options != nil && options.Count != nil {
+			reqQP.Set("count", strconv.FormatBool(*options.Count))
+		}
+		if options != nil && options.Filter != nil {
+			reqQP.Set("filter", *options.Filter)
+		}
+		if options != nil && options.OrderBy != nil {
+			reqQP.Set("orderBy", *options.OrderBy)
+		}
+		if options != nil && options.PeriodEndDate != nil {
+			reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
+		}
+		if options != nil && options.PeriodStartDate != nil {
+			reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
+		}
+		if options != nil && options.Search != nil {
+			reqQP.Set("search", *options.Search)
+		}
+		if options != nil && options.Skip != nil {
+			reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Filter != nil {
-		reqQP.Set("filter", *options.Filter)
-	}
-	if options != nil && options.OrderBy != nil {
-		reqQP.Set("orderBy", *options.OrderBy)
-	}
-	if options != nil && options.PeriodEndDate != nil {
-		reqQP.Set("periodEndDate", datetime.PlainDate(*options.PeriodEndDate).String())
-	}
-	if options != nil && options.PeriodStartDate != nil {
-		reqQP.Set("periodStartDate", datetime.PlainDate(*options.PeriodStartDate).String())
-	}
-	if options != nil && options.Search != nil {
-		reqQP.Set("search", *options.Search)
-	}
-	if options != nil && options.Skip != nil {
-		reqQP.Set("skip", strconv.FormatInt(*options.Skip, 10))
-	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("top", strconv.FormatInt(*options.Top, 10))
-	}
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByBillingSubscriptionHandleResponse handles the ListByBillingSubscription response.
-func (client *InvoicesClient) listByBillingSubscriptionHandleResponse(resp *http.Response) (InvoicesClientListByBillingSubscriptionResponse, error) {
+func (client *InvoicesClient) listByBillingSubscriptionHandleResponse(resp *http.Response, successCodes ...int) (InvoicesClientListByBillingSubscriptionResponse, error) {
 	result := InvoicesClientListByBillingSubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InvoiceListResult); err != nil {
 		return InvoicesClientListByBillingSubscriptionResponse{}, err
 	}

@@ -11,10 +11,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
+	"strings"
 )
 
 // GetPrivateDNSZoneSuffixClient contains the methods for the GetPrivateDNSZoneSuffix group.
 // Don't use this type directly, use NewGetPrivateDNSZoneSuffixClient() instead.
+//
+// Generated from API version 2024-12-30
 type GetPrivateDNSZoneSuffixClient struct {
 	internal *arm.Client
 }
@@ -35,8 +38,6 @@ func NewGetPrivateDNSZoneSuffixClient(credential azcore.TokenCredential, options
 
 // Execute - Get private DNS zone suffix in the cloud.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 //   - options - GetPrivateDNSZoneSuffixClientExecuteOptions contains the optional parameters for the GetPrivateDNSZoneSuffixClient.Execute
 //     method.
 func (client *GetPrivateDNSZoneSuffixClient) Execute(ctx context.Context, options *GetPrivateDNSZoneSuffixClientExecuteOptions) (GetPrivateDNSZoneSuffixClientExecuteResponse, error) {
@@ -53,12 +54,7 @@ func (client *GetPrivateDNSZoneSuffixClient) Execute(ctx context.Context, option
 	if err != nil {
 		return GetPrivateDNSZoneSuffixClientExecuteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GetPrivateDNSZoneSuffixClientExecuteResponse{}, err
-	}
-	resp, err := client.executeHandleResponse(httpResp)
-	return resp, err
+	return client.executeHandleResponse(httpResp, http.StatusOK)
 }
 
 // executeCreateRequest creates the Execute request.
@@ -69,15 +65,18 @@ func (client *GetPrivateDNSZoneSuffixClient) executeCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-12-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241230)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // executeHandleResponse handles the Execute response.
-func (client *GetPrivateDNSZoneSuffixClient) executeHandleResponse(resp *http.Response) (GetPrivateDNSZoneSuffixClientExecuteResponse, error) {
+func (client *GetPrivateDNSZoneSuffixClient) executeHandleResponse(resp *http.Response, successCodes ...int) (GetPrivateDNSZoneSuffixClientExecuteResponse, error) {
 	result := GetPrivateDNSZoneSuffixClientExecuteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GetPrivateDNSZoneSuffixResponse); err != nil {
 		return GetPrivateDNSZoneSuffixClientExecuteResponse{}, err
 	}

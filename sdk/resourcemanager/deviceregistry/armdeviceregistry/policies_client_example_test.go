@@ -31,7 +31,7 @@ func ExamplePoliciesClient_BeginActivateBringYourOwnRoot() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -66,21 +66,21 @@ func ExamplePoliciesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.PoliciesClientCreateOrUpdateResponse{
-	// 	Policy: &armdeviceregistry.Policy{
+	// 	Policy: armdeviceregistry.Policy{
 	// 		Properties: &armdeviceregistry.PolicyProperties{
 	// 			ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
 	// 			Certificate: &armdeviceregistry.CertificateConfiguration{
 	// 				CertificateAuthorityConfiguration: &armdeviceregistry.CertificateAuthorityConfiguration{
 	// 					KeyType: to.Ptr(armdeviceregistry.SupportedKeyTypeECC),
 	// 					Subject: to.Ptr("CN=07b5d73a70e046f288ddc64518bc517e"),
-	// 					ValidityNotBefore: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
-	// 					ValidityNotAfter: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
+	// 					ValidityNotBefore: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
+	// 					ValidityNotAfter: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
 	// 					BringYourOwnRoot: &armdeviceregistry.BringYourOwnRoot{
 	// 						Enabled: to.Ptr(true),
 	// 						CertificateSigningRequest: to.Ptr(""),
@@ -99,10 +99,10 @@ func ExamplePoliciesClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -125,7 +125,7 @@ func ExamplePoliciesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -148,15 +148,15 @@ func ExamplePoliciesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.PoliciesClientGetResponse{
-	// 	Policy: &armdeviceregistry.Policy{
+	// 	Policy: armdeviceregistry.Policy{
 	// 		Properties: &armdeviceregistry.PolicyProperties{
 	// 			ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
 	// 			Certificate: &armdeviceregistry.CertificateConfiguration{
 	// 				CertificateAuthorityConfiguration: &armdeviceregistry.CertificateAuthorityConfiguration{
 	// 					KeyType: to.Ptr(armdeviceregistry.SupportedKeyTypeECC),
 	// 					Subject: to.Ptr("CN=07b5d73a70e046f288ddc64518bc517e"),
-	// 					ValidityNotBefore: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
-	// 					ValidityNotAfter: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
+	// 					ValidityNotBefore: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
+	// 					ValidityNotAfter: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
 	// 				},
 	// 				LeafCertificateConfiguration: &armdeviceregistry.LeafCertificateConfiguration{
 	// 					ValidityPeriodInDays: to.Ptr[int32](10),
@@ -169,10 +169,10 @@ func ExamplePoliciesClient_Get() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -210,8 +210,8 @@ func ExamplePoliciesClient_NewListByResourceGroupPager() {
 		// 						CertificateAuthorityConfiguration: &armdeviceregistry.CertificateAuthorityConfiguration{
 		// 							KeyType: to.Ptr(armdeviceregistry.SupportedKeyTypeECC),
 		// 							Subject: to.Ptr("CN=07b5d73a70e046f288ddc64518bc517e"),
-		// 							ValidityNotBefore: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
-		// 							ValidityNotAfter: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
+		// 							ValidityNotBefore: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
+		// 							ValidityNotAfter: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
 		// 						},
 		// 						LeafCertificateConfiguration: &armdeviceregistry.LeafCertificateConfiguration{
 		// 							ValidityPeriodInDays: to.Ptr[int32](10),
@@ -224,10 +224,10 @@ func ExamplePoliciesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -253,7 +253,7 @@ func ExamplePoliciesClient_BeginRevokeIssuer() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -283,21 +283,21 @@ func ExamplePoliciesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.PoliciesClientUpdateResponse{
-	// 	Policy: &armdeviceregistry.Policy{
+	// 	Policy: armdeviceregistry.Policy{
 	// 		Properties: &armdeviceregistry.PolicyProperties{
 	// 			ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
 	// 			Certificate: &armdeviceregistry.CertificateConfiguration{
 	// 				CertificateAuthorityConfiguration: &armdeviceregistry.CertificateAuthorityConfiguration{
 	// 					KeyType: to.Ptr(armdeviceregistry.SupportedKeyTypeECC),
 	// 					Subject: to.Ptr("CN=07b5d73a70e046f288ddc64518bc517e"),
-	// 					ValidityNotBefore: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
-	// 					ValidityNotAfter: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-12T20:17:41.741Z"); return t}()),
+	// 					ValidityNotBefore: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
+	// 					ValidityNotAfter: to.Ptr(time.Date(2025, time.June, 12, 20, 17, 41, 741000000, time.UTC)),
 	// 				},
 	// 				LeafCertificateConfiguration: &armdeviceregistry.LeafCertificateConfiguration{
 	// 					ValidityPeriodInDays: to.Ptr[int32](10),
@@ -310,10 +310,10 @@ func ExamplePoliciesClient_BeginUpdate() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 	// 		},
 	// 	},
 	// }

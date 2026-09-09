@@ -18,6 +18,8 @@ import (
 
 // HardwareSettingsClient contains the methods for the HardwareSettings group.
 // Don't use this type directly, use NewHardwareSettingsClient() instead.
+//
+// Generated from API version 2026-03-15
 type HardwareSettingsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type HardwareSettingsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewHardwareSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*HardwareSettingsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewHardwareSettingsClient(subscriptionID string, credential azcore.TokenCre
 
 // BeginCreateOrUpdate - Create or update hardware settings
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - hardwareSettingName - The name of the HardwareSetting
@@ -68,8 +71,6 @@ func (client *HardwareSettingsClient) BeginCreateOrUpdate(ctx context.Context, r
 
 // CreateOrUpdate - Create or update hardware settings
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 func (client *HardwareSettingsClient) createOrUpdate(ctx context.Context, resourceGroupName string, name string, hardwareSettingName string, resource HardwareSetting, options *HardwareSettingsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "HardwareSettingsClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *HardwareSettingsClient) createOrUpdate(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *HardwareSettingsClient) createOrUpdate(ctx context.Context, resour
 func (client *HardwareSettingsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, name string, hardwareSettingName string, resource HardwareSetting, _ *HardwareSettingsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/hardwareSettings/{hardwareSettingName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *HardwareSettingsClient) createOrUpdateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260315)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *HardwareSettingsClient) createOrUpdateCreateRequest(ctx context.Co
 
 // BeginDelete - Delete hardware settings
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - hardwareSettingName - The name of the HardwareSetting
@@ -153,8 +151,6 @@ func (client *HardwareSettingsClient) BeginDelete(ctx context.Context, resourceG
 
 // Delete - Delete hardware settings
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 func (client *HardwareSettingsClient) deleteOperation(ctx context.Context, resourceGroupName string, name string, hardwareSettingName string, options *HardwareSettingsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "HardwareSettingsClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *HardwareSettingsClient) deleteOperation(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *HardwareSettingsClient) deleteOperation(ctx context.Context, resou
 func (client *HardwareSettingsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, name string, hardwareSettingName string, _ *HardwareSettingsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/hardwareSettings/{hardwareSettingName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *HardwareSettingsClient) deleteCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260315)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get the hardware settings resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - hardwareSettingName - The name of the HardwareSetting
@@ -227,19 +220,14 @@ func (client *HardwareSettingsClient) Get(ctx context.Context, resourceGroupName
 	if err != nil {
 		return HardwareSettingsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HardwareSettingsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *HardwareSettingsClient) getCreateRequest(ctx context.Context, resourceGroupName string, name string, hardwareSettingName string, _ *HardwareSettingsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/hardwareSettings/{hardwareSettingName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -259,15 +247,18 @@ func (client *HardwareSettingsClient) getCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260315)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *HardwareSettingsClient) getHandleResponse(resp *http.Response) (HardwareSettingsClientGetResponse, error) {
+func (client *HardwareSettingsClient) getHandleResponse(resp *http.Response, successCodes ...int) (HardwareSettingsClientGetResponse, error) {
 	result := HardwareSettingsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HardwareSetting); err != nil {
 		return HardwareSettingsClientGetResponse{}, err
 	}
@@ -275,8 +266,6 @@ func (client *HardwareSettingsClient) getHandleResponse(resp *http.Response) (Ha
 }
 
 // NewListByParentPager - List by parent
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - options - HardwareSettingsClientListByParentOptions contains the optional parameters for the HardwareSettingsClient.NewListByParentPager
@@ -292,47 +281,61 @@ func (client *HardwareSettingsClient) NewListByParentPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByParentCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.listByParentCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return HardwareSettingsClientListByParentResponse{}, err
 			}
-			return client.listByParentHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return HardwareSettingsClientListByParentResponse{}, err
+			}
+			return client.listByParentHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByParentCreateRequest creates the ListByParent request.
-func (client *HardwareSettingsClient) listByParentCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *HardwareSettingsClientListByParentOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/hardwareSettings"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *HardwareSettingsClient) listByParentCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *HardwareSettingsClientListByParentOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/hardwareSettings"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260315)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByParentHandleResponse handles the ListByParent response.
-func (client *HardwareSettingsClient) listByParentHandleResponse(resp *http.Response) (HardwareSettingsClientListByParentResponse, error) {
+func (client *HardwareSettingsClient) listByParentHandleResponse(resp *http.Response, successCodes ...int) (HardwareSettingsClientListByParentResponse, error) {
 	result := HardwareSettingsClientListByParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HardwareSettingListResult); err != nil {
 		return HardwareSettingsClientListByParentResponse{}, err
 	}

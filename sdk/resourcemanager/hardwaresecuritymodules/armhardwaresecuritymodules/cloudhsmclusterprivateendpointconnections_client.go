@@ -19,6 +19,8 @@ import (
 // CloudHsmClusterPrivateEndpointConnectionsClient contains the methods for the CloudHsmClusterPrivateEndpointConnections
 // group.
 // Don't use this type directly, use NewCloudHsmClusterPrivateEndpointConnectionsClient() instead.
+//
+// Generated from API version 2025-12-01-preview
 type CloudHsmClusterPrivateEndpointConnectionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type CloudHsmClusterPrivateEndpointConnectionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCloudHsmClusterPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CloudHsmClusterPrivateEndpointConnectionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewCloudHsmClusterPrivateEndpointConnectionsClient(subscriptionID string, c
 
 // Create - Creates or updates the private endpoint connection for the Cloud Hsm Cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -65,19 +68,14 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) Create(ctx contex
 	if err != nil {
 		return CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusOK)
 }
 
 // createCreateRequest creates the Create request.
 func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, peConnectionName string, properties PrivateEndpointConnection, _ *CloudHsmClusterPrivateEndpointConnectionsClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/privateEndpointConnections/{peConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -97,8 +95,8 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -108,8 +106,11 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createCreateReque
 }
 
 // createHandleResponse handles the Create response.
-func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createHandleResponse(resp *http.Response) (CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse, error) {
+func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createHandleResponse(resp *http.Response, successCodes ...int) (CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse, error) {
 	result := CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse{}, err
 	}
@@ -118,8 +119,6 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) createHandleRespo
 
 // BeginDelete - Deletes the private endpoint connection for the Cloud Hsm Cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -145,8 +144,6 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) BeginDelete(ctx c
 
 // Delete - Deletes the private endpoint connection for the Cloud Hsm Cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 func (client *CloudHsmClusterPrivateEndpointConnectionsClient) deleteOperation(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, peConnectionName string, options *CloudHsmClusterPrivateEndpointConnectionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CloudHsmClusterPrivateEndpointConnectionsClient.BeginDelete"
@@ -162,8 +159,7 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) deleteOperation(c
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -172,7 +168,7 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) deleteOperation(c
 func (client *CloudHsmClusterPrivateEndpointConnectionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, peConnectionName string, _ *CloudHsmClusterPrivateEndpointConnectionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/privateEndpointConnections/{peConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -192,15 +188,13 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) deleteCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the private endpoint connection for the Cloud Hsm Cluster.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-31
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudHsmClusterName - The name of the Cloud HSM Cluster within the specified resource group. Cloud HSM Cluster names must
 //     be between 3 and 23 characters in length.
@@ -221,19 +215,14 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) Get(ctx context.C
 	if err != nil {
 		return CloudHsmClusterPrivateEndpointConnectionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CloudHsmClusterPrivateEndpointConnectionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CloudHsmClusterPrivateEndpointConnectionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudHsmClusterName string, peConnectionName string, _ *CloudHsmClusterPrivateEndpointConnectionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/{cloudHsmClusterName}/privateEndpointConnections/{peConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -253,15 +242,18 @@ func (client *CloudHsmClusterPrivateEndpointConnectionsClient) getCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-31")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CloudHsmClusterPrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response) (CloudHsmClusterPrivateEndpointConnectionsClientGetResponse, error) {
+func (client *CloudHsmClusterPrivateEndpointConnectionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (CloudHsmClusterPrivateEndpointConnectionsClientGetResponse, error) {
 	result := CloudHsmClusterPrivateEndpointConnectionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return CloudHsmClusterPrivateEndpointConnectionsClientGetResponse{}, err
 	}

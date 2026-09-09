@@ -35,7 +35,7 @@ func ExampleSolutionTemplateVersionsClient_BeginBulkDeploySolution() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -74,7 +74,7 @@ func ExampleSolutionTemplateVersionsClient_BeginBulkPublishSolution() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -97,7 +97,7 @@ func ExampleSolutionTemplateVersionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.SolutionTemplateVersionsClientGetResponse{
-	// 	SolutionTemplateVersion: &armworkloadorchestration.SolutionTemplateVersion{
+	// 	SolutionTemplateVersion: armworkloadorchestration.SolutionTemplateVersion{
 	// 		Properties: &armworkloadorchestration.SolutionTemplateVersionProperties{
 	// 			Configurations: to.Ptr("ofqcsavwmeuwmvtjnqpoybtjvkmrlh"),
 	// 			Specification: map[string]any{
@@ -112,10 +112,10 @@ func ExampleSolutionTemplateVersionsClient_Get() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("nvjczgdguyvllp"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -161,10 +161,10 @@ func ExampleSolutionTemplateVersionsClient_NewListBySolutionTemplatePager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("nvjczgdguyvllp"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("uzbznzjgvaspvtqhyg"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-09T10:11:50.747Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.June, 9, 10, 11, 50, 747000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

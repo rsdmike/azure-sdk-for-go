@@ -18,6 +18,8 @@ import (
 
 // CertificateObjectLocalRulestackClient contains the methods for the CertificateObjectLocalRulestack group.
 // Don't use this type directly, use NewCertificateObjectLocalRulestackClient() instead.
+//
+// Generated from API version 2025-10-08
 type CertificateObjectLocalRulestackClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CertificateObjectLocalRulestackClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCertificateObjectLocalRulestackClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CertificateObjectLocalRulestackClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewCertificateObjectLocalRulestackClient(subscriptionID string, credential 
 
 // BeginCreateOrUpdate - Create a CertificateObjectLocalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - name - certificate name
@@ -68,8 +71,6 @@ func (client *CertificateObjectLocalRulestackClient) BeginCreateOrUpdate(ctx con
 
 // CreateOrUpdate - Create a CertificateObjectLocalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *CertificateObjectLocalRulestackClient) createOrUpdate(ctx context.Context, resourceGroupName string, localRulestackName string, name string, resource CertificateObjectLocalRulestackResource, options *CertificateObjectLocalRulestackClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CertificateObjectLocalRulestackClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *CertificateObjectLocalRulestackClient) createOrUpdate(ctx context.
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *CertificateObjectLocalRulestackClient) createOrUpdate(ctx context.
 func (client *CertificateObjectLocalRulestackClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, name string, resource CertificateObjectLocalRulestackResource, _ *CertificateObjectLocalRulestackClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/certificates/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *CertificateObjectLocalRulestackClient) createOrUpdateCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *CertificateObjectLocalRulestackClient) createOrUpdateCreateRequest
 
 // BeginDelete - Delete a CertificateObjectLocalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - name - certificate name
@@ -153,8 +151,6 @@ func (client *CertificateObjectLocalRulestackClient) BeginDelete(ctx context.Con
 
 // Delete - Delete a CertificateObjectLocalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *CertificateObjectLocalRulestackClient) deleteOperation(ctx context.Context, resourceGroupName string, localRulestackName string, name string, options *CertificateObjectLocalRulestackClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CertificateObjectLocalRulestackClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *CertificateObjectLocalRulestackClient) deleteOperation(ctx context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *CertificateObjectLocalRulestackClient) deleteOperation(ctx context
 func (client *CertificateObjectLocalRulestackClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, name string, _ *CertificateObjectLocalRulestackClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/certificates/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *CertificateObjectLocalRulestackClient) deleteCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a CertificateObjectLocalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - name - certificate name
@@ -228,19 +221,14 @@ func (client *CertificateObjectLocalRulestackClient) Get(ctx context.Context, re
 	if err != nil {
 		return CertificateObjectLocalRulestackClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CertificateObjectLocalRulestackClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CertificateObjectLocalRulestackClient) getCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, name string, _ *CertificateObjectLocalRulestackClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/certificates/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -260,15 +248,18 @@ func (client *CertificateObjectLocalRulestackClient) getCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CertificateObjectLocalRulestackClient) getHandleResponse(resp *http.Response) (CertificateObjectLocalRulestackClientGetResponse, error) {
+func (client *CertificateObjectLocalRulestackClient) getHandleResponse(resp *http.Response, successCodes ...int) (CertificateObjectLocalRulestackClientGetResponse, error) {
 	result := CertificateObjectLocalRulestackClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateObjectLocalRulestackResource); err != nil {
 		return CertificateObjectLocalRulestackClientGetResponse{}, err
 	}
@@ -276,8 +267,6 @@ func (client *CertificateObjectLocalRulestackClient) getHandleResponse(resp *htt
 }
 
 // NewListByLocalRulestacksPager - List CertificateObjectLocalRulestackResource resources by LocalRulestacks
-//
-// Generated from API version 2025-10-08
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - localRulestackName - LocalRulestack resource name
 //   - options - CertificateObjectLocalRulestackClientListByLocalRulestacksOptions contains the optional parameters for the CertificateObjectLocalRulestackClient.NewListByLocalRulestacksPager
@@ -293,47 +282,61 @@ func (client *CertificateObjectLocalRulestackClient) NewListByLocalRulestacksPag
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByLocalRulestacksCreateRequest(ctx, resourceGroupName, localRulestackName, options)
-			}, nil)
+			req, err := client.listByLocalRulestacksCreateRequest(ctx, resourceGroupName, localRulestackName, nextLink, options)
 			if err != nil {
 				return CertificateObjectLocalRulestackClientListByLocalRulestacksResponse{}, err
 			}
-			return client.listByLocalRulestacksHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CertificateObjectLocalRulestackClientListByLocalRulestacksResponse{}, err
+			}
+			return client.listByLocalRulestacksHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByLocalRulestacksCreateRequest creates the ListByLocalRulestacks request.
-func (client *CertificateObjectLocalRulestackClient) listByLocalRulestacksCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, _ *CertificateObjectLocalRulestackClientListByLocalRulestacksOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/certificates"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CertificateObjectLocalRulestackClient) listByLocalRulestacksCreateRequest(ctx context.Context, resourceGroupName string, localRulestackName string, nextLink string, _ *CertificateObjectLocalRulestackClientListByLocalRulestacksOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/{localRulestackName}/certificates"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if localRulestackName == "" {
+			return nil, errors.New("parameter localRulestackName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{localRulestackName}", url.PathEscape(localRulestackName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if localRulestackName == "" {
-		return nil, errors.New("parameter localRulestackName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{localRulestackName}", url.PathEscape(localRulestackName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251008)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByLocalRulestacksHandleResponse handles the ListByLocalRulestacks response.
-func (client *CertificateObjectLocalRulestackClient) listByLocalRulestacksHandleResponse(resp *http.Response) (CertificateObjectLocalRulestackClientListByLocalRulestacksResponse, error) {
+func (client *CertificateObjectLocalRulestackClient) listByLocalRulestacksHandleResponse(resp *http.Response, successCodes ...int) (CertificateObjectLocalRulestackClientListByLocalRulestacksResponse, error) {
 	result := CertificateObjectLocalRulestackClientListByLocalRulestacksResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateObjectLocalRulestackResourceListResult); err != nil {
 		return CertificateObjectLocalRulestackClientListByLocalRulestacksResponse{}, err
 	}

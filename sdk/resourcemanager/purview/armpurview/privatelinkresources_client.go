@@ -7,18 +7,19 @@ package armpurview
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // PrivateLinkResourcesClient contains the methods for the PrivateLinkResources group.
 // Don't use this type directly, use NewPrivateLinkResourcesClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type PrivateLinkResourcesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type PrivateLinkResourcesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PrivateLinkResourcesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewPrivateLinkResourcesClient(subscriptionID string, credential azcore.Toke
 //
 // Gets a privately linkable resources for an account with given group identifier
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - groupID - The group identifier.
@@ -65,19 +67,14 @@ func (client *PrivateLinkResourcesClient) GetByGroupID(ctx context.Context, reso
 	if err != nil {
 		return PrivateLinkResourcesClientGetByGroupIDResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PrivateLinkResourcesClientGetByGroupIDResponse{}, err
-	}
-	resp, err := client.getByGroupIDHandleResponse(httpResp)
-	return resp, err
+	return client.getByGroupIDHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByGroupIDCreateRequest creates the GetByGroupID request.
 func (client *PrivateLinkResourcesClient) getByGroupIDCreateRequest(ctx context.Context, resourceGroupName string, accountName string, groupID string, _ *PrivateLinkResourcesClientGetByGroupIDOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/privateLinkResources/{groupId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -97,15 +94,18 @@ func (client *PrivateLinkResourcesClient) getByGroupIDCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByGroupIDHandleResponse handles the GetByGroupID response.
-func (client *PrivateLinkResourcesClient) getByGroupIDHandleResponse(resp *http.Response) (PrivateLinkResourcesClientGetByGroupIDResponse, error) {
+func (client *PrivateLinkResourcesClient) getByGroupIDHandleResponse(resp *http.Response, successCodes ...int) (PrivateLinkResourcesClientGetByGroupIDResponse, error) {
 	result := PrivateLinkResourcesClientGetByGroupIDResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResource); err != nil {
 		return PrivateLinkResourcesClientGetByGroupIDResponse{}, err
 	}
@@ -114,9 +114,7 @@ func (client *PrivateLinkResourcesClient) getByGroupIDHandleResponse(resp *http.
 
 // NewListByAccountPager - Gets a list of privately linkable resources for an account.
 //
-// # Gets a list of privately linkable resources for an account
-//
-// Generated from API version 2024-04-01-preview
+// Gets a list of privately linkable resources for an account
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - options - PrivateLinkResourcesClientListByAccountOptions contains the optional parameters for the PrivateLinkResourcesClient.NewListByAccountPager
@@ -132,47 +130,61 @@ func (client *PrivateLinkResourcesClient) NewListByAccountPager(resourceGroupNam
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
-			}, nil)
+			req, err := client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, nextLink, options)
 			if err != nil {
 				return PrivateLinkResourcesClientListByAccountResponse{}, err
 			}
-			return client.listByAccountHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PrivateLinkResourcesClientListByAccountResponse{}, err
+			}
+			return client.listByAccountHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.
-func (client *PrivateLinkResourcesClient) listByAccountCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *PrivateLinkResourcesClientListByAccountOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/privateLinkResources"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *PrivateLinkResourcesClient) listByAccountCreateRequest(ctx context.Context, resourceGroupName string, accountName string, nextLink string, _ *PrivateLinkResourcesClientListByAccountOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/privateLinkResources"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if accountName == "" {
+			return nil, errors.New("parameter accountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if accountName == "" {
-		return nil, errors.New("parameter accountName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByAccountHandleResponse handles the ListByAccount response.
-func (client *PrivateLinkResourcesClient) listByAccountHandleResponse(resp *http.Response) (PrivateLinkResourcesClientListByAccountResponse, error) {
+func (client *PrivateLinkResourcesClient) listByAccountHandleResponse(resp *http.Response, successCodes ...int) (PrivateLinkResourcesClientListByAccountResponse, error) {
 	result := PrivateLinkResourcesClientListByAccountResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourceList); err != nil {
 		return PrivateLinkResourcesClientListByAccountResponse{}, err
 	}

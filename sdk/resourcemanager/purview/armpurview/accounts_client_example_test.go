@@ -6,11 +6,10 @@ package armpurview_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/purview/armpurview/v2"
+	"log"
 )
 
 // Generated from example definition: 2024-04-01-preview/Accounts_AddRootCollectionAdmin.json
@@ -59,7 +58,7 @@ func ExampleAccountsClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.AccountsClientCheckNameAvailabilityResponse{
-	// 	CheckNameAvailabilityResult: &armpurview.CheckNameAvailabilityResult{
+	// 	CheckNameAvailabilityResult: armpurview.CheckNameAvailabilityResult{
 	// 		NameAvailable: to.Ptr(true),
 	// 	},
 	// }
@@ -84,13 +83,13 @@ func ExampleAccountsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.AccountsClientCreateOrUpdateResponse{
-	// 	Account: &armpurview.Account{
+	// 	Account: armpurview.Account{
 	// 		Name: to.Ptr("account1"),
 	// 		Type: to.Ptr("Microsoft.Purview/accounts"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/SampleResourceGroup/providers/Microsoft.Purview/accounts/account1"),
@@ -127,10 +126,10 @@ func ExampleAccountsClient_BeginCreateOrUpdate() {
 	// 			Capacity: to.Ptr[int32](1),
 	// 		},
 	// 		SystemData: &armpurview.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 	// 			CreatedBy: to.Ptr("client-name"),
 	// 			CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("client-name"),
 	// 			LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 	// 		},
@@ -155,7 +154,7 @@ func ExampleAccountsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -183,7 +182,7 @@ func ExampleAccountsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.AccountsClientGetResponse{
-	// 	Account: &armpurview.Account{
+	// 	Account: armpurview.Account{
 	// 		Name: to.Ptr("account1"),
 	// 		Type: to.Ptr("Microsoft.Purview/accounts"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/SampleResourceGroup/providers/Microsoft.Purview/accounts/account1"),
@@ -248,10 +247,10 @@ func ExampleAccountsClient_Get() {
 	// 			Capacity: to.Ptr[int32](1),
 	// 		},
 	// 		SystemData: &armpurview.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 	// 			CreatedBy: to.Ptr("client-name"),
 	// 			CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("client-name"),
 	// 			LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 	// 		},
@@ -338,10 +337,10 @@ func ExampleAccountsClient_NewListByResourceGroupPager() {
 		// 					Capacity: to.Ptr[int32](1),
 		// 				},
 		// 				SystemData: &armpurview.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 		// 					CreatedBy: to.Ptr("client-name"),
 		// 					CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("client-name"),
 		// 					LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 		// 				},
@@ -400,10 +399,10 @@ func ExampleAccountsClient_NewListByResourceGroupPager() {
 		// 					Capacity: to.Ptr[int32](1),
 		// 				},
 		// 				SystemData: &armpurview.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 		// 					CreatedBy: to.Ptr("client-name"),
 		// 					CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("client-name"),
 		// 					LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 		// 				},
@@ -493,10 +492,10 @@ func ExampleAccountsClient_NewListBySubscriptionPager() {
 		// 					Capacity: to.Ptr[int32](1),
 		// 				},
 		// 				SystemData: &armpurview.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 		// 					CreatedBy: to.Ptr("client-name"),
 		// 					CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("client-name"),
 		// 					LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 		// 				},
@@ -555,10 +554,10 @@ func ExampleAccountsClient_NewListBySubscriptionPager() {
 		// 					Capacity: to.Ptr[int32](1),
 		// 				},
 		// 				SystemData: &armpurview.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 		// 					CreatedBy: to.Ptr("client-name"),
 		// 					CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("client-name"),
 		// 					LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 		// 				},
@@ -588,7 +587,7 @@ func ExampleAccountsClient_ListKeys() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.AccountsClientListKeysResponse{
-	// 	AccessKeys: &armpurview.AccessKeys{
+	// 	AccessKeys: armpurview.AccessKeys{
 	// 		AtlasKafkaPrimaryEndpoint: to.Ptr("Endpoint=sb://fake_objectId.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ASDASasdfmasdf123412341234="),
 	// 		AtlasKafkaSecondaryEndpoint: to.Ptr("Endpoint=sb://fake_objectId.servicebus.windows.net/;SharedAccessKeyName=AlternateSharedAccessKey;SharedAccessKey=BSDASasdfmasdf123412341234="),
 	// 	},
@@ -624,13 +623,13 @@ func ExampleAccountsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.AccountsClientUpdateResponse{
-	// 	Account: &armpurview.Account{
+	// 	Account: armpurview.Account{
 	// 		Name: to.Ptr("account1"),
 	// 		Type: to.Ptr("Microsoft.Purview/accounts"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/SampleResourceGroup/providers/Microsoft.Purview/accounts/account1"),
@@ -665,10 +664,10 @@ func ExampleAccountsClient_BeginUpdate() {
 	// 			Capacity: to.Ptr[int32](1),
 	// 		},
 	// 		SystemData: &armpurview.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-11-22T18:39:58.6929344Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2019, time.November, 22, 18, 39, 58, 692934400, time.UTC)),
 	// 			CreatedBy: to.Ptr("client-name"),
 	// 			CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-03-16T23:24:34.3430059Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.March, 16, 23, 24, 34, 343005900, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("client-name"),
 	// 			LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 	// 		},

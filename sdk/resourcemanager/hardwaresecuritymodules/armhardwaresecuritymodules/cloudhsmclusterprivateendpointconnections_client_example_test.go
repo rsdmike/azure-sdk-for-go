@@ -8,11 +8,11 @@ import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/hardwaresecuritymodules/armhardwaresecuritymodules/v2"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/hardwaresecuritymodules/armhardwaresecuritymodules/v3"
 	"log"
 )
 
-// Generated from example definition: 2025-03-31/CloudHsmClusterPrivateEndpointConnection_Create_MaximumSet_Gen.json
+// Generated from example definition: 2025-12-01-preview/CloudHsmClusterPrivateEndpointConnection_Create_MaximumSet_Gen.json
 func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Create() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -38,7 +38,7 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Create() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhardwaresecuritymodules.CloudHsmClusterPrivateEndpointConnectionsClientCreateResponse{
-	// 	PrivateEndpointConnection: &armhardwaresecuritymodules.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armhardwaresecuritymodules.PrivateEndpointConnection{
 	// 		Name: to.Ptr("sample-pec"),
 	// 		Type: to.Ptr("Microsoft.HardwareSecurityModules/cloudHsmClusters/privateEndpointConnections"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgcloudhsm/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/chsm1/privateEndpointConnections/sample-pec"),
@@ -54,10 +54,10 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Create() {
 	// 			ProvisioningState: to.Ptr(armhardwaresecuritymodules.PrivateEndpointConnectionProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armhardwaresecuritymodules.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("User1"),
 	// 			CreatedByType: to.Ptr(armhardwaresecuritymodules.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("User2"),
 	// 			LastModifiedByType: to.Ptr(armhardwaresecuritymodules.CreatedByTypeUser),
 	// 		},
@@ -65,7 +65,7 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Create() {
 	// }
 }
 
-// Generated from example definition: 2025-03-31/CloudHsmClusterPrivateEndpointConnection_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2025-12-01-preview/CloudHsmClusterPrivateEndpointConnection_Delete_MaximumSet_Gen.json
 func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -82,11 +82,11 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-03-31/CloudHsmClusterPrivateEndpointConnection_Get_MaximumSet_Gen.json
+// Generated from example definition: 2025-12-01-preview/CloudHsmClusterPrivateEndpointConnection_Get_MaximumSet_Gen.json
 func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -105,7 +105,7 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhardwaresecuritymodules.CloudHsmClusterPrivateEndpointConnectionsClientGetResponse{
-	// 	PrivateEndpointConnection: &armhardwaresecuritymodules.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armhardwaresecuritymodules.PrivateEndpointConnection{
 	// 		Name: to.Ptr("sample-pec"),
 	// 		Type: to.Ptr("Microsoft.HardwareSecurityModules/cloudHsmClusters/privateEndpointConnections"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgcloudhsm/providers/Microsoft.HardwareSecurityModules/cloudHsmClusters/chsm1/privateEndpointConnections/sample-pec"),
@@ -121,10 +121,10 @@ func ExampleCloudHsmClusterPrivateEndpointConnectionsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armhardwaresecuritymodules.PrivateEndpointConnectionProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armhardwaresecuritymodules.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("User1"),
 	// 			CreatedByType: to.Ptr(armhardwaresecuritymodules.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("User2"),
 	// 			LastModifiedByType: to.Ptr(armhardwaresecuritymodules.CreatedByTypeUser),
 	// 		},

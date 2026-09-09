@@ -19,6 +19,8 @@ import (
 
 // ManagedHsmsClient contains the methods for the ManagedHsms group.
 // Don't use this type directly, use NewManagedHsmsClient() instead.
+//
+// Generated from API version 2026-02-01
 type ManagedHsmsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type ManagedHsmsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewManagedHsmsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ManagedHsmsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewManagedHsmsClient(subscriptionID string, credential azcore.TokenCredenti
 
 // CheckMhsmNameAvailability - Checks that the managed hsm name is valid and is not already in use.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - mhsmName - The request body
 //   - options - ManagedHsmsClientCheckMhsmNameAvailabilityOptions contains the optional parameters for the ManagedHsmsClient.CheckMhsmNameAvailability
 //     method.
@@ -61,19 +64,14 @@ func (client *ManagedHsmsClient) CheckMhsmNameAvailability(ctx context.Context, 
 	if err != nil {
 		return ManagedHsmsClientCheckMhsmNameAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ManagedHsmsClientCheckMhsmNameAvailabilityResponse{}, err
-	}
-	resp, err := client.checkMhsmNameAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkMhsmNameAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkMhsmNameAvailabilityCreateRequest creates the CheckMhsmNameAvailability request.
 func (client *ManagedHsmsClient) checkMhsmNameAvailabilityCreateRequest(ctx context.Context, mhsmName CheckMhsmNameAvailabilityParameters, _ *ManagedHsmsClientCheckMhsmNameAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/checkMhsmNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -81,8 +79,8 @@ func (client *ManagedHsmsClient) checkMhsmNameAvailabilityCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, mhsmName); err != nil {
@@ -92,8 +90,11 @@ func (client *ManagedHsmsClient) checkMhsmNameAvailabilityCreateRequest(ctx cont
 }
 
 // checkMhsmNameAvailabilityHandleResponse handles the CheckMhsmNameAvailability response.
-func (client *ManagedHsmsClient) checkMhsmNameAvailabilityHandleResponse(resp *http.Response) (ManagedHsmsClientCheckMhsmNameAvailabilityResponse, error) {
+func (client *ManagedHsmsClient) checkMhsmNameAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientCheckMhsmNameAvailabilityResponse, error) {
 	result := ManagedHsmsClientCheckMhsmNameAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckMhsmNameAvailabilityResult); err != nil {
 		return ManagedHsmsClientCheckMhsmNameAvailabilityResponse{}, err
 	}
@@ -102,8 +103,6 @@ func (client *ManagedHsmsClient) checkMhsmNameAvailabilityHandleResponse(resp *h
 
 // BeginCreateOrUpdate - Create or update a managed HSM Pool in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - The name of the managed HSM Pool.
 //   - parameters - Parameters to create or update the managed HSM Pool
@@ -128,8 +127,6 @@ func (client *ManagedHsmsClient) BeginCreateOrUpdate(ctx context.Context, resour
 
 // CreateOrUpdate - Create or update a managed HSM Pool in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 func (client *ManagedHsmsClient) createOrUpdate(ctx context.Context, resourceGroupName string, name string, parameters ManagedHsm, options *ManagedHsmsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ManagedHsmsClient.BeginCreateOrUpdate"
@@ -145,8 +142,7 @@ func (client *ManagedHsmsClient) createOrUpdate(ctx context.Context, resourceGro
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -155,7 +151,7 @@ func (client *ManagedHsmsClient) createOrUpdate(ctx context.Context, resourceGro
 func (client *ManagedHsmsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, name string, parameters ManagedHsm, _ *ManagedHsmsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -171,8 +167,8 @@ func (client *ManagedHsmsClient) createOrUpdateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -183,8 +179,6 @@ func (client *ManagedHsmsClient) createOrUpdateCreateRequest(ctx context.Context
 
 // BeginDelete - Deletes the specified managed HSM Pool.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - The name of the managed HSM Pool.
 //   - options - ManagedHsmsClientBeginDeleteOptions contains the optional parameters for the ManagedHsmsClient.BeginDelete method.
@@ -207,8 +201,6 @@ func (client *ManagedHsmsClient) BeginDelete(ctx context.Context, resourceGroupN
 
 // Delete - Deletes the specified managed HSM Pool.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 func (client *ManagedHsmsClient) deleteOperation(ctx context.Context, resourceGroupName string, name string, options *ManagedHsmsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ManagedHsmsClient.BeginDelete"
@@ -224,8 +216,7 @@ func (client *ManagedHsmsClient) deleteOperation(ctx context.Context, resourceGr
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -234,7 +225,7 @@ func (client *ManagedHsmsClient) deleteOperation(ctx context.Context, resourceGr
 func (client *ManagedHsmsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *ManagedHsmsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -250,15 +241,13 @@ func (client *ManagedHsmsClient) deleteCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the specified managed HSM Pool.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - The name of the managed HSM Pool.
 //   - options - ManagedHsmsClientGetOptions contains the optional parameters for the ManagedHsmsClient.Get method.
@@ -276,19 +265,14 @@ func (client *ManagedHsmsClient) Get(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ManagedHsmsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ManagedHsmsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ManagedHsmsClient) getCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *ManagedHsmsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -304,15 +288,18 @@ func (client *ManagedHsmsClient) getCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ManagedHsmsClient) getHandleResponse(resp *http.Response) (ManagedHsmsClientGetResponse, error) {
+func (client *ManagedHsmsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientGetResponse, error) {
 	result := ManagedHsmsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsm); err != nil {
 		return ManagedHsmsClientGetResponse{}, err
 	}
@@ -321,8 +308,6 @@ func (client *ManagedHsmsClient) getHandleResponse(resp *http.Response) (Managed
 
 // GetDeleted - Gets the specified deleted managed HSM.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - options - ManagedHsmsClientGetDeletedOptions contains the optional parameters for the ManagedHsmsClient.GetDeleted method.
 func (client *ManagedHsmsClient) GetDeleted(ctx context.Context, name string, location string, options *ManagedHsmsClientGetDeletedOptions) (ManagedHsmsClientGetDeletedResponse, error) {
 	var err error
@@ -338,19 +323,14 @@ func (client *ManagedHsmsClient) GetDeleted(ctx context.Context, name string, lo
 	if err != nil {
 		return ManagedHsmsClientGetDeletedResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ManagedHsmsClientGetDeletedResponse{}, err
-	}
-	resp, err := client.getDeletedHandleResponse(httpResp)
-	return resp, err
+	return client.getDeletedHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeletedCreateRequest creates the GetDeleted request.
 func (client *ManagedHsmsClient) getDeletedCreateRequest(ctx context.Context, name string, location string, _ *ManagedHsmsClientGetDeletedOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedManagedHSMs/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if name == "" {
@@ -366,15 +346,18 @@ func (client *ManagedHsmsClient) getDeletedCreateRequest(ctx context.Context, na
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeletedHandleResponse handles the GetDeleted response.
-func (client *ManagedHsmsClient) getDeletedHandleResponse(resp *http.Response) (ManagedHsmsClientGetDeletedResponse, error) {
+func (client *ManagedHsmsClient) getDeletedHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientGetDeletedResponse, error) {
 	result := ManagedHsmsClientGetDeletedResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedManagedHsm); err != nil {
 		return ManagedHsmsClientGetDeletedResponse{}, err
 	}
@@ -383,8 +366,6 @@ func (client *ManagedHsmsClient) getDeletedHandleResponse(resp *http.Response) (
 
 // NewListByResourceGroupPager - The List operation gets information about the managed HSM Pools associated with the subscription
 // and within the specified resource group.
-//
-// Generated from API version 2026-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - ManagedHsmsClientListByResourceGroupOptions contains the optional parameters for the ManagedHsmsClient.NewListByResourceGroupPager
 //     method.
@@ -399,46 +380,60 @@ func (client *ManagedHsmsClient) NewListByResourceGroupPager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return ManagedHsmsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ManagedHsmsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *ManagedHsmsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *ManagedHsmsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ManagedHsmsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *ManagedHsmsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260201)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *ManagedHsmsClient) listByResourceGroupHandleResponse(resp *http.Response) (ManagedHsmsClientListByResourceGroupResponse, error) {
+func (client *ManagedHsmsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientListByResourceGroupResponse, error) {
 	result := ManagedHsmsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListByResourceGroupResponse{}, err
 	}
@@ -446,8 +441,6 @@ func (client *ManagedHsmsClient) listByResourceGroupHandleResponse(resp *http.Re
 }
 
 // NewListBySubscriptionPager - The List operation gets information about the managed HSM Pools associated with the subscription.
-//
-// Generated from API version 2026-02-01
 //   - options - ManagedHsmsClientListBySubscriptionOptions contains the optional parameters for the ManagedHsmsClient.NewListBySubscriptionPager
 //     method.
 func (client *ManagedHsmsClient) NewListBySubscriptionPager(options *ManagedHsmsClientListBySubscriptionOptions) *runtime.Pager[ManagedHsmsClientListBySubscriptionResponse] {
@@ -461,42 +454,56 @@ func (client *ManagedHsmsClient) NewListBySubscriptionPager(options *ManagedHsms
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ManagedHsmsClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ManagedHsmsClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *ManagedHsmsClient) listBySubscriptionCreateRequest(ctx context.Context, options *ManagedHsmsClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/managedHSMs"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ManagedHsmsClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *ManagedHsmsClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/managedHSMs"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260201)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *ManagedHsmsClient) listBySubscriptionHandleResponse(resp *http.Response) (ManagedHsmsClientListBySubscriptionResponse, error) {
+func (client *ManagedHsmsClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientListBySubscriptionResponse, error) {
 	result := ManagedHsmsClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListBySubscriptionResponse{}, err
 	}
@@ -504,8 +511,6 @@ func (client *ManagedHsmsClient) listBySubscriptionHandleResponse(resp *http.Res
 }
 
 // NewListDeletedPager - The List operation gets information about the deleted managed HSMs associated with the subscription.
-//
-// Generated from API version 2026-02-01
 //   - options - ManagedHsmsClientListDeletedOptions contains the optional parameters for the ManagedHsmsClient.NewListDeletedPager
 //     method.
 func (client *ManagedHsmsClient) NewListDeletedPager(options *ManagedHsmsClientListDeletedOptions) *runtime.Pager[ManagedHsmsClientListDeletedResponse] {
@@ -519,39 +524,53 @@ func (client *ManagedHsmsClient) NewListDeletedPager(options *ManagedHsmsClientL
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listDeletedCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listDeletedCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ManagedHsmsClientListDeletedResponse{}, err
 			}
-			return client.listDeletedHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ManagedHsmsClientListDeletedResponse{}, err
+			}
+			return client.listDeletedHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listDeletedCreateRequest creates the ListDeleted request.
-func (client *ManagedHsmsClient) listDeletedCreateRequest(ctx context.Context, _ *ManagedHsmsClientListDeletedOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/deletedManagedHSMs"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ManagedHsmsClient) listDeletedCreateRequest(ctx context.Context, nextLink string, _ *ManagedHsmsClientListDeletedOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/deletedManagedHSMs"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260201)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listDeletedHandleResponse handles the ListDeleted response.
-func (client *ManagedHsmsClient) listDeletedHandleResponse(resp *http.Response) (ManagedHsmsClientListDeletedResponse, error) {
+func (client *ManagedHsmsClient) listDeletedHandleResponse(resp *http.Response, successCodes ...int) (ManagedHsmsClientListDeletedResponse, error) {
 	result := ManagedHsmsClientListDeletedResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedManagedHsmListResult); err != nil {
 		return ManagedHsmsClientListDeletedResponse{}, err
 	}
@@ -560,8 +579,6 @@ func (client *ManagedHsmsClient) listDeletedHandleResponse(resp *http.Response) 
 
 // BeginPurgeDeleted - Permanently deletes the specified managed HSM.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - options - ManagedHsmsClientBeginPurgeDeletedOptions contains the optional parameters for the ManagedHsmsClient.BeginPurgeDeleted
 //     method.
 func (client *ManagedHsmsClient) BeginPurgeDeleted(ctx context.Context, name string, location string, options *ManagedHsmsClientBeginPurgeDeletedOptions) (*runtime.Poller[ManagedHsmsClientPurgeDeletedResponse], error) {
@@ -583,8 +600,6 @@ func (client *ManagedHsmsClient) BeginPurgeDeleted(ctx context.Context, name str
 
 // PurgeDeleted - Permanently deletes the specified managed HSM.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 func (client *ManagedHsmsClient) purgeDeleted(ctx context.Context, name string, location string, options *ManagedHsmsClientBeginPurgeDeletedOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ManagedHsmsClient.BeginPurgeDeleted"
@@ -600,8 +615,7 @@ func (client *ManagedHsmsClient) purgeDeleted(ctx context.Context, name string, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -610,7 +624,7 @@ func (client *ManagedHsmsClient) purgeDeleted(ctx context.Context, name string, 
 func (client *ManagedHsmsClient) purgeDeletedCreateRequest(ctx context.Context, name string, location string, _ *ManagedHsmsClientBeginPurgeDeletedOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.KeyVault/locations/{location}/deletedManagedHSMs/{name}/purge"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if name == "" {
@@ -626,15 +640,13 @@ func (client *ManagedHsmsClient) purgeDeletedCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginUpdate - Update a managed HSM Pool in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - The name of the managed HSM Pool.
 //   - parameters - Parameters to patch the managed HSM Pool
@@ -658,8 +670,6 @@ func (client *ManagedHsmsClient) BeginUpdate(ctx context.Context, resourceGroupN
 
 // Update - Update a managed HSM Pool in the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 func (client *ManagedHsmsClient) update(ctx context.Context, resourceGroupName string, name string, parameters ManagedHsm, options *ManagedHsmsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ManagedHsmsClient.BeginUpdate"
@@ -675,8 +685,7 @@ func (client *ManagedHsmsClient) update(ctx context.Context, resourceGroupName s
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -685,7 +694,7 @@ func (client *ManagedHsmsClient) update(ctx context.Context, resourceGroupName s
 func (client *ManagedHsmsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, name string, parameters ManagedHsm, _ *ManagedHsmsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.KeyVault/managedHSMs/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -701,8 +710,8 @@ func (client *ManagedHsmsClient) updateCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {

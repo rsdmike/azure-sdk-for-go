@@ -18,6 +18,8 @@ import (
 
 // VaultClient contains the methods for the Vault group.
 // Don't use this type directly, use NewVaultClient() instead.
+//
+// Generated from API version 2024-09-01
 type VaultClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type VaultClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewVaultClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VaultClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewVaultClient(subscriptionID string, credential azcore.TokenCredential, op
 
 // BeginCreate - Creates the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The vault name.
 //   - resource - Vault properties.
@@ -66,8 +69,6 @@ func (client *VaultClient) BeginCreate(ctx context.Context, resourceGroupName st
 
 // Create - Creates the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 func (client *VaultClient) create(ctx context.Context, resourceGroupName string, vaultName string, resource VaultModel, options *VaultClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VaultClient.BeginCreate"
@@ -83,8 +84,7 @@ func (client *VaultClient) create(ctx context.Context, resourceGroupName string,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -93,7 +93,7 @@ func (client *VaultClient) create(ctx context.Context, resourceGroupName string,
 func (client *VaultClient) createCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, resource VaultModel, _ *VaultClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -109,8 +109,8 @@ func (client *VaultClient) createCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -121,8 +121,6 @@ func (client *VaultClient) createCreateRequest(ctx context.Context, resourceGrou
 
 // BeginDelete - Removes the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The vault name.
 //   - options - VaultClientBeginDeleteOptions contains the optional parameters for the VaultClient.BeginDelete method.
@@ -145,8 +143,6 @@ func (client *VaultClient) BeginDelete(ctx context.Context, resourceGroupName st
 
 // Delete - Removes the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 func (client *VaultClient) deleteOperation(ctx context.Context, resourceGroupName string, vaultName string, options *VaultClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VaultClient.BeginDelete"
@@ -162,8 +158,7 @@ func (client *VaultClient) deleteOperation(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -172,7 +167,7 @@ func (client *VaultClient) deleteOperation(ctx context.Context, resourceGroupNam
 func (client *VaultClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, _ *VaultClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -188,15 +183,13 @@ func (client *VaultClient) deleteCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the details of the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The vault name.
 //   - options - VaultClientGetOptions contains the optional parameters for the VaultClient.Get method.
@@ -214,19 +207,14 @@ func (client *VaultClient) Get(ctx context.Context, resourceGroupName string, va
 	if err != nil {
 		return VaultClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return VaultClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *VaultClient) getCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, _ *VaultClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -242,15 +230,18 @@ func (client *VaultClient) getCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *VaultClient) getHandleResponse(resp *http.Response) (VaultClientGetResponse, error) {
+func (client *VaultClient) getHandleResponse(resp *http.Response, successCodes ...int) (VaultClientGetResponse, error) {
 	result := VaultClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultModel); err != nil {
 		return VaultClientGetResponse{}, err
 	}
@@ -258,8 +249,6 @@ func (client *VaultClient) getHandleResponse(resp *http.Response) (VaultClientGe
 }
 
 // NewListPager - Gets the list of vaults in the given subscription and resource group.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - VaultClientListOptions contains the optional parameters for the VaultClient.NewListPager method.
 func (client *VaultClient) NewListPager(resourceGroupName string, options *VaultClientListOptions) *runtime.Pager[VaultClientListResponse] {
@@ -273,46 +262,60 @@ func (client *VaultClient) NewListPager(resourceGroupName string, options *Vault
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return VaultClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return VaultClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *VaultClient) listCreateRequest(ctx context.Context, resourceGroupName string, options *VaultClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *VaultClient) listCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *VaultClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	if options != nil && options.ContinuationToken != nil {
-		reqQP.Set("continuationToken", *options.ContinuationToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240901)
+		if options != nil && options.ContinuationToken != nil {
+			reqQP.Set("continuationToken", *options.ContinuationToken)
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *VaultClient) listHandleResponse(resp *http.Response) (VaultClientListResponse, error) {
+func (client *VaultClient) listHandleResponse(resp *http.Response, successCodes ...int) (VaultClientListResponse, error) {
 	result := VaultClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultModelListResult); err != nil {
 		return VaultClientListResponse{}, err
 	}
@@ -320,8 +323,6 @@ func (client *VaultClient) listHandleResponse(resp *http.Response) (VaultClientL
 }
 
 // NewListBySubscriptionPager - Gets the list of vaults in the given subscription.
-//
-// Generated from API version 2024-09-01
 //   - options - VaultClientListBySubscriptionOptions contains the optional parameters for the VaultClient.NewListBySubscriptionPager
 //     method.
 func (client *VaultClient) NewListBySubscriptionPager(options *VaultClientListBySubscriptionOptions) *runtime.Pager[VaultClientListBySubscriptionResponse] {
@@ -335,39 +336,53 @@ func (client *VaultClient) NewListBySubscriptionPager(options *VaultClientListBy
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return VaultClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return VaultClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *VaultClient) listBySubscriptionCreateRequest(ctx context.Context, _ *VaultClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationVaults"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *VaultClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *VaultClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/replicationVaults"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *VaultClient) listBySubscriptionHandleResponse(resp *http.Response) (VaultClientListBySubscriptionResponse, error) {
+func (client *VaultClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (VaultClientListBySubscriptionResponse, error) {
 	result := VaultClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultModelListResult); err != nil {
 		return VaultClientListBySubscriptionResponse{}, err
 	}
@@ -376,8 +391,6 @@ func (client *VaultClient) listBySubscriptionHandleResponse(resp *http.Response)
 
 // BeginUpdate - Performs update on the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The vault name.
 //   - properties - Vault properties.
@@ -401,8 +414,6 @@ func (client *VaultClient) BeginUpdate(ctx context.Context, resourceGroupName st
 
 // Update - Performs update on the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 func (client *VaultClient) update(ctx context.Context, resourceGroupName string, vaultName string, properties VaultModelUpdate, options *VaultClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VaultClient.BeginUpdate"
@@ -418,8 +429,7 @@ func (client *VaultClient) update(ctx context.Context, resourceGroupName string,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -428,7 +438,7 @@ func (client *VaultClient) update(ctx context.Context, resourceGroupName string,
 func (client *VaultClient) updateCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, properties VaultModelUpdate, _ *VaultClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/replicationVaults/{vaultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -444,8 +454,8 @@ func (client *VaultClient) updateCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {

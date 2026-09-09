@@ -18,6 +18,8 @@ import (
 
 // NameAvailabilityClient contains the methods for the NameAvailability group.
 // Don't use this type directly, use NewNameAvailabilityClient() instead.
+//
+// Generated from API version 2026-04-01-preview
 type NameAvailabilityClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type NameAvailabilityClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewNameAvailabilityClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*NameAvailabilityClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewNameAvailabilityClient(subscriptionID string, credential azcore.TokenCre
 // CheckGlobally - Checks the validity and availability of the given name, to assign it to a new server or to use it as the
 // base name of a new pair of virtual endpoints.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - parameters - The request body
 //   - options - NameAvailabilityClientCheckGloballyOptions contains the optional parameters for the NameAvailabilityClient.CheckGlobally
 //     method.
@@ -61,19 +64,14 @@ func (client *NameAvailabilityClient) CheckGlobally(ctx context.Context, paramet
 	if err != nil {
 		return NameAvailabilityClientCheckGloballyResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return NameAvailabilityClientCheckGloballyResponse{}, err
-	}
-	resp, err := client.checkGloballyHandleResponse(httpResp)
-	return resp, err
+	return client.checkGloballyHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkGloballyCreateRequest creates the CheckGlobally request.
 func (client *NameAvailabilityClient) checkGloballyCreateRequest(ctx context.Context, parameters CheckNameAvailabilityRequest, _ *NameAvailabilityClientCheckGloballyOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DBforPostgreSQL/checkNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -81,8 +79,8 @@ func (client *NameAvailabilityClient) checkGloballyCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -92,8 +90,11 @@ func (client *NameAvailabilityClient) checkGloballyCreateRequest(ctx context.Con
 }
 
 // checkGloballyHandleResponse handles the CheckGlobally response.
-func (client *NameAvailabilityClient) checkGloballyHandleResponse(resp *http.Response) (NameAvailabilityClientCheckGloballyResponse, error) {
+func (client *NameAvailabilityClient) checkGloballyHandleResponse(resp *http.Response, successCodes ...int) (NameAvailabilityClientCheckGloballyResponse, error) {
 	result := NameAvailabilityClientCheckGloballyResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityModel); err != nil {
 		return NameAvailabilityClientCheckGloballyResponse{}, err
 	}
@@ -102,8 +103,6 @@ func (client *NameAvailabilityClient) checkGloballyHandleResponse(resp *http.Res
 
 // CheckWithLocation - Check the availability of name for resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - locationName - The name of the location.
 //   - parameters - The request body
 //   - options - NameAvailabilityClientCheckWithLocationOptions contains the optional parameters for the NameAvailabilityClient.CheckWithLocation
@@ -122,19 +121,14 @@ func (client *NameAvailabilityClient) CheckWithLocation(ctx context.Context, loc
 	if err != nil {
 		return NameAvailabilityClientCheckWithLocationResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return NameAvailabilityClientCheckWithLocationResponse{}, err
-	}
-	resp, err := client.checkWithLocationHandleResponse(httpResp)
-	return resp, err
+	return client.checkWithLocationHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkWithLocationCreateRequest creates the CheckWithLocation request.
 func (client *NameAvailabilityClient) checkWithLocationCreateRequest(ctx context.Context, locationName string, parameters CheckNameAvailabilityRequest, _ *NameAvailabilityClientCheckWithLocationOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DBforPostgreSQL/locations/{locationName}/checkNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if locationName == "" {
@@ -146,8 +140,8 @@ func (client *NameAvailabilityClient) checkWithLocationCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -157,8 +151,11 @@ func (client *NameAvailabilityClient) checkWithLocationCreateRequest(ctx context
 }
 
 // checkWithLocationHandleResponse handles the CheckWithLocation response.
-func (client *NameAvailabilityClient) checkWithLocationHandleResponse(resp *http.Response) (NameAvailabilityClientCheckWithLocationResponse, error) {
+func (client *NameAvailabilityClient) checkWithLocationHandleResponse(resp *http.Response, successCodes ...int) (NameAvailabilityClientCheckWithLocationResponse, error) {
 	result := NameAvailabilityClientCheckWithLocationResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityModel); err != nil {
 		return NameAvailabilityClientCheckWithLocationResponse{}, err
 	}

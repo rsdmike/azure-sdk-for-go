@@ -48,23 +48,23 @@ func ExampleClient_BeginCreate_createExtension() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientCreateResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/ClusterMonitor"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("ClusterMonitor"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Properties: &armextensions.ExtensionProperties{
 	// 			ExtensionType: to.Ptr("azuremonitor-containers"),
@@ -120,23 +120,23 @@ func ExampleClient_BeginCreate_createExtensionWithPlan() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientCreateResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/azureVote"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("azureVote"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Plan: &armextensions.Plan{
 	// 			Name: to.Ptr("azure-vote-standard"),
@@ -181,7 +181,7 @@ func ExampleClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -209,17 +209,17 @@ func ExampleClient_Get_getExtension() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/ClusterMonitor"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("ClusterMonitor"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Properties: &armextensions.ExtensionProperties{
 	// 			ExtensionType: to.Ptr("azuremonitor-containers"),
@@ -265,17 +265,17 @@ func ExampleClient_Get_getExtensionWithAdditionalDetails() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/ClusterMonitor"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("ClusterMonitor"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Properties: &armextensions.ExtensionProperties{
 	// 			ExtensionType: to.Ptr("azuremonitor-containers"),
@@ -326,17 +326,17 @@ func ExampleClient_Get_getExtensionWithExtensionState() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/ClusterMonitor"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("ClusterMonitor"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Properties: &armextensions.ExtensionProperties{
 	// 			ExtensionType: to.Ptr("azuremonitor-containers"),
@@ -383,7 +383,7 @@ func ExampleClient_Get_getExtensionWithManagedBy() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.ContainerService/managedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/azureVote"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("azureVote"),
@@ -391,10 +391,10 @@ func ExampleClient_Get_getExtensionWithManagedBy() {
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Plan: &armextensions.Plan{
 	// 			Name: to.Ptr("azure-vote-standard"),
@@ -465,17 +465,17 @@ func ExampleClient_Get_getExtensionWithManagementDetails() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.ContainerService/managedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/azureVote"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("azureVote"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Plan: &armextensions.Plan{
 	// 			Name: to.Ptr("azure-vote-standard"),
@@ -546,17 +546,17 @@ func ExampleClient_Get_getExtensionWithPlan() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientGetResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		ID: to.Ptr("/subscriptions/subId1/resourceGroups/rg1/providers/Microsoft.Kubernetes/connectedClusters/clusterName1/providers/Microsoft.KubernetesConfiguration/extensions/azureVote"),
 	// 		Type: to.Ptr("Microsoft.KubernetesConfiguration/extensions"),
 	// 		Name: to.Ptr("azureVote"),
 	// 		SystemData: &armextensions.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 	// 		},
 	// 		Plan: &armextensions.Plan{
 	// 			Name: to.Ptr("azure-vote-standard"),
@@ -620,10 +620,10 @@ func ExampleClient_NewListPager() {
 		// 				SystemData: &armextensions.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 		// 				},
 		// 				Properties: &armextensions.ExtensionProperties{
 		// 					ExtensionType: to.Ptr("azuremonitor-containers"),
@@ -654,10 +654,10 @@ func ExampleClient_NewListPager() {
 		// 				SystemData: &armextensions.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T04:09:23.011Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 4, 9, 23, 11000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T04:09:23.011Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 4, 9, 23, 11000000, time.UTC)),
 		// 				},
 		// 				Properties: &armextensions.ExtensionProperties{
 		// 					ExtensionType: to.Ptr("Microsoft.RecoveryServices/recoveryVault"),
@@ -686,10 +686,10 @@ func ExampleClient_NewListPager() {
 		// 				SystemData: &armextensions.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armextensions.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-09-08T05:10:57.027Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.September, 8, 5, 10, 57, 27000000, time.UTC)),
 		// 				},
 		// 				Plan: &armextensions.Plan{
 		// 					Name: to.Ptr("azure-vote-standard"),
@@ -754,13 +754,13 @@ func ExampleClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armextensions.ClientUpdateResponse{
-	// 	Extension: &armextensions.Extension{
+	// 	Extension: armextensions.Extension{
 	// 		Properties: &armextensions.ExtensionProperties{
 	// 			ExtensionType: to.Ptr("azuremonitor-containers"),
 	// 			AutoUpgradeMode: to.Ptr(armextensions.AutoUpgradeModeCompatible),

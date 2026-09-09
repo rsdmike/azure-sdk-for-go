@@ -7,18 +7,19 @@ package armpurview
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // FeaturesClient contains the methods for the Features group.
 // Don't use this type directly, use NewFeaturesClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type FeaturesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type FeaturesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewFeaturesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*FeaturesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -46,8 +50,6 @@ func NewFeaturesClient(subscriptionID string, credential azcore.TokenCredential,
 //
 // Gets details from a list of feature names.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - featureRequest - Request body with feature names.
@@ -66,19 +68,14 @@ func (client *FeaturesClient) AccountGet(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return FeaturesClientAccountGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FeaturesClientAccountGetResponse{}, err
-	}
-	resp, err := client.accountGetHandleResponse(httpResp)
-	return resp, err
+	return client.accountGetHandleResponse(httpResp, http.StatusOK)
 }
 
 // accountGetCreateRequest creates the AccountGet request.
 func (client *FeaturesClient) accountGetCreateRequest(ctx context.Context, resourceGroupName string, accountName string, featureRequest BatchFeatureRequest, _ *FeaturesClientAccountGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/listFeatures"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +91,8 @@ func (client *FeaturesClient) accountGetCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, featureRequest); err != nil {
@@ -105,8 +102,11 @@ func (client *FeaturesClient) accountGetCreateRequest(ctx context.Context, resou
 }
 
 // accountGetHandleResponse handles the AccountGet response.
-func (client *FeaturesClient) accountGetHandleResponse(resp *http.Response) (FeaturesClientAccountGetResponse, error) {
+func (client *FeaturesClient) accountGetHandleResponse(resp *http.Response, successCodes ...int) (FeaturesClientAccountGetResponse, error) {
 	result := FeaturesClientAccountGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BatchFeatureStatus); err != nil {
 		return FeaturesClientAccountGetResponse{}, err
 	}
@@ -119,8 +119,6 @@ func (client *FeaturesClient) accountGetHandleResponse(resp *http.Response) (Fea
 //
 // Gets details from a list of feature names.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - locations - Location of feature.
 //   - featureRequest - The request body
 //   - options - FeaturesClientSubscriptionGetOptions contains the optional parameters for the FeaturesClient.SubscriptionGet
@@ -139,19 +137,14 @@ func (client *FeaturesClient) SubscriptionGet(ctx context.Context, locations str
 	if err != nil {
 		return FeaturesClientSubscriptionGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FeaturesClientSubscriptionGetResponse{}, err
-	}
-	resp, err := client.subscriptionGetHandleResponse(httpResp)
-	return resp, err
+	return client.subscriptionGetHandleResponse(httpResp, http.StatusOK)
 }
 
 // subscriptionGetCreateRequest creates the SubscriptionGet request.
 func (client *FeaturesClient) subscriptionGetCreateRequest(ctx context.Context, locations string, featureRequest BatchFeatureRequest, _ *FeaturesClientSubscriptionGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Purview/locations/{locations}/listFeatures"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if locations == "" {
@@ -163,8 +156,8 @@ func (client *FeaturesClient) subscriptionGetCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, featureRequest); err != nil {
@@ -174,8 +167,11 @@ func (client *FeaturesClient) subscriptionGetCreateRequest(ctx context.Context, 
 }
 
 // subscriptionGetHandleResponse handles the SubscriptionGet response.
-func (client *FeaturesClient) subscriptionGetHandleResponse(resp *http.Response) (FeaturesClientSubscriptionGetResponse, error) {
+func (client *FeaturesClient) subscriptionGetHandleResponse(resp *http.Response, successCodes ...int) (FeaturesClientSubscriptionGetResponse, error) {
 	result := FeaturesClientSubscriptionGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.BatchFeatureStatus); err != nil {
 		return FeaturesClientSubscriptionGetResponse{}, err
 	}

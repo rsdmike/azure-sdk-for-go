@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // ReplicationRecoveryPlansClient contains the methods for the ReplicationRecoveryPlans group.
 // Don't use this type directly, use NewReplicationRecoveryPlansClient() instead.
+//
+// Generated from API version 2025-08-01
 type ReplicationRecoveryPlansClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type ReplicationRecoveryPlansClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewReplicationRecoveryPlansClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ReplicationRecoveryPlansClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewReplicationRecoveryPlansClient(subscriptionID string, credential azcore.
 //
 // The operation to create a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -73,8 +75,6 @@ func (client *ReplicationRecoveryPlansClient) BeginCreate(ctx context.Context, r
 //
 // The operation to create a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) create(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input CreateRecoveryPlanInput, options *ReplicationRecoveryPlansClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginCreate"
@@ -90,8 +90,7 @@ func (client *ReplicationRecoveryPlansClient) create(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -100,7 +99,7 @@ func (client *ReplicationRecoveryPlansClient) create(ctx context.Context, resour
 func (client *ReplicationRecoveryPlansClient) createCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input CreateRecoveryPlanInput, _ *ReplicationRecoveryPlansClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +119,8 @@ func (client *ReplicationRecoveryPlansClient) createCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {
@@ -134,8 +133,6 @@ func (client *ReplicationRecoveryPlansClient) createCreateRequest(ctx context.Co
 //
 // Delete a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -162,8 +159,6 @@ func (client *ReplicationRecoveryPlansClient) BeginDelete(ctx context.Context, r
 //
 // Delete a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) deleteOperation(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, options *ReplicationRecoveryPlansClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginDelete"
@@ -179,8 +174,7 @@ func (client *ReplicationRecoveryPlansClient) deleteOperation(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -189,7 +183,7 @@ func (client *ReplicationRecoveryPlansClient) deleteOperation(ctx context.Contex
 func (client *ReplicationRecoveryPlansClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, _ *ReplicationRecoveryPlansClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -209,8 +203,8 @@ func (client *ReplicationRecoveryPlansClient) deleteCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -218,8 +212,6 @@ func (client *ReplicationRecoveryPlansClient) deleteCreateRequest(ctx context.Co
 //
 // The operation to cancel the failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -246,8 +238,6 @@ func (client *ReplicationRecoveryPlansClient) BeginFailoverCancel(ctx context.Co
 //
 // The operation to cancel the failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) failoverCancel(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, options *ReplicationRecoveryPlansClientBeginFailoverCancelOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginFailoverCancel"
@@ -263,8 +253,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCancel(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -273,7 +262,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCancel(ctx context.Context
 func (client *ReplicationRecoveryPlansClient) failoverCancelCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, _ *ReplicationRecoveryPlansClientBeginFailoverCancelOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/failoverCancel"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -293,8 +282,8 @@ func (client *ReplicationRecoveryPlansClient) failoverCancelCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
@@ -303,8 +292,6 @@ func (client *ReplicationRecoveryPlansClient) failoverCancelCreateRequest(ctx co
 //
 // The operation to commit the failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -331,8 +318,6 @@ func (client *ReplicationRecoveryPlansClient) BeginFailoverCommit(ctx context.Co
 //
 // The operation to commit the failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) failoverCommit(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, options *ReplicationRecoveryPlansClientBeginFailoverCommitOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginFailoverCommit"
@@ -348,8 +333,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCommit(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -358,7 +342,7 @@ func (client *ReplicationRecoveryPlansClient) failoverCommit(ctx context.Context
 func (client *ReplicationRecoveryPlansClient) failoverCommitCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, _ *ReplicationRecoveryPlansClientBeginFailoverCommitOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/failoverCommit"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -378,8 +362,8 @@ func (client *ReplicationRecoveryPlansClient) failoverCommitCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
@@ -388,8 +372,6 @@ func (client *ReplicationRecoveryPlansClient) failoverCommitCreateRequest(ctx co
 //
 // Gets the details of the recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -409,19 +391,14 @@ func (client *ReplicationRecoveryPlansClient) Get(ctx context.Context, resourceG
 	if err != nil {
 		return ReplicationRecoveryPlansClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ReplicationRecoveryPlansClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ReplicationRecoveryPlansClient) getCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, _ *ReplicationRecoveryPlansClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -441,15 +418,18 @@ func (client *ReplicationRecoveryPlansClient) getCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ReplicationRecoveryPlansClient) getHandleResponse(resp *http.Response) (ReplicationRecoveryPlansClientGetResponse, error) {
+func (client *ReplicationRecoveryPlansClient) getHandleResponse(resp *http.Response, successCodes ...int) (ReplicationRecoveryPlansClientGetResponse, error) {
 	result := ReplicationRecoveryPlansClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPlan); err != nil {
 		return ReplicationRecoveryPlansClientGetResponse{}, err
 	}
@@ -459,8 +439,6 @@ func (client *ReplicationRecoveryPlansClient) getHandleResponse(resp *http.Respo
 // NewListPager - Gets the list of recovery plans.
 //
 // Lists the recovery plans in the vault.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - options - ReplicationRecoveryPlansClientListOptions contains the optional parameters for the ReplicationRecoveryPlansClient.NewListPager
@@ -476,47 +454,61 @@ func (client *ReplicationRecoveryPlansClient) NewListPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, nextLink, options)
 			if err != nil {
 				return ReplicationRecoveryPlansClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ReplicationRecoveryPlansClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ReplicationRecoveryPlansClient) listCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ReplicationRecoveryPlansClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ReplicationRecoveryPlansClient) listCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, nextLink string, _ *ReplicationRecoveryPlansClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ReplicationRecoveryPlansClient) listHandleResponse(resp *http.Response) (ReplicationRecoveryPlansClientListResponse, error) {
+func (client *ReplicationRecoveryPlansClient) listHandleResponse(resp *http.Response, successCodes ...int) (ReplicationRecoveryPlansClientListResponse, error) {
 	result := ReplicationRecoveryPlansClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryPlanCollection); err != nil {
 		return ReplicationRecoveryPlansClientListResponse{}, err
 	}
@@ -527,8 +519,6 @@ func (client *ReplicationRecoveryPlansClient) listHandleResponse(resp *http.Resp
 //
 // The operation to start the planned failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -556,8 +546,6 @@ func (client *ReplicationRecoveryPlansClient) BeginPlannedFailover(ctx context.C
 //
 // The operation to start the planned failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) plannedFailover(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanPlannedFailoverInput, options *ReplicationRecoveryPlansClientBeginPlannedFailoverOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginPlannedFailover"
@@ -573,8 +561,7 @@ func (client *ReplicationRecoveryPlansClient) plannedFailover(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -583,7 +570,7 @@ func (client *ReplicationRecoveryPlansClient) plannedFailover(ctx context.Contex
 func (client *ReplicationRecoveryPlansClient) plannedFailoverCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanPlannedFailoverInput, _ *ReplicationRecoveryPlansClientBeginPlannedFailoverOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/plannedFailover"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -603,8 +590,8 @@ func (client *ReplicationRecoveryPlansClient) plannedFailoverCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {
@@ -617,8 +604,6 @@ func (client *ReplicationRecoveryPlansClient) plannedFailoverCreateRequest(ctx c
 //
 // The operation to reprotect(reverse replicate) a recovery plan. This api is for deprecated scenarios and no longer works.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -645,8 +630,6 @@ func (client *ReplicationRecoveryPlansClient) BeginReprotect(ctx context.Context
 //
 // The operation to reprotect(reverse replicate) a recovery plan. This api is for deprecated scenarios and no longer works.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) reprotect(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, options *ReplicationRecoveryPlansClientBeginReprotectOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginReprotect"
@@ -662,8 +645,7 @@ func (client *ReplicationRecoveryPlansClient) reprotect(ctx context.Context, res
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -672,7 +654,7 @@ func (client *ReplicationRecoveryPlansClient) reprotect(ctx context.Context, res
 func (client *ReplicationRecoveryPlansClient) reprotectCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, _ *ReplicationRecoveryPlansClientBeginReprotectOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/reProtect"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -692,8 +674,8 @@ func (client *ReplicationRecoveryPlansClient) reprotectCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
@@ -702,8 +684,6 @@ func (client *ReplicationRecoveryPlansClient) reprotectCreateRequest(ctx context
 //
 // The operation to start the test failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -731,8 +711,6 @@ func (client *ReplicationRecoveryPlansClient) BeginTestFailover(ctx context.Cont
 //
 // The operation to start the test failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) testFailover(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanTestFailoverInput, options *ReplicationRecoveryPlansClientBeginTestFailoverOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginTestFailover"
@@ -748,8 +726,7 @@ func (client *ReplicationRecoveryPlansClient) testFailover(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -758,7 +735,7 @@ func (client *ReplicationRecoveryPlansClient) testFailover(ctx context.Context, 
 func (client *ReplicationRecoveryPlansClient) testFailoverCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanTestFailoverInput, _ *ReplicationRecoveryPlansClientBeginTestFailoverOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/testFailover"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -778,8 +755,8 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {
@@ -792,8 +769,6 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCreateRequest(ctx cont
 //
 // The operation to cleanup test failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -821,8 +796,6 @@ func (client *ReplicationRecoveryPlansClient) BeginTestFailoverCleanup(ctx conte
 //
 // The operation to cleanup test failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) testFailoverCleanup(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanTestFailoverCleanupInput, options *ReplicationRecoveryPlansClientBeginTestFailoverCleanupOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginTestFailoverCleanup"
@@ -838,8 +811,7 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCleanup(ctx context.Co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -848,7 +820,7 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCleanup(ctx context.Co
 func (client *ReplicationRecoveryPlansClient) testFailoverCleanupCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanTestFailoverCleanupInput, _ *ReplicationRecoveryPlansClientBeginTestFailoverCleanupOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/testFailoverCleanup"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -868,8 +840,8 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCleanupCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {
@@ -882,8 +854,6 @@ func (client *ReplicationRecoveryPlansClient) testFailoverCleanupCreateRequest(c
 //
 // The operation to start the unplanned failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -911,8 +881,6 @@ func (client *ReplicationRecoveryPlansClient) BeginUnplannedFailover(ctx context
 //
 // The operation to start the unplanned failover of a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) unplannedFailover(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanUnplannedFailoverInput, options *ReplicationRecoveryPlansClientBeginUnplannedFailoverOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginUnplannedFailover"
@@ -928,8 +896,7 @@ func (client *ReplicationRecoveryPlansClient) unplannedFailover(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -938,7 +905,7 @@ func (client *ReplicationRecoveryPlansClient) unplannedFailover(ctx context.Cont
 func (client *ReplicationRecoveryPlansClient) unplannedFailoverCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input RecoveryPlanUnplannedFailoverInput, _ *ReplicationRecoveryPlansClientBeginUnplannedFailoverOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}/unplannedFailover"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -958,8 +925,8 @@ func (client *ReplicationRecoveryPlansClient) unplannedFailoverCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {
@@ -972,8 +939,6 @@ func (client *ReplicationRecoveryPlansClient) unplannedFailoverCreateRequest(ctx
 //
 // The operation to update a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - recoveryPlanName - Name of the recovery plan.
@@ -1001,8 +966,6 @@ func (client *ReplicationRecoveryPlansClient) BeginUpdate(ctx context.Context, r
 //
 // The operation to update a recovery plan.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryPlansClient) update(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input UpdateRecoveryPlanInput, options *ReplicationRecoveryPlansClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryPlansClient.BeginUpdate"
@@ -1018,8 +981,7 @@ func (client *ReplicationRecoveryPlansClient) update(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1028,7 +990,7 @@ func (client *ReplicationRecoveryPlansClient) update(ctx context.Context, resour
 func (client *ReplicationRecoveryPlansClient) updateCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, recoveryPlanName string, input UpdateRecoveryPlanInput, _ *ReplicationRecoveryPlansClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryPlans/{recoveryPlanName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1048,8 +1010,8 @@ func (client *ReplicationRecoveryPlansClient) updateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, input); err != nil {

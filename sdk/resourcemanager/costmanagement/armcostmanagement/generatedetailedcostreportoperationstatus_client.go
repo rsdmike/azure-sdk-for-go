@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-const defaultGenerateDetailedCostReportOperationStatusClientVersion string = "2025-03-01"
-
 // GenerateDetailedCostReportOperationStatusClient contains the methods for the GenerateDetailedCostReportOperationStatus
 // group.
 // Don't use this type directly, use NewGenerateDetailedCostReportOperationStatusClient() instead.
@@ -60,12 +58,7 @@ func (client *GenerateDetailedCostReportOperationStatusClient) Get(ctx context.C
 	if err != nil {
 		return GenerateDetailedCostReportOperationStatusClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GenerateDetailedCostReportOperationStatusClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -84,15 +77,18 @@ func (client *GenerateDetailedCostReportOperationStatusClient) getCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultGenerateDetailedCostReportOperationStatusClientVersion)
+	reqQP.Set("api-version", version20250301)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *GenerateDetailedCostReportOperationStatusClient) getHandleResponse(resp *http.Response) (GenerateDetailedCostReportOperationStatusClientGetResponse, error) {
+func (client *GenerateDetailedCostReportOperationStatusClient) getHandleResponse(resp *http.Response, successCodes ...int) (GenerateDetailedCostReportOperationStatusClientGetResponse, error) {
 	result := GenerateDetailedCostReportOperationStatusClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GenerateDetailedCostReportOperationStatuses); err != nil {
 		return GenerateDetailedCostReportOperationStatusClientGetResponse{}, err
 	}

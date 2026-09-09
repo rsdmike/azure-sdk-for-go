@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-01-20-preview/Pools_Get.json
+// Generated from example definition: 2026-05-01-preview/Pools_Get.json
 func ExamplePoolsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -30,13 +30,13 @@ func ExamplePoolsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhorizondb.PoolsClientGetResponse{
-	// 	Pool: &armhorizondb.Pool{
+	// 	Pool: armhorizondb.Pool{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.HorizonDb/clusters/examplecluster/pools/examplepool"),
 	// 		Name: to.Ptr("examplepool"),
 	// 		Type: to.Ptr("Microsoft.HorizonDb/clusters/pools"),
 	// 		Properties: &armhorizondb.PoolProperties{
 	// 			Location: to.Ptr("westus2"),
-	// 			State: to.Ptr(armhorizondb.StateReady),
+	// 			State: to.Ptr(armhorizondb.StateSucceeded),
 	// 			ReplicaCount: to.Ptr[int32](2),
 	// 			ProvisioningState: to.Ptr(armhorizondb.ProvisioningStateSucceeded),
 	// 		},
@@ -44,7 +44,7 @@ func ExamplePoolsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-01-20-preview/Pools_List.json
+// Generated from example definition: 2026-05-01-preview/Pools_List.json
 func ExamplePoolsClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -75,7 +75,7 @@ func ExamplePoolsClient_NewListPager() {
 		// 				Type: to.Ptr("Microsoft.HorizonDb/clusters/pools"),
 		// 				Properties: &armhorizondb.PoolProperties{
 		// 					Location: to.Ptr("westus2"),
-		// 					State: to.Ptr(armhorizondb.StateReady),
+		// 					State: to.Ptr(armhorizondb.StateSucceeded),
 		// 					ReplicaCount: to.Ptr[int32](2),
 		// 					ProvisioningState: to.Ptr(armhorizondb.ProvisioningStateSucceeded),
 		// 				},

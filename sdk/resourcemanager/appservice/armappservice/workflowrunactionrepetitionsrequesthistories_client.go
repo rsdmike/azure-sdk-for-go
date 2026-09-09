@@ -19,6 +19,8 @@ import (
 // WorkflowRunActionRepetitionsRequestHistoriesClient contains the methods for the WorkflowRunActionRepetitionsRequestHistories
 // group.
 // Don't use this type directly, use NewWorkflowRunActionRepetitionsRequestHistoriesClient() instead.
+//
+// Generated from API version 2025-05-01
 type WorkflowRunActionRepetitionsRequestHistoriesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type WorkflowRunActionRepetitionsRequestHistoriesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewWorkflowRunActionRepetitionsRequestHistoriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*WorkflowRunActionRepetitionsRequestHistoriesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewWorkflowRunActionRepetitionsRequestHistoriesClient(subscriptionID string
 
 // Get - Gets a workflow run repetition request history.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Site name.
 //   - workflowName - The workflow name.
@@ -67,19 +70,14 @@ func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) Get(ctx contex
 	if err != nil {
 		return WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) getCreateRequest(ctx context.Context, resourceGroupName string, name string, workflowName string, runName string, actionName string, repetitionName string, requestHistoryName string, _ *WorkflowRunActionRepetitionsRequestHistoriesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/hostruntime/runtime/webhooks/workflow/api/management/workflows/{workflowName}/runs/{runName}/actions/{actionName}/repetitions/{repetitionName}/requestHistories/{requestHistoryName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,15 +113,18 @@ func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) getCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) getHandleResponse(resp *http.Response) (WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse, error) {
+func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) getHandleResponse(resp *http.Response, successCodes ...int) (WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse, error) {
 	result := WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestHistory); err != nil {
 		return WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse{}, err
 	}
@@ -131,8 +132,6 @@ func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) getHandleRespo
 }
 
 // NewListPager - List a workflow run repetition request history.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Site name.
 //   - workflowName - The workflow name.
@@ -152,63 +151,77 @@ func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) NewListPager(r
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, name, workflowName, runName, actionName, repetitionName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, name, workflowName, runName, actionName, repetitionName, nextLink, options)
 			if err != nil {
 				return WorkflowRunActionRepetitionsRequestHistoriesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return WorkflowRunActionRepetitionsRequestHistoriesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) listCreateRequest(ctx context.Context, resourceGroupName string, name string, workflowName string, runName string, actionName string, repetitionName string, _ *WorkflowRunActionRepetitionsRequestHistoriesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/hostruntime/runtime/webhooks/workflow/api/management/workflows/{workflowName}/runs/{runName}/actions/{actionName}/repetitions/{repetitionName}/requestHistories"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) listCreateRequest(ctx context.Context, resourceGroupName string, name string, workflowName string, runName string, actionName string, repetitionName string, nextLink string, _ *WorkflowRunActionRepetitionsRequestHistoriesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/hostruntime/runtime/webhooks/workflow/api/management/workflows/{workflowName}/runs/{runName}/actions/{actionName}/repetitions/{repetitionName}/requestHistories"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if workflowName == "" {
+			return nil, errors.New("parameter workflowName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{workflowName}", url.PathEscape(workflowName))
+		if runName == "" {
+			return nil, errors.New("parameter runName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{runName}", url.PathEscape(runName))
+		if actionName == "" {
+			return nil, errors.New("parameter actionName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{actionName}", url.PathEscape(actionName))
+		if repetitionName == "" {
+			return nil, errors.New("parameter repetitionName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{repetitionName}", url.PathEscape(repetitionName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if workflowName == "" {
-		return nil, errors.New("parameter workflowName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{workflowName}", url.PathEscape(workflowName))
-	if runName == "" {
-		return nil, errors.New("parameter runName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{runName}", url.PathEscape(runName))
-	if actionName == "" {
-		return nil, errors.New("parameter actionName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{actionName}", url.PathEscape(actionName))
-	if repetitionName == "" {
-		return nil, errors.New("parameter repetitionName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{repetitionName}", url.PathEscape(repetitionName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) listHandleResponse(resp *http.Response) (WorkflowRunActionRepetitionsRequestHistoriesClientListResponse, error) {
+func (client *WorkflowRunActionRepetitionsRequestHistoriesClient) listHandleResponse(resp *http.Response, successCodes ...int) (WorkflowRunActionRepetitionsRequestHistoriesClientListResponse, error) {
 	result := WorkflowRunActionRepetitionsRequestHistoriesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RequestHistoryListResult); err != nil {
 		return WorkflowRunActionRepetitionsRequestHistoriesClientListResponse{}, err
 	}

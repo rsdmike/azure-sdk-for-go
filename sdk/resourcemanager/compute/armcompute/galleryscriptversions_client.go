@@ -18,6 +18,8 @@ import (
 
 // GalleryScriptVersionsClient contains the methods for the GalleryScriptVersions group.
 // Don't use this type directly, use NewGalleryScriptVersionsClient() instead.
+//
+// Generated from API version 2025-12-03
 type GalleryScriptVersionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type GalleryScriptVersionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewGalleryScriptVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*GalleryScriptVersionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewGalleryScriptVersionsClient(subscriptionID string, credential azcore.Tok
 
 // BeginCreateOrUpdate - Create or update a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - galleryName - The name of the Shared Image Gallery.
 //   - galleryScriptName - The name of the gallery Script Definition to be retrieved.
@@ -70,8 +73,6 @@ func (client *GalleryScriptVersionsClient) BeginCreateOrUpdate(ctx context.Conte
 
 // CreateOrUpdate - Create or update a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 func (client *GalleryScriptVersionsClient) createOrUpdate(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, galleryScriptVersion GalleryScriptVersion, options *GalleryScriptVersionsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GalleryScriptVersionsClient.BeginCreateOrUpdate"
@@ -87,8 +88,7 @@ func (client *GalleryScriptVersionsClient) createOrUpdate(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -97,7 +97,7 @@ func (client *GalleryScriptVersionsClient) createOrUpdate(ctx context.Context, r
 func (client *GalleryScriptVersionsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, galleryScriptVersion GalleryScriptVersion, _ *GalleryScriptVersionsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions/{galleryScriptVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -121,8 +121,8 @@ func (client *GalleryScriptVersionsClient) createOrUpdateCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251203)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, galleryScriptVersion); err != nil {
@@ -133,8 +133,6 @@ func (client *GalleryScriptVersionsClient) createOrUpdateCreateRequest(ctx conte
 
 // BeginDelete - Delete a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - galleryName - The name of the Shared Image Gallery.
 //   - galleryScriptName - The name of the gallery Script Definition to be retrieved.
@@ -161,8 +159,6 @@ func (client *GalleryScriptVersionsClient) BeginDelete(ctx context.Context, reso
 
 // Delete - Delete a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 func (client *GalleryScriptVersionsClient) deleteOperation(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, options *GalleryScriptVersionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GalleryScriptVersionsClient.BeginDelete"
@@ -178,8 +174,7 @@ func (client *GalleryScriptVersionsClient) deleteOperation(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -188,7 +183,7 @@ func (client *GalleryScriptVersionsClient) deleteOperation(ctx context.Context, 
 func (client *GalleryScriptVersionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, _ *GalleryScriptVersionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions/{galleryScriptVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -212,15 +207,13 @@ func (client *GalleryScriptVersionsClient) deleteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251203)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Custom ArmResourceRead operation template with CloudError as Error
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - galleryName - The name of the Shared Image Gallery.
 //   - galleryScriptName - The name of the gallery Script Definition to be retrieved.
@@ -241,19 +234,14 @@ func (client *GalleryScriptVersionsClient) Get(ctx context.Context, resourceGrou
 	if err != nil {
 		return GalleryScriptVersionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GalleryScriptVersionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *GalleryScriptVersionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, _ *GalleryScriptVersionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions/{galleryScriptVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -277,15 +265,18 @@ func (client *GalleryScriptVersionsClient) getCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251203)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *GalleryScriptVersionsClient) getHandleResponse(resp *http.Response) (GalleryScriptVersionsClientGetResponse, error) {
+func (client *GalleryScriptVersionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (GalleryScriptVersionsClientGetResponse, error) {
 	result := GalleryScriptVersionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryScriptVersion); err != nil {
 		return GalleryScriptVersionsClientGetResponse{}, err
 	}
@@ -293,8 +284,6 @@ func (client *GalleryScriptVersionsClient) getHandleResponse(resp *http.Response
 }
 
 // NewListByGalleryScriptPager - List gallery Script Versions in a gallery Script Definition.
-//
-// Generated from API version 2025-03-03
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - galleryName - The name of the Shared Image Gallery.
 //   - galleryScriptName - The name of the gallery Script Definition to be retrieved.
@@ -311,51 +300,65 @@ func (client *GalleryScriptVersionsClient) NewListByGalleryScriptPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByGalleryScriptCreateRequest(ctx, resourceGroupName, galleryName, galleryScriptName, options)
-			}, nil)
+			req, err := client.listByGalleryScriptCreateRequest(ctx, resourceGroupName, galleryName, galleryScriptName, nextLink, options)
 			if err != nil {
 				return GalleryScriptVersionsClientListByGalleryScriptResponse{}, err
 			}
-			return client.listByGalleryScriptHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return GalleryScriptVersionsClientListByGalleryScriptResponse{}, err
+			}
+			return client.listByGalleryScriptHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByGalleryScriptCreateRequest creates the ListByGalleryScript request.
-func (client *GalleryScriptVersionsClient) listByGalleryScriptCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, _ *GalleryScriptVersionsClientListByGalleryScriptOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *GalleryScriptVersionsClient) listByGalleryScriptCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, nextLink string, _ *GalleryScriptVersionsClientListByGalleryScriptOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if galleryName == "" {
+			return nil, errors.New("parameter galleryName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{galleryName}", url.PathEscape(galleryName))
+		if galleryScriptName == "" {
+			return nil, errors.New("parameter galleryScriptName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{galleryScriptName}", url.PathEscape(galleryScriptName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if galleryName == "" {
-		return nil, errors.New("parameter galleryName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{galleryName}", url.PathEscape(galleryName))
-	if galleryScriptName == "" {
-		return nil, errors.New("parameter galleryScriptName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{galleryScriptName}", url.PathEscape(galleryScriptName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251203)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByGalleryScriptHandleResponse handles the ListByGalleryScript response.
-func (client *GalleryScriptVersionsClient) listByGalleryScriptHandleResponse(resp *http.Response) (GalleryScriptVersionsClientListByGalleryScriptResponse, error) {
+func (client *GalleryScriptVersionsClient) listByGalleryScriptHandleResponse(resp *http.Response, successCodes ...int) (GalleryScriptVersionsClientListByGalleryScriptResponse, error) {
 	result := GalleryScriptVersionsClientListByGalleryScriptResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GalleryScriptVersionList); err != nil {
 		return GalleryScriptVersionsClientListByGalleryScriptResponse{}, err
 	}
@@ -364,8 +367,6 @@ func (client *GalleryScriptVersionsClient) listByGalleryScriptHandleResponse(res
 
 // BeginUpdate - Update a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - galleryName - The name of the Shared Image Gallery.
 //   - galleryScriptName - The name of the gallery Script Definition to be retrieved.
@@ -393,8 +394,6 @@ func (client *GalleryScriptVersionsClient) BeginUpdate(ctx context.Context, reso
 
 // Update - Update a gallery Script Version.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 func (client *GalleryScriptVersionsClient) update(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, galleryScriptVersion GalleryScriptVersionUpdate, options *GalleryScriptVersionsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GalleryScriptVersionsClient.BeginUpdate"
@@ -410,8 +409,7 @@ func (client *GalleryScriptVersionsClient) update(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -420,7 +418,7 @@ func (client *GalleryScriptVersionsClient) update(ctx context.Context, resourceG
 func (client *GalleryScriptVersionsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, galleryName string, galleryScriptName string, galleryScriptVersionName string, galleryScriptVersion GalleryScriptVersionUpdate, _ *GalleryScriptVersionsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/galleries/{galleryName}/scripts/{galleryScriptName}/versions/{galleryScriptVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -444,8 +442,8 @@ func (client *GalleryScriptVersionsClient) updateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251203)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, galleryScriptVersion); err != nil {

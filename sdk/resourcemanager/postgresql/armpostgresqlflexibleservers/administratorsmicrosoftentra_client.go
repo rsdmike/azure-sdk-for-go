@@ -18,6 +18,8 @@ import (
 
 // AdministratorsMicrosoftEntraClient contains the methods for the AdministratorsMicrosoftEntra group.
 // Don't use this type directly, use NewAdministratorsMicrosoftEntraClient() instead.
+//
+// Generated from API version 2026-04-01-preview
 type AdministratorsMicrosoftEntraClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type AdministratorsMicrosoftEntraClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewAdministratorsMicrosoftEntraClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*AdministratorsMicrosoftEntraClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewAdministratorsMicrosoftEntraClient(subscriptionID string, credential azc
 
 // BeginCreateOrUpdate - Creates a new server administrator associated to a Microsoft Entra principal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - objectID - Object identifier of the Microsoft Entra principal.
@@ -69,8 +72,6 @@ func (client *AdministratorsMicrosoftEntraClient) BeginCreateOrUpdate(ctx contex
 
 // CreateOrUpdate - Creates a new server administrator associated to a Microsoft Entra principal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 func (client *AdministratorsMicrosoftEntraClient) createOrUpdate(ctx context.Context, resourceGroupName string, serverName string, objectID string, parameters AdministratorMicrosoftEntraAdd, options *AdministratorsMicrosoftEntraClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "AdministratorsMicrosoftEntraClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *AdministratorsMicrosoftEntraClient) createOrUpdate(ctx context.Con
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *AdministratorsMicrosoftEntraClient) createOrUpdate(ctx context.Con
 func (client *AdministratorsMicrosoftEntraClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, serverName string, objectID string, parameters AdministratorMicrosoftEntraAdd, _ *AdministratorsMicrosoftEntraClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/administrators/{objectId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *AdministratorsMicrosoftEntraClient) createOrUpdateCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
 		return nil, err
@@ -127,8 +127,6 @@ func (client *AdministratorsMicrosoftEntraClient) createOrUpdateCreateRequest(ct
 
 // BeginDelete - Deletes an existing server administrator associated to a Microsoft Entra principal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - objectID - Object identifier of the Microsoft Entra principal.
@@ -153,8 +151,6 @@ func (client *AdministratorsMicrosoftEntraClient) BeginDelete(ctx context.Contex
 
 // Delete - Deletes an existing server administrator associated to a Microsoft Entra principal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 func (client *AdministratorsMicrosoftEntraClient) deleteOperation(ctx context.Context, resourceGroupName string, serverName string, objectID string, options *AdministratorsMicrosoftEntraClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "AdministratorsMicrosoftEntraClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *AdministratorsMicrosoftEntraClient) deleteOperation(ctx context.Co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *AdministratorsMicrosoftEntraClient) deleteOperation(ctx context.Co
 func (client *AdministratorsMicrosoftEntraClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, serverName string, objectID string, _ *AdministratorsMicrosoftEntraClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/administrators/{objectId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *AdministratorsMicrosoftEntraClient) deleteCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets information about a server administrator associated to a Microsoft Entra principal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - objectID - Object identifier of the Microsoft Entra principal.
@@ -228,19 +221,14 @@ func (client *AdministratorsMicrosoftEntraClient) Get(ctx context.Context, resou
 	if err != nil {
 		return AdministratorsMicrosoftEntraClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AdministratorsMicrosoftEntraClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *AdministratorsMicrosoftEntraClient) getCreateRequest(ctx context.Context, resourceGroupName string, serverName string, objectID string, _ *AdministratorsMicrosoftEntraClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/administrators/{objectId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -260,15 +248,18 @@ func (client *AdministratorsMicrosoftEntraClient) getCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *AdministratorsMicrosoftEntraClient) getHandleResponse(resp *http.Response) (AdministratorsMicrosoftEntraClientGetResponse, error) {
+func (client *AdministratorsMicrosoftEntraClient) getHandleResponse(resp *http.Response, successCodes ...int) (AdministratorsMicrosoftEntraClientGetResponse, error) {
 	result := AdministratorsMicrosoftEntraClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdministratorMicrosoftEntra); err != nil {
 		return AdministratorsMicrosoftEntraClientGetResponse{}, err
 	}
@@ -276,8 +267,6 @@ func (client *AdministratorsMicrosoftEntraClient) getHandleResponse(resp *http.R
 }
 
 // NewListByServerPager - List all server administrators associated to a Microsoft Entra principal.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - options - AdministratorsMicrosoftEntraClientListByServerOptions contains the optional parameters for the AdministratorsMicrosoftEntraClient.NewListByServerPager
@@ -293,47 +282,61 @@ func (client *AdministratorsMicrosoftEntraClient) NewListByServerPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByServerCreateRequest(ctx, resourceGroupName, serverName, options)
-			}, nil)
+			req, err := client.listByServerCreateRequest(ctx, resourceGroupName, serverName, nextLink, options)
 			if err != nil {
 				return AdministratorsMicrosoftEntraClientListByServerResponse{}, err
 			}
-			return client.listByServerHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return AdministratorsMicrosoftEntraClientListByServerResponse{}, err
+			}
+			return client.listByServerHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByServerCreateRequest creates the ListByServer request.
-func (client *AdministratorsMicrosoftEntraClient) listByServerCreateRequest(ctx context.Context, resourceGroupName string, serverName string, _ *AdministratorsMicrosoftEntraClientListByServerOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/administrators"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *AdministratorsMicrosoftEntraClient) listByServerCreateRequest(ctx context.Context, resourceGroupName string, serverName string, nextLink string, _ *AdministratorsMicrosoftEntraClientListByServerOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/administrators"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if serverName == "" {
+			return nil, errors.New("parameter serverName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{serverName}", url.PathEscape(serverName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serverName == "" {
-		return nil, errors.New("parameter serverName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serverName}", url.PathEscape(serverName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByServerHandleResponse handles the ListByServer response.
-func (client *AdministratorsMicrosoftEntraClient) listByServerHandleResponse(resp *http.Response) (AdministratorsMicrosoftEntraClientListByServerResponse, error) {
+func (client *AdministratorsMicrosoftEntraClient) listByServerHandleResponse(resp *http.Response, successCodes ...int) (AdministratorsMicrosoftEntraClientListByServerResponse, error) {
 	result := AdministratorsMicrosoftEntraClientListByServerResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AdministratorMicrosoftEntraList); err != nil {
 		return AdministratorsMicrosoftEntraClientListByServerResponse{}, err
 	}

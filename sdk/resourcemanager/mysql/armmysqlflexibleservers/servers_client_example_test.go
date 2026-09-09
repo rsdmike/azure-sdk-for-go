@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2024-12-01-preview/ServerCreate.json
+// Generated from example definition: 2024-12-30/ServerCreate.json
 func ExampleServersClient_BeginCreate_createANewServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -61,13 +61,13 @@ func ExampleServersClient_BeginCreate_createANewServer() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientCreateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -77,7 +77,7 @@ func ExampleServersClient_BeginCreate_createANewServer() {
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -121,7 +121,7 @@ func ExampleServersClient_BeginCreate_createANewServer() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerCreateReplica.json
+// Generated from example definition: 2024-12-30/ServerCreateReplica.json
 func ExampleServersClient_BeginCreate_createAReplicaServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -144,13 +144,13 @@ func ExampleServersClient_BeginCreate_createAReplicaServer() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientCreateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("replica-server"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testgr/providers/Microsoft.DBforMySQL/flexibleServers/replica-server"),
@@ -160,7 +160,7 @@ func ExampleServersClient_BeginCreate_createAReplicaServer() {
 	// 			AvailabilityZone: to.Ptr("3"),
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-24T08:19:18.5729164+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 24, 8, 19, 18, 572916400, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -204,7 +204,7 @@ func ExampleServersClient_BeginCreate_createAReplicaServer() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerCreateWithBYOK.json
+// Generated from example definition: 2024-12-30/ServerCreateWithBYOK.json
 func ExampleServersClient_BeginCreate_createAServerWithByok() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -265,13 +265,13 @@ func ExampleServersClient_BeginCreate_createAServerWithByok() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientCreateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -281,7 +281,7 @@ func ExampleServersClient_BeginCreate_createAServerWithByok() {
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -325,7 +325,7 @@ func ExampleServersClient_BeginCreate_createAServerWithByok() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerCreateWithDatabasePort.json
+// Generated from example definition: 2024-12-30/ServerCreateWithDatabasePort.json
 func ExampleServersClient_BeginCreate_createAServerWithNonDefaultDatabasePort() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -374,13 +374,13 @@ func ExampleServersClient_BeginCreate_createAServerWithNonDefaultDatabasePort() 
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientCreateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -390,7 +390,7 @@ func ExampleServersClient_BeginCreate_createAServerWithNonDefaultDatabasePort() 
 	// 			AvailabilityZone: to.Ptr("1"),
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](8888),
@@ -434,7 +434,7 @@ func ExampleServersClient_BeginCreate_createAServerWithNonDefaultDatabasePort() 
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerCreateWithPointInTimeRestore.json
+// Generated from example definition: 2024-12-30/ServerCreateWithPointInTimeRestore.json
 func ExampleServersClient_BeginCreate_createAServerAsAPointInTimeRestore() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -449,7 +449,7 @@ func ExampleServersClient_BeginCreate_createAServerAsAPointInTimeRestore() {
 		Location: to.Ptr("SoutheastAsia"),
 		Properties: &armmysqlflexibleservers.ServerProperties{
 			CreateMode:             to.Ptr(armmysqlflexibleservers.CreateModePointInTimeRestore),
-			RestorePointInTime:     to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-24T00:00:37.467Z"); return t }()),
+			RestorePointInTime:     to.Ptr(time.Date(2021, time.June, 24, 0, 0, 37, 467000000, time.UTC)),
 			SourceServerResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/SourceResourceGroup/providers/Microsoft.DBforMySQL/flexibleServers/sourceserver"),
 		},
 		SKU: &armmysqlflexibleservers.MySQLServerSKU{
@@ -465,13 +465,13 @@ func ExampleServersClient_BeginCreate_createAServerAsAPointInTimeRestore() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientCreateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("targetserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TargetResourceGroup/providers/Microsoft.DBforMySQL/flexibleServers/targetserver"),
@@ -482,7 +482,7 @@ func ExampleServersClient_BeginCreate_createAServerAsAPointInTimeRestore() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-24T00:15:24.00+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 24, 0, 15, 24, 0, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -525,7 +525,7 @@ func ExampleServersClient_BeginCreate_createAServerAsAPointInTimeRestore() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerDelete.json
+// Generated from example definition: 2024-12-30/ServerDelete.json
 func ExampleServersClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -542,7 +542,7 @@ func ExampleServersClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -551,7 +551,7 @@ func ExampleServersClient_BeginDelete() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerDetachVNet.json
+// Generated from example definition: 2024-12-30/ServerDetachVNet.json
 func ExampleServersClient_BeginDetachVNet() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -570,13 +570,13 @@ func ExampleServersClient_BeginDetachVNet() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientDetachVNetResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -587,7 +587,7 @@ func ExampleServersClient_BeginDetachVNet() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -633,7 +633,7 @@ func ExampleServersClient_BeginDetachVNet() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerFailover.json
+// Generated from example definition: 2024-12-30/ServerFailover.json
 func ExampleServersClient_BeginFailover() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -650,7 +650,7 @@ func ExampleServersClient_BeginFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -659,7 +659,7 @@ func ExampleServersClient_BeginFailover() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerGet.json
+// Generated from example definition: 2024-12-30/ServerGet.json
 func ExampleServersClient_Get_getAServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -678,7 +678,7 @@ func ExampleServersClient_Get_getAServer() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientGetResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -689,7 +689,7 @@ func ExampleServersClient_Get_getAServer() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -736,7 +736,7 @@ func ExampleServersClient_Get_getAServer() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerGetWithVnet.json
+// Generated from example definition: 2024-12-30/ServerGetWithVnet.json
 func ExampleServersClient_Get_getAServerWithVnet() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -755,7 +755,7 @@ func ExampleServersClient_Get_getAServerWithVnet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientGetResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -766,7 +766,7 @@ func ExampleServersClient_Get_getAServerWithVnet() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -813,7 +813,7 @@ func ExampleServersClient_Get_getAServerWithVnet() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServersList.json
+// Generated from example definition: 2024-12-30/ServersList.json
 func ExampleServersClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -849,7 +849,7 @@ func ExampleServersClient_NewListPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T07:08:17.4259886+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 7, 8, 17, 425988600, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -903,7 +903,7 @@ func ExampleServersClient_NewListPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T07:08:17.4259886+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 7, 8, 17, 425988600, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -957,7 +957,7 @@ func ExampleServersClient_NewListPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-24T06:28:19.0611667+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 24, 6, 28, 19, 61166700, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -1006,7 +1006,7 @@ func ExampleServersClient_NewListPager() {
 	}
 }
 
-// Generated from example definition: 2024-12-01-preview/ServersListByResourceGroup.json
+// Generated from example definition: 2024-12-30/ServersListByResourceGroup.json
 func ExampleServersClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1042,7 +1042,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T07:08:17.4259886+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 7, 8, 17, 425988600, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -1096,7 +1096,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T07:08:17.4259886+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 7, 8, 17, 425988600, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -1150,7 +1150,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 		// 					Backup: &armmysqlflexibleservers.Backup{
 		// 						BackupIntervalHours: to.Ptr[int32](24),
 		// 						BackupRetentionDays: to.Ptr[int32](7),
-		// 						EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-24T06:28:19.0611667+00:00"); return t}()),
+		// 						EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 24, 6, 28, 19, 61166700, time.UTC)),
 		// 						GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 		// 					},
 		// 					DatabasePort: to.Ptr[int32](3306),
@@ -1196,7 +1196,7 @@ func ExampleServersClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerResetGtid.json
+// Generated from example definition: 2024-12-30/ServerResetGtid.json
 func ExampleServersClient_BeginResetGtid() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1215,7 +1215,7 @@ func ExampleServersClient_BeginResetGtid() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1224,7 +1224,7 @@ func ExampleServersClient_BeginResetGtid() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerRestart.json
+// Generated from example definition: 2024-12-30/ServerRestart.json
 func ExampleServersClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1244,7 +1244,7 @@ func ExampleServersClient_BeginRestart() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1253,7 +1253,7 @@ func ExampleServersClient_BeginRestart() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerStart.json
+// Generated from example definition: 2024-12-30/ServerStart.json
 func ExampleServersClient_BeginStart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1270,7 +1270,7 @@ func ExampleServersClient_BeginStart() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1279,7 +1279,7 @@ func ExampleServersClient_BeginStart() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerStop.json
+// Generated from example definition: 2024-12-30/ServerStop.json
 func ExampleServersClient_BeginStop() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1296,7 +1296,7 @@ func ExampleServersClient_BeginStop() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1305,7 +1305,7 @@ func ExampleServersClient_BeginStop() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/MaintenancePolicyPatchOptInVirtualCanary.json
+// Generated from example definition: 2024-12-30/MaintenancePolicyPatchOptInVirtualCanary.json
 func ExampleServersClient_BeginUpdate_updateServerToOptInVirtualCanary() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1328,13 +1328,13 @@ func ExampleServersClient_BeginUpdate_updateServerToOptInVirtualCanary() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientUpdateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -1345,7 +1345,7 @@ func ExampleServersClient_BeginUpdate_updateServerToOptInVirtualCanary() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -1390,7 +1390,7 @@ func ExampleServersClient_BeginUpdate_updateServerToOptInVirtualCanary() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/MaintenancePolicyPatchOptOutVirtualCanary.json
+// Generated from example definition: 2024-12-30/MaintenancePolicyPatchOptOutVirtualCanary.json
 func ExampleServersClient_BeginUpdate_updateServerToOptOutVirtualCanary() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1413,13 +1413,13 @@ func ExampleServersClient_BeginUpdate_updateServerToOptOutVirtualCanary() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientUpdateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -1430,7 +1430,7 @@ func ExampleServersClient_BeginUpdate_updateServerToOptOutVirtualCanary() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -1475,7 +1475,7 @@ func ExampleServersClient_BeginUpdate_updateServerToOptOutVirtualCanary() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerUpdate.json
+// Generated from example definition: 2024-12-30/ServerUpdate.json
 func ExampleServersClient_BeginUpdate_updateAServer() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1505,13 +1505,13 @@ func ExampleServersClient_BeginUpdate_updateAServer() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientUpdateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -1522,7 +1522,7 @@ func ExampleServersClient_BeginUpdate_updateAServer() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -1569,7 +1569,7 @@ func ExampleServersClient_BeginUpdate_updateAServer() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerUpdateWithBYOK.json
+// Generated from example definition: 2024-12-30/ServerUpdateWithBYOK.json
 func ExampleServersClient_BeginUpdate_updateServerWithByok() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1602,13 +1602,13 @@ func ExampleServersClient_BeginUpdate_updateServerWithByok() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientUpdateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -1619,7 +1619,7 @@ func ExampleServersClient_BeginUpdate_updateServerWithByok() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -1666,7 +1666,7 @@ func ExampleServersClient_BeginUpdate_updateServerWithByok() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerUpdateWithCustomerMaintenanceWindow.json
+// Generated from example definition: 2024-12-30/ServerUpdateWithCustomerMaintenanceWindow.json
 func ExampleServersClient_BeginUpdate_updateServerCustomerMaintenanceWindow() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1693,13 +1693,13 @@ func ExampleServersClient_BeginUpdate_updateServerCustomerMaintenanceWindow() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientUpdateResponse{
-	// 	Server: &armmysqlflexibleservers.Server{
+	// 	Server: armmysqlflexibleservers.Server{
 	// 		Name: to.Ptr("mysqltestserver"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testrg/providers/Microsoft.DBforMySQL/flexibleServers/mysqltestserver"),
@@ -1710,7 +1710,7 @@ func ExampleServersClient_BeginUpdate_updateServerCustomerMaintenanceWindow() {
 	// 			Backup: &armmysqlflexibleservers.Backup{
 	// 				BackupIntervalHours: to.Ptr[int32](24),
 	// 				BackupRetentionDays: to.Ptr[int32](7),
-	// 				EarliestRestoreDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-06-17T06:11:38.4150019+00:00"); return t}()),
+	// 				EarliestRestoreDate: to.Ptr(time.Date(2021, time.June, 17, 6, 11, 38, 415001900, time.UTC)),
 	// 				GeoRedundantBackup: to.Ptr(armmysqlflexibleservers.EnableStatusEnumDisabled),
 	// 			},
 	// 			DatabasePort: to.Ptr[int32](3306),
@@ -1756,7 +1756,7 @@ func ExampleServersClient_BeginUpdate_updateServerCustomerMaintenanceWindow() {
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ServerValidateEstimateHighAvailability.json
+// Generated from example definition: 2024-12-30/ServerValidateEstimateHighAvailability.json
 func ExampleServersClient_ValidateEstimateHighAvailability() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1777,7 +1777,7 @@ func ExampleServersClient_ValidateEstimateHighAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.ServersClientValidateEstimateHighAvailabilityResponse{
-	// 	HighAvailabilityValidationEstimation: &armmysqlflexibleservers.HighAvailabilityValidationEstimation{
+	// 	HighAvailabilityValidationEstimation: armmysqlflexibleservers.HighAvailabilityValidationEstimation{
 	// 		EstimatedDowntime: to.Ptr[int32](0),
 	// 		ExpectedStandbyAvailabilityZone: to.Ptr("1"),
 	// 		ScheduledStandbyAvailabilityZone: to.Ptr("1"),

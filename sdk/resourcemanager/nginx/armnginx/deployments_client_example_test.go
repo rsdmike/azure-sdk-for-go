@@ -28,13 +28,13 @@ func ExampleDeploymentsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.DeploymentsClientCreateOrUpdateResponse{
-	// 	Deployment: &armnginx.Deployment{
+	// 	Deployment: armnginx.Deployment{
 	// 		Name: to.Ptr("myDeployment"),
 	// 		Type: to.Ptr("nginx.nginxplus/deployments"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment"),
@@ -70,11 +70,11 @@ func ExampleDeploymentsClient_BeginCreateOrUpdate() {
 	// 				},
 	// 				WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 	// 					AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.21"),
 	// 					},
 	// 					BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.22"),
 	// 					},
 	// 					ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -82,7 +82,7 @@ func ExampleDeploymentsClient_BeginCreateOrUpdate() {
 	// 						WafNginxVersion: to.Ptr("4.815.0"),
 	// 					},
 	// 					ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.23"),
 	// 					},
 	// 				},
@@ -117,7 +117,7 @@ func ExampleDeploymentsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -140,7 +140,7 @@ func ExampleDeploymentsClient_Get_deploymentsGet() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.DeploymentsClientGetResponse{
-	// 	Deployment: &armnginx.Deployment{
+	// 	Deployment: armnginx.Deployment{
 	// 		Name: to.Ptr("myDeployment"),
 	// 		Type: to.Ptr("nginx.nginxplus/deployments"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment"),
@@ -175,11 +175,11 @@ func ExampleDeploymentsClient_Get_deploymentsGet() {
 	// 				},
 	// 				WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 	// 					AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.21"),
 	// 					},
 	// 					BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.22"),
 	// 					},
 	// 					ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -187,7 +187,7 @@ func ExampleDeploymentsClient_Get_deploymentsGet() {
 	// 						WafNginxVersion: to.Ptr("4.815.0"),
 	// 					},
 	// 					ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.23"),
 	// 					},
 	// 				},
@@ -224,7 +224,7 @@ func ExampleDeploymentsClient_Get_deploymentsGetAutoScale() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.DeploymentsClientGetResponse{
-	// 	Deployment: &armnginx.Deployment{
+	// 	Deployment: armnginx.Deployment{
 	// 		Name: to.Ptr("myDeployment"),
 	// 		Type: to.Ptr("nginx.nginxplus/deployments"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment"),
@@ -336,11 +336,11 @@ func ExampleDeploymentsClient_NewListPager() {
 		// 						},
 		// 						WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 		// 							AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.21"),
 		// 							},
 		// 							BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.22"),
 		// 							},
 		// 							ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -348,7 +348,7 @@ func ExampleDeploymentsClient_NewListPager() {
 		// 								WafNginxVersion: to.Ptr("4.815.0"),
 		// 							},
 		// 							ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.23"),
 		// 							},
 		// 						},
@@ -427,11 +427,11 @@ func ExampleDeploymentsClient_NewListByResourceGroupPager() {
 		// 						},
 		// 						WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 		// 							AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.21"),
 		// 							},
 		// 							BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.22"),
 		// 							},
 		// 							ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -439,7 +439,7 @@ func ExampleDeploymentsClient_NewListByResourceGroupPager() {
 		// 								WafNginxVersion: to.Ptr("4.815.0"),
 		// 							},
 		// 							ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-		// 								RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+		// 								RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 		// 								Version: to.Ptr("2024.02.23"),
 		// 							},
 		// 						},
@@ -474,13 +474,13 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.DeploymentsClientUpdateResponse{
-	// 	Deployment: &armnginx.Deployment{
+	// 	Deployment: armnginx.Deployment{
 	// 		Name: to.Ptr("myDeployment"),
 	// 		Type: to.Ptr("nginx.nginxplus/deployments"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment"),
@@ -516,11 +516,11 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdate() {
 	// 				},
 	// 				WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 	// 					AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.21"),
 	// 					},
 	// 					BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.22"),
 	// 					},
 	// 					ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -528,7 +528,7 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdate() {
 	// 						WafNginxVersion: to.Ptr("4.815.0"),
 	// 					},
 	// 					ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.23"),
 	// 					},
 	// 				},
@@ -566,13 +566,13 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdateSubnet() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.DeploymentsClientUpdateResponse{
-	// 	Deployment: &armnginx.Deployment{
+	// 	Deployment: armnginx.Deployment{
 	// 		Name: to.Ptr("myDeployment"),
 	// 		Type: to.Ptr("nginx.nginxplus/deployments"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment"),
@@ -603,11 +603,11 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdateSubnet() {
 	// 				},
 	// 				WebApplicationFirewallStatus: &armnginx.WebApplicationFirewallStatus{
 	// 					AttackSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-21T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 21, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.21"),
 	// 					},
 	// 					BotSignaturesPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-22T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 22, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.22"),
 	// 					},
 	// 					ComponentVersions: &armnginx.WebApplicationFirewallComponentVersions{
@@ -615,7 +615,7 @@ func ExampleDeploymentsClient_BeginUpdate_deploymentsUpdateSubnet() {
 	// 						WafNginxVersion: to.Ptr("4.815.0"),
 	// 					},
 	// 					ThreatCampaignsPackage: &armnginx.WebApplicationFirewallPackage{
-	// 						RevisionDatetime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-02-23T15:50:53Z"); return t}()),
+	// 						RevisionDatetime: to.Ptr(time.Date(2024, time.February, 23, 15, 50, 53, 0, time.UTC)),
 	// 						Version: to.Ptr("2024.02.23"),
 	// 					},
 	// 				},

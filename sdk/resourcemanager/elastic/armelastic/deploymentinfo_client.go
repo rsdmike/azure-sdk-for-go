@@ -18,6 +18,8 @@ import (
 
 // DeploymentInfoClient contains the methods for the DeploymentInfo group.
 // Don't use this type directly, use NewDeploymentInfoClient() instead.
+//
+// Generated from API version 2025-06-01
 type DeploymentInfoClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DeploymentInfoClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDeploymentInfoClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DeploymentInfoClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewDeploymentInfoClient(subscriptionID string, credential azcore.TokenCrede
 
 // List - Fetch detailed information about Elastic cloud deployments corresponding to the Elastic monitor resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - DeploymentInfoClientListOptions contains the optional parameters for the DeploymentInfoClient.List method.
@@ -60,19 +63,14 @@ func (client *DeploymentInfoClient) List(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DeploymentInfoClientListResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DeploymentInfoClientListResponse{}, err
-	}
-	resp, err := client.listHandleResponse(httpResp)
-	return resp, err
+	return client.listHandleResponse(httpResp, http.StatusOK)
 }
 
 // listCreateRequest creates the List request.
 func (client *DeploymentInfoClient) listCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *DeploymentInfoClientListOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/listDeploymentInfo"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -88,15 +86,18 @@ func (client *DeploymentInfoClient) listCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DeploymentInfoClient) listHandleResponse(resp *http.Response) (DeploymentInfoClientListResponse, error) {
+func (client *DeploymentInfoClient) listHandleResponse(resp *http.Response, successCodes ...int) (DeploymentInfoClientListResponse, error) {
 	result := DeploymentInfoClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentInfoResponse); err != nil {
 		return DeploymentInfoClientListResponse{}, err
 	}

@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 )
 
 // TroubleshootersServer is a fake server for instances of the armselfhelp.TroubleshootersClient type.
@@ -66,9 +67,7 @@ func (t *TroubleshootersServerTransport) Do(req *http.Request) (*http.Response, 
 }
 
 func (t *TroubleshootersServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -92,10 +91,7 @@ func (t *TroubleshootersServerTransport) dispatchToMethodFake(req *http.Request,
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -110,7 +106,7 @@ func (t *TroubleshootersServerTransport) dispatchContinue(req *http.Request) (*h
 	if t.srv.Continue == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Continue not implemented")}
 	}
-	const regexStr = `/(?P<scope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/continue`
+	const regexStr = `/(?P<scope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/continue`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -139,7 +135,7 @@ func (t *TroubleshootersServerTransport) dispatchContinue(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -147,7 +143,7 @@ func (t *TroubleshootersServerTransport) dispatchContinue(req *http.Request) (*h
 		return nil, err
 	}
 	if val := server.GetResponse(respr).Location; val != nil {
-		resp.Header.Set("location", *val)
+		resp.Header.Set("Location", *val)
 	}
 	return resp, nil
 }
@@ -156,7 +152,7 @@ func (t *TroubleshootersServerTransport) dispatchCreate(req *http.Request) (*htt
 	if t.srv.Create == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Create not implemented")}
 	}
-	const regexStr = `/(?P<scope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<scope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -179,7 +175,7 @@ func (t *TroubleshootersServerTransport) dispatchCreate(req *http.Request) (*htt
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TroubleshooterResource, req)
@@ -193,7 +189,7 @@ func (t *TroubleshootersServerTransport) dispatchEnd(req *http.Request) (*http.R
 	if t.srv.End == nil {
 		return nil, &nonRetriableError{errors.New("fake for method End not implemented")}
 	}
-	const regexStr = `/(?P<scope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/end`
+	const regexStr = `/(?P<scope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/end`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -212,7 +208,7 @@ func (t *TroubleshootersServerTransport) dispatchEnd(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -220,7 +216,7 @@ func (t *TroubleshootersServerTransport) dispatchEnd(req *http.Request) (*http.R
 		return nil, err
 	}
 	if val := server.GetResponse(respr).Location; val != nil {
-		resp.Header.Set("location", *val)
+		resp.Header.Set("Location", *val)
 	}
 	return resp, nil
 }
@@ -229,7 +225,7 @@ func (t *TroubleshootersServerTransport) dispatchGet(req *http.Request) (*http.R
 	if t.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/(?P<scope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<scope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -248,7 +244,7 @@ func (t *TroubleshootersServerTransport) dispatchGet(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).TroubleshooterResource, req)
@@ -262,7 +258,7 @@ func (t *TroubleshootersServerTransport) dispatchRestart(req *http.Request) (*ht
 	if t.srv.Restart == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Restart not implemented")}
 	}
-	const regexStr = `/(?P<scope>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/restart`
+	const regexStr = `/(?P<scope>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.Help/troubleshooters/(?P<troubleshooterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/restart`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -281,7 +277,7 @@ func (t *TroubleshootersServerTransport) dispatchRestart(req *http.Request) (*ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RestartTroubleshooterResponse, req)
@@ -289,7 +285,7 @@ func (t *TroubleshootersServerTransport) dispatchRestart(req *http.Request) (*ht
 		return nil, err
 	}
 	if val := server.GetResponse(respr).Location; val != nil {
-		resp.Header.Set("location", *val)
+		resp.Header.Set("Location", *val)
 	}
 	return resp, nil
 }

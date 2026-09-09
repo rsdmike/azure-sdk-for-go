@@ -54,13 +54,13 @@ func ExampleElasticSansClient_BeginCreate_elasticSansCreateMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientCreateResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -92,10 +92,10 @@ func ExampleElasticSansClient_BeginCreate_elasticSansCreateMaximumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -132,13 +132,13 @@ func ExampleElasticSansClient_BeginCreate_elasticSansCreateMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientCreateResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -162,10 +162,10 @@ func ExampleElasticSansClient_BeginCreate_elasticSansCreateMinimumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -193,7 +193,7 @@ func ExampleElasticSansClient_BeginDelete_elasticSansDeleteMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -219,7 +219,7 @@ func ExampleElasticSansClient_BeginDelete_elasticSansDeleteMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -247,7 +247,7 @@ func ExampleElasticSansClient_Get_elasticSansGetMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientGetResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -286,10 +286,10 @@ func ExampleElasticSansClient_Get_elasticSansGetMaximumSetGen() {
 	// 						ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 	// 					},
 	// 					SystemData: &armelasticsan.SystemData{
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 						CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 						CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 						LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 					},
@@ -308,10 +308,10 @@ func ExampleElasticSansClient_Get_elasticSansGetMaximumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -341,7 +341,7 @@ func ExampleElasticSansClient_Get_elasticSansGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientGetResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -380,10 +380,10 @@ func ExampleElasticSansClient_Get_elasticSansGetMinimumSetGen() {
 	// 						ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 	// 					},
 	// 					SystemData: &armelasticsan.SystemData{
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 						CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 						CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 						LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 					},
@@ -402,10 +402,10 @@ func ExampleElasticSansClient_Get_elasticSansGetMinimumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -481,10 +481,10 @@ func ExampleElasticSansClient_NewListByResourceGroupPager_elasticSansListByResou
 		// 								ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 		// 							},
 		// 							SystemData: &armelasticsan.SystemData{
-		// 								CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+		// 								CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 		// 								CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 		// 								CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 								LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+		// 								LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 		// 								LastModifiedBy: to.Ptr("bcclmbseed"),
 		// 								LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 							},
@@ -503,10 +503,10 @@ func ExampleElasticSansClient_NewListByResourceGroupPager_elasticSansListByResou
 		// 					VolumeGroupCount: to.Ptr[int64](24),
 		// 				},
 		// 				SystemData: &armelasticsan.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 		// 					CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 		// 					LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 				},
@@ -616,10 +616,10 @@ func ExampleElasticSansClient_NewListBySubscriptionPager_elasticSansListBySubscr
 		// 								ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 		// 							},
 		// 							SystemData: &armelasticsan.SystemData{
-		// 								CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+		// 								CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 		// 								CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 		// 								CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 								LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+		// 								LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 		// 								LastModifiedBy: to.Ptr("bcclmbseed"),
 		// 								LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 							},
@@ -638,10 +638,10 @@ func ExampleElasticSansClient_NewListBySubscriptionPager_elasticSansListBySubscr
 		// 					VolumeGroupCount: to.Ptr[int64](24),
 		// 				},
 		// 				SystemData: &armelasticsan.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 		// 					CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 		// 					LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 				},
@@ -720,13 +720,13 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMaximumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientUpdateResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -765,10 +765,10 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMaximumSetGen() {
 	// 						ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 	// 					},
 	// 					SystemData: &armelasticsan.SystemData{
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 						CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 	// 						CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("bcclmbseed"),
 	// 						LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 					},
@@ -787,10 +787,10 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMaximumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -818,13 +818,13 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMinimumSetGen() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.ElasticSansClientUpdateResponse{
-	// 	ElasticSan: &armelasticsan.ElasticSan{
+	// 	ElasticSan: armelasticsan.ElasticSan{
 	// 		Name: to.Ptr("vfoatmakv"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/ElasticSans"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}"),
@@ -863,10 +863,10 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMinimumSetGen() {
 	// 						ProvisioningState: to.Ptr(armelasticsan.ProvisioningStatesSucceeded),
 	// 					},
 	// 					SystemData: &armelasticsan.SystemData{
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 						CreatedBy: to.Ptr("kakcyehdrphqkilgkhpbdtvpupak"),
 	// 						CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-23T12:16:10.057Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2023, time.August, 23, 12, 16, 10, 57000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("bcclmbseed"),
 	// 						LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 					},
@@ -885,10 +885,10 @@ func ExampleElasticSansClient_BeginUpdate_elasticSansUpdateMinimumSetGen() {
 	// 			VolumeGroupCount: to.Ptr[int64](24),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("otfifnrahdshqombvtg"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-03T09:59:45.919Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 3, 9, 59, 45, 919000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jnaxavnlhrboshtidtib"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},

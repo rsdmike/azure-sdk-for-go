@@ -39,13 +39,13 @@ func ExampleDeidServicesClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthdataaiservices.DeidServicesClientCreateResponse{
-	// 	DeidService: &armhealthdataaiservices.DeidService{
+	// 	DeidService: armhealthdataaiservices.DeidService{
 	// 		Properties: &armhealthdataaiservices.DeidServiceProperties{
 	// 			ProvisioningState: to.Ptr(armhealthdataaiservices.ProvisioningStateSucceeded),
 	// 			PublicNetworkAccess: to.Ptr(armhealthdataaiservices.PublicNetworkAccessEnabled),
@@ -71,10 +71,10 @@ func ExampleDeidServicesClient_BeginCreate() {
 	// 					SystemData: &armhealthdataaiservices.SystemData{
 	// 						CreatedBy: to.Ptr("p"),
 	// 						CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 						LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 					},
 	// 				},
 	// 			},
@@ -96,10 +96,10 @@ func ExampleDeidServicesClient_BeginCreate() {
 	// 		SystemData: &armhealthdataaiservices.SystemData{
 	// 			CreatedBy: to.Ptr("p"),
 	// 			CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 			LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -122,7 +122,7 @@ func ExampleDeidServicesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -145,7 +145,7 @@ func ExampleDeidServicesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthdataaiservices.DeidServicesClientGetResponse{
-	// 	DeidService: &armhealthdataaiservices.DeidService{
+	// 	DeidService: armhealthdataaiservices.DeidService{
 	// 		Properties: &armhealthdataaiservices.DeidServiceProperties{
 	// 			ProvisioningState: to.Ptr(armhealthdataaiservices.ProvisioningStateSucceeded),
 	// 			PublicNetworkAccess: to.Ptr(armhealthdataaiservices.PublicNetworkAccessEnabled),
@@ -171,10 +171,10 @@ func ExampleDeidServicesClient_Get() {
 	// 					SystemData: &armhealthdataaiservices.SystemData{
 	// 						CreatedBy: to.Ptr("p"),
 	// 						CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 						LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 					},
 	// 				},
 	// 			},
@@ -196,10 +196,10 @@ func ExampleDeidServicesClient_Get() {
 	// 		SystemData: &armhealthdataaiservices.SystemData{
 	// 			CreatedBy: to.Ptr("p"),
 	// 			CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 			LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -256,10 +256,10 @@ func ExampleDeidServicesClient_NewListByResourceGroupPager() {
 		// 							SystemData: &armhealthdataaiservices.SystemData{
 		// 								CreatedBy: to.Ptr("p"),
 		// 								CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 								CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+		// 								CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 		// 								LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 		// 								LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 								LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+		// 								LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 		// 							},
 		// 						},
 		// 					},
@@ -281,10 +281,10 @@ func ExampleDeidServicesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armhealthdataaiservices.SystemData{
 		// 					CreatedBy: to.Ptr("p"),
 		// 					CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 		// 					LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -345,10 +345,10 @@ func ExampleDeidServicesClient_NewListBySubscriptionPager() {
 		// 							SystemData: &armhealthdataaiservices.SystemData{
 		// 								CreatedBy: to.Ptr("p"),
 		// 								CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 								CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+		// 								CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 		// 								LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 		// 								LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 								LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+		// 								LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 		// 							},
 		// 						},
 		// 					},
@@ -370,10 +370,10 @@ func ExampleDeidServicesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armhealthdataaiservices.SystemData{
 		// 					CreatedBy: to.Ptr("p"),
 		// 					CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 		// 					LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -409,13 +409,13 @@ func ExampleDeidServicesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthdataaiservices.DeidServicesClientUpdateResponse{
-	// 	DeidService: &armhealthdataaiservices.DeidService{
+	// 	DeidService: armhealthdataaiservices.DeidService{
 	// 		Properties: &armhealthdataaiservices.DeidServiceProperties{
 	// 			ProvisioningState: to.Ptr(armhealthdataaiservices.ProvisioningStateSucceeded),
 	// 			PublicNetworkAccess: to.Ptr(armhealthdataaiservices.PublicNetworkAccessEnabled),
@@ -441,10 +441,10 @@ func ExampleDeidServicesClient_BeginUpdate() {
 	// 					SystemData: &armhealthdataaiservices.SystemData{
 	// 						CreatedBy: to.Ptr("p"),
 	// 						CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 						CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 						LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 						LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 						LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 						LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 					},
 	// 				},
 	// 			},
@@ -466,10 +466,10 @@ func ExampleDeidServicesClient_BeginUpdate() {
 	// 		SystemData: &armhealthdataaiservices.SystemData{
 	// 			CreatedBy: to.Ptr("p"),
 	// 			CreatedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.985Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 985000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pmbozfvwrblbknedeb"),
 	// 			LastModifiedByType: to.Ptr(armhealthdataaiservices.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-13T19:47:24.986Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 13, 19, 47, 24, 986000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

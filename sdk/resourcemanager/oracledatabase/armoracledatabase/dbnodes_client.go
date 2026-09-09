@@ -18,6 +18,8 @@ import (
 
 // DbNodesClient contains the methods for the DbNodes group.
 // Don't use this type directly, use NewDbNodesClient() instead.
+//
+// Generated from API version 2025-09-01
 type DbNodesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DbNodesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDbNodesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DbNodesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewDbNodesClient(subscriptionID string, credential azcore.TokenCredential, 
 
 // BeginAction - VM actions on DbNode of VM Cluster by the provided filter
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - dbnodeocid - DbNode OCID.
@@ -67,8 +70,6 @@ func (client *DbNodesClient) BeginAction(ctx context.Context, resourceGroupName 
 
 // Action - VM actions on DbNode of VM Cluster by the provided filter
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *DbNodesClient) action(ctx context.Context, resourceGroupName string, cloudvmclustername string, dbnodeocid string, body DbNodeAction, options *DbNodesClientBeginActionOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DbNodesClient.BeginAction"
@@ -84,8 +85,7 @@ func (client *DbNodesClient) action(ctx context.Context, resourceGroupName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -94,7 +94,7 @@ func (client *DbNodesClient) action(ctx context.Context, resourceGroupName strin
 func (client *DbNodesClient) actionCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, dbnodeocid string, body DbNodeAction, _ *DbNodesClientBeginActionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/dbNodes/{dbnodeocid}/action"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -114,8 +114,8 @@ func (client *DbNodesClient) actionCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -126,8 +126,6 @@ func (client *DbNodesClient) actionCreateRequest(ctx context.Context, resourceGr
 
 // Get - Get a DbNode
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - dbnodeocid - DbNode OCID.
@@ -146,19 +144,14 @@ func (client *DbNodesClient) Get(ctx context.Context, resourceGroupName string, 
 	if err != nil {
 		return DbNodesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DbNodesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DbNodesClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, dbnodeocid string, _ *DbNodesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/dbNodes/{dbnodeocid}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -178,15 +171,18 @@ func (client *DbNodesClient) getCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DbNodesClient) getHandleResponse(resp *http.Response) (DbNodesClientGetResponse, error) {
+func (client *DbNodesClient) getHandleResponse(resp *http.Response, successCodes ...int) (DbNodesClientGetResponse, error) {
 	result := DbNodesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DbNode); err != nil {
 		return DbNodesClientGetResponse{}, err
 	}
@@ -194,8 +190,6 @@ func (client *DbNodesClient) getHandleResponse(resp *http.Response) (DbNodesClie
 }
 
 // NewListByCloudVMClusterPager - List DbNode resources by CloudVmCluster
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - options - DbNodesClientListByCloudVMClusterOptions contains the optional parameters for the DbNodesClient.NewListByCloudVMClusterPager
@@ -211,47 +205,61 @@ func (client *DbNodesClient) NewListByCloudVMClusterPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByCloudVMClusterCreateRequest(ctx, resourceGroupName, cloudvmclustername, options)
-			}, nil)
+			req, err := client.listByCloudVMClusterCreateRequest(ctx, resourceGroupName, cloudvmclustername, nextLink, options)
 			if err != nil {
 				return DbNodesClientListByCloudVMClusterResponse{}, err
 			}
-			return client.listByCloudVMClusterHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DbNodesClientListByCloudVMClusterResponse{}, err
+			}
+			return client.listByCloudVMClusterHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByCloudVMClusterCreateRequest creates the ListByCloudVMCluster request.
-func (client *DbNodesClient) listByCloudVMClusterCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, _ *DbNodesClientListByCloudVMClusterOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/dbNodes"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DbNodesClient) listByCloudVMClusterCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, nextLink string, _ *DbNodesClientListByCloudVMClusterOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/dbNodes"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if cloudvmclustername == "" {
+			return nil, errors.New("parameter cloudvmclustername cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{cloudvmclustername}", url.PathEscape(cloudvmclustername))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if cloudvmclustername == "" {
-		return nil, errors.New("parameter cloudvmclustername cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{cloudvmclustername}", url.PathEscape(cloudvmclustername))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByCloudVMClusterHandleResponse handles the ListByCloudVMCluster response.
-func (client *DbNodesClient) listByCloudVMClusterHandleResponse(resp *http.Response) (DbNodesClientListByCloudVMClusterResponse, error) {
+func (client *DbNodesClient) listByCloudVMClusterHandleResponse(resp *http.Response, successCodes ...int) (DbNodesClientListByCloudVMClusterResponse, error) {
 	result := DbNodesClientListByCloudVMClusterResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DbNodeListResult); err != nil {
 		return DbNodesClientListByCloudVMClusterResponse{}, err
 	}

@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-02-01/OperationStatusFailed_example.json
+// Generated from example definition: 2026-05-01-preview/OperationStatusFailed_example.json
 func ExampleOperationStatusClient_Get_errorResponseDescribingWhyTheOperationFailed() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -30,10 +30,10 @@ func ExampleOperationStatusClient_Get_errorResponseDescribingWhyTheOperationFail
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armservicefabricmanagedclusters.OperationStatusClientGetResponse{
-	// 	LongRunningOperationResult: &armservicefabricmanagedclusters.LongRunningOperationResult{
+	// 	LongRunningOperationResult: armservicefabricmanagedclusters.LongRunningOperationResult{
 	// 		Name: to.Ptr("00000000-0000-0000-0000-000000001234"),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-03T23:58:02.2501337Z"); return t}()),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-04T00:13:03.2790951Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2022, time.January, 3, 23, 58, 2, 250133700, time.UTC)),
+	// 		EndTime: to.Ptr(time.Date(2022, time.January, 4, 0, 13, 3, 279095100, time.UTC)),
 	// 		PercentComplete: to.Ptr[float64](100),
 	// 		Status: to.Ptr("Failed"),
 	// 		Error: &armservicefabricmanagedclusters.ErrorModelError{
@@ -44,7 +44,7 @@ func ExampleOperationStatusClient_Get_errorResponseDescribingWhyTheOperationFail
 	// }
 }
 
-// Generated from example definition: 2026-02-01/OperationStatusSucceeded_example.json
+// Generated from example definition: 2026-05-01-preview/OperationStatusSucceeded_example.json
 func ExampleOperationStatusClient_Get_okTheRequestHasSucceeded() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -63,10 +63,10 @@ func ExampleOperationStatusClient_Get_okTheRequestHasSucceeded() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armservicefabricmanagedclusters.OperationStatusClientGetResponse{
-	// 	LongRunningOperationResult: &armservicefabricmanagedclusters.LongRunningOperationResult{
+	// 	LongRunningOperationResult: armservicefabricmanagedclusters.LongRunningOperationResult{
 	// 		Name: to.Ptr("00000000-0000-0000-0000-000000001234"),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-03T23:58:02.2501337Z"); return t}()),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-04T00:13:03.2790951Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2022, time.January, 3, 23, 58, 2, 250133700, time.UTC)),
+	// 		EndTime: to.Ptr(time.Date(2022, time.January, 4, 0, 13, 3, 279095100, time.UTC)),
 	// 		PercentComplete: to.Ptr[float64](100),
 	// 		Status: to.Ptr("Succeeded"),
 	// 	},

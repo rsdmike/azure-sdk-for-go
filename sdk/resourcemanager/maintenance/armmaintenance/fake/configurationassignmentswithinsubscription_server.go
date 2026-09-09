@@ -14,6 +14,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/maintenance/armmaintenance"
 	"net/http"
 	"regexp"
+	"slices"
 )
 
 // ConfigurationAssignmentsWithinSubscriptionServer is a fake server for instances of the armmaintenance.ConfigurationAssignmentsWithinSubscriptionClient type.
@@ -52,9 +53,7 @@ func (c *ConfigurationAssignmentsWithinSubscriptionServerTransport) Do(req *http
 }
 
 func (c *ConfigurationAssignmentsWithinSubscriptionServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -70,10 +69,7 @@ func (c *ConfigurationAssignmentsWithinSubscriptionServerTransport) dispatchToMe
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -90,7 +86,7 @@ func (c *ConfigurationAssignmentsWithinSubscriptionServerTransport) dispatchNewL
 	}
 	newListPager := c.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Maintenance/configurationAssignments`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Maintenance/configurationAssignments`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -107,7 +103,7 @@ func (c *ConfigurationAssignmentsWithinSubscriptionServerTransport) dispatchNewL
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		c.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

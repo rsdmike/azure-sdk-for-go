@@ -60,13 +60,13 @@ func ExampleWhatIfResultsAtResourceGroupClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.WhatIfResultsAtResourceGroupClientCreateOrUpdateResponse{
-	// 	WhatIfResult: &armdeploymentstacks.WhatIfResult{
+	// 	WhatIfResult: armdeploymentstacks.WhatIfResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacksWhatIfResults/simpleDeploymentStackWhatIfResult"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacksWhatIfResults"),
 	// 		Name: to.Ptr("simpleDeploymentStackWhatIfResult"),
@@ -74,14 +74,14 @@ func ExampleWhatIfResultsAtResourceGroupClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.WhatIfResultProperties{
 	// 			DeploymentStackResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
-	// 			DeploymentStackLastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-01T01:01:01.1075056Z"); return t}()),
+	// 			DeploymentStackLastModified: to.Ptr(time.Date(2025, time.January, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			RetentionInterval: to.Ptr("P7D"),
 	// 			CorrelationID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 	// 			TemplateLink: &armdeploymentstacks.TemplateLink{
@@ -145,7 +145,7 @@ func ExampleWhatIfResultsAtResourceGroupClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.WhatIfResultsAtResourceGroupClientGetResponse{
-	// 	WhatIfResult: &armdeploymentstacks.WhatIfResult{
+	// 	WhatIfResult: armdeploymentstacks.WhatIfResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacksWhatIfResults/simpleDeploymentStackWhatIfResult"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacksWhatIfResults"),
 	// 		Name: to.Ptr("simpleDeploymentStackWhatIfResult"),
@@ -153,14 +153,14 @@ func ExampleWhatIfResultsAtResourceGroupClient_Get() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.WhatIfResultProperties{
 	// 			DeploymentStackResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
-	// 			DeploymentStackLastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-01T01:01:01.1075056Z"); return t}()),
+	// 			DeploymentStackLastModified: to.Ptr(time.Date(2025, time.January, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			RetentionInterval: to.Ptr("P7D"),
 	// 			CorrelationID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 	// 			TemplateLink: &armdeploymentstacks.TemplateLink{
@@ -251,14 +251,14 @@ func ExampleWhatIfResultsAtResourceGroupClient_NewListPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.WhatIfResultProperties{
 		// 					DeploymentStackResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
-		// 					DeploymentStackLastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-01T01:01:01.1075056Z"); return t}()),
+		// 					DeploymentStackLastModified: to.Ptr(time.Date(2025, time.January, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					RetentionInterval: to.Ptr("P7D"),
 		// 					CorrelationID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 		// 					TemplateLink: &armdeploymentstacks.TemplateLink{
@@ -321,14 +321,14 @@ func ExampleWhatIfResultsAtResourceGroupClient_NewListPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.WhatIfResultProperties{
 		// 					DeploymentStackResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacks/deploymentStack2"),
-		// 					DeploymentStackLastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-03T03:01:01.3141592Z"); return t}()),
+		// 					DeploymentStackLastModified: to.Ptr(time.Date(2025, time.January, 3, 3, 1, 1, 314159200, time.UTC)),
 		// 					RetentionInterval: to.Ptr("P7D"),
 		// 					CorrelationID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 		// 					TemplateLink: &armdeploymentstacks.TemplateLink{
@@ -413,13 +413,13 @@ func ExampleWhatIfResultsAtResourceGroupClient_BeginWhatIf() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.WhatIfResultsAtResourceGroupClientWhatIfResponse{
-	// 	WhatIfResult: &armdeploymentstacks.WhatIfResult{
+	// 	WhatIfResult: armdeploymentstacks.WhatIfResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Resources/resourceGroups/myResourceGroup/deploymentStacksWhatIfResults/changedDeploymentStackWhatIfResult"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacksWhatIfResults"),
 	// 		Name: to.Ptr("changedDeploymentStackWhatIfResult"),
@@ -427,14 +427,14 @@ func ExampleWhatIfResultsAtResourceGroupClient_BeginWhatIf() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.WhatIfResultProperties{
 	// 			DeploymentStackResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Resources/deploymentStacks/deploymentStack2"),
-	// 			DeploymentStackLastModified: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-03T03:01:01.3141592Z"); return t}()),
+	// 			DeploymentStackLastModified: to.Ptr(time.Date(2025, time.January, 3, 3, 1, 1, 314159200, time.UTC)),
 	// 			RetentionInterval: to.Ptr("P7D"),
 	// 			CorrelationID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 	// 			TemplateLink: &armdeploymentstacks.TemplateLink{

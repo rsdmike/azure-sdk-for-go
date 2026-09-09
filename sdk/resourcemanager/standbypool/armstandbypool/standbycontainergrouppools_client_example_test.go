@@ -57,13 +57,13 @@ func ExampleStandbyContainerGroupPoolsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstandbypool.StandbyContainerGroupPoolsClientCreateOrUpdateResponse{
-	// 	StandbyContainerGroupPoolResource: &armstandbypool.StandbyContainerGroupPoolResource{
+	// 	StandbyContainerGroupPoolResource: armstandbypool.StandbyContainerGroupPoolResource{
 	// 		Properties: &armstandbypool.StandbyContainerGroupPoolResourceProperties{
 	// 			ElasticityProfile: &armstandbypool.StandbyContainerGroupPoolElasticityProfile{
 	// 				MaxReadyCapacity: to.Ptr[int64](688),
@@ -99,10 +99,10 @@ func ExampleStandbyContainerGroupPoolsClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armstandbypool.SystemData{
 	// 			CreatedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -125,7 +125,7 @@ func ExampleStandbyContainerGroupPoolsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -148,7 +148,7 @@ func ExampleStandbyContainerGroupPoolsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstandbypool.StandbyContainerGroupPoolsClientGetResponse{
-	// 	StandbyContainerGroupPoolResource: &armstandbypool.StandbyContainerGroupPoolResource{
+	// 	StandbyContainerGroupPoolResource: armstandbypool.StandbyContainerGroupPoolResource{
 	// 		Properties: &armstandbypool.StandbyContainerGroupPoolResourceProperties{
 	// 			ElasticityProfile: &armstandbypool.StandbyContainerGroupPoolElasticityProfile{
 	// 				MaxReadyCapacity: to.Ptr[int64](688),
@@ -184,10 +184,10 @@ func ExampleStandbyContainerGroupPoolsClient_Get() {
 	// 		SystemData: &armstandbypool.SystemData{
 	// 			CreatedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -254,10 +254,10 @@ func ExampleStandbyContainerGroupPoolsClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armstandbypool.SystemData{
 		// 					CreatedBy: to.Ptr("pooluser@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("pooluser@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -328,10 +328,10 @@ func ExampleStandbyContainerGroupPoolsClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armstandbypool.SystemData{
 		// 					CreatedBy: to.Ptr("pooluser@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("pooluser@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -387,7 +387,7 @@ func ExampleStandbyContainerGroupPoolsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstandbypool.StandbyContainerGroupPoolsClientUpdateResponse{
-	// 	StandbyContainerGroupPoolResource: &armstandbypool.StandbyContainerGroupPoolResource{
+	// 	StandbyContainerGroupPoolResource: armstandbypool.StandbyContainerGroupPoolResource{
 	// 		Properties: &armstandbypool.StandbyContainerGroupPoolResourceProperties{
 	// 			ElasticityProfile: &armstandbypool.StandbyContainerGroupPoolElasticityProfile{
 	// 				MaxReadyCapacity: to.Ptr[int64](1743),
@@ -423,10 +423,10 @@ func ExampleStandbyContainerGroupPoolsClient_Update() {
 	// 		SystemData: &armstandbypool.SystemData{
 	// 			CreatedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("pooluser@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armstandbypool.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-07T16:33:22.210Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 7, 16, 33, 22, 210000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

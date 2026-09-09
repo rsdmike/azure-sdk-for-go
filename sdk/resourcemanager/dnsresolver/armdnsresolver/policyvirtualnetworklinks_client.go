@@ -19,6 +19,8 @@ import (
 
 // PolicyVirtualNetworkLinksClient contains the methods for the PolicyVirtualNetworkLinks group.
 // Don't use this type directly, use NewPolicyVirtualNetworkLinksClient() instead.
+//
+// Generated from API version 2025-10-01-preview
 type PolicyVirtualNetworkLinksClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type PolicyVirtualNetworkLinksClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPolicyVirtualNetworkLinksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PolicyVirtualNetworkLinksClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewPolicyVirtualNetworkLinksClient(subscriptionID string, credential azcore
 
 // BeginCreateOrUpdate - Creates or updates a DNS resolver policy virtual network link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsResolverPolicyVirtualNetworkLinkName - The name of the DNS resolver policy virtual network link for the DNS resolver
@@ -70,8 +73,6 @@ func (client *PolicyVirtualNetworkLinksClient) BeginCreateOrUpdate(ctx context.C
 
 // CreateOrUpdate - Creates or updates a DNS resolver policy virtual network link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *PolicyVirtualNetworkLinksClient) createOrUpdate(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, parameters PolicyVirtualNetworkLink, options *PolicyVirtualNetworkLinksClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PolicyVirtualNetworkLinksClient.BeginCreateOrUpdate"
@@ -87,8 +88,7 @@ func (client *PolicyVirtualNetworkLinksClient) createOrUpdate(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -97,7 +97,7 @@ func (client *PolicyVirtualNetworkLinksClient) createOrUpdate(ctx context.Contex
 func (client *PolicyVirtualNetworkLinksClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, parameters PolicyVirtualNetworkLink, options *PolicyVirtualNetworkLinksClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks/{dnsResolverPolicyVirtualNetworkLinkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -117,8 +117,8 @@ func (client *PolicyVirtualNetworkLinksClient) createOrUpdateCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
@@ -135,8 +135,6 @@ func (client *PolicyVirtualNetworkLinksClient) createOrUpdateCreateRequest(ctx c
 
 // BeginDelete - Deletes a DNS resolver policy virtual network link. WARNING: This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsResolverPolicyVirtualNetworkLinkName - The name of the DNS resolver policy virtual network link for the DNS resolver
@@ -162,8 +160,6 @@ func (client *PolicyVirtualNetworkLinksClient) BeginDelete(ctx context.Context, 
 
 // Delete - Deletes a DNS resolver policy virtual network link. WARNING: This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *PolicyVirtualNetworkLinksClient) deleteOperation(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, options *PolicyVirtualNetworkLinksClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PolicyVirtualNetworkLinksClient.BeginDelete"
@@ -179,8 +175,7 @@ func (client *PolicyVirtualNetworkLinksClient) deleteOperation(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -189,7 +184,7 @@ func (client *PolicyVirtualNetworkLinksClient) deleteOperation(ctx context.Conte
 func (client *PolicyVirtualNetworkLinksClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, options *PolicyVirtualNetworkLinksClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks/{dnsResolverPolicyVirtualNetworkLinkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -209,8 +204,8 @@ func (client *PolicyVirtualNetworkLinksClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
 	}
@@ -219,8 +214,6 @@ func (client *PolicyVirtualNetworkLinksClient) deleteCreateRequest(ctx context.C
 
 // Get - Gets properties of a DNS resolver policy virtual network link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsResolverPolicyVirtualNetworkLinkName - The name of the DNS resolver policy virtual network link for the DNS resolver
@@ -241,19 +234,14 @@ func (client *PolicyVirtualNetworkLinksClient) Get(ctx context.Context, resource
 	if err != nil {
 		return PolicyVirtualNetworkLinksClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PolicyVirtualNetworkLinksClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *PolicyVirtualNetworkLinksClient) getCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, _ *PolicyVirtualNetworkLinksClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks/{dnsResolverPolicyVirtualNetworkLinkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -273,15 +261,18 @@ func (client *PolicyVirtualNetworkLinksClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PolicyVirtualNetworkLinksClient) getHandleResponse(resp *http.Response) (PolicyVirtualNetworkLinksClientGetResponse, error) {
+func (client *PolicyVirtualNetworkLinksClient) getHandleResponse(resp *http.Response, successCodes ...int) (PolicyVirtualNetworkLinksClientGetResponse, error) {
 	result := PolicyVirtualNetworkLinksClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyVirtualNetworkLink); err != nil {
 		return PolicyVirtualNetworkLinksClientGetResponse{}, err
 	}
@@ -289,8 +280,6 @@ func (client *PolicyVirtualNetworkLinksClient) getHandleResponse(resp *http.Resp
 }
 
 // NewListPager - Lists DNS resolver policy virtual network links.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - options - PolicyVirtualNetworkLinksClientListOptions contains the optional parameters for the PolicyVirtualNetworkLinksClient.NewListPager
@@ -306,50 +295,64 @@ func (client *PolicyVirtualNetworkLinksClient) NewListPager(resourceGroupName st
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, dnsResolverPolicyName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, dnsResolverPolicyName, nextLink, options)
 			if err != nil {
 				return PolicyVirtualNetworkLinksClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PolicyVirtualNetworkLinksClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *PolicyVirtualNetworkLinksClient) listCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, options *PolicyVirtualNetworkLinksClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *PolicyVirtualNetworkLinksClient) listCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, nextLink string, options *PolicyVirtualNetworkLinksClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if dnsResolverPolicyName == "" {
+			return nil, errors.New("parameter dnsResolverPolicyName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{dnsResolverPolicyName}", url.PathEscape(dnsResolverPolicyName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if dnsResolverPolicyName == "" {
-		return nil, errors.New("parameter dnsResolverPolicyName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{dnsResolverPolicyName}", url.PathEscape(dnsResolverPolicyName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *PolicyVirtualNetworkLinksClient) listHandleResponse(resp *http.Response) (PolicyVirtualNetworkLinksClientListResponse, error) {
+func (client *PolicyVirtualNetworkLinksClient) listHandleResponse(resp *http.Response, successCodes ...int) (PolicyVirtualNetworkLinksClientListResponse, error) {
 	result := PolicyVirtualNetworkLinksClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PolicyVirtualNetworkLinkListResult); err != nil {
 		return PolicyVirtualNetworkLinksClientListResponse{}, err
 	}
@@ -358,8 +361,6 @@ func (client *PolicyVirtualNetworkLinksClient) listHandleResponse(resp *http.Res
 
 // BeginUpdate - Updates a DNS resolver policy virtual network link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsResolverPolicyVirtualNetworkLinkName - The name of the DNS resolver policy virtual network link for the DNS resolver
@@ -386,8 +387,6 @@ func (client *PolicyVirtualNetworkLinksClient) BeginUpdate(ctx context.Context, 
 
 // Update - Updates a DNS resolver policy virtual network link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *PolicyVirtualNetworkLinksClient) update(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, parameters PolicyVirtualNetworkLinkPatch, options *PolicyVirtualNetworkLinksClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PolicyVirtualNetworkLinksClient.BeginUpdate"
@@ -403,8 +402,7 @@ func (client *PolicyVirtualNetworkLinksClient) update(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -413,7 +411,7 @@ func (client *PolicyVirtualNetworkLinksClient) update(ctx context.Context, resou
 func (client *PolicyVirtualNetworkLinksClient) updateCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsResolverPolicyVirtualNetworkLinkName string, parameters PolicyVirtualNetworkLinkPatch, options *PolicyVirtualNetworkLinksClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/virtualNetworkLinks/{dnsResolverPolicyVirtualNetworkLinkName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -433,8 +431,8 @@ func (client *PolicyVirtualNetworkLinksClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}

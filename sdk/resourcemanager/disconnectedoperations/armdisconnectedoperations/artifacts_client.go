@@ -18,6 +18,8 @@ import (
 
 // ArtifactsClient contains the methods for the Artifacts group.
 // Don't use this type directly, use NewArtifactsClient() instead.
+//
+// Generated from API version 2026-03-15
 type ArtifactsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ArtifactsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewArtifactsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ArtifactsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewArtifactsClient(subscriptionID string, credential azcore.TokenCredential
 
 // Get - Get the resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - imageName - The name of the Image
@@ -62,19 +65,14 @@ func (client *ArtifactsClient) Get(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return ArtifactsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ArtifactsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ArtifactsClient) getCreateRequest(ctx context.Context, resourceGroupName string, name string, imageName string, artifactName string, _ *ArtifactsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/images/{imageName}/artifacts/{artifactName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -98,15 +96,18 @@ func (client *ArtifactsClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260315)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ArtifactsClient) getHandleResponse(resp *http.Response) (ArtifactsClientGetResponse, error) {
+func (client *ArtifactsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ArtifactsClientGetResponse, error) {
 	result := ArtifactsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Artifact); err != nil {
 		return ArtifactsClientGetResponse{}, err
 	}
@@ -114,8 +115,6 @@ func (client *ArtifactsClient) getHandleResponse(resp *http.Response) (Artifacts
 }
 
 // NewListByParentPager - List by parent
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - imageName - The name of the Image
@@ -132,51 +131,65 @@ func (client *ArtifactsClient) NewListByParentPager(resourceGroupName string, na
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByParentCreateRequest(ctx, resourceGroupName, name, imageName, options)
-			}, nil)
+			req, err := client.listByParentCreateRequest(ctx, resourceGroupName, name, imageName, nextLink, options)
 			if err != nil {
 				return ArtifactsClientListByParentResponse{}, err
 			}
-			return client.listByParentHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ArtifactsClientListByParentResponse{}, err
+			}
+			return client.listByParentHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByParentCreateRequest creates the ListByParent request.
-func (client *ArtifactsClient) listByParentCreateRequest(ctx context.Context, resourceGroupName string, name string, imageName string, _ *ArtifactsClientListByParentOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/images/{imageName}/artifacts"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ArtifactsClient) listByParentCreateRequest(ctx context.Context, resourceGroupName string, name string, imageName string, nextLink string, _ *ArtifactsClientListByParentOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/images/{imageName}/artifacts"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if imageName == "" {
+			return nil, errors.New("parameter imageName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{imageName}", url.PathEscape(imageName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if imageName == "" {
-		return nil, errors.New("parameter imageName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{imageName}", url.PathEscape(imageName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260315)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByParentHandleResponse handles the ListByParent response.
-func (client *ArtifactsClient) listByParentHandleResponse(resp *http.Response) (ArtifactsClientListByParentResponse, error) {
+func (client *ArtifactsClient) listByParentHandleResponse(resp *http.Response, successCodes ...int) (ArtifactsClientListByParentResponse, error) {
 	result := ArtifactsClientListByParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactListResult); err != nil {
 		return ArtifactsClientListByParentResponse{}, err
 	}
@@ -185,8 +198,6 @@ func (client *ArtifactsClient) listByParentHandleResponse(resp *http.Response) (
 
 // ListDownloadURI - Get artifact download link.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-15
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the resource
 //   - imageName - The name of the Image
@@ -207,19 +218,14 @@ func (client *ArtifactsClient) ListDownloadURI(ctx context.Context, resourceGrou
 	if err != nil {
 		return ArtifactsClientListDownloadURIResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ArtifactsClientListDownloadURIResponse{}, err
-	}
-	resp, err := client.listDownloadURIHandleResponse(httpResp)
-	return resp, err
+	return client.listDownloadURIHandleResponse(httpResp, http.StatusOK)
 }
 
 // listDownloadURICreateRequest creates the ListDownloadURI request.
 func (client *ArtifactsClient) listDownloadURICreateRequest(ctx context.Context, resourceGroupName string, name string, imageName string, artifactName string, _ *ArtifactsClientListDownloadURIOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/disconnectedOperations/{name}/images/{imageName}/artifacts/{artifactName}/listDownloadUri"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -243,15 +249,18 @@ func (client *ArtifactsClient) listDownloadURICreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-15")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260315)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listDownloadURIHandleResponse handles the ListDownloadURI response.
-func (client *ArtifactsClient) listDownloadURIHandleResponse(resp *http.Response) (ArtifactsClientListDownloadURIResponse, error) {
+func (client *ArtifactsClient) listDownloadURIHandleResponse(resp *http.Response, successCodes ...int) (ArtifactsClientListDownloadURIResponse, error) {
 	result := ArtifactsClientListDownloadURIResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ArtifactDownloadResult); err != nil {
 		return ArtifactsClientListDownloadURIResponse{}, err
 	}

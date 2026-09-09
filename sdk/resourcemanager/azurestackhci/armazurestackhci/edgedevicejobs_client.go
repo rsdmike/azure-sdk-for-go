@@ -18,6 +18,8 @@ import (
 
 // EdgeDeviceJobsClient contains the methods for the EdgeDeviceJobs group.
 // Don't use this type directly, use NewEdgeDeviceJobsClient() instead.
+//
+// Generated from API version 2026-04-30
 type EdgeDeviceJobsClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewEdgeDeviceJobsClient(credential azcore.TokenCredential, options *arm.Cli
 
 // BeginCreateOrUpdate - Create a EdgeDeviceJob
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-04-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - edgeDeviceName - Name of Device
 //   - jobsName - Name of EdgeDevice Job
@@ -65,8 +65,6 @@ func (client *EdgeDeviceJobsClient) BeginCreateOrUpdate(ctx context.Context, res
 
 // CreateOrUpdate - Create a EdgeDeviceJob
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-04-01-preview
 func (client *EdgeDeviceJobsClient) createOrUpdate(ctx context.Context, resourceURI string, edgeDeviceName string, jobsName string, resource EdgeDeviceJobClassification, options *EdgeDeviceJobsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EdgeDeviceJobsClient.BeginCreateOrUpdate"
@@ -82,8 +80,7 @@ func (client *EdgeDeviceJobsClient) createOrUpdate(ctx context.Context, resource
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -108,8 +105,8 @@ func (client *EdgeDeviceJobsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260430)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -120,8 +117,6 @@ func (client *EdgeDeviceJobsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // BeginDelete - Delete a EdgeDeviceJob
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-04-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - edgeDeviceName - Name of Device
 //   - jobsName - Name of EdgeDevice Job
@@ -146,8 +141,6 @@ func (client *EdgeDeviceJobsClient) BeginDelete(ctx context.Context, resourceURI
 
 // Delete - Delete a EdgeDeviceJob
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-04-01-preview
 func (client *EdgeDeviceJobsClient) deleteOperation(ctx context.Context, resourceURI string, edgeDeviceName string, jobsName string, options *EdgeDeviceJobsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "EdgeDeviceJobsClient.BeginDelete"
@@ -163,8 +156,7 @@ func (client *EdgeDeviceJobsClient) deleteOperation(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -189,15 +181,13 @@ func (client *EdgeDeviceJobsClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260430)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a EdgeDeviceJob
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-04-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - edgeDeviceName - Name of Device
 //   - jobsName - Name of EdgeDevice Job
@@ -216,12 +206,7 @@ func (client *EdgeDeviceJobsClient) Get(ctx context.Context, resourceURI string,
 	if err != nil {
 		return EdgeDeviceJobsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return EdgeDeviceJobsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -244,15 +229,18 @@ func (client *EdgeDeviceJobsClient) getCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260430)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *EdgeDeviceJobsClient) getHandleResponse(resp *http.Response) (EdgeDeviceJobsClientGetResponse, error) {
+func (client *EdgeDeviceJobsClient) getHandleResponse(resp *http.Response, successCodes ...int) (EdgeDeviceJobsClientGetResponse, error) {
 	result := EdgeDeviceJobsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result); err != nil {
 		return EdgeDeviceJobsClientGetResponse{}, err
 	}
@@ -260,8 +248,6 @@ func (client *EdgeDeviceJobsClient) getHandleResponse(resp *http.Response) (Edge
 }
 
 // NewListByEdgeDevicePager - List EdgeDeviceJob resources by EdgeDevice
-//
-// Generated from API version 2026-04-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - edgeDeviceName - Name of Device
 //   - options - EdgeDeviceJobsClientListByEdgeDeviceOptions contains the optional parameters for the EdgeDeviceJobsClient.NewListByEdgeDevicePager
@@ -277,43 +263,57 @@ func (client *EdgeDeviceJobsClient) NewListByEdgeDevicePager(resourceURI string,
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByEdgeDeviceCreateRequest(ctx, resourceURI, edgeDeviceName, options)
-			}, nil)
+			req, err := client.listByEdgeDeviceCreateRequest(ctx, resourceURI, edgeDeviceName, nextLink, options)
 			if err != nil {
 				return EdgeDeviceJobsClientListByEdgeDeviceResponse{}, err
 			}
-			return client.listByEdgeDeviceHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return EdgeDeviceJobsClientListByEdgeDeviceResponse{}, err
+			}
+			return client.listByEdgeDeviceHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByEdgeDeviceCreateRequest creates the ListByEdgeDevice request.
-func (client *EdgeDeviceJobsClient) listByEdgeDeviceCreateRequest(ctx context.Context, resourceURI string, edgeDeviceName string, _ *EdgeDeviceJobsClientListByEdgeDeviceOptions) (*policy.Request, error) {
-	urlPath := "/{resourceUri}/providers/Microsoft.AzureStackHCI/edgeDevices/{edgeDeviceName}/jobs"
-	if resourceURI == "" {
-		return nil, errors.New("parameter resourceURI cannot be empty")
+func (client *EdgeDeviceJobsClient) listByEdgeDeviceCreateRequest(ctx context.Context, resourceURI string, edgeDeviceName string, nextLink string, _ *EdgeDeviceJobsClientListByEdgeDeviceOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{resourceUri}/providers/Microsoft.AzureStackHCI/edgeDevices/{edgeDeviceName}/jobs"
+		if resourceURI == "" {
+			return nil, errors.New("parameter resourceURI cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
+		if edgeDeviceName == "" {
+			return nil, errors.New("parameter edgeDeviceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{edgeDeviceName}", url.PathEscape(edgeDeviceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
-	if edgeDeviceName == "" {
-		return nil, errors.New("parameter edgeDeviceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{edgeDeviceName}", url.PathEscape(edgeDeviceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260430)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByEdgeDeviceHandleResponse handles the ListByEdgeDevice response.
-func (client *EdgeDeviceJobsClient) listByEdgeDeviceHandleResponse(resp *http.Response) (EdgeDeviceJobsClientListByEdgeDeviceResponse, error) {
+func (client *EdgeDeviceJobsClient) listByEdgeDeviceHandleResponse(resp *http.Response, successCodes ...int) (EdgeDeviceJobsClientListByEdgeDeviceResponse, error) {
 	result := EdgeDeviceJobsClientListByEdgeDeviceResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EdgeDeviceJobListResult); err != nil {
 		return EdgeDeviceJobsClientListByEdgeDeviceResponse{}, err
 	}

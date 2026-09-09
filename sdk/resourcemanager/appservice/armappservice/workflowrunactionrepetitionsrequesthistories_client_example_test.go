@@ -30,13 +30,13 @@ func ExampleWorkflowRunActionRepetitionsRequestHistoriesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.WorkflowRunActionRepetitionsRequestHistoriesClientGetResponse{
-	// 	RequestHistory: &armappservice.RequestHistory{
+	// 	RequestHistory: armappservice.RequestHistory{
 	// 		Name: to.Ptr("08586611142732800686"),
 	// 		Type: to.Ptr("Microsoft.Web/sites/workflows/runs/actions/requestHistories"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-name/workflows/test-workflow/runs/08586611142736787787412824395CU21/actions/HTTP_Webhook/requestHistories/08586611142732800686"),
 	// 		Location: to.Ptr("West US"),
 	// 		Properties: &armappservice.RequestHistoryProperties{
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-25T18:36:52.1863033Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2018, time.October, 25, 18, 36, 52, 186303300, time.UTC)),
 	// 			Response: &armappservice.Response{
 	// 				BodyLink: &armappservice.ContentLink{
 	// 					ContentHash: &armappservice.ContentHash{
@@ -57,7 +57,7 @@ func ExampleWorkflowRunActionRepetitionsRequestHistoriesClient_Get() {
 	// 				},
 	// 				StatusCode: to.Ptr[int32](302),
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-25T18:36:51.9206732Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2018, time.October, 25, 18, 36, 51, 920673200, time.UTC)),
 	// 			Request: &armappservice.Request{
 	// 				Method: to.Ptr("GET"),
 	// 				Headers: map[string]any{
@@ -118,7 +118,7 @@ func ExampleWorkflowRunActionRepetitionsRequestHistoriesClient_NewListPager() {
 		// 				ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/test-resource-group/providers/Microsoft.Web/sites/test-name/workflows/test-workflow/runs/08586611142736787787412824395CU21/actions/HTTP_Webhook/requestHistories/08586611142732800686"),
 		// 				Location: to.Ptr("West US"),
 		// 				Properties: &armappservice.RequestHistoryProperties{
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-25T18:36:52.1863033Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2018, time.October, 25, 18, 36, 52, 186303300, time.UTC)),
 		// 					Response: &armappservice.Response{
 		// 						BodyLink: &armappservice.ContentLink{
 		// 							ContentHash: &armappservice.ContentHash{
@@ -139,7 +139,7 @@ func ExampleWorkflowRunActionRepetitionsRequestHistoriesClient_NewListPager() {
 		// 						},
 		// 						StatusCode: to.Ptr[int32](302),
 		// 					},
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-25T18:36:51.9206732Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2018, time.October, 25, 18, 36, 51, 920673200, time.UTC)),
 		// 					Request: &armappservice.Request{
 		// 						Method: to.Ptr("GET"),
 		// 						Headers: map[string]any{

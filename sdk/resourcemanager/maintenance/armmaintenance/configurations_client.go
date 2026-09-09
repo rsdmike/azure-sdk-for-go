@@ -18,6 +18,8 @@ import (
 
 // ConfigurationsClient contains the methods for the Configurations group.
 // Don't use this type directly, use NewConfigurationsClient() instead.
+//
+// Generated from API version 2023-10-01-preview
 type ConfigurationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ConfigurationsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ConfigurationsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewConfigurationsClient(subscriptionID string, credential azcore.TokenCrede
 
 // CreateOrUpdate - Create or Update configuration record
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the MaintenanceConfiguration
 //   - configuration - The configuration
@@ -62,19 +65,14 @@ func (client *ConfigurationsClient) CreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return ConfigurationsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ConfigurationsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, configuration Configuration, _ *ConfigurationsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maintenance/maintenanceConfigurations/{resourceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -90,8 +88,8 @@ func (client *ConfigurationsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, configuration); err != nil {
@@ -101,8 +99,11 @@ func (client *ConfigurationsClient) createOrUpdateCreateRequest(ctx context.Cont
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response) (ConfigurationsClientCreateOrUpdateResponse, error) {
+func (client *ConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationsClientCreateOrUpdateResponse, error) {
 	result := ConfigurationsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientCreateOrUpdateResponse{}, err
 	}
@@ -111,8 +112,6 @@ func (client *ConfigurationsClient) createOrUpdateHandleResponse(resp *http.Resp
 
 // Delete - Delete Configuration record
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the MaintenanceConfiguration
 //   - options - ConfigurationsClientDeleteOptions contains the optional parameters for the ConfigurationsClient.Delete method.
@@ -130,19 +129,14 @@ func (client *ConfigurationsClient) Delete(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return ConfigurationsClientDeleteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationsClientDeleteResponse{}, err
-	}
-	resp, err := client.deleteHandleResponse(httpResp)
-	return resp, err
+	return client.deleteHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // deleteCreateRequest creates the Delete request.
 func (client *ConfigurationsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ConfigurationsClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maintenance/maintenanceConfigurations/{resourceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -158,15 +152,18 @@ func (client *ConfigurationsClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // deleteHandleResponse handles the Delete response.
-func (client *ConfigurationsClient) deleteHandleResponse(resp *http.Response) (ConfigurationsClientDeleteResponse, error) {
+func (client *ConfigurationsClient) deleteHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationsClientDeleteResponse, error) {
 	result := ConfigurationsClientDeleteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientDeleteResponse{}, err
 	}
@@ -175,8 +172,6 @@ func (client *ConfigurationsClient) deleteHandleResponse(resp *http.Response) (C
 
 // Get - Get Configuration record
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the MaintenanceConfiguration
 //   - options - ConfigurationsClientGetOptions contains the optional parameters for the ConfigurationsClient.Get method.
@@ -194,19 +189,14 @@ func (client *ConfigurationsClient) Get(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return ConfigurationsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ConfigurationsClient) getCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ConfigurationsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maintenance/maintenanceConfigurations/{resourceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -222,15 +212,18 @@ func (client *ConfigurationsClient) getCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (ConfigurationsClientGetResponse, error) {
+func (client *ConfigurationsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationsClientGetResponse, error) {
 	result := ConfigurationsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientGetResponse{}, err
 	}
@@ -238,8 +231,6 @@ func (client *ConfigurationsClient) getHandleResponse(resp *http.Response) (Conf
 }
 
 // NewListPager - Get Configuration records within a subscription
-//
-// Generated from API version 2023-10-01-preview
 //   - options - ConfigurationsClientListOptions contains the optional parameters for the ConfigurationsClient.NewListPager method.
 func (client *ConfigurationsClient) NewListPager(options *ConfigurationsClientListOptions) *runtime.Pager[ConfigurationsClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[ConfigurationsClientListResponse]{
@@ -252,39 +243,53 @@ func (client *ConfigurationsClient) NewListPager(options *ConfigurationsClientLi
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ConfigurationsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ConfigurationsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ConfigurationsClient) listCreateRequest(ctx context.Context, _ *ConfigurationsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Maintenance/maintenanceConfigurations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ConfigurationsClient) listCreateRequest(ctx context.Context, nextLink string, _ *ConfigurationsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Maintenance/maintenanceConfigurations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20231001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ConfigurationsClient) listHandleResponse(resp *http.Response) (ConfigurationsClientListResponse, error) {
+func (client *ConfigurationsClient) listHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationsClientListResponse, error) {
 	result := ConfigurationsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListMaintenanceConfigurationsResult); err != nil {
 		return ConfigurationsClientListResponse{}, err
 	}
@@ -293,8 +298,6 @@ func (client *ConfigurationsClient) listHandleResponse(resp *http.Response) (Con
 
 // Update - Patch configuration record
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the MaintenanceConfiguration
 //   - configuration - The configuration
@@ -313,19 +316,14 @@ func (client *ConfigurationsClient) Update(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return ConfigurationsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *ConfigurationsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, configuration Configuration, _ *ConfigurationsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maintenance/maintenanceConfigurations/{resourceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -341,8 +339,8 @@ func (client *ConfigurationsClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, configuration); err != nil {
@@ -352,8 +350,11 @@ func (client *ConfigurationsClient) updateCreateRequest(ctx context.Context, res
 }
 
 // updateHandleResponse handles the Update response.
-func (client *ConfigurationsClient) updateHandleResponse(resp *http.Response) (ConfigurationsClientUpdateResponse, error) {
+func (client *ConfigurationsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationsClientUpdateResponse, error) {
 	result := ConfigurationsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Configuration); err != nil {
 		return ConfigurationsClientUpdateResponse{}, err
 	}

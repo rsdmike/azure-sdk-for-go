@@ -18,6 +18,8 @@ import (
 
 // OperationStatusBackupVaultContextClient contains the methods for the OperationStatusBackupVaultContext group.
 // Don't use this type directly, use NewOperationStatusBackupVaultContextClient() instead.
+//
+// Generated from API version 2026-03-01
 type OperationStatusBackupVaultContextClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type OperationStatusBackupVaultContextClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewOperationStatusBackupVaultContextClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*OperationStatusBackupVaultContextClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewOperationStatusBackupVaultContextClient(subscriptionID string, credentia
 
 // Get - Gets the operation status for an operation over a BackupVault's context.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The name of the BackupVaultResource
 //   - options - OperationStatusBackupVaultContextClientGetOptions contains the optional parameters for the OperationStatusBackupVaultContextClient.Get
@@ -61,19 +64,14 @@ func (client *OperationStatusBackupVaultContextClient) Get(ctx context.Context, 
 	if err != nil {
 		return OperationStatusBackupVaultContextClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return OperationStatusBackupVaultContextClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *OperationStatusBackupVaultContextClient) getCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, operationID string, _ *OperationStatusBackupVaultContextClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/backupVaults/{vaultName}/operationStatus/{operationId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -93,15 +91,18 @@ func (client *OperationStatusBackupVaultContextClient) getCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *OperationStatusBackupVaultContextClient) getHandleResponse(resp *http.Response) (OperationStatusBackupVaultContextClientGetResponse, error) {
+func (client *OperationStatusBackupVaultContextClient) getHandleResponse(resp *http.Response, successCodes ...int) (OperationStatusBackupVaultContextClientGetResponse, error) {
 	result := OperationStatusBackupVaultContextClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationResource); err != nil {
 		return OperationStatusBackupVaultContextClientGetResponse{}, err
 	}

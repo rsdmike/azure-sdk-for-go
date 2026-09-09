@@ -6,11 +6,10 @@ package armpurview_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/purview/armpurview/v2"
+	"log"
 )
 
 // Generated from example definition: 2024-04-01-preview/KafkaConfigurations_CreateOrUpdate.json
@@ -45,7 +44,7 @@ func ExampleKafkaConfigurationsClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.KafkaConfigurationsClientCreateOrUpdateResponse{
-	// 	KafkaConfiguration: &armpurview.KafkaConfiguration{
+	// 	KafkaConfiguration: armpurview.KafkaConfiguration{
 	// 		Name: to.Ptr("kafkaConfigName"),
 	// 		Type: to.Ptr("Microsoft.Purview/accounts/kafkaconfiguration"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/SampleResourceGroup/providers/Microsoft.Purview/accounts/account1/kafkaConfigurations/default"),
@@ -62,10 +61,10 @@ func ExampleKafkaConfigurationsClient_CreateOrUpdate() {
 	// 			EventStreamingType: to.Ptr(armpurview.EventStreamingTypeAzure),
 	// 		},
 	// 		SystemData: &armpurview.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-09T01:36:27.637Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.March, 9, 1, 36, 27, 637000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("User@user"),
 	// 			CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-09T01:36:27.637Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.March, 9, 1, 36, 27, 637000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("User"),
 	// 			LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 	// 		},
@@ -114,7 +113,7 @@ func ExampleKafkaConfigurationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpurview.KafkaConfigurationsClientGetResponse{
-	// 	KafkaConfiguration: &armpurview.KafkaConfiguration{
+	// 	KafkaConfiguration: armpurview.KafkaConfiguration{
 	// 		Name: to.Ptr("kafkaConfigName"),
 	// 		Type: to.Ptr("Microsoft.Purview/accounts/kafkaconfiguration"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/SampleResourceGroup/providers/Microsoft.Purview/accounts/account1/kafkaConfigurations/default"),
@@ -131,10 +130,10 @@ func ExampleKafkaConfigurationsClient_Get() {
 	// 			EventStreamingType: to.Ptr(armpurview.EventStreamingTypeAzure),
 	// 		},
 	// 		SystemData: &armpurview.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-09T01:36:27.637Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.March, 9, 1, 36, 27, 637000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("User@user"),
 	// 			CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-09T01:36:27.637Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.March, 9, 1, 36, 27, 637000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("User"),
 	// 			LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 	// 		},
@@ -186,10 +185,10 @@ func ExampleKafkaConfigurationsClient_NewListByAccountPager() {
 		// 					EventStreamingType: to.Ptr(armpurview.EventStreamingTypeNone),
 		// 				},
 		// 				SystemData: &armpurview.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-17T04:23:24.157Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.March, 17, 4, 23, 24, 157000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("user"),
 		// 					CreatedByType: to.Ptr(armpurview.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-17T04:23:24.157Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.March, 17, 4, 23, 24, 157000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user"),
 		// 					LastModifiedByType: to.Ptr(armpurview.CreatedByTypeUser),
 		// 				},

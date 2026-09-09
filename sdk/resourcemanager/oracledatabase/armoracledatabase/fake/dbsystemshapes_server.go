@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // DbSystemShapesServer is a fake server for instances of the armoracledatabase.DbSystemShapesClient type.
@@ -58,9 +59,7 @@ func (d *DbSystemShapesServerTransport) Do(req *http.Request) (*http.Response, e
 }
 
 func (d *DbSystemShapesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (d *DbSystemShapesServerTransport) dispatchToMethodFake(req *http.Request, 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (d *DbSystemShapesServerTransport) dispatchGet(req *http.Request) (*http.Re
 	if d.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbSystemShapes/(?P<dbsystemshapename>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbSystemShapes/(?P<dbsystemshapename>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -115,7 +111,7 @@ func (d *DbSystemShapesServerTransport) dispatchGet(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DbSystemShape, req)
@@ -131,7 +127,7 @@ func (d *DbSystemShapesServerTransport) dispatchNewListByLocationPager(req *http
 	}
 	newListByLocationPager := d.newListByLocationPager.get(req)
 	if newListByLocationPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbSystemShapes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbSystemShapes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -142,16 +138,8 @@ func (d *DbSystemShapesServerTransport) dispatchNewListByLocationPager(req *http
 		if err != nil {
 			return nil, err
 		}
-		zoneUnescaped, err := url.QueryUnescape(qp.Get("zone"))
-		if err != nil {
-			return nil, err
-		}
-		zoneParam := getOptional(zoneUnescaped)
-		shapeAttributeUnescaped, err := url.QueryUnescape(qp.Get("shapeAttribute"))
-		if err != nil {
-			return nil, err
-		}
-		shapeAttributeParam := getOptional(shapeAttributeUnescaped)
+		zoneParam := getOptional(qp.Get("zone"))
+		shapeAttributeParam := getOptional(qp.Get("shapeAttribute"))
 		var options *armoracledatabase.DbSystemShapesClientListByLocationOptions
 		if zoneParam != nil || shapeAttributeParam != nil {
 			options = &armoracledatabase.DbSystemShapesClientListByLocationOptions{
@@ -170,7 +158,7 @@ func (d *DbSystemShapesServerTransport) dispatchNewListByLocationPager(req *http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		d.newListByLocationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

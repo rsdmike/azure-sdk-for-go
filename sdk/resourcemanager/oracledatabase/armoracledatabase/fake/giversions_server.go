@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // GiVersionsServer is a fake server for instances of the armoracledatabase.GiVersionsClient type.
@@ -58,9 +59,7 @@ func (g *GiVersionsServerTransport) Do(req *http.Request) (*http.Response, error
 }
 
 func (g *GiVersionsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (g *GiVersionsServerTransport) dispatchToMethodFake(req *http.Request, meth
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (g *GiVersionsServerTransport) dispatchGet(req *http.Request) (*http.Respon
 	if g.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/giVersions/(?P<giversionname>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/giVersions/(?P<giversionname>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -115,7 +111,7 @@ func (g *GiVersionsServerTransport) dispatchGet(req *http.Request) (*http.Respon
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).GiVersion, req)
@@ -131,7 +127,7 @@ func (g *GiVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 	}
 	newListByLocationPager := g.newListByLocationPager.get(req)
 	if newListByLocationPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/giVersions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/giVersions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -142,21 +138,9 @@ func (g *GiVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 		if err != nil {
 			return nil, err
 		}
-		shapeUnescaped, err := url.QueryUnescape(qp.Get("shape"))
-		if err != nil {
-			return nil, err
-		}
-		shapeParam := getOptional(armoracledatabase.SystemShapes(shapeUnescaped))
-		zoneUnescaped, err := url.QueryUnescape(qp.Get("zone"))
-		if err != nil {
-			return nil, err
-		}
-		zoneParam := getOptional(zoneUnescaped)
-		shapeAttributeUnescaped, err := url.QueryUnescape(qp.Get("shapeAttribute"))
-		if err != nil {
-			return nil, err
-		}
-		shapeAttributeParam := getOptional(shapeAttributeUnescaped)
+		shapeParam := getOptional(armoracledatabase.SystemShapes(qp.Get("shape")))
+		zoneParam := getOptional(qp.Get("zone"))
+		shapeAttributeParam := getOptional(qp.Get("shapeAttribute"))
 		var options *armoracledatabase.GiVersionsClientListByLocationOptions
 		if shapeParam != nil || zoneParam != nil || shapeAttributeParam != nil {
 			options = &armoracledatabase.GiVersionsClientListByLocationOptions{
@@ -176,7 +160,7 @@ func (g *GiVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		g.newListByLocationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

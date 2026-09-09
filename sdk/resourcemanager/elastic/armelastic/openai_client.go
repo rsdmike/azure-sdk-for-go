@@ -18,6 +18,8 @@ import (
 
 // OpenAIClient contains the methods for the OpenAI group.
 // Don't use this type directly, use NewOpenAIClient() instead.
+//
+// Generated from API version 2025-06-01
 type OpenAIClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type OpenAIClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewOpenAIClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*OpenAIClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewOpenAIClient(subscriptionID string, credential azcore.TokenCredential, o
 // CreateOrUpdate - Create or update an OpenAI integration rule for a given Elastic monitor resource, enabling advanced AI-driven
 // observability and monitoring.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - OpenAIClientCreateOrUpdateOptions contains the optional parameters for the OpenAIClient.CreateOrUpdate method.
 func (client *OpenAIClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, monitorName string, integrationName string, body OpenAIIntegrationRPModel, options *OpenAIClientCreateOrUpdateOptions) (OpenAIClientCreateOrUpdateResponse, error) {
@@ -60,19 +63,14 @@ func (client *OpenAIClient) CreateOrUpdate(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return OpenAIClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return OpenAIClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *OpenAIClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, integrationName string, body OpenAIIntegrationRPModel, _ *OpenAIClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations/{integrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -92,8 +90,8 @@ func (client *OpenAIClient) createOrUpdateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -103,8 +101,11 @@ func (client *OpenAIClient) createOrUpdateCreateRequest(ctx context.Context, res
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *OpenAIClient) createOrUpdateHandleResponse(resp *http.Response) (OpenAIClientCreateOrUpdateResponse, error) {
+func (client *OpenAIClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (OpenAIClientCreateOrUpdateResponse, error) {
 	result := OpenAIClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenAIIntegrationRPModel); err != nil {
 		return OpenAIClientCreateOrUpdateResponse{}, err
 	}
@@ -114,8 +115,6 @@ func (client *OpenAIClient) createOrUpdateHandleResponse(resp *http.Response) (O
 // Delete - Delete an OpenAI integration rule for a given Elastic monitor resource, removing AI-driven observability and monitoring
 // capabilities.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - integrationName - OpenAI Integration name
@@ -135,8 +134,7 @@ func (client *OpenAIClient) Delete(ctx context.Context, resourceGroupName string
 		return OpenAIClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return OpenAIClientDeleteResponse{}, err
+		return OpenAIClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return OpenAIClientDeleteResponse{}, nil
 }
@@ -145,7 +143,7 @@ func (client *OpenAIClient) Delete(ctx context.Context, resourceGroupName string
 func (client *OpenAIClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, integrationName string, _ *OpenAIClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations/{integrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -165,15 +163,13 @@ func (client *OpenAIClient) deleteCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get detailed information about OpenAI integration rules for a given Elastic monitor resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - integrationName - OpenAI Integration name
@@ -192,19 +188,14 @@ func (client *OpenAIClient) Get(ctx context.Context, resourceGroupName string, m
 	if err != nil {
 		return OpenAIClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return OpenAIClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *OpenAIClient) getCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, integrationName string, _ *OpenAIClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations/{integrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -224,15 +215,18 @@ func (client *OpenAIClient) getCreateRequest(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *OpenAIClient) getHandleResponse(resp *http.Response) (OpenAIClientGetResponse, error) {
+func (client *OpenAIClient) getHandleResponse(resp *http.Response, successCodes ...int) (OpenAIClientGetResponse, error) {
 	result := OpenAIClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenAIIntegrationRPModel); err != nil {
 		return OpenAIClientGetResponse{}, err
 	}
@@ -242,8 +236,6 @@ func (client *OpenAIClient) getHandleResponse(resp *http.Response) (OpenAIClient
 // GetStatus - Get the status of OpenAI integration for a given Elastic monitor resource, ensuring optimal observability and
 // performance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - integrationName - OpenAI Integration name
@@ -262,19 +254,14 @@ func (client *OpenAIClient) GetStatus(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return OpenAIClientGetStatusResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return OpenAIClientGetStatusResponse{}, err
-	}
-	resp, err := client.getStatusHandleResponse(httpResp)
-	return resp, err
+	return client.getStatusHandleResponse(httpResp, http.StatusOK)
 }
 
 // getStatusCreateRequest creates the GetStatus request.
 func (client *OpenAIClient) getStatusCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, integrationName string, _ *OpenAIClientGetStatusOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations/{integrationName}/getStatus"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -294,15 +281,18 @@ func (client *OpenAIClient) getStatusCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getStatusHandleResponse handles the GetStatus response.
-func (client *OpenAIClient) getStatusHandleResponse(resp *http.Response) (OpenAIClientGetStatusResponse, error) {
+func (client *OpenAIClient) getStatusHandleResponse(resp *http.Response, successCodes ...int) (OpenAIClientGetStatusResponse, error) {
 	result := OpenAIClientGetStatusResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenAIIntegrationStatusResponse); err != nil {
 		return OpenAIClientGetStatusResponse{}, err
 	}
@@ -311,8 +301,6 @@ func (client *OpenAIClient) getStatusHandleResponse(resp *http.Response) (OpenAI
 
 // NewListPager - List all OpenAI integration rules for a given Elastic monitor resource, helping you manage AI-driven observability
 // and monitoring.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - OpenAIClientListOptions contains the optional parameters for the OpenAIClient.NewListPager method.
@@ -327,47 +315,61 @@ func (client *OpenAIClient) NewListPager(resourceGroupName string, monitorName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, monitorName, nextLink, options)
 			if err != nil {
 				return OpenAIClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return OpenAIClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *OpenAIClient) listCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *OpenAIClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *OpenAIClient) listCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, nextLink string, _ *OpenAIClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/openAIIntegrations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *OpenAIClient) listHandleResponse(resp *http.Response) (OpenAIClientListResponse, error) {
+func (client *OpenAIClient) listHandleResponse(resp *http.Response, successCodes ...int) (OpenAIClientListResponse, error) {
 	result := OpenAIClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OpenAIIntegrationRPModelListResponse); err != nil {
 		return OpenAIClientListResponse{}, err
 	}

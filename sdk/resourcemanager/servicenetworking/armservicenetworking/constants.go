@@ -4,6 +4,10 @@
 
 package armservicenetworking
 
+const (
+	version20260301 string = "2026-03-01"
+)
+
 // ActionType - Extensible enum. Indicates the action type. "Internal" refers to actions that are for internal only APIs.
 type ActionType string
 
@@ -116,6 +120,30 @@ func PossiblePolicyTypeValues() []PolicyType {
 	}
 }
 
+// PrivateLinkServiceConnectionStatus - The private endpoint connection status.
+type PrivateLinkServiceConnectionStatus string
+
+const (
+	// PrivateLinkServiceConnectionStatusApproved - Connection is approved.
+	PrivateLinkServiceConnectionStatusApproved PrivateLinkServiceConnectionStatus = "Approved"
+	// PrivateLinkServiceConnectionStatusDisconnected - Connection is disconnected.
+	PrivateLinkServiceConnectionStatusDisconnected PrivateLinkServiceConnectionStatus = "Disconnected"
+	// PrivateLinkServiceConnectionStatusPending - Connection is pending approval.
+	PrivateLinkServiceConnectionStatusPending PrivateLinkServiceConnectionStatus = "Pending"
+	// PrivateLinkServiceConnectionStatusRejected - Connection is rejected.
+	PrivateLinkServiceConnectionStatusRejected PrivateLinkServiceConnectionStatus = "Rejected"
+)
+
+// PossiblePrivateLinkServiceConnectionStatusValues returns the possible values for the PrivateLinkServiceConnectionStatus const type.
+func PossiblePrivateLinkServiceConnectionStatusValues() []PrivateLinkServiceConnectionStatus {
+	return []PrivateLinkServiceConnectionStatus{
+		PrivateLinkServiceConnectionStatusApproved,
+		PrivateLinkServiceConnectionStatusDisconnected,
+		PrivateLinkServiceConnectionStatusPending,
+		PrivateLinkServiceConnectionStatusRejected,
+	}
+}
+
 // ProvisioningState - Resource Provisioning State Enum
 type ProvisioningState string
 
@@ -146,5 +174,23 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 		ProvisioningStateProvisioning,
 		ProvisioningStateSucceeded,
 		ProvisioningStateUpdating,
+	}
+}
+
+// PublicNetworkAccess - Whether public network access is allowed for the frontend.
+type PublicNetworkAccess string
+
+const (
+	// PublicNetworkAccessDisabled - Public network access is disabled (private frontend accessible only through a private endpoint).
+	PublicNetworkAccessDisabled PublicNetworkAccess = "Disabled"
+	// PublicNetworkAccessEnabled - Public network access is enabled (public frontend accessible via a public IP address).
+	PublicNetworkAccessEnabled PublicNetworkAccess = "Enabled"
+)
+
+// PossiblePublicNetworkAccessValues returns the possible values for the PublicNetworkAccess const type.
+func PossiblePublicNetworkAccessValues() []PublicNetworkAccess {
+	return []PublicNetworkAccess{
+		PublicNetworkAccessDisabled,
+		PublicNetworkAccessEnabled,
 	}
 }

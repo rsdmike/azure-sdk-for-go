@@ -18,6 +18,8 @@ import (
 
 // ConfigurationAssignmentsClient contains the methods for the ConfigurationAssignments group.
 // Don't use this type directly, use NewConfigurationAssignmentsClient() instead.
+//
+// Generated from API version 2023-10-01-preview
 type ConfigurationAssignmentsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ConfigurationAssignmentsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewConfigurationAssignmentsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ConfigurationAssignmentsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewConfigurationAssignmentsClient(subscriptionID string, credential azcore.
 
 // CreateOrUpdate - Register configuration for resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceType - Resource parent type
@@ -65,19 +68,14 @@ func (client *ConfigurationAssignmentsClient) CreateOrUpdate(ctx context.Context
 	if err != nil {
 		return ConfigurationAssignmentsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ConfigurationAssignmentsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, configurationAssignmentName string, configurationAssignment ConfigurationAssignment, _ *ConfigurationAssignmentsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -105,8 +103,8 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, configurationAssignment); err != nil {
@@ -116,8 +114,11 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateCreateRequest(ctx co
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ConfigurationAssignmentsClient) createOrUpdateHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientCreateOrUpdateResponse, error) {
+func (client *ConfigurationAssignmentsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientCreateOrUpdateResponse, error) {
 	result := ConfigurationAssignmentsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientCreateOrUpdateResponse{}, err
 	}
@@ -126,8 +127,6 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateHandleResponse(resp 
 
 // CreateOrUpdateParent - Register configuration for resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceParentType - Resource parent type
@@ -152,19 +151,14 @@ func (client *ConfigurationAssignmentsClient) CreateOrUpdateParent(ctx context.C
 	if err != nil {
 		return ConfigurationAssignmentsClientCreateOrUpdateParentResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientCreateOrUpdateParentResponse{}, err
-	}
-	resp, err := client.createOrUpdateParentHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateParentHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateParentCreateRequest creates the CreateOrUpdateParent request.
 func (client *ConfigurationAssignmentsClient) createOrUpdateParentCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, configurationAssignmentName string, configurationAssignment ConfigurationAssignment, _ *ConfigurationAssignmentsClientCreateOrUpdateParentOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceParentType}/{resourceParentName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,8 +194,8 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateParentCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, configurationAssignment); err != nil {
@@ -211,8 +205,11 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateParentCreateRequest(
 }
 
 // createOrUpdateParentHandleResponse handles the CreateOrUpdateParent response.
-func (client *ConfigurationAssignmentsClient) createOrUpdateParentHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientCreateOrUpdateParentResponse, error) {
+func (client *ConfigurationAssignmentsClient) createOrUpdateParentHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientCreateOrUpdateParentResponse, error) {
 	result := ConfigurationAssignmentsClientCreateOrUpdateParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientCreateOrUpdateParentResponse{}, err
 	}
@@ -221,8 +218,6 @@ func (client *ConfigurationAssignmentsClient) createOrUpdateParentHandleResponse
 
 // Delete - Unregister configuration for resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceType - Resource parent type
@@ -244,19 +239,14 @@ func (client *ConfigurationAssignmentsClient) Delete(ctx context.Context, resour
 	if err != nil {
 		return ConfigurationAssignmentsClientDeleteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientDeleteResponse{}, err
-	}
-	resp, err := client.deleteHandleResponse(httpResp)
-	return resp, err
+	return client.deleteHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // deleteCreateRequest creates the Delete request.
 func (client *ConfigurationAssignmentsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, configurationAssignmentName string, _ *ConfigurationAssignmentsClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -284,15 +274,18 @@ func (client *ConfigurationAssignmentsClient) deleteCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // deleteHandleResponse handles the Delete response.
-func (client *ConfigurationAssignmentsClient) deleteHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientDeleteResponse, error) {
+func (client *ConfigurationAssignmentsClient) deleteHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientDeleteResponse, error) {
 	result := ConfigurationAssignmentsClientDeleteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientDeleteResponse{}, err
 	}
@@ -301,8 +294,6 @@ func (client *ConfigurationAssignmentsClient) deleteHandleResponse(resp *http.Re
 
 // DeleteParent - Unregister configuration for resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceParentType - Resource parent type
@@ -326,19 +317,14 @@ func (client *ConfigurationAssignmentsClient) DeleteParent(ctx context.Context, 
 	if err != nil {
 		return ConfigurationAssignmentsClientDeleteParentResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientDeleteParentResponse{}, err
-	}
-	resp, err := client.deleteParentHandleResponse(httpResp)
-	return resp, err
+	return client.deleteParentHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // deleteParentCreateRequest creates the DeleteParent request.
 func (client *ConfigurationAssignmentsClient) deleteParentCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, configurationAssignmentName string, _ *ConfigurationAssignmentsClientDeleteParentOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceParentType}/{resourceParentName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -374,15 +360,18 @@ func (client *ConfigurationAssignmentsClient) deleteParentCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // deleteParentHandleResponse handles the DeleteParent response.
-func (client *ConfigurationAssignmentsClient) deleteParentHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientDeleteParentResponse, error) {
+func (client *ConfigurationAssignmentsClient) deleteParentHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientDeleteParentResponse, error) {
 	result := ConfigurationAssignmentsClientDeleteParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientDeleteParentResponse{}, err
 	}
@@ -391,8 +380,6 @@ func (client *ConfigurationAssignmentsClient) deleteParentHandleResponse(resp *h
 
 // Get - Get configuration assignment for resource..
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceType - Resource parent type
@@ -414,19 +401,14 @@ func (client *ConfigurationAssignmentsClient) Get(ctx context.Context, resourceG
 	if err != nil {
 		return ConfigurationAssignmentsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ConfigurationAssignmentsClient) getCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, configurationAssignmentName string, _ *ConfigurationAssignmentsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -454,15 +436,18 @@ func (client *ConfigurationAssignmentsClient) getCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ConfigurationAssignmentsClient) getHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientGetResponse, error) {
+func (client *ConfigurationAssignmentsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientGetResponse, error) {
 	result := ConfigurationAssignmentsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientGetResponse{}, err
 	}
@@ -471,8 +456,6 @@ func (client *ConfigurationAssignmentsClient) getHandleResponse(resp *http.Respo
 
 // GetParent - Get configuration assignment for resource..
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceParentType - Resource parent type
@@ -496,19 +479,14 @@ func (client *ConfigurationAssignmentsClient) GetParent(ctx context.Context, res
 	if err != nil {
 		return ConfigurationAssignmentsClientGetParentResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ConfigurationAssignmentsClientGetParentResponse{}, err
-	}
-	resp, err := client.getParentHandleResponse(httpResp)
-	return resp, err
+	return client.getParentHandleResponse(httpResp, http.StatusOK)
 }
 
 // getParentCreateRequest creates the GetParent request.
 func (client *ConfigurationAssignmentsClient) getParentCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, configurationAssignmentName string, _ *ConfigurationAssignmentsClientGetParentOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceParentType}/{resourceParentName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments/{configurationAssignmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -544,15 +522,18 @@ func (client *ConfigurationAssignmentsClient) getParentCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20231001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getParentHandleResponse handles the GetParent response.
-func (client *ConfigurationAssignmentsClient) getParentHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientGetParentResponse, error) {
+func (client *ConfigurationAssignmentsClient) getParentHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientGetParentResponse, error) {
 	result := ConfigurationAssignmentsClientGetParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConfigurationAssignment); err != nil {
 		return ConfigurationAssignmentsClientGetParentResponse{}, err
 	}
@@ -561,9 +542,7 @@ func (client *ConfigurationAssignmentsClient) getParentHandleResponse(resp *http
 
 // NewListPager - Get Configuration records within a subscription and resource group
 //
-// # Get Configuration records within a subscription and resource group
-//
-// Generated from API version 2023-10-01-preview
+// Get Configuration records within a subscription and resource group
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceType - Resource type
@@ -581,55 +560,69 @@ func (client *ConfigurationAssignmentsClient) NewListPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, providerName, resourceType, resourceName, nextLink, options)
 			if err != nil {
 				return ConfigurationAssignmentsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ConfigurationAssignmentsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ConfigurationAssignmentsClient) listCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, _ *ConfigurationAssignmentsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{providerName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ConfigurationAssignmentsClient) listCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceType string, resourceName string, nextLink string, _ *ConfigurationAssignmentsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/{providerName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if providerName == "" {
+			return nil, errors.New("parameter providerName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{providerName}", url.PathEscape(providerName))
+		if resourceType == "" {
+			return nil, errors.New("parameter resourceType cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceType}", url.PathEscape(resourceType))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if providerName == "" {
-		return nil, errors.New("parameter providerName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{providerName}", url.PathEscape(providerName))
-	if resourceType == "" {
-		return nil, errors.New("parameter resourceType cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceType}", url.PathEscape(resourceType))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20231001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ConfigurationAssignmentsClient) listHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientListResponse, error) {
+func (client *ConfigurationAssignmentsClient) listHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientListResponse, error) {
 	result := ConfigurationAssignmentsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListConfigurationAssignmentsResult); err != nil {
 		return ConfigurationAssignmentsClientListResponse{}, err
 	}
@@ -637,8 +630,6 @@ func (client *ConfigurationAssignmentsClient) listHandleResponse(resp *http.Resp
 }
 
 // NewListParentPager - List configurationAssignments for resource.
-//
-// Generated from API version 2023-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - providerName - Resource provider name
 //   - resourceParentType - Resource parent type
@@ -658,63 +649,77 @@ func (client *ConfigurationAssignmentsClient) NewListParentPager(resourceGroupNa
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, options)
-			}, nil)
+			req, err := client.listParentCreateRequest(ctx, resourceGroupName, providerName, resourceParentType, resourceParentName, resourceType, resourceName, nextLink, options)
 			if err != nil {
 				return ConfigurationAssignmentsClientListParentResponse{}, err
 			}
-			return client.listParentHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ConfigurationAssignmentsClientListParentResponse{}, err
+			}
+			return client.listParentHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listParentCreateRequest creates the ListParent request.
-func (client *ConfigurationAssignmentsClient) listParentCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, _ *ConfigurationAssignmentsClientListParentOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceParentType}/{resourceParentName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ConfigurationAssignmentsClient) listParentCreateRequest(ctx context.Context, resourceGroupName string, providerName string, resourceParentType string, resourceParentName string, resourceType string, resourceName string, nextLink string, _ *ConfigurationAssignmentsClientListParentOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{providerName}/{resourceParentType}/{resourceParentName}/{resourceType}/{resourceName}/providers/Microsoft.Maintenance/configurationAssignments"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if providerName == "" {
+			return nil, errors.New("parameter providerName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{providerName}", url.PathEscape(providerName))
+		if resourceParentType == "" {
+			return nil, errors.New("parameter resourceParentType cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceParentType}", url.PathEscape(resourceParentType))
+		if resourceParentName == "" {
+			return nil, errors.New("parameter resourceParentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceParentName}", url.PathEscape(resourceParentName))
+		if resourceType == "" {
+			return nil, errors.New("parameter resourceType cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceType}", url.PathEscape(resourceType))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if providerName == "" {
-		return nil, errors.New("parameter providerName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{providerName}", url.PathEscape(providerName))
-	if resourceParentType == "" {
-		return nil, errors.New("parameter resourceParentType cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceParentType}", url.PathEscape(resourceParentType))
-	if resourceParentName == "" {
-		return nil, errors.New("parameter resourceParentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceParentName}", url.PathEscape(resourceParentName))
-	if resourceType == "" {
-		return nil, errors.New("parameter resourceType cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceType}", url.PathEscape(resourceType))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20231001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listParentHandleResponse handles the ListParent response.
-func (client *ConfigurationAssignmentsClient) listParentHandleResponse(resp *http.Response) (ConfigurationAssignmentsClientListParentResponse, error) {
+func (client *ConfigurationAssignmentsClient) listParentHandleResponse(resp *http.Response, successCodes ...int) (ConfigurationAssignmentsClientListParentResponse, error) {
 	result := ConfigurationAssignmentsClientListParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ListConfigurationAssignmentsResult); err != nil {
 		return ConfigurationAssignmentsClientListParentResponse{}, err
 	}

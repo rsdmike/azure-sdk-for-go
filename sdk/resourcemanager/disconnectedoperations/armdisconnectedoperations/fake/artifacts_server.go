@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ArtifactsServer is a fake server for instances of the armdisconnectedoperations.ArtifactsClient type.
@@ -62,9 +63,7 @@ func (a *ArtifactsServerTransport) Do(req *http.Request) (*http.Response, error)
 }
 
 func (a *ArtifactsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -84,10 +83,7 @@ func (a *ArtifactsServerTransport) dispatchToMethodFake(req *http.Request, metho
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -102,7 +98,7 @@ func (a *ArtifactsServerTransport) dispatchGet(req *http.Request) (*http.Respons
 	if a.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/images/(?P<imageName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacts/(?P<artifactName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/images/(?P<imageName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacts/(?P<artifactName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -129,7 +125,7 @@ func (a *ArtifactsServerTransport) dispatchGet(req *http.Request) (*http.Respons
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).Artifact, req)
@@ -145,7 +141,7 @@ func (a *ArtifactsServerTransport) dispatchNewListByParentPager(req *http.Reques
 	}
 	newListByParentPager := a.newListByParentPager.get(req)
 	if newListByParentPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/images/(?P<imageName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacts`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/images/(?P<imageName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacts`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -174,7 +170,7 @@ func (a *ArtifactsServerTransport) dispatchNewListByParentPager(req *http.Reques
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		a.newListByParentPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -188,7 +184,7 @@ func (a *ArtifactsServerTransport) dispatchListDownloadURI(req *http.Request) (*
 	if a.srv.ListDownloadURI == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListDownloadURI not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/images/(?P<imageName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacts/(?P<artifactName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listDownloadUri`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/disconnectedOperations/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/images/(?P<imageName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacts/(?P<artifactName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/listDownloadUri`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -215,7 +211,7 @@ func (a *ArtifactsServerTransport) dispatchListDownloadURI(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ArtifactDownloadResult, req)

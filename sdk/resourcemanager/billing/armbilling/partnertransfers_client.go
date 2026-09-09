@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-const defaultPartnerTransfersClientVersion string = "2024-04-01"
-
 // PartnerTransfersClient contains the methods for the PartnerTransfers group.
 // Don't use this type directly, use NewPartnerTransfersClient() instead.
 //
@@ -62,12 +60,7 @@ func (client *PartnerTransfersClient) Cancel(ctx context.Context, billingAccount
 	if err != nil {
 		return PartnerTransfersClientCancelResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerTransfersClientCancelResponse{}, err
-	}
-	resp, err := client.cancelHandleResponse(httpResp)
-	return resp, err
+	return client.cancelHandleResponse(httpResp, http.StatusOK)
 }
 
 // cancelCreateRequest creates the Cancel request.
@@ -94,15 +87,18 @@ func (client *PartnerTransfersClient) cancelCreateRequest(ctx context.Context, b
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPartnerTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // cancelHandleResponse handles the Cancel response.
-func (client *PartnerTransfersClient) cancelHandleResponse(resp *http.Response) (PartnerTransfersClientCancelResponse, error) {
+func (client *PartnerTransfersClient) cancelHandleResponse(resp *http.Response, successCodes ...int) (PartnerTransfersClientCancelResponse, error) {
 	result := PartnerTransfersClientCancelResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerTransferDetails); err != nil {
 		return PartnerTransfersClientCancelResponse{}, err
 	}
@@ -131,12 +127,7 @@ func (client *PartnerTransfersClient) Get(ctx context.Context, billingAccountNam
 	if err != nil {
 		return PartnerTransfersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerTransfersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -163,15 +154,18 @@ func (client *PartnerTransfersClient) getCreateRequest(ctx context.Context, bill
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPartnerTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PartnerTransfersClient) getHandleResponse(resp *http.Response) (PartnerTransfersClientGetResponse, error) {
+func (client *PartnerTransfersClient) getHandleResponse(resp *http.Response, successCodes ...int) (PartnerTransfersClientGetResponse, error) {
 	result := PartnerTransfersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerTransferDetails); err != nil {
 		return PartnerTransfersClientGetResponse{}, err
 	}
@@ -202,12 +196,7 @@ func (client *PartnerTransfersClient) Initiate(ctx context.Context, billingAccou
 	if err != nil {
 		return PartnerTransfersClientInitiateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerTransfersClientInitiateResponse{}, err
-	}
-	resp, err := client.initiateHandleResponse(httpResp)
-	return resp, err
+	return client.initiateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // initiateCreateRequest creates the Initiate request.
@@ -234,7 +223,7 @@ func (client *PartnerTransfersClient) initiateCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPartnerTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -245,8 +234,11 @@ func (client *PartnerTransfersClient) initiateCreateRequest(ctx context.Context,
 }
 
 // initiateHandleResponse handles the Initiate response.
-func (client *PartnerTransfersClient) initiateHandleResponse(resp *http.Response) (PartnerTransfersClientInitiateResponse, error) {
+func (client *PartnerTransfersClient) initiateHandleResponse(resp *http.Response, successCodes ...int) (PartnerTransfersClientInitiateResponse, error) {
 	result := PartnerTransfersClientInitiateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerTransferDetails); err != nil {
 		return PartnerTransfersClientInitiateResponse{}, err
 	}
@@ -271,47 +263,61 @@ func (client *PartnerTransfersClient) NewListPager(billingAccountName string, bi
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, billingAccountName, billingProfileName, customerName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, billingAccountName, billingProfileName, customerName, nextLink, options)
 			if err != nil {
 				return PartnerTransfersClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PartnerTransfersClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *PartnerTransfersClient) listCreateRequest(ctx context.Context, billingAccountName string, billingProfileName string, customerName string, _ *PartnerTransfersClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/billingProfiles/{billingProfileName}/customers/{customerName}/transfers"
-	if billingAccountName == "" {
-		return nil, errors.New("parameter billingAccountName cannot be empty")
+func (client *PartnerTransfersClient) listCreateRequest(ctx context.Context, billingAccountName string, billingProfileName string, customerName string, nextLink string, _ *PartnerTransfersClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/billingProfiles/{billingProfileName}/customers/{customerName}/transfers"
+		if billingAccountName == "" {
+			return nil, errors.New("parameter billingAccountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
+		if billingProfileName == "" {
+			return nil, errors.New("parameter billingProfileName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{billingProfileName}", url.PathEscape(billingProfileName))
+		if customerName == "" {
+			return nil, errors.New("parameter customerName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{customerName}", url.PathEscape(customerName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{billingAccountName}", url.PathEscape(billingAccountName))
-	if billingProfileName == "" {
-		return nil, errors.New("parameter billingProfileName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{billingProfileName}", url.PathEscape(billingProfileName))
-	if customerName == "" {
-		return nil, errors.New("parameter customerName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{customerName}", url.PathEscape(customerName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultPartnerTransfersClientVersion)
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *PartnerTransfersClient) listHandleResponse(resp *http.Response) (PartnerTransfersClientListResponse, error) {
+func (client *PartnerTransfersClient) listHandleResponse(resp *http.Response, successCodes ...int) (PartnerTransfersClientListResponse, error) {
 	result := PartnerTransfersClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerTransferDetailsListResult); err != nil {
 		return PartnerTransfersClientListResponse{}, err
 	}

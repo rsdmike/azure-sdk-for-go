@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"runtime"
 	"sort"
 	"sync"
 
@@ -17,6 +18,45 @@ import (
 
 const maxItemsPerQuery = 1000
 const maxPKRangeGoneRetries = 3
+
+func sharedPartitionKey(items []ItemIdentity) *PartitionKey {
+	if len(items) == 0 {
+		return nil
+	}
+
+	partitionKey := &items[0].PartitionKey
+	serializedPartitionKey, err := partitionKey.toJsonString()
+	if err != nil {
+		return nil
+	}
+	for i := 1; i < len(items); i++ {
+		serialized, err := items[i].PartitionKey.toJsonString()
+		if err != nil || serialized != serializedPartitionKey {
+			return nil
+		}
+	}
+	return partitionKey
+}
+
+func completeSharedPartitionKey(items []ItemIdentity, pkDef PartitionKeyDefinition) *PartitionKey {
+	partitionKey := sharedPartitionKey(items)
+	if partitionKey == nil || len(partitionKey.values) != len(pkDef.Paths) {
+		return nil
+	}
+	return partitionKey
+}
+
+// determineConcurrency returns either the provided positive max or NumCPU (>=1).
+func determineConcurrency(max *int32) int {
+	if max != nil && *max > 0 {
+		return int(*max)
+	}
+	c := runtime.NumCPU()
+	if c <= 0 {
+		c = 1
+	}
+	return c
+}
 
 // queryChunk is a single parameterized query targeting one physical partition key range.
 type queryChunk struct {
@@ -217,31 +257,14 @@ func (c *ContainerClient) executeOneChunk(
 			localOpts.ContinuationToken = &continuation
 		}
 
-		rangeID := chunk.rangeID
-		azResponse, err := c.database.client.sendQueryRequest(
-			path,
-			ctx,
-			chunk.query,
-			chunk.params,
-			operationContext,
-			&localOpts,
-			func(req *policy.Request) {
-				req.Raw().Header.Set(cosmosHeaderPartitionKeyRangeId, rangeID)
-			},
-		)
+		items, charge, ct, err := c.executeOneChunkPage(ctx, chunk, &localOpts, operationContext, path)
+		totalCharge += charge
 		if err != nil {
 			return nil, totalCharge, err
 		}
 
-		qResp, err := newQueryResponse(azResponse)
-		if err != nil {
-			return nil, totalCharge, err
-		}
+		allItems = append(allItems, items...)
 
-		totalCharge += qResp.RequestCharge
-		allItems = append(allItems, qResp.Items...)
-
-		ct := azResponse.Header.Get(cosmosHeaderContinuationToken)
 		if ct == "" {
 			break
 		}
@@ -249,6 +272,49 @@ func (c *ContainerClient) executeOneChunk(
 	}
 
 	return allItems, totalCharge, nil
+}
+
+// executeOneChunkPage sends a single page request for a chunk, creating an
+// OTel span for each HTTP round-trip. This matches the per-page span that
+// NewQueryItemsPager creates so that the internal queries issued by
+// ReadManyItems are visible in distributed traces.
+func (c *ContainerClient) executeOneChunkPage(
+	ctx context.Context,
+	chunk queryChunk,
+	queryOpts *QueryOptions,
+	operationContext pipelineRequestOptions,
+	path string,
+) ([][]byte, float32, string, error) {
+	var err error
+	spanName, err := c.getSpanForItems(operationTypeQuery)
+	if err != nil {
+		return nil, 0, "", err
+	}
+	ctx, endSpan := startSpan(ctx, spanName.name, c.database.client.internal.Tracer(), &spanName.options)
+	defer func() { endSpan(err) }()
+
+	rangeID := chunk.rangeID
+	azResponse, err := c.database.client.sendQueryRequest(
+		path,
+		ctx,
+		chunk.query,
+		chunk.params,
+		operationContext,
+		queryOpts,
+		func(req *policy.Request) {
+			req.Raw().Header.Set(cosmosHeaderPartitionKeyRangeId, rangeID)
+		},
+	)
+	if err != nil {
+		return nil, 0, "", err
+	}
+
+	qResp, err := newQueryResponse(azResponse)
+	if err != nil {
+		return nil, 0, "", err
+	}
+
+	return qResp.Items, qResp.RequestCharge, azResponse.Header.Get(cosmosHeaderContinuationToken), nil
 }
 
 // collectChunkResults merges per-chunk results into a single ReadManyItemsResponse.
@@ -287,7 +353,7 @@ func hasAnyPKRangeGoneError(results []chunkResult) bool {
 func (c *ContainerClient) executeReadManyWithQueries(
 	ctx context.Context,
 	items []ItemIdentity,
-	readManyOptions *ReadManyOptions,
+	readManyOptions *ReadManyItemsOptions,
 	operationContext pipelineRequestOptions,
 ) (ReadManyItemsResponse, error) {
 	concurrency := determineConcurrency(nil)
@@ -322,6 +388,8 @@ func (c *ContainerClient) executeReadManyWithQueries(
 			}
 			pkDef = containerResp.ContainerProperties.PartitionKeyDefinition
 		}
+
+		operationContext.headerOptionsOverride.partitionKey = completeSharedPartitionKey(items, pkDef)
 
 		pkRangeResp, err := c.getPartitionKeyRanges(ctx, nil)
 		if err != nil {

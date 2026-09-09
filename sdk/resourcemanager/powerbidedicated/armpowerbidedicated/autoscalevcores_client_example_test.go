@@ -45,7 +45,7 @@ func ExampleAutoScaleVCoresClient_Create() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.AutoScaleVCoresClientCreateResponse{
-	// 	AutoScaleVCore: &armpowerbidedicated.AutoScaleVCore{
+	// 	AutoScaleVCore: armpowerbidedicated.AutoScaleVCore{
 	// 		Name: to.Ptr("testvcore"),
 	// 		Type: to.Ptr("Microsoft.PowerBIDedicated/autoScaleVCores"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/autoScaleVCores/testvcore"),
@@ -61,10 +61,10 @@ func ExampleAutoScaleVCoresClient_Create() {
 	// 			Tier: to.Ptr(armpowerbidedicated.VCoreSKUTierAutoScale),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("app1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("app1"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
 	// 		},
@@ -116,7 +116,7 @@ func ExampleAutoScaleVCoresClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.AutoScaleVCoresClientGetResponse{
-	// 	AutoScaleVCore: &armpowerbidedicated.AutoScaleVCore{
+	// 	AutoScaleVCore: armpowerbidedicated.AutoScaleVCore{
 	// 		Name: to.Ptr("testvcore"),
 	// 		Type: to.Ptr("Microsoft.PowerBIDedicated/autoScaleVCores"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/autoScaleVCores/testvcore"),
@@ -132,10 +132,10 @@ func ExampleAutoScaleVCoresClient_Get() {
 	// 			Tier: to.Ptr(armpowerbidedicated.VCoreSKUTierAutoScale),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("app1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("app1"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
 	// 		},
@@ -314,7 +314,7 @@ func ExampleAutoScaleVCoresClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.AutoScaleVCoresClientUpdateResponse{
-	// 	AutoScaleVCore: &armpowerbidedicated.AutoScaleVCore{
+	// 	AutoScaleVCore: armpowerbidedicated.AutoScaleVCore{
 	// 		Name: to.Ptr("testvcore"),
 	// 		Type: to.Ptr("Microsoft.PowerBIDedicated/autoScaleVCores"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/autoScaleVCores/testvcore"),
@@ -330,10 +330,10 @@ func ExampleAutoScaleVCoresClient_Update() {
 	// 			Tier: to.Ptr(armpowerbidedicated.VCoreSKUTierAutoScale),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("app1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("app1"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeApplication),
 	// 		},

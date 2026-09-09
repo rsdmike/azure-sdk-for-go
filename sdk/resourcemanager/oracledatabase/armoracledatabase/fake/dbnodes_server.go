@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // DbNodesServer is a fake server for instances of the armoracledatabase.DbNodesClient type.
@@ -64,9 +65,7 @@ func (d *DbNodesServerTransport) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (d *DbNodesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -86,10 +85,7 @@ func (d *DbNodesServerTransport) dispatchToMethodFake(req *http.Request, method 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -106,7 +102,7 @@ func (d *DbNodesServerTransport) dispatchBeginAction(req *http.Request) (*http.R
 	}
 	beginAction := d.beginAction.get(req)
 	if beginAction == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes/(?P<dbnodeocid>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/action`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes/(?P<dbnodeocid>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/action`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -141,7 +137,7 @@ func (d *DbNodesServerTransport) dispatchBeginAction(req *http.Request) (*http.R
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		d.beginAction.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -156,7 +152,7 @@ func (d *DbNodesServerTransport) dispatchGet(req *http.Request) (*http.Response,
 	if d.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes/(?P<dbnodeocid>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes/(?P<dbnodeocid>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -179,7 +175,7 @@ func (d *DbNodesServerTransport) dispatchGet(req *http.Request) (*http.Response,
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DbNode, req)
@@ -195,7 +191,7 @@ func (d *DbNodesServerTransport) dispatchNewListByCloudVMClusterPager(req *http.
 	}
 	newListByCloudVMClusterPager := d.newListByCloudVMClusterPager.get(req)
 	if newListByCloudVMClusterPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/cloudVmClusters/(?P<cloudvmclustername>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -220,7 +216,7 @@ func (d *DbNodesServerTransport) dispatchNewListByCloudVMClusterPager(req *http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		d.newListByCloudVMClusterPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

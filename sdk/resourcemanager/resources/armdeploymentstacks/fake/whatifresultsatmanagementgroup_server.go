@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -75,9 +76,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) Do(req *http.Request) (*
 }
 
 func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -101,10 +100,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchToMethodFake(req
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -121,7 +117,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchBeginCreateOrUpd
 	}
 	beginCreateOrUpdate := w.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -152,7 +148,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchBeginCreateOrUpd
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		w.beginCreateOrUpdate.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -167,7 +163,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchDelete(req *http
 	if w.srv.Delete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Delete not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -182,31 +178,11 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchDelete(req *http
 	if err != nil {
 		return nil, err
 	}
-	unmanageActionResourcesUnescaped, err := url.QueryUnescape(qp.Get("unmanageAction.Resources"))
-	if err != nil {
-		return nil, err
-	}
-	unmanageActionResourcesParam := getOptional(armdeploymentstacks.UnmanageActionResourceMode(unmanageActionResourcesUnescaped))
-	unmanageActionResourceGroupsUnescaped, err := url.QueryUnescape(qp.Get("unmanageAction.ResourceGroups"))
-	if err != nil {
-		return nil, err
-	}
-	unmanageActionResourceGroupsParam := getOptional(armdeploymentstacks.UnmanageActionResourceGroupMode(unmanageActionResourceGroupsUnescaped))
-	unmanageActionManagementGroupsUnescaped, err := url.QueryUnescape(qp.Get("unmanageAction.ManagementGroups"))
-	if err != nil {
-		return nil, err
-	}
-	unmanageActionManagementGroupsParam := getOptional(armdeploymentstacks.UnmanageActionManagementGroupMode(unmanageActionManagementGroupsUnescaped))
-	unmanageActionResourcesWithoutDeleteSupportUnescaped, err := url.QueryUnescape(qp.Get("unmanageAction.ResourcesWithoutDeleteSupport"))
-	if err != nil {
-		return nil, err
-	}
-	unmanageActionResourcesWithoutDeleteSupportParam := getOptional(armdeploymentstacks.ResourcesWithoutDeleteSupportAction(unmanageActionResourcesWithoutDeleteSupportUnescaped))
-	bypassStackOutOfSyncErrorUnescaped, err := url.QueryUnescape(qp.Get("bypassStackOutOfSyncError"))
-	if err != nil {
-		return nil, err
-	}
-	bypassStackOutOfSyncErrorParam, err := parseOptional(bypassStackOutOfSyncErrorUnescaped, strconv.ParseBool)
+	unmanageActionResourcesParam := getOptional(armdeploymentstacks.UnmanageActionResourceMode(qp.Get("unmanageAction.Resources")))
+	unmanageActionResourceGroupsParam := getOptional(armdeploymentstacks.UnmanageActionResourceGroupMode(qp.Get("unmanageAction.ResourceGroups")))
+	unmanageActionManagementGroupsParam := getOptional(armdeploymentstacks.UnmanageActionManagementGroupMode(qp.Get("unmanageAction.ManagementGroups")))
+	unmanageActionResourcesWithoutDeleteSupportParam := getOptional(armdeploymentstacks.ResourcesWithoutDeleteSupportAction(qp.Get("unmanageAction.ResourcesWithoutDeleteSupport")))
+	bypassStackOutOfSyncErrorParam, err := parseOptional(qp.Get("bypassStackOutOfSyncError"), strconv.ParseBool)
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +201,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchDelete(req *http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -239,7 +215,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchGet(req *http.Re
 	if w.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -258,7 +234,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchGet(req *http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).WhatIfResult, req)
@@ -274,7 +250,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchNewListPager(req
 	}
 	newListPager := w.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults`
+		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -295,7 +271,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchNewListPager(req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -311,7 +287,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchBeginWhatIf(req 
 	}
 	beginWhatIf := w.beginWhatIf.get(req)
 	if beginWhatIf == nil {
-		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/whatIf`
+		const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Resources/deploymentStacksWhatIfResults/(?P<deploymentStacksWhatIfResultName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/whatIf`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -338,7 +314,7 @@ func (w *WhatIfResultsAtManagementGroupServerTransport) dispatchBeginWhatIf(req 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		w.beginWhatIf.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}

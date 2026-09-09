@@ -18,6 +18,8 @@ import (
 
 // PrefixListGlobalRulestackClient contains the methods for the PrefixListGlobalRulestack group.
 // Don't use this type directly, use NewPrefixListGlobalRulestackClient() instead.
+//
+// Generated from API version 2025-10-08
 type PrefixListGlobalRulestackClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewPrefixListGlobalRulestackClient(credential azcore.TokenCredential, optio
 
 // BeginCreateOrUpdate - Create a PrefixListGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - Local Rule priority
 //   - resource - Resource create parameters.
@@ -64,8 +64,6 @@ func (client *PrefixListGlobalRulestackClient) BeginCreateOrUpdate(ctx context.C
 
 // CreateOrUpdate - Create a PrefixListGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *PrefixListGlobalRulestackClient) createOrUpdate(ctx context.Context, globalRulestackName string, name string, resource PrefixListGlobalRulestackResource, options *PrefixListGlobalRulestackClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PrefixListGlobalRulestackClient.BeginCreateOrUpdate"
@@ -81,8 +79,7 @@ func (client *PrefixListGlobalRulestackClient) createOrUpdate(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -103,8 +100,8 @@ func (client *PrefixListGlobalRulestackClient) createOrUpdateCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -115,8 +112,6 @@ func (client *PrefixListGlobalRulestackClient) createOrUpdateCreateRequest(ctx c
 
 // BeginDelete - Delete a PrefixListGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - Local Rule priority
 //   - options - PrefixListGlobalRulestackClientBeginDeleteOptions contains the optional parameters for the PrefixListGlobalRulestackClient.BeginDelete
@@ -140,8 +135,6 @@ func (client *PrefixListGlobalRulestackClient) BeginDelete(ctx context.Context, 
 
 // Delete - Delete a PrefixListGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 func (client *PrefixListGlobalRulestackClient) deleteOperation(ctx context.Context, globalRulestackName string, name string, options *PrefixListGlobalRulestackClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PrefixListGlobalRulestackClient.BeginDelete"
@@ -157,8 +150,7 @@ func (client *PrefixListGlobalRulestackClient) deleteOperation(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -179,15 +171,13 @@ func (client *PrefixListGlobalRulestackClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a PrefixListGlobalRulestackResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - name - Local Rule priority
 //   - options - PrefixListGlobalRulestackClientGetOptions contains the optional parameters for the PrefixListGlobalRulestackClient.Get
@@ -206,12 +196,7 @@ func (client *PrefixListGlobalRulestackClient) Get(ctx context.Context, globalRu
 	if err != nil {
 		return PrefixListGlobalRulestackClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PrefixListGlobalRulestackClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -230,15 +215,18 @@ func (client *PrefixListGlobalRulestackClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251008)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PrefixListGlobalRulestackClient) getHandleResponse(resp *http.Response) (PrefixListGlobalRulestackClientGetResponse, error) {
+func (client *PrefixListGlobalRulestackClient) getHandleResponse(resp *http.Response, successCodes ...int) (PrefixListGlobalRulestackClientGetResponse, error) {
 	result := PrefixListGlobalRulestackClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrefixListGlobalRulestackResource); err != nil {
 		return PrefixListGlobalRulestackClientGetResponse{}, err
 	}
@@ -246,8 +234,6 @@ func (client *PrefixListGlobalRulestackClient) getHandleResponse(resp *http.Resp
 }
 
 // NewListPager - List PrefixListGlobalRulestackResource resources by Tenant
-//
-// Generated from API version 2025-10-08
 //   - globalRulestackName - GlobalRulestack resource name
 //   - options - PrefixListGlobalRulestackClientListOptions contains the optional parameters for the PrefixListGlobalRulestackClient.NewListPager
 //     method.
@@ -262,39 +248,53 @@ func (client *PrefixListGlobalRulestackClient) NewListPager(globalRulestackName 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, globalRulestackName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, globalRulestackName, nextLink, options)
 			if err != nil {
 				return PrefixListGlobalRulestackClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PrefixListGlobalRulestackClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *PrefixListGlobalRulestackClient) listCreateRequest(ctx context.Context, globalRulestackName string, _ *PrefixListGlobalRulestackClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/prefixlists"
-	if globalRulestackName == "" {
-		return nil, errors.New("parameter globalRulestackName cannot be empty")
+func (client *PrefixListGlobalRulestackClient) listCreateRequest(ctx context.Context, globalRulestackName string, nextLink string, _ *PrefixListGlobalRulestackClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/PaloAltoNetworks.Cloudngfw/globalRulestacks/{globalRulestackName}/prefixlists"
+		if globalRulestackName == "" {
+			return nil, errors.New("parameter globalRulestackName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{globalRulestackName}", url.PathEscape(globalRulestackName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-08")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251008)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *PrefixListGlobalRulestackClient) listHandleResponse(resp *http.Response) (PrefixListGlobalRulestackClientListResponse, error) {
+func (client *PrefixListGlobalRulestackClient) listHandleResponse(resp *http.Response, successCodes ...int) (PrefixListGlobalRulestackClientListResponse, error) {
 	result := PrefixListGlobalRulestackClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrefixListGlobalRulestackResourceListResult); err != nil {
 		return PrefixListGlobalRulestackClientListResponse{}, err
 	}

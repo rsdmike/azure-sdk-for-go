@@ -14,8 +14,6 @@ import (
 	"strings"
 )
 
-const defaultAddressClientVersion string = "2024-04-01"
-
 // AddressClient contains the methods for the Address group.
 // Don't use this type directly, use NewAddressClient() instead.
 //
@@ -56,12 +54,7 @@ func (client *AddressClient) Validate(ctx context.Context, parameters AddressDet
 	if err != nil {
 		return AddressClientValidateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AddressClientValidateResponse{}, err
-	}
-	resp, err := client.validateHandleResponse(httpResp)
-	return resp, err
+	return client.validateHandleResponse(httpResp, http.StatusOK)
 }
 
 // validateCreateRequest creates the Validate request.
@@ -72,7 +65,7 @@ func (client *AddressClient) validateCreateRequest(ctx context.Context, paramete
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultAddressClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -83,8 +76,11 @@ func (client *AddressClient) validateCreateRequest(ctx context.Context, paramete
 }
 
 // validateHandleResponse handles the Validate response.
-func (client *AddressClient) validateHandleResponse(resp *http.Response) (AddressClientValidateResponse, error) {
+func (client *AddressClient) validateHandleResponse(resp *http.Response, successCodes ...int) (AddressClientValidateResponse, error) {
 	result := AddressClientValidateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AddressValidationResponse); err != nil {
 		return AddressClientValidateResponse{}, err
 	}

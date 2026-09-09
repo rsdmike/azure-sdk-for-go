@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // AggregatedCostServer is a fake server for instances of the armconsumption.AggregatedCostClient type.
@@ -53,9 +54,7 @@ func (a *AggregatedCostServerTransport) Do(req *http.Request) (*http.Response, e
 }
 
 func (a *AggregatedCostServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -73,10 +72,7 @@ func (a *AggregatedCostServerTransport) dispatchToMethodFake(req *http.Request, 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -91,7 +87,7 @@ func (a *AggregatedCostServerTransport) dispatchGetByManagementGroup(req *http.R
 	if a.srv.GetByManagementGroup == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetByManagementGroup not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/aggregatedcost`
+	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/aggregatedcost`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -102,11 +98,7 @@ func (a *AggregatedCostServerTransport) dispatchGetByManagementGroup(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-	if err != nil {
-		return nil, err
-	}
-	filterParam := getOptional(filterUnescaped)
+	filterParam := getOptional(qp.Get("$filter"))
 	var options *armconsumption.AggregatedCostClientGetByManagementGroupOptions
 	if filterParam != nil {
 		options = &armconsumption.AggregatedCostClientGetByManagementGroupOptions{
@@ -118,7 +110,7 @@ func (a *AggregatedCostServerTransport) dispatchGetByManagementGroup(req *http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ManagementGroupAggregatedCostResult, req)
@@ -132,7 +124,7 @@ func (a *AggregatedCostServerTransport) dispatchGetForBillingPeriodByManagementG
 	if a.srv.GetForBillingPeriodByManagementGroup == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetForBillingPeriodByManagementGroup not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Billing/billingPeriods/(?P<billingPeriodName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Consumption/aggregatedCost`
+	const regexStr = `/providers/Microsoft\.Management/managementGroups/(?P<managementGroupId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Billing/billingPeriods/(?P<billingPeriodName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Consumption/aggregatedCost`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -151,7 +143,7 @@ func (a *AggregatedCostServerTransport) dispatchGetForBillingPeriodByManagementG
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ManagementGroupAggregatedCostResult, req)

@@ -41,7 +41,7 @@ func ExampleExecutionsClient_BeginCreateOrUpdate() {
 						Outputs:       map[string]any{},
 					},
 				},
-				UpdateTime:    to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-17T13:55:20.922Z"); return t }()),
+				UpdateTime:    to.Ptr(time.Date(2025, time.February, 17, 13, 55, 20, 922000000, time.UTC)),
 				StatusMessage: to.Ptr("ebhukpnhnbu"),
 			},
 			WorkflowVersionID: to.Ptr("souenlqwltljsojdcbpc"),
@@ -56,13 +56,13 @@ func ExampleExecutionsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ExecutionsClientCreateOrUpdateResponse{
-	// 	Execution: &armworkloadorchestration.Execution{
+	// 	Execution: armworkloadorchestration.Execution{
 	// 		Properties: &armworkloadorchestration.ExecutionProperties{
 	// 			Specification: map[string]any{
 	// 			},
@@ -82,7 +82,7 @@ func ExampleExecutionsClient_BeginCreateOrUpdate() {
 	// 						},
 	// 					},
 	// 				},
-	// 				UpdateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-17T13:55:20.922Z"); return t}()),
+	// 				UpdateTime: to.Ptr(time.Date(2025, time.February, 17, 13, 55, 20, 922000000, time.UTC)),
 	// 				StatusMessage: to.Ptr("ebhukpnhnbu"),
 	// 			},
 	// 			WorkflowVersionID: to.Ptr("souenlqwltljsojdcbpc"),
@@ -99,10 +99,10 @@ func ExampleExecutionsClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("favedmahrbemfqzeuggazxzrvwugxw"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lywqfnyqrutroctdfbxzytel"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -125,7 +125,7 @@ func ExampleExecutionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -148,7 +148,7 @@ func ExampleExecutionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ExecutionsClientGetResponse{
-	// 	Execution: &armworkloadorchestration.Execution{
+	// 	Execution: armworkloadorchestration.Execution{
 	// 		Properties: &armworkloadorchestration.ExecutionProperties{
 	// 			Specification: map[string]any{
 	// 			},
@@ -168,7 +168,7 @@ func ExampleExecutionsClient_Get() {
 	// 						},
 	// 					},
 	// 				},
-	// 				UpdateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-17T13:55:20.922Z"); return t}()),
+	// 				UpdateTime: to.Ptr(time.Date(2025, time.February, 17, 13, 55, 20, 922000000, time.UTC)),
 	// 				StatusMessage: to.Ptr("ebhukpnhnbu"),
 	// 			},
 	// 			WorkflowVersionID: to.Ptr("souenlqwltljsojdcbpc"),
@@ -185,10 +185,10 @@ func ExampleExecutionsClient_Get() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("favedmahrbemfqzeuggazxzrvwugxw"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lywqfnyqrutroctdfbxzytel"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -240,7 +240,7 @@ func ExampleExecutionsClient_NewListByWorkflowVersionPager() {
 		// 								},
 		// 							},
 		// 						},
-		// 						UpdateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-17T13:55:20.919Z"); return t}()),
+		// 						UpdateTime: to.Ptr(time.Date(2025, time.February, 17, 13, 55, 20, 919000000, time.UTC)),
 		// 						StatusMessage: to.Ptr("dfmqxqonlrmrrmqkneij"),
 		// 					},
 		// 					ProvisioningState: to.Ptr(armworkloadorchestration.ProvisioningStateSucceeded),
@@ -256,10 +256,10 @@ func ExampleExecutionsClient_NewListByWorkflowVersionPager() {
 		// 				SystemData: &armworkloadorchestration.SystemData{
 		// 					CreatedBy: to.Ptr("favedmahrbemfqzeuggazxzrvwugxw"),
 		// 					CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("lywqfnyqrutroctdfbxzytel"),
 		// 					LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -291,13 +291,13 @@ func ExampleExecutionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armworkloadorchestration.ExecutionsClientUpdateResponse{
-	// 	Execution: &armworkloadorchestration.Execution{
+	// 	Execution: armworkloadorchestration.Execution{
 	// 		Properties: &armworkloadorchestration.ExecutionProperties{
 	// 			Specification: map[string]any{
 	// 			},
@@ -317,7 +317,7 @@ func ExampleExecutionsClient_BeginUpdate() {
 	// 						},
 	// 					},
 	// 				},
-	// 				UpdateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-17T13:55:20.922Z"); return t}()),
+	// 				UpdateTime: to.Ptr(time.Date(2025, time.February, 17, 13, 55, 20, 922000000, time.UTC)),
 	// 				StatusMessage: to.Ptr("ebhukpnhnbu"),
 	// 			},
 	// 			WorkflowVersionID: to.Ptr("souenlqwltljsojdcbpc"),
@@ -334,10 +334,10 @@ func ExampleExecutionsClient_BeginUpdate() {
 	// 		SystemData: &armworkloadorchestration.SystemData{
 	// 			CreatedBy: to.Ptr("favedmahrbemfqzeuggazxzrvwugxw"),
 	// 			CreatedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("lywqfnyqrutroctdfbxzytel"),
 	// 			LastModifiedByType: to.Ptr(armworkloadorchestration.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-01-24T11:04:49.597Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.January, 24, 11, 4, 49, 597000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

@@ -18,6 +18,8 @@ import (
 
 // IntegrationRuntimeObjectMetadataClient contains the methods for the IntegrationRuntimeObjectMetadata group.
 // Don't use this type directly, use NewIntegrationRuntimeObjectMetadataClient() instead.
+//
+// Generated from API version 2018-06-01
 type IntegrationRuntimeObjectMetadataClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type IntegrationRuntimeObjectMetadataClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewIntegrationRuntimeObjectMetadataClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*IntegrationRuntimeObjectMetadataClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewIntegrationRuntimeObjectMetadataClient(subscriptionID string, credential
 
 // Get - Get a SSIS integration runtime object metadata by specified path. The return is pageable metadata list.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - integrationRuntimeName - The integration runtime name.
@@ -62,19 +65,14 @@ func (client *IntegrationRuntimeObjectMetadataClient) Get(ctx context.Context, r
 	if err != nil {
 		return IntegrationRuntimeObjectMetadataClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IntegrationRuntimeObjectMetadataClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *IntegrationRuntimeObjectMetadataClient) getCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimeObjectMetadataClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/integrationRuntimes/{integrationRuntimeName}/getObjectMetadata"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *IntegrationRuntimeObjectMetadataClient) getCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.GetMetadataRequest != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -108,8 +106,11 @@ func (client *IntegrationRuntimeObjectMetadataClient) getCreateRequest(ctx conte
 }
 
 // getHandleResponse handles the Get response.
-func (client *IntegrationRuntimeObjectMetadataClient) getHandleResponse(resp *http.Response) (IntegrationRuntimeObjectMetadataClientGetResponse, error) {
+func (client *IntegrationRuntimeObjectMetadataClient) getHandleResponse(resp *http.Response, successCodes ...int) (IntegrationRuntimeObjectMetadataClientGetResponse, error) {
 	result := IntegrationRuntimeObjectMetadataClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SsisObjectMetadataListResponse); err != nil {
 		return IntegrationRuntimeObjectMetadataClientGetResponse{}, err
 	}
@@ -118,8 +119,6 @@ func (client *IntegrationRuntimeObjectMetadataClient) getHandleResponse(resp *ht
 
 // BeginRefresh - Refresh a SSIS integration runtime object metadata.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - integrationRuntimeName - The integration runtime name.
@@ -144,8 +143,6 @@ func (client *IntegrationRuntimeObjectMetadataClient) BeginRefresh(ctx context.C
 
 // Refresh - Refresh a SSIS integration runtime object metadata.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *IntegrationRuntimeObjectMetadataClient) refresh(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimeObjectMetadataClientBeginRefreshOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IntegrationRuntimeObjectMetadataClient.BeginRefresh"
@@ -161,8 +158,7 @@ func (client *IntegrationRuntimeObjectMetadataClient) refresh(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -171,7 +167,7 @@ func (client *IntegrationRuntimeObjectMetadataClient) refresh(ctx context.Contex
 func (client *IntegrationRuntimeObjectMetadataClient) refreshCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, _ *IntegrationRuntimeObjectMetadataClientBeginRefreshOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/integrationRuntimes/{integrationRuntimeName}/refreshObjectMetadata"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -191,8 +187,8 @@ func (client *IntegrationRuntimeObjectMetadataClient) refreshCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

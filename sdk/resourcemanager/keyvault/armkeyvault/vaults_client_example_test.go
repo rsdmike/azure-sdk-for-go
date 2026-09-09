@@ -6,11 +6,10 @@ package armkeyvault_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/keyvault/armkeyvault/v2"
+	"log"
 )
 
 // Generated from example definition: 2026-02-01/checkVaultNameAvailability.json
@@ -35,7 +34,7 @@ func ExampleVaultsClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientCheckNameAvailabilityResponse{
-	// 	CheckNameAvailabilityResult: &armkeyvault.CheckNameAvailabilityResult{
+	// 	CheckNameAvailabilityResult: armkeyvault.CheckNameAvailabilityResult{
 	// 		NameAvailable: to.Ptr(true),
 	// 	},
 	// }
@@ -123,13 +122,13 @@ func ExampleVaultsClient_BeginCreateOrUpdate_createANewVaultOrUpdateAnExistingVa
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientCreateOrUpdateResponse{
-	// 	Vault: &armkeyvault.Vault{
+	// 	Vault: armkeyvault.Vault{
 	// 		Name: to.Ptr("sample-vault"),
 	// 		Type: to.Ptr("Microsoft.KeyVault/vaults"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-resource-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -232,10 +231,10 @@ func ExampleVaultsClient_BeginCreateOrUpdate_createANewVaultOrUpdateAnExistingVa
 	// 			VaultURI: to.Ptr("https://sample-vault.vault.azure.net"),
 	// 		},
 	// 		SystemData: &armkeyvault.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("keyVaultUser1"),
 	// 			CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("keyVaultUser2"),
 	// 			LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 	// 		},
@@ -291,13 +290,13 @@ func ExampleVaultsClient_BeginCreateOrUpdate_createOrUpdateAVaultWithNetworkAcls
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientCreateOrUpdateResponse{
-	// 	Vault: &armkeyvault.Vault{
+	// 	Vault: armkeyvault.Vault{
 	// 		Name: to.Ptr("sample-vault"),
 	// 		Type: to.Ptr("Microsoft.KeyVault/vaults"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-resource-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -332,10 +331,10 @@ func ExampleVaultsClient_BeginCreateOrUpdate_createOrUpdateAVaultWithNetworkAcls
 	// 			VaultURI: to.Ptr("https://sample-vault.vault.azure.net"),
 	// 		},
 	// 		SystemData: &armkeyvault.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("keyVaultUser1"),
 	// 			CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("keyVaultUser2"),
 	// 			LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 	// 		},
@@ -386,7 +385,7 @@ func ExampleVaultsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientGetResponse{
-	// 	Vault: &armkeyvault.Vault{
+	// 	Vault: armkeyvault.Vault{
 	// 		Name: to.Ptr("sample-vault"),
 	// 		Type: to.Ptr("Microsoft.KeyVault/vaults"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-resource-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -458,10 +457,10 @@ func ExampleVaultsClient_Get() {
 	// 			VaultURI: to.Ptr("https://sample-vault.vault.azure.net"),
 	// 		},
 	// 		SystemData: &armkeyvault.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("keyVaultUser1"),
 	// 			CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("keyVaultUser2"),
 	// 			LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 	// 		},
@@ -490,15 +489,15 @@ func ExampleVaultsClient_GetDeleted() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientGetDeletedResponse{
-	// 	DeletedVault: &armkeyvault.DeletedVault{
+	// 	DeletedVault: armkeyvault.DeletedVault{
 	// 		Name: to.Ptr("sample-vault"),
 	// 		Type: to.Ptr("Microsoft.KeyVault/deletedVaults"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.KeyVault/locations/westus/deletedVaults/sample-vault"),
 	// 		Properties: &armkeyvault.DeletedVaultProperties{
-	// 			DeletionDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-01-01T00:00:59Z"); return t}()),
+	// 			DeletionDate: to.Ptr(time.Date(2017, time.January, 1, 0, 0, 59, 0, time.UTC)),
 	// 			Location: to.Ptr("westus"),
 	// 			PurgeProtectionEnabled: to.Ptr(true),
-	// 			ScheduledPurgeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-01T00:00:59Z"); return t}()),
+	// 			ScheduledPurgeDate: to.Ptr(time.Date(2017, time.April, 1, 0, 0, 59, 0, time.UTC)),
 	// 			Tags: map[string]*string{
 	// 			},
 	// 			VaultID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -518,7 +517,8 @@ func ExampleVaultsClient_NewListPager() {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
-	pager := clientFactory.NewVaultsClient().NewListPager(&armkeyvault.VaultsClientListOptions{Top: to.Ptr[int32](1)})
+	pager := clientFactory.NewVaultsClient().NewListPager(&armkeyvault.VaultsClientListOptions{
+		Top: to.Ptr[int32](1)})
 	for pager.More() {
 		page, err := pager.NextPage(ctx)
 		if err != nil {
@@ -646,10 +646,10 @@ func ExampleVaultsClient_NewListByResourceGroupPager() {
 		// 					VaultURI: to.Ptr("https://sample-vault.vault.azure.net/"),
 		// 				},
 		// 				SystemData: &armkeyvault.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 		// 					CreatedBy: to.Ptr("keyVaultUser1"),
 		// 					CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("keyVaultUser2"),
 		// 					LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 		// 				},
@@ -761,10 +761,10 @@ func ExampleVaultsClient_NewListBySubscriptionPager() {
 		// 					VaultURI: to.Ptr("https://sample-vault.vault.azure.net/"),
 		// 				},
 		// 				SystemData: &armkeyvault.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 		// 					CreatedBy: to.Ptr("keyVaultUser1"),
 		// 					CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("keyVaultUser2"),
 		// 					LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 		// 				},
@@ -808,10 +808,10 @@ func ExampleVaultsClient_NewListDeletedPager() {
 		// 				Type: to.Ptr("Microsoft.KeyVault/deletedVaults"),
 		// 				ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.KeyVault/locations/westus/deletedVaults/sample-vault"),
 		// 				Properties: &armkeyvault.DeletedVaultProperties{
-		// 					DeletionDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-01-01T00:00:59Z"); return t}()),
+		// 					DeletionDate: to.Ptr(time.Date(2017, time.January, 1, 0, 0, 59, 0, time.UTC)),
 		// 					Location: to.Ptr("westus"),
 		// 					PurgeProtectionEnabled: to.Ptr(true),
-		// 					ScheduledPurgeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-01T00:00:59Z"); return t}()),
+		// 					ScheduledPurgeDate: to.Ptr(time.Date(2017, time.April, 1, 0, 0, 59, 0, time.UTC)),
 		// 					Tags: map[string]*string{
 		// 					},
 		// 					VaultID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -840,7 +840,7 @@ func ExampleVaultsClient_BeginPurgeDeleted() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -932,7 +932,7 @@ func ExampleVaultsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientUpdateResponse{
-	// 	Vault: &armkeyvault.Vault{
+	// 	Vault: armkeyvault.Vault{
 	// 		Name: to.Ptr("sample-vault"),
 	// 		Type: to.Ptr("Microsoft.KeyVault/vaults"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-resource-group/providers/Microsoft.KeyVault/vaults/sample-vault"),
@@ -1034,10 +1034,10 @@ func ExampleVaultsClient_Update() {
 	// 			VaultURI: to.Ptr("https://sample-vault.vault.azure.net"),
 	// 		},
 	// 		SystemData: &armkeyvault.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			CreatedBy: to.Ptr("keyVaultUser1"),
 	// 			CreatedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T12:00:00.0000000Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 1, 12, 0, 0, 0, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("keyVaultUser2"),
 	// 			LastModifiedByType: to.Ptr(armkeyvault.CreatedByTypeUser),
 	// 		},
@@ -1086,7 +1086,7 @@ func ExampleVaultsClient_UpdateAccessPolicy() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armkeyvault.VaultsClientUpdateAccessPolicyResponse{
-	// 	VaultAccessPolicyParameters: &armkeyvault.VaultAccessPolicyParameters{
+	// 	VaultAccessPolicyParameters: armkeyvault.VaultAccessPolicyParameters{
 	// 		Type: to.Ptr("Microsoft.KeyVault/vaults/accessPolicies"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-group/providers/Microsoft.KeyVault/vaults/sample-vault/accessPolicies/"),
 	// 		Properties: &armkeyvault.VaultAccessPolicyProperties{

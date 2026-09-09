@@ -18,6 +18,8 @@ import (
 
 // InformationalOperationsClient contains the methods for the InformationalOperations group.
 // Don't use this type directly, use NewInformationalOperationsClient() instead.
+//
+// Generated from API version 2026-06-01
 type InformationalOperationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type InformationalOperationsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewInformationalOperationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*InformationalOperationsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewInformationalOperationsClient(subscriptionID string, credential azcore.T
 
 // GetLimits - Get file shares limits.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-06-01
 //   - location - The name of the Azure region.
 //   - options - InformationalOperationsClientGetLimitsOptions contains the optional parameters for the InformationalOperationsClient.GetLimits
 //     method.
@@ -60,19 +63,14 @@ func (client *InformationalOperationsClient) GetLimits(ctx context.Context, loca
 	if err != nil {
 		return InformationalOperationsClientGetLimitsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InformationalOperationsClientGetLimitsResponse{}, err
-	}
-	resp, err := client.getLimitsHandleResponse(httpResp)
-	return resp, err
+	return client.getLimitsHandleResponse(httpResp, http.StatusOK)
 }
 
 // getLimitsCreateRequest creates the GetLimits request.
 func (client *InformationalOperationsClient) getLimitsCreateRequest(ctx context.Context, location string, _ *InformationalOperationsClientGetLimitsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.FileShares/locations/{location}/getLimits"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -84,15 +82,18 @@ func (client *InformationalOperationsClient) getLimitsCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getLimitsHandleResponse handles the GetLimits response.
-func (client *InformationalOperationsClient) getLimitsHandleResponse(resp *http.Response) (InformationalOperationsClientGetLimitsResponse, error) {
+func (client *InformationalOperationsClient) getLimitsHandleResponse(resp *http.Response, successCodes ...int) (InformationalOperationsClientGetLimitsResponse, error) {
 	result := InformationalOperationsClientGetLimitsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShareLimitsResponse); err != nil {
 		return InformationalOperationsClientGetLimitsResponse{}, err
 	}
@@ -101,8 +102,6 @@ func (client *InformationalOperationsClient) getLimitsHandleResponse(resp *http.
 
 // GetProvisioningRecommendation - Get file shares provisioning parameters recommendation.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-06-01
 //   - location - The name of the Azure region.
 //   - body - The request body
 //   - options - InformationalOperationsClientGetProvisioningRecommendationOptions contains the optional parameters for the InformationalOperationsClient.GetProvisioningRecommendation
@@ -121,19 +120,14 @@ func (client *InformationalOperationsClient) GetProvisioningRecommendation(ctx c
 	if err != nil {
 		return InformationalOperationsClientGetProvisioningRecommendationResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InformationalOperationsClientGetProvisioningRecommendationResponse{}, err
-	}
-	resp, err := client.getProvisioningRecommendationHandleResponse(httpResp)
-	return resp, err
+	return client.getProvisioningRecommendationHandleResponse(httpResp, http.StatusOK)
 }
 
 // getProvisioningRecommendationCreateRequest creates the GetProvisioningRecommendation request.
 func (client *InformationalOperationsClient) getProvisioningRecommendationCreateRequest(ctx context.Context, location string, body FileShareProvisioningRecommendationRequest, _ *InformationalOperationsClientGetProvisioningRecommendationOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.FileShares/locations/{location}/getProvisioningRecommendation"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -145,8 +139,8 @@ func (client *InformationalOperationsClient) getProvisioningRecommendationCreate
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -156,8 +150,11 @@ func (client *InformationalOperationsClient) getProvisioningRecommendationCreate
 }
 
 // getProvisioningRecommendationHandleResponse handles the GetProvisioningRecommendation response.
-func (client *InformationalOperationsClient) getProvisioningRecommendationHandleResponse(resp *http.Response) (InformationalOperationsClientGetProvisioningRecommendationResponse, error) {
+func (client *InformationalOperationsClient) getProvisioningRecommendationHandleResponse(resp *http.Response, successCodes ...int) (InformationalOperationsClientGetProvisioningRecommendationResponse, error) {
 	result := InformationalOperationsClientGetProvisioningRecommendationResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShareProvisioningRecommendationResponse); err != nil {
 		return InformationalOperationsClientGetProvisioningRecommendationResponse{}, err
 	}
@@ -166,8 +163,6 @@ func (client *InformationalOperationsClient) getProvisioningRecommendationHandle
 
 // GetUsageData - Get file shares usage data.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-06-01
 //   - location - The name of the Azure region.
 //   - options - InformationalOperationsClientGetUsageDataOptions contains the optional parameters for the InformationalOperationsClient.GetUsageData
 //     method.
@@ -185,19 +180,14 @@ func (client *InformationalOperationsClient) GetUsageData(ctx context.Context, l
 	if err != nil {
 		return InformationalOperationsClientGetUsageDataResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InformationalOperationsClientGetUsageDataResponse{}, err
-	}
-	resp, err := client.getUsageDataHandleResponse(httpResp)
-	return resp, err
+	return client.getUsageDataHandleResponse(httpResp, http.StatusOK)
 }
 
 // getUsageDataCreateRequest creates the GetUsageData request.
 func (client *InformationalOperationsClient) getUsageDataCreateRequest(ctx context.Context, location string, _ *InformationalOperationsClientGetUsageDataOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.FileShares/locations/{location}/getUsageData"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -209,15 +199,18 @@ func (client *InformationalOperationsClient) getUsageDataCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getUsageDataHandleResponse handles the GetUsageData response.
-func (client *InformationalOperationsClient) getUsageDataHandleResponse(resp *http.Response) (InformationalOperationsClientGetUsageDataResponse, error) {
+func (client *InformationalOperationsClient) getUsageDataHandleResponse(resp *http.Response, successCodes ...int) (InformationalOperationsClientGetUsageDataResponse, error) {
 	result := InformationalOperationsClientGetUsageDataResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileShareUsageDataResponse); err != nil {
 		return InformationalOperationsClientGetUsageDataResponse{}, err
 	}

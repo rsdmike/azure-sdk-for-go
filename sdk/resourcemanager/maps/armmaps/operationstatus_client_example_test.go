@@ -6,10 +6,9 @@ package armmaps_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/maps/armmaps/v2"
+	"log"
 )
 
 // Generated from example definition: 2025-10-01-preview/GetOperationStatus.json
@@ -31,9 +30,9 @@ func ExampleOperationStatusClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmaps.OperationStatusClientGetResponse{
-	// 	OperationStatusResult: &armmaps.OperationStatusResult{
+	// 	OperationStatusResult: armmaps.OperationStatusResult{
 	// 		Name: to.Ptr("01234567-89ab-4def-0123-456789abcdef"),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-23T02:00:00.000+09:00"); return t}()),
+	// 		EndTime: to.Ptr(time.Date(2024, time.January, 22, 17, 0, 0, 0, time.UTC)),
 	// 		Error: &armmaps.ErrorDetail{
 	// 			Code: to.Ptr("BadArgument"),
 	// 			Message: to.Ptr("Invalid SKU provided."),
@@ -41,7 +40,7 @@ func ExampleOperationStatusClient_Get() {
 	// 		ID: to.Ptr("/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/providers/Microsoft.Maps/locations/eastus/operationStatuses/01234567-89ab-4def-0123-456789abcdef"),
 	// 		PercentComplete: to.Ptr[float64](0),
 	// 		ResourceID: to.Ptr("/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/resourceGroups/myResourceGroup/providers/Microsoft.Maps/accounts/myMapsAccount"),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-23T01:23:45.678+09:00"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2024, time.January, 22, 16, 23, 45, 678000000, time.UTC)),
 	// 		Status: to.Ptr("Failed"),
 	// 		Operations: []*armmaps.OperationStatusResult{
 	// 		},

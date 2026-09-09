@@ -19,6 +19,8 @@ import (
 
 // PriceSheetClient contains the methods for the PriceSheet group.
 // Don't use this type directly, use NewPriceSheetClient() instead.
+//
+// Generated from API version 2024-08-01
 type PriceSheetClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type PriceSheetClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPriceSheetClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PriceSheetClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewPriceSheetClient(subscriptionID string, credential azcore.TokenCredentia
 // BeginDownloadByBillingAccountPeriod - Generates the pricesheet for the provided billing period asynchronously based on
 // the enrollment id
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-08-01
 //   - billingAccountID - BillingAccount ID
 //   - billingPeriodName - Billing Period Name.
 //   - options - PriceSheetClientBeginDownloadByBillingAccountPeriodOptions contains the optional parameters for the PriceSheetClient.BeginDownloadByBillingAccountPeriod
@@ -69,8 +72,6 @@ func (client *PriceSheetClient) BeginDownloadByBillingAccountPeriod(ctx context.
 // DownloadByBillingAccountPeriod - Generates the pricesheet for the provided billing period asynchronously based on the enrollment
 // id
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-08-01
 func (client *PriceSheetClient) downloadByBillingAccountPeriod(ctx context.Context, billingAccountID string, billingPeriodName string, options *PriceSheetClientBeginDownloadByBillingAccountPeriodOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PriceSheetClient.BeginDownloadByBillingAccountPeriod"
@@ -86,8 +87,7 @@ func (client *PriceSheetClient) downloadByBillingAccountPeriod(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -108,16 +108,14 @@ func (client *PriceSheetClient) downloadByBillingAccountPeriodCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // Get - Gets the price sheet for a subscription. Price sheet is available via this API only for May 1, 2014 or later.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-08-01
 //   - options - PriceSheetClientGetOptions contains the optional parameters for the PriceSheetClient.Get method.
 func (client *PriceSheetClient) Get(ctx context.Context, options *PriceSheetClientGetOptions) (PriceSheetClientGetResponse, error) {
 	var err error
@@ -133,19 +131,14 @@ func (client *PriceSheetClient) Get(ctx context.Context, options *PriceSheetClie
 	if err != nil {
 		return PriceSheetClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PriceSheetClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *PriceSheetClient) getCreateRequest(ctx context.Context, options *PriceSheetClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Consumption/pricesheets/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -162,15 +155,18 @@ func (client *PriceSheetClient) getCreateRequest(ctx context.Context, options *P
 	if options != nil && options.Top != nil {
 		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
 	}
-	reqQP.Set("api-version", "2024-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PriceSheetClient) getHandleResponse(resp *http.Response) (PriceSheetClientGetResponse, error) {
+func (client *PriceSheetClient) getHandleResponse(resp *http.Response, successCodes ...int) (PriceSheetClientGetResponse, error) {
 	result := PriceSheetClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PriceSheetResult); err != nil {
 		return PriceSheetClientGetResponse{}, err
 	}
@@ -180,8 +176,6 @@ func (client *PriceSheetClient) getHandleResponse(resp *http.Response) (PriceShe
 // GetByBillingPeriod - Get the price sheet for a scope by subscriptionId and billing period. Price sheet is available via
 // this API only for May 1, 2014 or later.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-08-01
 //   - billingPeriodName - Billing Period Name.
 //   - options - PriceSheetClientGetByBillingPeriodOptions contains the optional parameters for the PriceSheetClient.GetByBillingPeriod
 //     method.
@@ -199,19 +193,14 @@ func (client *PriceSheetClient) GetByBillingPeriod(ctx context.Context, billingP
 	if err != nil {
 		return PriceSheetClientGetByBillingPeriodResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PriceSheetClientGetByBillingPeriodResponse{}, err
-	}
-	resp, err := client.getByBillingPeriodHandleResponse(httpResp)
-	return resp, err
+	return client.getByBillingPeriodHandleResponse(httpResp, http.StatusOK)
 }
 
 // getByBillingPeriodCreateRequest creates the GetByBillingPeriod request.
 func (client *PriceSheetClient) getByBillingPeriodCreateRequest(ctx context.Context, billingPeriodName string, options *PriceSheetClientGetByBillingPeriodOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Billing/billingPeriods/{billingPeriodName}/providers/Microsoft.Consumption/pricesheets/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if billingPeriodName == "" {
@@ -232,15 +221,18 @@ func (client *PriceSheetClient) getByBillingPeriodCreateRequest(ctx context.Cont
 	if options != nil && options.Top != nil {
 		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
 	}
-	reqQP.Set("api-version", "2024-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getByBillingPeriodHandleResponse handles the GetByBillingPeriod response.
-func (client *PriceSheetClient) getByBillingPeriodHandleResponse(resp *http.Response) (PriceSheetClientGetByBillingPeriodResponse, error) {
+func (client *PriceSheetClient) getByBillingPeriodHandleResponse(resp *http.Response, successCodes ...int) (PriceSheetClientGetByBillingPeriodResponse, error) {
 	result := PriceSheetClientGetByBillingPeriodResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PriceSheetResult); err != nil {
 		return PriceSheetClientGetByBillingPeriodResponse{}, err
 	}

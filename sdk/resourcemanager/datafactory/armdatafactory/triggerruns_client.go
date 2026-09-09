@@ -18,6 +18,8 @@ import (
 
 // TriggerRunsClient contains the methods for the TriggerRuns group.
 // Don't use this type directly, use NewTriggerRunsClient() instead.
+//
+// Generated from API version 2018-06-01
 type TriggerRunsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type TriggerRunsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewTriggerRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*TriggerRunsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewTriggerRunsClient(subscriptionID string, credential azcore.TokenCredenti
 
 // Cancel - Cancel a single trigger instance by runId.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - runID - The pipeline run identifier.
 //   - options - TriggerRunsClientCancelOptions contains the optional parameters for the TriggerRunsClient.Cancel method.
@@ -61,8 +64,7 @@ func (client *TriggerRunsClient) Cancel(ctx context.Context, resourceGroupName s
 		return TriggerRunsClientCancelResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggerRunsClientCancelResponse{}, err
+		return TriggerRunsClientCancelResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return TriggerRunsClientCancelResponse{}, nil
 }
@@ -71,7 +73,7 @@ func (client *TriggerRunsClient) Cancel(ctx context.Context, resourceGroupName s
 func (client *TriggerRunsClient) cancelCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, runID string, _ *TriggerRunsClientCancelOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/triggerRuns/{runId}/cancel"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -95,16 +97,13 @@ func (client *TriggerRunsClient) cancelCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // QueryByFactory - Query trigger runs.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - filterParameters - Parameters to filter the pipeline run.
@@ -124,19 +123,14 @@ func (client *TriggerRunsClient) QueryByFactory(ctx context.Context, resourceGro
 	if err != nil {
 		return TriggerRunsClientQueryByFactoryResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggerRunsClientQueryByFactoryResponse{}, err
-	}
-	resp, err := client.queryByFactoryHandleResponse(httpResp)
-	return resp, err
+	return client.queryByFactoryHandleResponse(httpResp, http.StatusOK)
 }
 
 // queryByFactoryCreateRequest creates the QueryByFactory request.
 func (client *TriggerRunsClient) queryByFactoryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, filterParameters RunFilterParameters, _ *TriggerRunsClientQueryByFactoryOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/queryTriggerRuns"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -152,8 +146,8 @@ func (client *TriggerRunsClient) queryByFactoryCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, filterParameters); err != nil {
@@ -163,8 +157,11 @@ func (client *TriggerRunsClient) queryByFactoryCreateRequest(ctx context.Context
 }
 
 // queryByFactoryHandleResponse handles the QueryByFactory response.
-func (client *TriggerRunsClient) queryByFactoryHandleResponse(resp *http.Response) (TriggerRunsClientQueryByFactoryResponse, error) {
+func (client *TriggerRunsClient) queryByFactoryHandleResponse(resp *http.Response, successCodes ...int) (TriggerRunsClientQueryByFactoryResponse, error) {
 	result := TriggerRunsClientQueryByFactoryResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TriggerRunsQueryResponse); err != nil {
 		return TriggerRunsClientQueryByFactoryResponse{}, err
 	}
@@ -173,8 +170,6 @@ func (client *TriggerRunsClient) queryByFactoryHandleResponse(resp *http.Respons
 
 // Rerun - Rerun single trigger instance by runId.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - runID - The pipeline run identifier.
 //   - options - TriggerRunsClientRerunOptions contains the optional parameters for the TriggerRunsClient.Rerun method.
@@ -193,8 +188,7 @@ func (client *TriggerRunsClient) Rerun(ctx context.Context, resourceGroupName st
 		return TriggerRunsClientRerunResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TriggerRunsClientRerunResponse{}, err
+		return TriggerRunsClientRerunResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return TriggerRunsClientRerunResponse{}, nil
 }
@@ -203,7 +197,7 @@ func (client *TriggerRunsClient) Rerun(ctx context.Context, resourceGroupName st
 func (client *TriggerRunsClient) rerunCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, runID string, _ *TriggerRunsClientRerunOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/triggers/{triggerName}/triggerRuns/{runId}/rerun"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -227,8 +221,7 @@ func (client *TriggerRunsClient) rerunCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }

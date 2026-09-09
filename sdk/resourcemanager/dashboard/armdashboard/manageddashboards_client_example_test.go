@@ -34,13 +34,13 @@ func ExampleManagedDashboardsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdashboard.ManagedDashboardsClientCreateResponse{
-	// 	ManagedDashboard: &armdashboard.ManagedDashboard{
+	// 	ManagedDashboard: armdashboard.ManagedDashboard{
 	// 		Name: to.Ptr("myDashboard"),
 	// 		Type: to.Ptr("Microsoft.Dashboard/dashboards"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Dashboard/dashboards/myDashboard"),
@@ -49,10 +49,10 @@ func ExampleManagedDashboardsClient_BeginCreate() {
 	// 			ProvisioningState: to.Ptr(armdashboard.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdashboard.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdashboard.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdashboard.CreatedByTypeUser),
 	// 		},
@@ -104,7 +104,7 @@ func ExampleManagedDashboardsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdashboard.ManagedDashboardsClientGetResponse{
-	// 	ManagedDashboard: &armdashboard.ManagedDashboard{
+	// 	ManagedDashboard: armdashboard.ManagedDashboard{
 	// 		Name: to.Ptr("myDashboard"),
 	// 		Type: to.Ptr("Microsoft.Dashboard/dashboards"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Dashboard/dashboards/myDashboard"),
@@ -113,10 +113,10 @@ func ExampleManagedDashboardsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armdashboard.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdashboard.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdashboard.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdashboard.CreatedByTypeUser),
 	// 		},
@@ -236,7 +236,7 @@ func ExampleManagedDashboardsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdashboard.ManagedDashboardsClientUpdateResponse{
-	// 	ManagedDashboard: &armdashboard.ManagedDashboard{
+	// 	ManagedDashboard: armdashboard.ManagedDashboard{
 	// 		Name: to.Ptr("myDashboard"),
 	// 		Type: to.Ptr("Microsoft.Dashboard/dashboards"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Dashboard/dashboards/myDashboard"),

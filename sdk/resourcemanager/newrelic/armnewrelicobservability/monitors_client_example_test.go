@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2025-05-01-preview/Monitors_CreateOrUpdate_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_CreateOrUpdate_MaximumSet_Gen.json
 func ExampleMonitorsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -57,7 +57,7 @@ func ExampleMonitorsClient_BeginCreateOrUpdate() {
 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 			PlanData: &armnewrelicobservability.PlanData{
 				BillingCycle:  to.Ptr("Yearly"),
-				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t }()),
+				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 				PlanDetails:   to.Ptr("tbbiaga"),
 				UsageType:     to.Ptr(armnewrelicobservability.UsageTypePAYG),
 			},
@@ -84,13 +84,13 @@ func ExampleMonitorsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientCreateOrUpdateResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -132,7 +132,7 @@ func ExampleMonitorsClient_BeginCreateOrUpdate() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("Yearly"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -148,10 +148,10 @@ func ExampleMonitorsClient_BeginCreateOrUpdate() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -162,7 +162,7 @@ func ExampleMonitorsClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_Delete_MaximumSet_Gen.json
 func ExampleMonitorsClient_BeginDelete_monitorsDeleteMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -173,13 +173,13 @@ func ExampleMonitorsClient_BeginDelete_monitorsDeleteMaximumSetGen() {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
-	poller, err := clientFactory.NewMonitorsClient().BeginDelete(ctx, "rgopenapi", "ipxmlcbonyxtolzejcjshkmlron", "ruxvg@xqkmdhrnoo.hlmbpm", nil)
+	poller, err := clientFactory.NewMonitorsClient().BeginDelete(ctx, "rgopenapi", "ruxvg@xqkmdhrnoo.hlmbpm", "ipxmlcbonyxtolzejcjshkmlron", nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -188,7 +188,7 @@ func ExampleMonitorsClient_BeginDelete_monitorsDeleteMaximumSetGen() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_Delete_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_Delete_MinimumSet_Gen.json
 func ExampleMonitorsClient_BeginDelete_monitorsDeleteMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -199,13 +199,13 @@ func ExampleMonitorsClient_BeginDelete_monitorsDeleteMinimumSetGen() {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
-	poller, err := clientFactory.NewMonitorsClient().BeginDelete(ctx, "rgopenapi", "ipxmlcbonyxtolzejcjshkmlron", "ruxvg@xqkmdhrnoo.hlmbpm", nil)
+	poller, err := clientFactory.NewMonitorsClient().BeginDelete(ctx, "rgopenapi", "ruxvg@xqkmdhrnoo.hlmbpm", "ipxmlcbonyxtolzejcjshkmlron", nil)
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -214,7 +214,7 @@ func ExampleMonitorsClient_BeginDelete_monitorsDeleteMinimumSetGen() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_Get_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_Get_MaximumSet_Gen.json
 func ExampleMonitorsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -233,7 +233,7 @@ func ExampleMonitorsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientGetResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -275,7 +275,7 @@ func ExampleMonitorsClient_Get() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("Yearly"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -289,10 +289,10 @@ func ExampleMonitorsClient_Get() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -303,7 +303,7 @@ func ExampleMonitorsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_GetMetricRules_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_GetMetricRules_MaximumSet_Gen.json
 func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -324,7 +324,7 @@ func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMaximumSetGen() 
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientGetMetricRulesResponse{
-	// 	MetricRules: &armnewrelicobservability.MetricRules{
+	// 	MetricRules: armnewrelicobservability.MetricRules{
 	// 		FilteringTags: []*armnewrelicobservability.FilteringTag{
 	// 			{
 	// 				Name: to.Ptr("qnvixg"),
@@ -338,7 +338,7 @@ func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMaximumSetGen() 
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_GetMetricRules_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_GetMetricRules_MinimumSet_Gen.json
 func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -359,7 +359,7 @@ func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMinimumSetGen() 
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientGetMetricRulesResponse{
-	// 	MetricRules: &armnewrelicobservability.MetricRules{
+	// 	MetricRules: armnewrelicobservability.MetricRules{
 	// 		FilteringTags: []*armnewrelicobservability.FilteringTag{
 	// 		},
 	// 		SendMetrics: to.Ptr(armnewrelicobservability.SendMetricsStatusDisabled),
@@ -367,7 +367,7 @@ func ExampleMonitorsClient_GetMetricRules_monitorsGetMetricRulesMinimumSetGen() 
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_GetMetricStatus_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_GetMetricStatus_MaximumSet_Gen.json
 func ExampleMonitorsClient_GetMetricStatus_monitorsGetMetricStatusMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -391,7 +391,7 @@ func ExampleMonitorsClient_GetMetricStatus_monitorsGetMetricStatusMaximumSetGen(
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientGetMetricStatusResponse{
-	// 	MetricsStatusResponse: &armnewrelicobservability.MetricsStatusResponse{
+	// 	MetricsStatusResponse: armnewrelicobservability.MetricsStatusResponse{
 	// 		AzureResourceIDs: []*string{
 	// 			to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgNewRelic/providers/NewRelic.Observability/monitors/fhcjxnxumkdlgpwanewtkdnyuz"),
 	// 		},
@@ -399,7 +399,7 @@ func ExampleMonitorsClient_GetMetricStatus_monitorsGetMetricStatusMaximumSetGen(
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_GetMetricStatus_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_GetMetricStatus_MinimumSet_Gen.json
 func ExampleMonitorsClient_GetMetricStatus_monitorsGetMetricStatusMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -423,14 +423,14 @@ func ExampleMonitorsClient_GetMetricStatus_monitorsGetMetricStatusMinimumSetGen(
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientGetMetricStatusResponse{
-	// 	MetricsStatusResponse: &armnewrelicobservability.MetricsStatusResponse{
+	// 	MetricsStatusResponse: armnewrelicobservability.MetricsStatusResponse{
 	// 		AzureResourceIDs: []*string{
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_LatestLinkedSaaS_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_LatestLinkedSaaS_MaximumSet_Gen.json
 func ExampleMonitorsClient_LatestLinkedSaaS_monitorsLatestLinkedSaaSMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -449,14 +449,14 @@ func ExampleMonitorsClient_LatestLinkedSaaS_monitorsLatestLinkedSaaSMaximumSetGe
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientLatestLinkedSaaSResponse{
-	// 	LatestLinkedSaaSResponse: &armnewrelicobservability.LatestLinkedSaaSResponse{
+	// 	LatestLinkedSaaSResponse: armnewrelicobservability.LatestLinkedSaaSResponse{
 	// 		IsHiddenSaaS: to.Ptr(false),
 	// 		SaaSResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgNewRelic/providers/Microsoft.SaaS/resources/abcd"),
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_LatestLinkedSaaS_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_LatestLinkedSaaS_MinimumSet_Gen.json
 func ExampleMonitorsClient_LatestLinkedSaaS_monitorsLatestLinkedSaaSMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -475,14 +475,14 @@ func ExampleMonitorsClient_LatestLinkedSaaS_monitorsLatestLinkedSaaSMinimumSetGe
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientLatestLinkedSaaSResponse{
-	// 	LatestLinkedSaaSResponse: &armnewrelicobservability.LatestLinkedSaaSResponse{
+	// 	LatestLinkedSaaSResponse: armnewrelicobservability.LatestLinkedSaaSResponse{
 	// 		IsHiddenSaaS: to.Ptr(false),
 	// 		SaaSResourceID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgNewRelic/providers/Microsoft.SaaS/resources/abcd"),
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_LinkSaaS.json
+// Generated from example definition: 2026-06-01/Monitors_LinkSaaS.json
 func ExampleMonitorsClient_BeginLinkSaaS() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -501,13 +501,13 @@ func ExampleMonitorsClient_BeginLinkSaaS() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientLinkSaaSResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -549,7 +549,7 @@ func ExampleMonitorsClient_BeginLinkSaaS() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("YEARLY"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -565,10 +565,10 @@ func ExampleMonitorsClient_BeginLinkSaaS() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -579,7 +579,7 @@ func ExampleMonitorsClient_BeginLinkSaaS() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListAppServices_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListAppServices_MaximumSet_Gen.json
 func ExampleMonitorsClient_NewListAppServicesPager_monitorsListAppServicesMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -621,7 +621,7 @@ func ExampleMonitorsClient_NewListAppServicesPager_monitorsListAppServicesMaximu
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListAppServices_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListAppServices_MinimumSet_Gen.json
 func ExampleMonitorsClient_NewListAppServicesPager_monitorsListAppServicesMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -657,7 +657,7 @@ func ExampleMonitorsClient_NewListAppServicesPager_monitorsListAppServicesMinimu
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListByResourceGroup_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListByResourceGroup_MaximumSet_Gen.json
 func ExampleMonitorsClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -725,7 +725,7 @@ func ExampleMonitorsClient_NewListByResourceGroupPager() {
 		// 					OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 		// 					PlanData: &armnewrelicobservability.PlanData{
 		// 						BillingCycle: to.Ptr("Yearly"),
-		// 						EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+		// 						EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 		// 						PlanDetails: to.Ptr("tbbiaga"),
 		// 						UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 		// 					},
@@ -739,10 +739,10 @@ func ExampleMonitorsClient_NewListByResourceGroupPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armnewrelicobservability.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 		// 					CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 		// 					LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 		// 				},
@@ -756,7 +756,7 @@ func ExampleMonitorsClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListBySubscription_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListBySubscription_MaximumSet_Gen.json
 func ExampleMonitorsClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -824,7 +824,7 @@ func ExampleMonitorsClient_NewListBySubscriptionPager() {
 		// 					OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 		// 					PlanData: &armnewrelicobservability.PlanData{
 		// 						BillingCycle: to.Ptr("Yearly"),
-		// 						EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+		// 						EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 		// 						PlanDetails: to.Ptr("tbbiaga"),
 		// 						UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 		// 					},
@@ -838,10 +838,10 @@ func ExampleMonitorsClient_NewListBySubscriptionPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armnewrelicobservability.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 		// 					CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 		// 					LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 		// 				},
@@ -855,7 +855,7 @@ func ExampleMonitorsClient_NewListBySubscriptionPager() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListHosts_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListHosts_MaximumSet_Gen.json
 func ExampleMonitorsClient_NewListHostsPager_monitorsListHostsMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -897,7 +897,7 @@ func ExampleMonitorsClient_NewListHostsPager_monitorsListHostsMaximumSetGen() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListHosts_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListHosts_MinimumSet_Gen.json
 func ExampleMonitorsClient_NewListHostsPager_monitorsListHostsMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -933,7 +933,7 @@ func ExampleMonitorsClient_NewListHostsPager_monitorsListHostsMinimumSetGen() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/LinkedResources_List.json
+// Generated from example definition: 2026-06-01/LinkedResources_List.json
 func ExampleMonitorsClient_NewListLinkedResourcesPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -967,7 +967,7 @@ func ExampleMonitorsClient_NewListLinkedResourcesPager() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListMonitoredResources_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListMonitoredResources_MaximumSet_Gen.json
 func ExampleMonitorsClient_NewListMonitoredResourcesPager_monitorsListMonitoredResourcesMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1006,7 +1006,7 @@ func ExampleMonitorsClient_NewListMonitoredResourcesPager_monitorsListMonitoredR
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_ListMonitoredResources_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_ListMonitoredResources_MinimumSet_Gen.json
 func ExampleMonitorsClient_NewListMonitoredResourcesPager_monitorsListMonitoredResourcesMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1037,7 +1037,7 @@ func ExampleMonitorsClient_NewListMonitoredResourcesPager_monitorsListMonitoredR
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_RefreshIngestionKey.json
+// Generated from example definition: 2026-06-01/Monitors_RefreshIngestionKey.json
 func ExampleMonitorsClient_RefreshIngestionKey() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1054,7 +1054,7 @@ func ExampleMonitorsClient_RefreshIngestionKey() {
 	}
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_Resubscribe.json
+// Generated from example definition: 2026-06-01/Monitors_Resubscribe.json
 func ExampleMonitorsClient_BeginResubscribe() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1071,13 +1071,13 @@ func ExampleMonitorsClient_BeginResubscribe() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientResubscribeResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -1119,7 +1119,7 @@ func ExampleMonitorsClient_BeginResubscribe() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("YEARLY"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -1135,10 +1135,10 @@ func ExampleMonitorsClient_BeginResubscribe() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -1149,7 +1149,7 @@ func ExampleMonitorsClient_BeginResubscribe() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_SwitchBilling_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_SwitchBilling_MaximumSet_Gen.json
 func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1165,7 +1165,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 		OrganizationID:  to.Ptr("k"),
 		PlanData: &armnewrelicobservability.PlanData{
 			BillingCycle:  to.Ptr("Yearly"),
-			EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t }()),
+			EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 			PlanDetails:   to.Ptr("tbbiaga"),
 			UsageType:     to.Ptr(armnewrelicobservability.UsageTypePAYG),
 		},
@@ -1178,7 +1178,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientSwitchBillingResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -1220,7 +1220,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("Yearly"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -1234,10 +1234,10 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -1248,7 +1248,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMaximumSetGen() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_SwitchBilling_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_SwitchBilling_MinimumSet_Gen.json
 func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1269,7 +1269,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientSwitchBillingResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -1311,7 +1311,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMinimumSetGen() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("Yearly"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -1325,10 +1325,10 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMinimumSetGen() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -1339,7 +1339,7 @@ func ExampleMonitorsClient_SwitchBilling_monitorsSwitchBillingMinimumSetGen() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_Update_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_Update_MaximumSet_Gen.json
 func ExampleMonitorsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1379,7 +1379,7 @@ func ExampleMonitorsClient_BeginUpdate() {
 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 			PlanData: &armnewrelicobservability.PlanData{
 				BillingCycle:  to.Ptr("Yearly"),
-				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t }()),
+				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 				PlanDetails:   to.Ptr("tbbiaga"),
 				UsageType:     to.Ptr(armnewrelicobservability.UsageTypePAYG),
 			},
@@ -1400,13 +1400,13 @@ func ExampleMonitorsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientUpdateResponse{
-	// 	NewRelicMonitorResource: &armnewrelicobservability.NewRelicMonitorResource{
+	// 	NewRelicMonitorResource: armnewrelicobservability.NewRelicMonitorResource{
 	// 		Name: to.Ptr("fteaqmtwspcfgyopqzrepiqu"),
 	// 		Type: to.Ptr("hdj"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/NewRelic.Observability/monitors/myMonitor"),
@@ -1448,7 +1448,7 @@ func ExampleMonitorsClient_BeginUpdate() {
 	// 			OrgCreationSource: to.Ptr(armnewrelicobservability.OrgCreationSourceLIFTR),
 	// 			PlanData: &armnewrelicobservability.PlanData{
 	// 				BillingCycle: to.Ptr("Yearly"),
-	// 				EffectiveDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.786Z"); return t}()),
+	// 				EffectiveDate: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 786000000, time.UTC)),
 	// 				PlanDetails: to.Ptr("tbbiaga"),
 	// 				UsageType: to.Ptr(armnewrelicobservability.UsageTypePAYG),
 	// 			},
@@ -1462,10 +1462,10 @@ func ExampleMonitorsClient_BeginUpdate() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnewrelicobservability.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("pcdjzdldbwsdlfi"),
 	// 			CreatedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-05T14:11:37.787Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.December, 5, 14, 11, 37, 787000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xbsjrxmwwlmpnpvcica"),
 	// 			LastModifiedByType: to.Ptr(armnewrelicobservability.CreatedByTypeUser),
 	// 		},
@@ -1476,7 +1476,7 @@ func ExampleMonitorsClient_BeginUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_VmHostPayload_MaximumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_VmHostPayload_MaximumSet_Gen.json
 func ExampleMonitorsClient_VMHostPayload_monitorsVMHostPayloadMaximumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1495,13 +1495,13 @@ func ExampleMonitorsClient_VMHostPayload_monitorsVMHostPayloadMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientVMHostPayloadResponse{
-	// 	VMExtensionPayload: &armnewrelicobservability.VMExtensionPayload{
+	// 	VMExtensionPayload: armnewrelicobservability.VMExtensionPayload{
 	// 		IngestionKey: to.Ptr("ltqewhfexphvqgttoevaywrl"),
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2025-05-01-preview/Monitors_VmHostPayload_MinimumSet_Gen.json
+// Generated from example definition: 2026-06-01/Monitors_VmHostPayload_MinimumSet_Gen.json
 func ExampleMonitorsClient_VMHostPayload_monitorsVMHostPayloadMinimumSetGen() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1520,7 +1520,7 @@ func ExampleMonitorsClient_VMHostPayload_monitorsVMHostPayloadMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnewrelicobservability.MonitorsClientVMHostPayloadResponse{
-	// 	VMExtensionPayload: &armnewrelicobservability.VMExtensionPayload{
+	// 	VMExtensionPayload: armnewrelicobservability.VMExtensionPayload{
 	// 		IngestionKey: to.Ptr("ltqewhfexphvqgttoevaywrl"),
 	// 	},
 	// }

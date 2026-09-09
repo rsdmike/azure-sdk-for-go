@@ -8,12 +8,12 @@ import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud/v2"
 	"log"
 	"time"
 )
 
-// Generated from example definition: 2025-09-01/BareMetalMachineKeySets_Create.json
+// Generated from example definition: 2026-07-01/BareMetalMachineKeySets_Create.json
 func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -32,7 +32,7 @@ func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 		Location: to.Ptr("location"),
 		Properties: &armnetworkcloud.BareMetalMachineKeySetProperties{
 			AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
-			Expiration:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t }()),
+			Expiration:   to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 			JumpHostsAllowed: []*string{
 				to.Ptr("192.0.2.1"),
 				to.Ptr("192.0.2.5"),
@@ -69,13 +69,13 @@ func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachineKeySetsClientCreateOrUpdateResponse{
-	// 	BareMetalMachineKeySet: &armnetworkcloud.BareMetalMachineKeySet{
+	// 	BareMetalMachineKeySet: armnetworkcloud.BareMetalMachineKeySet{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -87,12 +87,12 @@ func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 	// 			AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
 	// 			DetailedStatus: to.Ptr(armnetworkcloud.BareMetalMachineKeySetDetailedStatusSomeInvalid),
 	// 			DetailedStatusMessage: to.Ptr("Invalid Azure user(s) were provided: userXYZ"),
-	// 			Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t}()),
+	// 			Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 	// 			JumpHostsAllowed: []*string{
 	// 				to.Ptr("192.0.2.1"),
 	// 				to.Ptr("192.0.2.5"),
 	// 			},
-	// 			LastValidation: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-12T12:00:00.008Z"); return t}()),
+	// 			LastValidation: to.Ptr(time.Date(2022, time.December, 12, 12, 0, 0, 8000000, time.UTC)),
 	// 			OSGroupName: to.Ptr("standardAccessGroup"),
 	// 			PrivilegeLevel: to.Ptr(armnetworkcloud.BareMetalMachineKeySetPrivilegeLevelOther),
 	// 			PrivilegeLevelName: to.Ptr("SecurityScanner"),
@@ -121,10 +121,10 @@ func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -137,7 +137,7 @@ func ExampleBareMetalMachineKeySetsClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachineKeySets_Delete.json
+// Generated from example definition: 2026-07-01/BareMetalMachineKeySets_Delete.json
 func ExampleBareMetalMachineKeySetsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -154,11 +154,11 @@ func ExampleBareMetalMachineKeySetsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachineKeySets_Get.json
+// Generated from example definition: 2026-07-01/BareMetalMachineKeySets_Get.json
 func ExampleBareMetalMachineKeySetsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -177,7 +177,7 @@ func ExampleBareMetalMachineKeySetsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachineKeySetsClientGetResponse{
-	// 	BareMetalMachineKeySet: &armnetworkcloud.BareMetalMachineKeySet{
+	// 	BareMetalMachineKeySet: armnetworkcloud.BareMetalMachineKeySet{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -189,12 +189,12 @@ func ExampleBareMetalMachineKeySetsClient_Get() {
 	// 			AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
 	// 			DetailedStatus: to.Ptr(armnetworkcloud.BareMetalMachineKeySetDetailedStatusSomeInvalid),
 	// 			DetailedStatusMessage: to.Ptr("Invalid Azure user(s) were provided: userXYZ"),
-	// 			Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t}()),
+	// 			Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 	// 			JumpHostsAllowed: []*string{
 	// 				to.Ptr("192.0.2.1"),
 	// 				to.Ptr("192.0.2.5"),
 	// 			},
-	// 			LastValidation: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-12T12:00:00.008Z"); return t}()),
+	// 			LastValidation: to.Ptr(time.Date(2022, time.December, 12, 12, 0, 0, 8000000, time.UTC)),
 	// 			OSGroupName: to.Ptr("standardAccessGroup"),
 	// 			PrivilegeLevel: to.Ptr(armnetworkcloud.BareMetalMachineKeySetPrivilegeLevelStandard),
 	// 			ProvisioningState: to.Ptr(armnetworkcloud.BareMetalMachineKeySetProvisioningStateSucceeded),
@@ -230,10 +230,10 @@ func ExampleBareMetalMachineKeySetsClient_Get() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -246,7 +246,7 @@ func ExampleBareMetalMachineKeySetsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachineKeySets_ListByCluster.json
+// Generated from example definition: 2026-07-01/BareMetalMachineKeySets_ListByCluster.json
 func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -284,12 +284,12 @@ func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 		// 					AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
 		// 					DetailedStatus: to.Ptr(armnetworkcloud.BareMetalMachineKeySetDetailedStatusSomeInvalid),
 		// 					DetailedStatusMessage: to.Ptr("Invalid Azure user(s) were provided: userXYZ"),
-		// 					Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t}()),
+		// 					Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 		// 					JumpHostsAllowed: []*string{
 		// 						to.Ptr("192.0.2.1"),
 		// 						to.Ptr("192.0.2.5"),
 		// 					},
-		// 					LastValidation: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-12T12:00:00.008Z"); return t}()),
+		// 					LastValidation: to.Ptr(time.Date(2022, time.December, 12, 12, 0, 0, 8000000, time.UTC)),
 		// 					OSGroupName: to.Ptr("standardAccessGroup"),
 		// 					PrivilegeLevel: to.Ptr(armnetworkcloud.BareMetalMachineKeySetPrivilegeLevelStandard),
 		// 					ProvisioningState: to.Ptr(armnetworkcloud.BareMetalMachineKeySetProvisioningStateSucceeded),
@@ -325,10 +325,10 @@ func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -350,12 +350,12 @@ func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 		// 					AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
 		// 					DetailedStatus: to.Ptr(armnetworkcloud.BareMetalMachineKeySetDetailedStatusSomeInvalid),
 		// 					DetailedStatusMessage: to.Ptr("Invalid Azure user(s) were provided: userXYZ"),
-		// 					Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t}()),
+		// 					Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 		// 					JumpHostsAllowed: []*string{
 		// 						to.Ptr("192.0.2.1"),
 		// 						to.Ptr("192.0.2.5"),
 		// 					},
-		// 					LastValidation: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-12T12:00:00.008Z"); return t}()),
+		// 					LastValidation: to.Ptr(time.Date(2022, time.December, 12, 12, 0, 0, 8000000, time.UTC)),
 		// 					OSGroupName: to.Ptr("standardAccessGroup"),
 		// 					PrivilegeLevel: to.Ptr(armnetworkcloud.BareMetalMachineKeySetPrivilegeLevelOther),
 		// 					PrivilegeLevelName: to.Ptr("SecurityScanner"),
@@ -384,10 +384,10 @@ func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -403,7 +403,7 @@ func ExampleBareMetalMachineKeySetsClient_NewListByClusterPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachineKeySets_Patch.json
+// Generated from example definition: 2026-07-01/BareMetalMachineKeySets_Patch.json
 func ExampleBareMetalMachineKeySetsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -416,7 +416,7 @@ func ExampleBareMetalMachineKeySetsClient_BeginUpdate() {
 	}
 	poller, err := clientFactory.NewBareMetalMachineKeySetsClient().BeginUpdate(ctx, "resourceGroupName", "clusterName", "bareMetalMachineKeySetName", armnetworkcloud.BareMetalMachineKeySetPatchParameters{
 		Properties: &armnetworkcloud.BareMetalMachineKeySetPatchProperties{
-			Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t }()),
+			Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 			JumpHostsAllowed: []*string{
 				to.Ptr("192.0.2.1"),
 				to.Ptr("192.0.2.5"),
@@ -450,13 +450,13 @@ func ExampleBareMetalMachineKeySetsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachineKeySetsClientUpdateResponse{
-	// 	BareMetalMachineKeySet: &armnetworkcloud.BareMetalMachineKeySet{
+	// 	BareMetalMachineKeySet: armnetworkcloud.BareMetalMachineKeySet{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -468,12 +468,12 @@ func ExampleBareMetalMachineKeySetsClient_BeginUpdate() {
 	// 			AzureGroupID: to.Ptr("f110271b-XXXX-4163-9b99-214d91660f0e"),
 	// 			DetailedStatus: to.Ptr(armnetworkcloud.BareMetalMachineKeySetDetailedStatusSomeInvalid),
 	// 			DetailedStatusMessage: to.Ptr("Invalid Azure user(s) were provided: userXYZ"),
-	// 			Expiration: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-31T23:59:59.008Z"); return t}()),
+	// 			Expiration: to.Ptr(time.Date(2022, time.December, 31, 23, 59, 59, 8000000, time.UTC)),
 	// 			JumpHostsAllowed: []*string{
 	// 				to.Ptr("192.0.2.1"),
 	// 				to.Ptr("192.0.2.5"),
 	// 			},
-	// 			LastValidation: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-12T12:00:00.008Z"); return t}()),
+	// 			LastValidation: to.Ptr(time.Date(2022, time.December, 12, 12, 0, 0, 8000000, time.UTC)),
 	// 			OSGroupName: to.Ptr("standardAccessGroup"),
 	// 			PrivilegeLevel: to.Ptr(armnetworkcloud.BareMetalMachineKeySetPrivilegeLevelStandard),
 	// 			ProvisioningState: to.Ptr(armnetworkcloud.BareMetalMachineKeySetProvisioningStateSucceeded),
@@ -509,10 +509,10 @@ func ExampleBareMetalMachineKeySetsClient_BeginUpdate() {
 	// 			},
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},

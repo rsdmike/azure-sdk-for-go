@@ -18,6 +18,8 @@ import (
 
 // ProfilesClient contains the methods for the Profiles group.
 // Don't use this type directly, use NewProfilesClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type ProfilesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ProfilesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ProfilesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewProfilesClient(subscriptionID string, credential azcore.TokenCredential,
 
 // CheckTrafficManagerNameAvailabilityV2 - Checks the availability of a Traffic Manager Relative DNS name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - parameters - The request body
 //   - options - ProfilesClientCheckTrafficManagerNameAvailabilityV2Options contains the optional parameters for the ProfilesClient.CheckTrafficManagerNameAvailabilityV2
 //     method.
@@ -60,19 +63,14 @@ func (client *ProfilesClient) CheckTrafficManagerNameAvailabilityV2(ctx context.
 	if err != nil {
 		return ProfilesClientCheckTrafficManagerNameAvailabilityV2Response{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientCheckTrafficManagerNameAvailabilityV2Response{}, err
-	}
-	resp, err := client.checkTrafficManagerNameAvailabilityV2HandleResponse(httpResp)
-	return resp, err
+	return client.checkTrafficManagerNameAvailabilityV2HandleResponse(httpResp, http.StatusOK)
 }
 
 // checkTrafficManagerNameAvailabilityV2CreateRequest creates the CheckTrafficManagerNameAvailabilityV2 request.
 func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2CreateRequest(ctx context.Context, parameters CheckTrafficManagerRelativeDNSNameAvailabilityParameters, _ *ProfilesClientCheckTrafficManagerNameAvailabilityV2Options) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/checkTrafficManagerNameAvailabilityV2"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -80,8 +78,8 @@ func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2CreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -91,8 +89,11 @@ func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2CreateRequest
 }
 
 // checkTrafficManagerNameAvailabilityV2HandleResponse handles the CheckTrafficManagerNameAvailabilityV2 response.
-func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2HandleResponse(resp *http.Response) (ProfilesClientCheckTrafficManagerNameAvailabilityV2Response, error) {
+func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2HandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientCheckTrafficManagerNameAvailabilityV2Response, error) {
 	result := ProfilesClientCheckTrafficManagerNameAvailabilityV2Response{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ProfilesClientCheckTrafficManagerNameAvailabilityV2Response{}, err
 	}
@@ -101,8 +102,6 @@ func (client *ProfilesClient) checkTrafficManagerNameAvailabilityV2HandleRespons
 
 // CheckTrafficManagerRelativeDNSNameAvailability - Checks the availability of a Traffic Manager Relative DNS name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - parameters - The request body
 //   - options - ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityOptions contains the optional parameters for the
 //     ProfilesClient.CheckTrafficManagerRelativeDNSNameAvailability method.
@@ -120,12 +119,7 @@ func (client *ProfilesClient) CheckTrafficManagerRelativeDNSNameAvailability(ctx
 	if err != nil {
 		return ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}, err
-	}
-	resp, err := client.checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkTrafficManagerRelativeDNSNameAvailabilityCreateRequest creates the CheckTrafficManagerRelativeDNSNameAvailability request.
@@ -136,8 +130,8 @@ func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -147,8 +141,11 @@ func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityCrea
 }
 
 // checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse handles the CheckTrafficManagerRelativeDNSNameAvailability response.
-func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse(resp *http.Response) (ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse, error) {
+func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse, error) {
 	result := ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailability); err != nil {
 		return ProfilesClientCheckTrafficManagerRelativeDNSNameAvailabilityResponse{}, err
 	}
@@ -157,8 +154,6 @@ func (client *ProfilesClient) checkTrafficManagerRelativeDNSNameAvailabilityHand
 
 // CreateOrUpdate - Create or update a Traffic Manager profile.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - profileName - The name of the Traffic Manager profile.
 //   - parameters - The Traffic Manager profile parameters supplied to the CreateOrUpdate operation.
@@ -177,19 +172,14 @@ func (client *ProfilesClient) CreateOrUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ProfilesClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, profileName string, parameters Profile, _ *ProfilesClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles/{profileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -205,8 +195,8 @@ func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -216,8 +206,11 @@ func (client *ProfilesClient) createOrUpdateCreateRequest(ctx context.Context, r
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ProfilesClient) createOrUpdateHandleResponse(resp *http.Response) (ProfilesClientCreateOrUpdateResponse, error) {
+func (client *ProfilesClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientCreateOrUpdateResponse, error) {
 	result := ProfilesClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientCreateOrUpdateResponse{}, err
 	}
@@ -226,8 +219,6 @@ func (client *ProfilesClient) createOrUpdateHandleResponse(resp *http.Response) 
 
 // Delete - Deletes a Traffic Manager profile.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - profileName - The name of the Traffic Manager profile.
 //   - options - ProfilesClientDeleteOptions contains the optional parameters for the ProfilesClient.Delete method.
@@ -245,19 +236,14 @@ func (client *ProfilesClient) Delete(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ProfilesClientDeleteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientDeleteResponse{}, err
-	}
-	resp, err := client.deleteHandleResponse(httpResp)
-	return resp, err
+	return client.deleteHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // deleteCreateRequest creates the Delete request.
 func (client *ProfilesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, profileName string, _ *ProfilesClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles/{profileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -273,15 +259,18 @@ func (client *ProfilesClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // deleteHandleResponse handles the Delete response.
-func (client *ProfilesClient) deleteHandleResponse(resp *http.Response) (ProfilesClientDeleteResponse, error) {
+func (client *ProfilesClient) deleteHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientDeleteResponse, error) {
 	result := ProfilesClientDeleteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeleteOperationResult); err != nil {
 		return ProfilesClientDeleteResponse{}, err
 	}
@@ -290,8 +279,6 @@ func (client *ProfilesClient) deleteHandleResponse(resp *http.Response) (Profile
 
 // Get - Gets a Traffic Manager profile.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - profileName - The name of the Traffic Manager profile.
 //   - options - ProfilesClientGetOptions contains the optional parameters for the ProfilesClient.Get method.
@@ -309,19 +296,14 @@ func (client *ProfilesClient) Get(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ProfilesClient) getCreateRequest(ctx context.Context, resourceGroupName string, profileName string, _ *ProfilesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles/{profileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -337,15 +319,18 @@ func (client *ProfilesClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesClientGetResponse, error) {
+func (client *ProfilesClient) getHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientGetResponse, error) {
 	result := ProfilesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientGetResponse{}, err
 	}
@@ -353,8 +338,6 @@ func (client *ProfilesClient) getHandleResponse(resp *http.Response) (ProfilesCl
 }
 
 // NewListByResourceGroupPager - Lists all Traffic Manager profiles within a resource group.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - ProfilesClientListByResourceGroupOptions contains the optional parameters for the ProfilesClient.NewListByResourceGroupPager
 //     method.
@@ -369,43 +352,57 @@ func (client *ProfilesClient) NewListByResourceGroupPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return ProfilesClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ProfilesClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *ProfilesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *ProfilesClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ProfilesClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *ProfilesClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Response) (ProfilesClientListByResourceGroupResponse, error) {
+func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientListByResourceGroupResponse, error) {
 	result := ProfilesClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListByResourceGroupResponse{}, err
 	}
@@ -413,8 +410,6 @@ func (client *ProfilesClient) listByResourceGroupHandleResponse(resp *http.Respo
 }
 
 // NewListBySubscriptionPager - Lists all Traffic Manager profiles within a subscription.
-//
-// Generated from API version 2024-04-01-preview
 //   - options - ProfilesClientListBySubscriptionOptions contains the optional parameters for the ProfilesClient.NewListBySubscriptionPager
 //     method.
 func (client *ProfilesClient) NewListBySubscriptionPager(options *ProfilesClientListBySubscriptionOptions) *runtime.Pager[ProfilesClientListBySubscriptionResponse] {
@@ -428,39 +423,53 @@ func (client *ProfilesClient) NewListBySubscriptionPager(options *ProfilesClient
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ProfilesClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ProfilesClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *ProfilesClient) listBySubscriptionCreateRequest(ctx context.Context, _ *ProfilesClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/trafficmanagerprofiles"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ProfilesClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *ProfilesClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Network/trafficmanagerprofiles"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *ProfilesClient) listBySubscriptionHandleResponse(resp *http.Response) (ProfilesClientListBySubscriptionResponse, error) {
+func (client *ProfilesClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientListBySubscriptionResponse, error) {
 	result := ProfilesClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProfileListResult); err != nil {
 		return ProfilesClientListBySubscriptionResponse{}, err
 	}
@@ -469,8 +478,6 @@ func (client *ProfilesClient) listBySubscriptionHandleResponse(resp *http.Respon
 
 // Update - Update a Traffic Manager profile.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - profileName - The name of the Traffic Manager profile.
 //   - parameters - The Traffic Manager profile parameters supplied to the Update operation.
@@ -489,19 +496,14 @@ func (client *ProfilesClient) Update(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ProfilesClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ProfilesClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *ProfilesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, profileName string, parameters Profile, _ *ProfilesClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficmanagerprofiles/{profileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -517,8 +519,8 @@ func (client *ProfilesClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -528,8 +530,11 @@ func (client *ProfilesClient) updateCreateRequest(ctx context.Context, resourceG
 }
 
 // updateHandleResponse handles the Update response.
-func (client *ProfilesClient) updateHandleResponse(resp *http.Response) (ProfilesClientUpdateResponse, error) {
+func (client *ProfilesClient) updateHandleResponse(resp *http.Response, successCodes ...int) (ProfilesClientUpdateResponse, error) {
 	result := ProfilesClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Profile); err != nil {
 		return ProfilesClientUpdateResponse{}, err
 	}

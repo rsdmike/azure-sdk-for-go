@@ -6,12 +6,11 @@ package armeventgrid_test
 
 import (
 	"context"
-	"log"
-	"time"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/eventgrid/armeventgrid/v2"
+	"log"
+	"time"
 )
 
 // Generated from example definition: 2025-07-15-preview/PartnerTopics_Activate.json
@@ -33,7 +32,7 @@ func ExamplePartnerTopicsClient_Activate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerTopicsClientActivateResponse{
-	// 	PartnerTopic: &armeventgrid.PartnerTopic{
+	// 	PartnerTopic: armeventgrid.PartnerTopic{
 	// 		Name: to.Ptr("examplePartnerTopic1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerTopics"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerTopics/examplePartnerTopic1"),
@@ -61,7 +60,7 @@ func ExamplePartnerTopicsClient_CreateOrUpdate() {
 	res, err := clientFactory.NewPartnerTopicsClient().CreateOrUpdate(ctx, "examplerg", "examplePartnerTopicName1", armeventgrid.PartnerTopic{
 		Location: to.Ptr("westus2"),
 		Properties: &armeventgrid.PartnerTopicProperties{
-			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-23T23:06:13.109Z"); return t }()),
+			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2022, time.March, 23, 23, 6, 13, 109000000, time.UTC)),
 			MessageForActivation:            to.Ptr("Example message for activation"),
 			PartnerRegistrationImmutableID:  to.Ptr("6f541064-031d-4cc8-9ec3-a3b4fc0f7185"),
 			PartnerTopicFriendlyDescription: to.Ptr("Example description"),
@@ -75,14 +74,14 @@ func ExamplePartnerTopicsClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerTopicsClientCreateOrUpdateResponse{
-	// 	PartnerTopic: &armeventgrid.PartnerTopic{
+	// 	PartnerTopic: armeventgrid.PartnerTopic{
 	// 		Name: to.Ptr("examplePartnerTopicName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerTopics"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerTopics/examplePartnerTopicName1"),
 	// 		Location: to.Ptr("centraluseuap"),
 	// 		Properties: &armeventgrid.PartnerTopicProperties{
 	// 			ActivationState: to.Ptr(armeventgrid.PartnerTopicActivationStateNeverActivated),
-	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-23T23:06:13.109Z"); return t}()),
+	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2022, time.March, 23, 23, 6, 13, 109000000, time.UTC)),
 	// 			MessageForActivation: to.Ptr("Example message for activation"),
 	// 			PartnerRegistrationImmutableID: to.Ptr("6f541064-031d-4cc8-9ec3-a3b4fc0f7185"),
 	// 			PartnerTopicFriendlyDescription: to.Ptr("Example description"),
@@ -116,7 +115,7 @@ func ExamplePartnerTopicsClient_Deactivate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerTopicsClientDeactivateResponse{
-	// 	PartnerTopic: &armeventgrid.PartnerTopic{
+	// 	PartnerTopic: armeventgrid.PartnerTopic{
 	// 		Name: to.Ptr("examplePartnerTopic1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerTopics"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerTopics/examplePartnerTopic1"),
@@ -147,7 +146,7 @@ func ExamplePartnerTopicsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -175,7 +174,7 @@ func ExamplePartnerTopicsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerTopicsClientGetResponse{
-	// 	PartnerTopic: &armeventgrid.PartnerTopic{
+	// 	PartnerTopic: armeventgrid.PartnerTopic{
 	// 		Name: to.Ptr("examplePartnerTopicName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerTopics"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerTopics/examplePartnerTopicName1"),

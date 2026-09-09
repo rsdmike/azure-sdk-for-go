@@ -18,6 +18,8 @@ import (
 
 // VMIngestionClient contains the methods for the VMIngestion group.
 // Don't use this type directly, use NewVMIngestionClient() instead.
+//
+// Generated from API version 2025-06-01
 type VMIngestionClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type VMIngestionClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewVMIngestionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VMIngestionClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewVMIngestionClient(subscriptionID string, credential azcore.TokenCredenti
 // Details - List detailed information about VM ingestion that will be monitored by the Elastic monitor resource, ensuring
 // optimal observability and performance.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - VMIngestionClientDetailsOptions contains the optional parameters for the VMIngestionClient.Details method.
@@ -61,19 +64,14 @@ func (client *VMIngestionClient) Details(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return VMIngestionClientDetailsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return VMIngestionClientDetailsResponse{}, err
-	}
-	resp, err := client.detailsHandleResponse(httpResp)
-	return resp, err
+	return client.detailsHandleResponse(httpResp, http.StatusOK)
 }
 
 // detailsCreateRequest creates the Details request.
 func (client *VMIngestionClient) detailsCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *VMIngestionClientDetailsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Elastic/monitors/{monitorName}/vmIngestionDetails"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -89,15 +87,18 @@ func (client *VMIngestionClient) detailsCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // detailsHandleResponse handles the Details response.
-func (client *VMIngestionClient) detailsHandleResponse(resp *http.Response) (VMIngestionClientDetailsResponse, error) {
+func (client *VMIngestionClient) detailsHandleResponse(resp *http.Response, successCodes ...int) (VMIngestionClientDetailsResponse, error) {
 	result := VMIngestionClientDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMIngestionDetailsResponse); err != nil {
 		return VMIngestionClientDetailsResponse{}, err
 	}

@@ -30,12 +30,12 @@ func ExampleAPIKeysClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.APIKeysClientCreateOrUpdateResponse{
-	// 	DeploymentAPIKeyResponse: &armnginx.DeploymentAPIKeyResponse{
+	// 	DeploymentAPIKeyResponse: armnginx.DeploymentAPIKeyResponse{
 	// 		Name: to.Ptr("myApiKey"),
 	// 		Type: to.Ptr("Nginx.NginxPlus/nginxDeployments/apiKeys"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/apiKeys/myApiKey"),
 	// 		Properties: &armnginx.DeploymentAPIKeyResponseProperties{
-	// 			EndDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-01T00:00:00Z"); return t}()),
+	// 			EndDateTime: to.Ptr(time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)),
 	// 			Hint: to.Ptr("000"),
 	// 		},
 	// 	},
@@ -83,12 +83,12 @@ func ExampleAPIKeysClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnginx.APIKeysClientGetResponse{
-	// 	DeploymentAPIKeyResponse: &armnginx.DeploymentAPIKeyResponse{
+	// 	DeploymentAPIKeyResponse: armnginx.DeploymentAPIKeyResponse{
 	// 		Name: to.Ptr("myApiKey"),
 	// 		Type: to.Ptr("Nginx.NginxPlus/nginxDeployments/apiKeys"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/apiKeys/myApiKey"),
 	// 		Properties: &armnginx.DeploymentAPIKeyResponseProperties{
-	// 			EndDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-01T00:00:00Z"); return t}()),
+	// 			EndDateTime: to.Ptr(time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)),
 	// 			Hint: to.Ptr("000"),
 	// 		},
 	// 	},
@@ -125,7 +125,7 @@ func ExampleAPIKeysClient_NewListPager() {
 		// 				Type: to.Ptr("Nginx.NginxPlus/nginxDeployments/apiKeys"),
 		// 				ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/apiKeys/myApiKey"),
 		// 				Properties: &armnginx.DeploymentAPIKeyResponseProperties{
-		// 					EndDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-01T00:00:00Z"); return t}()),
+		// 					EndDateTime: to.Ptr(time.Date(2024, time.September, 1, 0, 0, 0, 0, time.UTC)),
 		// 					Hint: to.Ptr("000"),
 		// 				},
 		// 			},
@@ -134,7 +134,7 @@ func ExampleAPIKeysClient_NewListPager() {
 		// 				Type: to.Ptr("Nginx.NginxPlus/nginxDeployments/apiKeys"),
 		// 				ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Nginx.NginxPlus/nginxDeployments/myDeployment/apiKeys/myApiKey2"),
 		// 				Properties: &armnginx.DeploymentAPIKeyResponseProperties{
-		// 					EndDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-01T00:00:00Z"); return t}()),
+		// 					EndDateTime: to.Ptr(time.Date(2024, time.October, 1, 0, 0, 0, 0, time.UTC)),
 		// 					Hint: to.Ptr("111"),
 		// 				},
 		// 			},

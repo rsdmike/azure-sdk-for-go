@@ -18,6 +18,8 @@ import (
 
 // DiscoverySolutionNLPClient contains the methods for the DiscoverySolutionNLP group.
 // Don't use this type directly, use NewDiscoverySolutionNLPClient() instead.
+//
+// Generated from API version 2024-03-01-preview
 type DiscoverySolutionNLPClient struct {
 	internal *arm.Client
 }
@@ -39,8 +41,6 @@ func NewDiscoverySolutionNLPClient(credential azcore.TokenCredential, options *a
 // DiscoverSolutions - Search for relevant Azure Diagnostics, Solutions and Troubleshooters using a natural language issue
 // summary.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - options - DiscoverySolutionNLPClientDiscoverSolutionsOptions contains the optional parameters for the DiscoverySolutionNLPClient.DiscoverSolutions
 //     method.
 func (client *DiscoverySolutionNLPClient) DiscoverSolutions(ctx context.Context, options *DiscoverySolutionNLPClientDiscoverSolutionsOptions) (DiscoverySolutionNLPClientDiscoverSolutionsResponse, error) {
@@ -57,12 +57,7 @@ func (client *DiscoverySolutionNLPClient) DiscoverSolutions(ctx context.Context,
 	if err != nil {
 		return DiscoverySolutionNLPClientDiscoverSolutionsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DiscoverySolutionNLPClientDiscoverSolutionsResponse{}, err
-	}
-	resp, err := client.discoverSolutionsHandleResponse(httpResp)
-	return resp, err
+	return client.discoverSolutionsHandleResponse(httpResp, http.StatusOK)
 }
 
 // discoverSolutionsCreateRequest creates the DiscoverSolutions request.
@@ -73,8 +68,8 @@ func (client *DiscoverySolutionNLPClient) discoverSolutionsCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.DiscoverSolutionRequest != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -87,8 +82,11 @@ func (client *DiscoverySolutionNLPClient) discoverSolutionsCreateRequest(ctx con
 }
 
 // discoverSolutionsHandleResponse handles the DiscoverSolutions response.
-func (client *DiscoverySolutionNLPClient) discoverSolutionsHandleResponse(resp *http.Response) (DiscoverySolutionNLPClientDiscoverSolutionsResponse, error) {
+func (client *DiscoverySolutionNLPClient) discoverSolutionsHandleResponse(resp *http.Response, successCodes ...int) (DiscoverySolutionNLPClientDiscoverSolutionsResponse, error) {
 	result := DiscoverySolutionNLPClientDiscoverSolutionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiscoveryNlpResponse); err != nil {
 		return DiscoverySolutionNLPClientDiscoverSolutionsResponse{}, err
 	}
@@ -98,8 +96,6 @@ func (client *DiscoverySolutionNLPClient) discoverSolutionsHandleResponse(resp *
 // DiscoverSolutionsBySubscription - Search for relevant Azure Diagnostics, Solutions and Troubleshooters using a natural
 // language issue summary and subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - subscriptionID - The ID of the target subscription. The value must be an UUID.
 //   - options - DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionOptions contains the optional parameters for the DiscoverySolutionNLPClient.DiscoverSolutionsBySubscription
 //     method.
@@ -117,12 +113,7 @@ func (client *DiscoverySolutionNLPClient) DiscoverSolutionsBySubscription(ctx co
 	if err != nil {
 		return DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse{}, err
-	}
-	resp, err := client.discoverSolutionsBySubscriptionHandleResponse(httpResp)
-	return resp, err
+	return client.discoverSolutionsBySubscriptionHandleResponse(httpResp, http.StatusOK)
 }
 
 // discoverSolutionsBySubscriptionCreateRequest creates the DiscoverSolutionsBySubscription request.
@@ -137,8 +128,8 @@ func (client *DiscoverySolutionNLPClient) discoverSolutionsBySubscriptionCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.DiscoverSolutionRequest != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -151,8 +142,11 @@ func (client *DiscoverySolutionNLPClient) discoverSolutionsBySubscriptionCreateR
 }
 
 // discoverSolutionsBySubscriptionHandleResponse handles the DiscoverSolutionsBySubscription response.
-func (client *DiscoverySolutionNLPClient) discoverSolutionsBySubscriptionHandleResponse(resp *http.Response) (DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse, error) {
+func (client *DiscoverySolutionNLPClient) discoverSolutionsBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse, error) {
 	result := DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiscoveryNlpResponse); err != nil {
 		return DiscoverySolutionNLPClientDiscoverSolutionsBySubscriptionResponse{}, err
 	}

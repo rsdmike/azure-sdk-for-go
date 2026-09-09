@@ -18,6 +18,8 @@ import (
 
 // GrafanaClient contains the methods for the Grafana group.
 // Don't use this type directly, use NewGrafanaClient() instead.
+//
+// Generated from API version 2025-08-01
 type GrafanaClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type GrafanaClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewGrafanaClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*GrafanaClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewGrafanaClient(subscriptionID string, credential azcore.TokenCredential, 
 
 // CheckEnterpriseDetails - Retrieve enterprise add-on details information
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientCheckEnterpriseDetailsOptions contains the optional parameters for the GrafanaClient.CheckEnterpriseDetails
@@ -61,19 +64,14 @@ func (client *GrafanaClient) CheckEnterpriseDetails(ctx context.Context, resourc
 	if err != nil {
 		return GrafanaClientCheckEnterpriseDetailsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GrafanaClientCheckEnterpriseDetailsResponse{}, err
-	}
-	resp, err := client.checkEnterpriseDetailsHandleResponse(httpResp)
-	return resp, err
+	return client.checkEnterpriseDetailsHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkEnterpriseDetailsCreateRequest creates the CheckEnterpriseDetails request.
 func (client *GrafanaClient) checkEnterpriseDetailsCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, _ *GrafanaClientCheckEnterpriseDetailsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}/checkEnterpriseDetails"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -89,15 +87,18 @@ func (client *GrafanaClient) checkEnterpriseDetailsCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // checkEnterpriseDetailsHandleResponse handles the CheckEnterpriseDetails response.
-func (client *GrafanaClient) checkEnterpriseDetailsHandleResponse(resp *http.Response) (GrafanaClientCheckEnterpriseDetailsResponse, error) {
+func (client *GrafanaClient) checkEnterpriseDetailsHandleResponse(resp *http.Response, successCodes ...int) (GrafanaClientCheckEnterpriseDetailsResponse, error) {
 	result := GrafanaClientCheckEnterpriseDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EnterpriseDetails); err != nil {
 		return GrafanaClientCheckEnterpriseDetailsResponse{}, err
 	}
@@ -107,8 +108,6 @@ func (client *GrafanaClient) checkEnterpriseDetailsHandleResponse(resp *http.Res
 // BeginCreate - Create or update a workspace for Grafana resource. This API is idempotent, so user can either create a new
 // grafana or update an existing grafana.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientBeginCreateOptions contains the optional parameters for the GrafanaClient.BeginCreate method.
@@ -132,8 +131,6 @@ func (client *GrafanaClient) BeginCreate(ctx context.Context, resourceGroupName 
 // Create - Create or update a workspace for Grafana resource. This API is idempotent, so user can either create a new grafana
 // or update an existing grafana.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *GrafanaClient) create(ctx context.Context, resourceGroupName string, workspaceName string, requestBodyParameters ManagedGrafana, options *GrafanaClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GrafanaClient.BeginCreate"
@@ -149,8 +146,7 @@ func (client *GrafanaClient) create(ctx context.Context, resourceGroupName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -159,7 +155,7 @@ func (client *GrafanaClient) create(ctx context.Context, resourceGroupName strin
 func (client *GrafanaClient) createCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, requestBodyParameters ManagedGrafana, _ *GrafanaClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -175,8 +171,8 @@ func (client *GrafanaClient) createCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, requestBodyParameters); err != nil {
@@ -187,8 +183,6 @@ func (client *GrafanaClient) createCreateRequest(ctx context.Context, resourceGr
 
 // BeginDelete - Delete a workspace for Grafana resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientBeginDeleteOptions contains the optional parameters for the GrafanaClient.BeginDelete method.
@@ -211,8 +205,6 @@ func (client *GrafanaClient) BeginDelete(ctx context.Context, resourceGroupName 
 
 // Delete - Delete a workspace for Grafana resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *GrafanaClient) deleteOperation(ctx context.Context, resourceGroupName string, workspaceName string, options *GrafanaClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GrafanaClient.BeginDelete"
@@ -228,8 +220,7 @@ func (client *GrafanaClient) deleteOperation(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -238,7 +229,7 @@ func (client *GrafanaClient) deleteOperation(ctx context.Context, resourceGroupN
 func (client *GrafanaClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, _ *GrafanaClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -254,15 +245,13 @@ func (client *GrafanaClient) deleteCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // FetchAvailablePlugins - A synchronous resource action.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientFetchAvailablePluginsOptions contains the optional parameters for the GrafanaClient.FetchAvailablePlugins
@@ -281,19 +270,14 @@ func (client *GrafanaClient) FetchAvailablePlugins(ctx context.Context, resource
 	if err != nil {
 		return GrafanaClientFetchAvailablePluginsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GrafanaClientFetchAvailablePluginsResponse{}, err
-	}
-	resp, err := client.fetchAvailablePluginsHandleResponse(httpResp)
-	return resp, err
+	return client.fetchAvailablePluginsHandleResponse(httpResp, http.StatusOK)
 }
 
 // fetchAvailablePluginsCreateRequest creates the FetchAvailablePlugins request.
 func (client *GrafanaClient) fetchAvailablePluginsCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, _ *GrafanaClientFetchAvailablePluginsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}/fetchAvailablePlugins"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -309,15 +293,18 @@ func (client *GrafanaClient) fetchAvailablePluginsCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // fetchAvailablePluginsHandleResponse handles the FetchAvailablePlugins response.
-func (client *GrafanaClient) fetchAvailablePluginsHandleResponse(resp *http.Response) (GrafanaClientFetchAvailablePluginsResponse, error) {
+func (client *GrafanaClient) fetchAvailablePluginsHandleResponse(resp *http.Response, successCodes ...int) (GrafanaClientFetchAvailablePluginsResponse, error) {
 	result := GrafanaClientFetchAvailablePluginsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GrafanaAvailablePluginListResponse); err != nil {
 		return GrafanaClientFetchAvailablePluginsResponse{}, err
 	}
@@ -326,8 +313,6 @@ func (client *GrafanaClient) fetchAvailablePluginsHandleResponse(resp *http.Resp
 
 // Get - Get the properties of a specific workspace for Grafana resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientGetOptions contains the optional parameters for the GrafanaClient.Get method.
@@ -345,19 +330,14 @@ func (client *GrafanaClient) Get(ctx context.Context, resourceGroupName string, 
 	if err != nil {
 		return GrafanaClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GrafanaClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *GrafanaClient) getCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, _ *GrafanaClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -373,15 +353,18 @@ func (client *GrafanaClient) getCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *GrafanaClient) getHandleResponse(resp *http.Response) (GrafanaClientGetResponse, error) {
+func (client *GrafanaClient) getHandleResponse(resp *http.Response, successCodes ...int) (GrafanaClientGetResponse, error) {
 	result := GrafanaClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedGrafana); err != nil {
 		return GrafanaClientGetResponse{}, err
 	}
@@ -389,8 +372,6 @@ func (client *GrafanaClient) getHandleResponse(resp *http.Response) (GrafanaClie
 }
 
 // NewListPager - List all resources of workspaces for Grafana under the specified subscription.
-//
-// Generated from API version 2025-08-01
 //   - options - GrafanaClientListOptions contains the optional parameters for the GrafanaClient.NewListPager method.
 func (client *GrafanaClient) NewListPager(options *GrafanaClientListOptions) *runtime.Pager[GrafanaClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[GrafanaClientListResponse]{
@@ -403,39 +384,53 @@ func (client *GrafanaClient) NewListPager(options *GrafanaClientListOptions) *ru
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return GrafanaClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return GrafanaClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *GrafanaClient) listCreateRequest(ctx context.Context, _ *GrafanaClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Dashboard/grafana"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *GrafanaClient) listCreateRequest(ctx context.Context, nextLink string, _ *GrafanaClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Dashboard/grafana"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *GrafanaClient) listHandleResponse(resp *http.Response) (GrafanaClientListResponse, error) {
+func (client *GrafanaClient) listHandleResponse(resp *http.Response, successCodes ...int) (GrafanaClientListResponse, error) {
 	result := GrafanaClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedGrafanaListResponse); err != nil {
 		return GrafanaClientListResponse{}, err
 	}
@@ -443,8 +438,6 @@ func (client *GrafanaClient) listHandleResponse(resp *http.Response) (GrafanaCli
 }
 
 // NewListByResourceGroupPager - List all resources of workspaces for Grafana under the specified resource group.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - GrafanaClientListByResourceGroupOptions contains the optional parameters for the GrafanaClient.NewListByResourceGroupPager
 //     method.
@@ -459,43 +452,57 @@ func (client *GrafanaClient) NewListByResourceGroupPager(resourceGroupName strin
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return GrafanaClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return GrafanaClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *GrafanaClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *GrafanaClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *GrafanaClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *GrafanaClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *GrafanaClient) listByResourceGroupHandleResponse(resp *http.Response) (GrafanaClientListByResourceGroupResponse, error) {
+func (client *GrafanaClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (GrafanaClientListByResourceGroupResponse, error) {
 	result := GrafanaClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ManagedGrafanaListResponse); err != nil {
 		return GrafanaClientListByResourceGroupResponse{}, err
 	}
@@ -504,8 +511,6 @@ func (client *GrafanaClient) listByResourceGroupHandleResponse(resp *http.Respon
 
 // BeginUpdate - Update a workspace for Grafana resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - workspaceName - The workspace name of Azure Managed Grafana.
 //   - options - GrafanaClientBeginUpdateOptions contains the optional parameters for the GrafanaClient.BeginUpdate method.
@@ -528,8 +533,6 @@ func (client *GrafanaClient) BeginUpdate(ctx context.Context, resourceGroupName 
 
 // Update - Update a workspace for Grafana resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *GrafanaClient) update(ctx context.Context, resourceGroupName string, workspaceName string, requestBodyParameters ManagedGrafanaUpdateParameters, options *GrafanaClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "GrafanaClient.BeginUpdate"
@@ -545,8 +548,7 @@ func (client *GrafanaClient) update(ctx context.Context, resourceGroupName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -555,7 +557,7 @@ func (client *GrafanaClient) update(ctx context.Context, resourceGroupName strin
 func (client *GrafanaClient) updateCreateRequest(ctx context.Context, resourceGroupName string, workspaceName string, requestBodyParameters ManagedGrafanaUpdateParameters, _ *GrafanaClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Dashboard/grafana/{workspaceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -571,8 +573,8 @@ func (client *GrafanaClient) updateCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, requestBodyParameters); err != nil {

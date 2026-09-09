@@ -30,10 +30,10 @@ func ExampleHealthValidationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatabasewatcher.HealthValidationsClientGetResponse{
-	// 	HealthValidation: &armdatabasewatcher.HealthValidation{
+	// 	HealthValidation: armdatabasewatcher.HealthValidation{
 	// 		Properties: &armdatabasewatcher.HealthValidationProperties{
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
+	// 			EndTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
 	// 			Status: to.Ptr(armdatabasewatcher.ValidationStatusSucceeded),
 	// 			Issues: []*armdatabasewatcher.ValidationIssue{
 	// 				{
@@ -54,10 +54,10 @@ func ExampleHealthValidationsClient_Get() {
 	// 		SystemData: &armdatabasewatcher.SystemData{
 	// 			CreatedBy: to.Ptr("enbpvlpqbwd"),
 	// 			CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("mxp"),
 	// 			LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -90,8 +90,8 @@ func ExampleHealthValidationsClient_NewListByParentPager() {
 		// 		Value: []*armdatabasewatcher.HealthValidation{
 		// 			{
 		// 				Properties: &armdatabasewatcher.HealthValidationProperties{
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
+		// 					EndTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
 		// 					Status: to.Ptr(armdatabasewatcher.ValidationStatusSucceeded),
 		// 					Issues: []*armdatabasewatcher.ValidationIssue{
 		// 						{
@@ -112,10 +112,10 @@ func ExampleHealthValidationsClient_NewListByParentPager() {
 		// 				SystemData: &armdatabasewatcher.SystemData{
 		// 					CreatedBy: to.Ptr("enbpvlpqbwd"),
 		// 					CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("mxp"),
 		// 					LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -142,16 +142,16 @@ func ExampleHealthValidationsClient_BeginStartValidation() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatabasewatcher.HealthValidationsClientStartValidationResponse{
-	// 	HealthValidation: &armdatabasewatcher.HealthValidation{
+	// 	HealthValidation: armdatabasewatcher.HealthValidation{
 	// 		Properties: &armdatabasewatcher.HealthValidationProperties{
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-07T19:42:55.594Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
+	// 			EndTime: to.Ptr(time.Date(2024, time.October, 7, 19, 42, 55, 594000000, time.UTC)),
 	// 			Status: to.Ptr(armdatabasewatcher.ValidationStatusRunning),
 	// 			Issues: []*armdatabasewatcher.ValidationIssue{
 	// 			},
@@ -163,10 +163,10 @@ func ExampleHealthValidationsClient_BeginStartValidation() {
 	// 		SystemData: &armdatabasewatcher.SystemData{
 	// 			CreatedBy: to.Ptr("enbpvlpqbwd"),
 	// 			CreatedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("mxp"),
 	// 			LastModifiedByType: to.Ptr(armdatabasewatcher.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-25T15:38:47.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 25, 15, 38, 47, 92000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

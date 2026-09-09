@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // PartnerConfigurationsClient contains the methods for the PartnerConfigurations group.
 // Don't use this type directly, use NewPartnerConfigurationsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type PartnerConfigurationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type PartnerConfigurationsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewPartnerConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*PartnerConfigurationsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewPartnerConfigurationsClient(subscriptionID string, credential azcore.Tok
 //
 // Authorize a single partner either by partner registration immutable Id or by partner name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerInfo - The information of the partner to be authorized.
 //   - options - PartnerConfigurationsClientAuthorizePartnerOptions contains the optional parameters for the PartnerConfigurationsClient.AuthorizePartner
@@ -65,19 +67,14 @@ func (client *PartnerConfigurationsClient) AuthorizePartner(ctx context.Context,
 	if err != nil {
 		return PartnerConfigurationsClientAuthorizePartnerResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerConfigurationsClientAuthorizePartnerResponse{}, err
-	}
-	resp, err := client.authorizePartnerHandleResponse(httpResp)
-	return resp, err
+	return client.authorizePartnerHandleResponse(httpResp, http.StatusOK)
 }
 
 // authorizePartnerCreateRequest creates the AuthorizePartner request.
 func (client *PartnerConfigurationsClient) authorizePartnerCreateRequest(ctx context.Context, resourceGroupName string, partnerInfo Partner, _ *PartnerConfigurationsClientAuthorizePartnerOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default/authorizePartner"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -89,8 +86,8 @@ func (client *PartnerConfigurationsClient) authorizePartnerCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, partnerInfo); err != nil {
@@ -100,8 +97,11 @@ func (client *PartnerConfigurationsClient) authorizePartnerCreateRequest(ctx con
 }
 
 // authorizePartnerHandleResponse handles the AuthorizePartner response.
-func (client *PartnerConfigurationsClient) authorizePartnerHandleResponse(resp *http.Response) (PartnerConfigurationsClientAuthorizePartnerResponse, error) {
+func (client *PartnerConfigurationsClient) authorizePartnerHandleResponse(resp *http.Response, successCodes ...int) (PartnerConfigurationsClientAuthorizePartnerResponse, error) {
 	result := PartnerConfigurationsClientAuthorizePartnerResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerConfiguration); err != nil {
 		return PartnerConfigurationsClientAuthorizePartnerResponse{}, err
 	}
@@ -112,8 +112,6 @@ func (client *PartnerConfigurationsClient) authorizePartnerHandleResponse(resp *
 //
 // Synchronously creates or updates a partner configuration with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerConfigurationInfo - Partner configuration information.
 //   - options - PartnerConfigurationsClientBeginCreateOrUpdateOptions contains the optional parameters for the PartnerConfigurationsClient.BeginCreateOrUpdate
@@ -139,8 +137,6 @@ func (client *PartnerConfigurationsClient) BeginCreateOrUpdate(ctx context.Conte
 //
 // Synchronously creates or updates a partner configuration with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *PartnerConfigurationsClient) createOrUpdate(ctx context.Context, resourceGroupName string, partnerConfigurationInfo PartnerConfiguration, options *PartnerConfigurationsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PartnerConfigurationsClient.BeginCreateOrUpdate"
@@ -156,8 +152,7 @@ func (client *PartnerConfigurationsClient) createOrUpdate(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -166,7 +161,7 @@ func (client *PartnerConfigurationsClient) createOrUpdate(ctx context.Context, r
 func (client *PartnerConfigurationsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, partnerConfigurationInfo PartnerConfiguration, _ *PartnerConfigurationsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -178,8 +173,8 @@ func (client *PartnerConfigurationsClient) createOrUpdateCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, partnerConfigurationInfo); err != nil {
@@ -192,8 +187,6 @@ func (client *PartnerConfigurationsClient) createOrUpdateCreateRequest(ctx conte
 //
 // Delete existing partner configuration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - PartnerConfigurationsClientBeginDeleteOptions contains the optional parameters for the PartnerConfigurationsClient.BeginDelete
 //     method.
@@ -218,8 +211,6 @@ func (client *PartnerConfigurationsClient) BeginDelete(ctx context.Context, reso
 //
 // Delete existing partner configuration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *PartnerConfigurationsClient) deleteOperation(ctx context.Context, resourceGroupName string, options *PartnerConfigurationsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PartnerConfigurationsClient.BeginDelete"
@@ -235,8 +226,7 @@ func (client *PartnerConfigurationsClient) deleteOperation(ctx context.Context, 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -245,7 +235,7 @@ func (client *PartnerConfigurationsClient) deleteOperation(ctx context.Context, 
 func (client *PartnerConfigurationsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, _ *PartnerConfigurationsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -257,8 +247,8 @@ func (client *PartnerConfigurationsClient) deleteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -266,8 +256,6 @@ func (client *PartnerConfigurationsClient) deleteCreateRequest(ctx context.Conte
 //
 // Get properties of a partner configuration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - PartnerConfigurationsClientGetOptions contains the optional parameters for the PartnerConfigurationsClient.Get
 //     method.
@@ -285,19 +273,14 @@ func (client *PartnerConfigurationsClient) Get(ctx context.Context, resourceGrou
 	if err != nil {
 		return PartnerConfigurationsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerConfigurationsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *PartnerConfigurationsClient) getCreateRequest(ctx context.Context, resourceGroupName string, _ *PartnerConfigurationsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -309,15 +292,18 @@ func (client *PartnerConfigurationsClient) getCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *PartnerConfigurationsClient) getHandleResponse(resp *http.Response) (PartnerConfigurationsClientGetResponse, error) {
+func (client *PartnerConfigurationsClient) getHandleResponse(resp *http.Response, successCodes ...int) (PartnerConfigurationsClientGetResponse, error) {
 	result := PartnerConfigurationsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerConfiguration); err != nil {
 		return PartnerConfigurationsClientGetResponse{}, err
 	}
@@ -327,8 +313,6 @@ func (client *PartnerConfigurationsClient) getHandleResponse(resp *http.Response
 // NewListByResourceGroupPager - List partner configurations under a resource group.
 //
 // List all the partner configurations under a resource group.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - PartnerConfigurationsClientListByResourceGroupOptions contains the optional parameters for the PartnerConfigurationsClient.NewListByResourceGroupPager
 //     method.
@@ -343,43 +327,57 @@ func (client *PartnerConfigurationsClient) NewListByResourceGroupPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return PartnerConfigurationsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PartnerConfigurationsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *PartnerConfigurationsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *PartnerConfigurationsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *PartnerConfigurationsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *PartnerConfigurationsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *PartnerConfigurationsClient) listByResourceGroupHandleResponse(resp *http.Response) (PartnerConfigurationsClientListByResourceGroupResponse, error) {
+func (client *PartnerConfigurationsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (PartnerConfigurationsClientListByResourceGroupResponse, error) {
 	result := PartnerConfigurationsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerConfigurationsListResult); err != nil {
 		return PartnerConfigurationsClientListByResourceGroupResponse{}, err
 	}
@@ -389,8 +387,6 @@ func (client *PartnerConfigurationsClient) listByResourceGroupHandleResponse(res
 // NewListBySubscriptionPager - List partner configurations under an Azure subscription.
 //
 // List all the partner configurations under an Azure subscription.
-//
-// Generated from API version 2025-07-15-preview
 //   - options - PartnerConfigurationsClientListBySubscriptionOptions contains the optional parameters for the PartnerConfigurationsClient.NewListBySubscriptionPager
 //     method.
 func (client *PartnerConfigurationsClient) NewListBySubscriptionPager(options *PartnerConfigurationsClientListBySubscriptionOptions) *runtime.Pager[PartnerConfigurationsClientListBySubscriptionResponse] {
@@ -404,45 +400,59 @@ func (client *PartnerConfigurationsClient) NewListBySubscriptionPager(options *P
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return PartnerConfigurationsClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return PartnerConfigurationsClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *PartnerConfigurationsClient) listBySubscriptionCreateRequest(ctx context.Context, options *PartnerConfigurationsClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EventGrid/partnerConfigurations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *PartnerConfigurationsClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *PartnerConfigurationsClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EventGrid/partnerConfigurations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *PartnerConfigurationsClient) listBySubscriptionHandleResponse(resp *http.Response) (PartnerConfigurationsClientListBySubscriptionResponse, error) {
+func (client *PartnerConfigurationsClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (PartnerConfigurationsClientListBySubscriptionResponse, error) {
 	result := PartnerConfigurationsClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerConfigurationsListResult); err != nil {
 		return PartnerConfigurationsClientListBySubscriptionResponse{}, err
 	}
@@ -453,8 +463,6 @@ func (client *PartnerConfigurationsClient) listBySubscriptionHandleResponse(resp
 //
 // Unauthorize a single partner either by partner registration immutable Id or by partner name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerInfo - The information of the partner to be unauthorized.
 //   - options - PartnerConfigurationsClientUnauthorizePartnerOptions contains the optional parameters for the PartnerConfigurationsClient.UnauthorizePartner
@@ -473,19 +481,14 @@ func (client *PartnerConfigurationsClient) UnauthorizePartner(ctx context.Contex
 	if err != nil {
 		return PartnerConfigurationsClientUnauthorizePartnerResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return PartnerConfigurationsClientUnauthorizePartnerResponse{}, err
-	}
-	resp, err := client.unauthorizePartnerHandleResponse(httpResp)
-	return resp, err
+	return client.unauthorizePartnerHandleResponse(httpResp, http.StatusOK)
 }
 
 // unauthorizePartnerCreateRequest creates the UnauthorizePartner request.
 func (client *PartnerConfigurationsClient) unauthorizePartnerCreateRequest(ctx context.Context, resourceGroupName string, partnerInfo Partner, _ *PartnerConfigurationsClientUnauthorizePartnerOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default/unauthorizePartner"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -497,8 +500,8 @@ func (client *PartnerConfigurationsClient) unauthorizePartnerCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, partnerInfo); err != nil {
@@ -508,8 +511,11 @@ func (client *PartnerConfigurationsClient) unauthorizePartnerCreateRequest(ctx c
 }
 
 // unauthorizePartnerHandleResponse handles the UnauthorizePartner response.
-func (client *PartnerConfigurationsClient) unauthorizePartnerHandleResponse(resp *http.Response) (PartnerConfigurationsClientUnauthorizePartnerResponse, error) {
+func (client *PartnerConfigurationsClient) unauthorizePartnerHandleResponse(resp *http.Response, successCodes ...int) (PartnerConfigurationsClientUnauthorizePartnerResponse, error) {
 	result := PartnerConfigurationsClientUnauthorizePartnerResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PartnerConfiguration); err != nil {
 		return PartnerConfigurationsClientUnauthorizePartnerResponse{}, err
 	}
@@ -520,8 +526,6 @@ func (client *PartnerConfigurationsClient) unauthorizePartnerHandleResponse(resp
 //
 // Synchronously updates a partner configuration with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerConfigurationUpdateParameters - Partner configuration update information.
 //   - options - PartnerConfigurationsClientBeginUpdateOptions contains the optional parameters for the PartnerConfigurationsClient.BeginUpdate
@@ -547,8 +551,6 @@ func (client *PartnerConfigurationsClient) BeginUpdate(ctx context.Context, reso
 //
 // Synchronously updates a partner configuration with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *PartnerConfigurationsClient) update(ctx context.Context, resourceGroupName string, partnerConfigurationUpdateParameters PartnerConfigurationUpdateParameters, options *PartnerConfigurationsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "PartnerConfigurationsClient.BeginUpdate"
@@ -564,8 +566,7 @@ func (client *PartnerConfigurationsClient) update(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -574,7 +575,7 @@ func (client *PartnerConfigurationsClient) update(ctx context.Context, resourceG
 func (client *PartnerConfigurationsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, partnerConfigurationUpdateParameters PartnerConfigurationUpdateParameters, _ *PartnerConfigurationsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerConfigurations/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -586,8 +587,8 @@ func (client *PartnerConfigurationsClient) updateCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, partnerConfigurationUpdateParameters); err != nil {

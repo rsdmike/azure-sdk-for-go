@@ -18,6 +18,8 @@ import (
 
 // InstancesClient contains the methods for the Instances group.
 // Don't use this type directly, use NewInstancesClient() instead.
+//
+// Generated from API version 2025-06-01
 type InstancesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type InstancesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewInstancesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*InstancesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewInstancesClient(subscriptionID string, credential azcore.TokenCredential
 
 // BeginCreateOrUpdate - Create or update Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -69,8 +72,6 @@ func (client *InstancesClient) BeginCreateOrUpdate(ctx context.Context, resource
 
 // CreateOrUpdate - Create or update Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *InstancesClient) createOrUpdate(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, resource Instance, options *InstancesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "InstancesClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *InstancesClient) createOrUpdate(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *InstancesClient) createOrUpdate(ctx context.Context, resourceGroup
 func (client *InstancesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, resource Instance, _ *InstancesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +120,8 @@ func (client *InstancesClient) createOrUpdateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -132,8 +132,6 @@ func (client *InstancesClient) createOrUpdateCreateRequest(ctx context.Context, 
 
 // BeginDelete - Delete Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -158,8 +156,6 @@ func (client *InstancesClient) BeginDelete(ctx context.Context, resourceGroupNam
 
 // Delete - Delete Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *InstancesClient) deleteOperation(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, options *InstancesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "InstancesClient.BeginDelete"
@@ -175,8 +171,7 @@ func (client *InstancesClient) deleteOperation(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -185,7 +180,7 @@ func (client *InstancesClient) deleteOperation(ctx context.Context, resourceGrou
 func (client *InstancesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, _ *InstancesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -209,15 +204,13 @@ func (client *InstancesClient) deleteCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -237,19 +230,14 @@ func (client *InstancesClient) Get(ctx context.Context, resourceGroupName string
 	if err != nil {
 		return InstancesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InstancesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *InstancesClient) getCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, _ *InstancesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -273,15 +261,18 @@ func (client *InstancesClient) getCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *InstancesClient) getHandleResponse(resp *http.Response) (InstancesClientGetResponse, error) {
+func (client *InstancesClient) getHandleResponse(resp *http.Response, successCodes ...int) (InstancesClientGetResponse, error) {
 	result := InstancesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Instance); err != nil {
 		return InstancesClientGetResponse{}, err
 	}
@@ -289,8 +280,6 @@ func (client *InstancesClient) getHandleResponse(resp *http.Response) (Instances
 }
 
 // NewListBySolutionPager - List Instance Resources
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -307,51 +296,65 @@ func (client *InstancesClient) NewListBySolutionPager(resourceGroupName string, 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySolutionCreateRequest(ctx, resourceGroupName, targetName, solutionName, options)
-			}, nil)
+			req, err := client.listBySolutionCreateRequest(ctx, resourceGroupName, targetName, solutionName, nextLink, options)
 			if err != nil {
 				return InstancesClientListBySolutionResponse{}, err
 			}
-			return client.listBySolutionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return InstancesClientListBySolutionResponse{}, err
+			}
+			return client.listBySolutionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySolutionCreateRequest creates the ListBySolution request.
-func (client *InstancesClient) listBySolutionCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, _ *InstancesClientListBySolutionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *InstancesClient) listBySolutionCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, nextLink string, _ *InstancesClientListBySolutionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if targetName == "" {
+			return nil, errors.New("parameter targetName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{targetName}", url.PathEscape(targetName))
+		if solutionName == "" {
+			return nil, errors.New("parameter solutionName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{solutionName}", url.PathEscape(solutionName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if targetName == "" {
-		return nil, errors.New("parameter targetName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{targetName}", url.PathEscape(targetName))
-	if solutionName == "" {
-		return nil, errors.New("parameter solutionName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{solutionName}", url.PathEscape(solutionName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySolutionHandleResponse handles the ListBySolution response.
-func (client *InstancesClient) listBySolutionHandleResponse(resp *http.Response) (InstancesClientListBySolutionResponse, error) {
+func (client *InstancesClient) listBySolutionHandleResponse(resp *http.Response, successCodes ...int) (InstancesClientListBySolutionResponse, error) {
 	result := InstancesClientListBySolutionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceListResult); err != nil {
 		return InstancesClientListBySolutionResponse{}, err
 	}
@@ -360,8 +363,6 @@ func (client *InstancesClient) listBySolutionHandleResponse(resp *http.Response)
 
 // BeginUpdate - Update an Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -387,8 +388,6 @@ func (client *InstancesClient) BeginUpdate(ctx context.Context, resourceGroupNam
 
 // Update - Update an Instance Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *InstancesClient) update(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, properties Instance, options *InstancesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "InstancesClient.BeginUpdate"
@@ -404,8 +403,7 @@ func (client *InstancesClient) update(ctx context.Context, resourceGroupName str
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -414,7 +412,7 @@ func (client *InstancesClient) update(ctx context.Context, resourceGroupName str
 func (client *InstancesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, properties Instance, _ *InstancesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -438,8 +436,8 @@ func (client *InstancesClient) updateCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {

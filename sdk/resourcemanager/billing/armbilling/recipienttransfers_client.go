@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-const defaultRecipientTransfersClientVersion string = "2024-04-01"
-
 // RecipientTransfersClient contains the methods for the RecipientTransfers group.
 // Don't use this type directly, use NewRecipientTransfersClient() instead.
 //
@@ -62,12 +60,7 @@ func (client *RecipientTransfersClient) Accept(ctx context.Context, transferName
 	if err != nil {
 		return RecipientTransfersClientAcceptResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return RecipientTransfersClientAcceptResponse{}, err
-	}
-	resp, err := client.acceptHandleResponse(httpResp)
-	return resp, err
+	return client.acceptHandleResponse(httpResp, http.StatusOK)
 }
 
 // acceptCreateRequest creates the Accept request.
@@ -82,7 +75,7 @@ func (client *RecipientTransfersClient) acceptCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultRecipientTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -93,8 +86,11 @@ func (client *RecipientTransfersClient) acceptCreateRequest(ctx context.Context,
 }
 
 // acceptHandleResponse handles the Accept response.
-func (client *RecipientTransfersClient) acceptHandleResponse(resp *http.Response) (RecipientTransfersClientAcceptResponse, error) {
+func (client *RecipientTransfersClient) acceptHandleResponse(resp *http.Response, successCodes ...int) (RecipientTransfersClientAcceptResponse, error) {
 	result := RecipientTransfersClientAcceptResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecipientTransferDetails); err != nil {
 		return RecipientTransfersClientAcceptResponse{}, err
 	}
@@ -122,12 +118,7 @@ func (client *RecipientTransfersClient) Decline(ctx context.Context, transferNam
 	if err != nil {
 		return RecipientTransfersClientDeclineResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return RecipientTransfersClientDeclineResponse{}, err
-	}
-	resp, err := client.declineHandleResponse(httpResp)
-	return resp, err
+	return client.declineHandleResponse(httpResp, http.StatusOK)
 }
 
 // declineCreateRequest creates the Decline request.
@@ -142,15 +133,18 @@ func (client *RecipientTransfersClient) declineCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultRecipientTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // declineHandleResponse handles the Decline response.
-func (client *RecipientTransfersClient) declineHandleResponse(resp *http.Response) (RecipientTransfersClientDeclineResponse, error) {
+func (client *RecipientTransfersClient) declineHandleResponse(resp *http.Response, successCodes ...int) (RecipientTransfersClientDeclineResponse, error) {
 	result := RecipientTransfersClientDeclineResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecipientTransferDetails); err != nil {
 		return RecipientTransfersClientDeclineResponse{}, err
 	}
@@ -177,12 +171,7 @@ func (client *RecipientTransfersClient) Get(ctx context.Context, transferName st
 	if err != nil {
 		return RecipientTransfersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return RecipientTransfersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -197,15 +186,18 @@ func (client *RecipientTransfersClient) getCreateRequest(ctx context.Context, tr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultRecipientTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *RecipientTransfersClient) getHandleResponse(resp *http.Response) (RecipientTransfersClientGetResponse, error) {
+func (client *RecipientTransfersClient) getHandleResponse(resp *http.Response, successCodes ...int) (RecipientTransfersClientGetResponse, error) {
 	result := RecipientTransfersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecipientTransferDetails); err != nil {
 		return RecipientTransfersClientGetResponse{}, err
 	}
@@ -228,35 +220,49 @@ func (client *RecipientTransfersClient) NewListPager(options *RecipientTransfers
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return RecipientTransfersClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return RecipientTransfersClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *RecipientTransfersClient) listCreateRequest(ctx context.Context, _ *RecipientTransfersClientListOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Billing/transfers"
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+func (client *RecipientTransfersClient) listCreateRequest(ctx context.Context, nextLink string, _ *RecipientTransfersClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Billing/transfers"
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
+	}
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultRecipientTransfersClientVersion)
-	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *RecipientTransfersClient) listHandleResponse(resp *http.Response) (RecipientTransfersClientListResponse, error) {
+func (client *RecipientTransfersClient) listHandleResponse(resp *http.Response, successCodes ...int) (RecipientTransfersClientListResponse, error) {
 	result := RecipientTransfersClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecipientTransferDetailsListResult); err != nil {
 		return RecipientTransfersClientListResponse{}, err
 	}
@@ -287,12 +293,7 @@ func (client *RecipientTransfersClient) Validate(ctx context.Context, transferNa
 	if err != nil {
 		return RecipientTransfersClientValidateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return RecipientTransfersClientValidateResponse{}, err
-	}
-	resp, err := client.validateHandleResponse(httpResp)
-	return resp, err
+	return client.validateHandleResponse(httpResp, http.StatusOK)
 }
 
 // validateCreateRequest creates the Validate request.
@@ -307,7 +308,7 @@ func (client *RecipientTransfersClient) validateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", defaultRecipientTransfersClientVersion)
+	reqQP.Set("api-version", version20240401)
 	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -318,8 +319,11 @@ func (client *RecipientTransfersClient) validateCreateRequest(ctx context.Contex
 }
 
 // validateHandleResponse handles the Validate response.
-func (client *RecipientTransfersClient) validateHandleResponse(resp *http.Response) (RecipientTransfersClientValidateResponse, error) {
+func (client *RecipientTransfersClient) validateHandleResponse(resp *http.Response, successCodes ...int) (RecipientTransfersClientValidateResponse, error) {
 	result := RecipientTransfersClientValidateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateTransferListResponse); err != nil {
 		return RecipientTransfersClientValidateResponse{}, err
 	}

@@ -18,6 +18,8 @@ import (
 
 // IntegrationRuntimeClient contains the methods for the IntegrationRuntime group.
 // Don't use this type directly, use NewIntegrationRuntimeClient() instead.
+//
+// Generated from API version 2018-06-01
 type IntegrationRuntimeClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type IntegrationRuntimeClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewIntegrationRuntimeClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*IntegrationRuntimeClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewIntegrationRuntimeClient(subscriptionID string, credential azcore.TokenC
 
 // BeginDisableInteractiveQuery - Disable interactive authoring of Managed Virtual Network integration runtime.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - integrationRuntimeName - The integration runtime name.
@@ -68,8 +71,6 @@ func (client *IntegrationRuntimeClient) BeginDisableInteractiveQuery(ctx context
 
 // DisableInteractiveQuery - Disable interactive authoring of Managed Virtual Network integration runtime.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *IntegrationRuntimeClient) disableInteractiveQuery(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, options *IntegrationRuntimeClientBeginDisableInteractiveQueryOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IntegrationRuntimeClient.BeginDisableInteractiveQuery"
@@ -85,8 +86,7 @@ func (client *IntegrationRuntimeClient) disableInteractiveQuery(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *IntegrationRuntimeClient) disableInteractiveQuery(ctx context.Cont
 func (client *IntegrationRuntimeClient) disableInteractiveQueryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, _ *IntegrationRuntimeClientBeginDisableInteractiveQueryOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/integrationRuntimes/{integrationRuntimeName}/disableInteractiveQuery"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,16 +115,14 @@ func (client *IntegrationRuntimeClient) disableInteractiveQueryCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // BeginEnableInteractiveQuery - Enable interactive authoring of Managed Virtual Network integration runtime.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - factoryName - The factory name.
 //   - integrationRuntimeName - The integration runtime name.
@@ -151,8 +149,6 @@ func (client *IntegrationRuntimeClient) BeginEnableInteractiveQuery(ctx context.
 
 // EnableInteractiveQuery - Enable interactive authoring of Managed Virtual Network integration runtime.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 func (client *IntegrationRuntimeClient) enableInteractiveQuery(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, enableInteractiveQueryRequest EnableInteractiveQueryRequest, options *IntegrationRuntimeClientBeginEnableInteractiveQueryOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IntegrationRuntimeClient.BeginEnableInteractiveQuery"
@@ -168,8 +164,7 @@ func (client *IntegrationRuntimeClient) enableInteractiveQuery(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -178,7 +173,7 @@ func (client *IntegrationRuntimeClient) enableInteractiveQuery(ctx context.Conte
 func (client *IntegrationRuntimeClient) enableInteractiveQueryCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, enableInteractiveQueryRequest EnableInteractiveQueryRequest, _ *IntegrationRuntimeClientBeginEnableInteractiveQueryOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/integrationRuntimes/{integrationRuntimeName}/enableInteractiveQuery"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -198,8 +193,8 @@ func (client *IntegrationRuntimeClient) enableInteractiveQueryCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, enableInteractiveQueryRequest); err != nil {

@@ -41,13 +41,13 @@ func ExampleBotsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthbot.BotsClientCreateResponse{
-	// 	HealthBot: &armhealthbot.HealthBot{
+	// 	HealthBot: armhealthbot.HealthBot{
 	// 		Name: to.Ptr("samplebotname"),
 	// 		Type: to.Ptr("Microsoft.HealthBot/healthBots"),
 	// 		ID: to.Ptr("/subscriptions/subscription-id/resourceGroups/OneResourceGroupName/providers/Microsoft.HealthBot/healthBots/samplebotname"),
@@ -70,10 +70,10 @@ func ExampleBotsClient_BeginCreate() {
 	// 			Name: to.Ptr(armhealthbot.SKUNameF0),
 	// 		},
 	// 		SystemData: &armhealthbot.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("jack@outlook.com"),
 	// 			CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ryan@outlook.com"),
 	// 			LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 	// 		},
@@ -98,7 +98,7 @@ func ExampleBotsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -126,7 +126,7 @@ func ExampleBotsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthbot.BotsClientGetResponse{
-	// 	HealthBot: &armhealthbot.HealthBot{
+	// 	HealthBot: armhealthbot.HealthBot{
 	// 		Name: to.Ptr("samplebotname"),
 	// 		Type: to.Ptr("Microsoft.HealthBot/healthBots"),
 	// 		ID: to.Ptr("/subscriptions/subscription-id/resourceGroups/OneResourceGroupName/providers/Microsoft.HealthBot/healthBots/samplebotname"),
@@ -149,10 +149,10 @@ func ExampleBotsClient_Get() {
 	// 			Name: to.Ptr(armhealthbot.SKUNameF0),
 	// 		},
 	// 		SystemData: &armhealthbot.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("jack@outlook.com"),
 	// 			CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ryan@outlook.com"),
 	// 			LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 	// 		},
@@ -208,10 +208,10 @@ func ExampleBotsClient_NewListPager() {
 		// 					Name: to.Ptr(armhealthbot.SKUNameC1),
 		// 				},
 		// 				SystemData: &armhealthbot.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("jack@outlook.com"),
 		// 					CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ryan@outlook.com"),
 		// 					LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 		// 				},
@@ -259,10 +259,10 @@ func ExampleBotsClient_NewListByResourceGroupPager() {
 		// 					Name: to.Ptr(armhealthbot.SKUNameF0),
 		// 				},
 		// 				SystemData: &armhealthbot.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("jack@outlook.com"),
 		// 					CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ryan@outlook.com"),
 		// 					LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 		// 				},
@@ -290,10 +290,10 @@ func ExampleBotsClient_NewListByResourceGroupPager() {
 		// 					Name: to.Ptr(armhealthbot.SKUNameC1),
 		// 				},
 		// 				SystemData: &armhealthbot.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("jack@outlook.com"),
 		// 					CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ryan@outlook.com"),
 		// 					LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 		// 				},
@@ -323,7 +323,7 @@ func ExampleBotsClient_ListSecrets() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthbot.BotsClientListSecretsResponse{
-	// 	KeysResponse: &armhealthbot.KeysResponse{
+	// 	KeysResponse: armhealthbot.KeysResponse{
 	// 		Secrets: []*armhealthbot.Key{
 	// 			{
 	// 				KeyName: to.Ptr("APP_SECRET"),
@@ -361,7 +361,7 @@ func ExampleBotsClient_RegenerateAPIJwtSecret() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthbot.BotsClientRegenerateAPIJwtSecretResponse{
-	// 	Key: &armhealthbot.Key{
+	// 	Key: armhealthbot.Key{
 	// 		KeyName: to.Ptr("API_JWT_SECRET"),
 	// 		Value: to.Ptr("XXXXX"),
 	// 	},
@@ -389,13 +389,13 @@ func ExampleBotsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhealthbot.BotsClientUpdateResponse{
-	// 	HealthBot: &armhealthbot.HealthBot{
+	// 	HealthBot: armhealthbot.HealthBot{
 	// 		Name: to.Ptr("samplebotname"),
 	// 		Type: to.Ptr("Microsoft.HealthBot/healthBots"),
 	// 		ID: to.Ptr("/subscriptions/subscription-id/resourceGroups/OneResourceGroupName/providers/Microsoft.HealthBot/healthBots/samplebotname"),
@@ -418,10 +418,10 @@ func ExampleBotsClient_BeginUpdate() {
 	// 			Name: to.Ptr(armhealthbot.SKUNameF0),
 	// 		},
 	// 		SystemData: &armhealthbot.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-05T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.May, 5, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("jack@outlook.com"),
 	// 			CreatedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-05-06T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.May, 6, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ryan@outlook.com"),
 	// 			LastModifiedByType: to.Ptr(armhealthbot.CreatedByTypeUser),
 	// 		},

@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ValidatedSolutionRecipesServer is a fake server for instances of the armazurestackhci.ValidatedSolutionRecipesClient type.
@@ -58,9 +59,7 @@ func (v *ValidatedSolutionRecipesServerTransport) Do(req *http.Request) (*http.R
 }
 
 func (v *ValidatedSolutionRecipesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (v *ValidatedSolutionRecipesServerTransport) dispatchToMethodFake(req *http
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (v *ValidatedSolutionRecipesServerTransport) dispatchGet(req *http.Request)
 	if v.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/validatedSolutionRecipes/(?P<validatedSolutionRecipeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureStackHCI/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/validatedSolutionRecipes/(?P<validatedSolutionRecipeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -115,7 +111,7 @@ func (v *ValidatedSolutionRecipesServerTransport) dispatchGet(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ValidatedSolutionRecipe, req)
@@ -131,7 +127,7 @@ func (v *ValidatedSolutionRecipesServerTransport) dispatchNewListBySubscriptionL
 	}
 	newListBySubscriptionLocationResourcePager := v.newListBySubscriptionLocationResourcePager.get(req)
 	if newListBySubscriptionLocationResourcePager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureStackHCI/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/validatedSolutionRecipes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureStackHCI/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/validatedSolutionRecipes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -152,7 +148,7 @@ func (v *ValidatedSolutionRecipesServerTransport) dispatchNewListBySubscriptionL
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		v.newListBySubscriptionLocationResourcePager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

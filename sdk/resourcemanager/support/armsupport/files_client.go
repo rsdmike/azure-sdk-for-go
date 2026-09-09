@@ -18,6 +18,8 @@ import (
 
 // FilesClient contains the methods for the Files group.
 // Don't use this type directly, use NewFilesClient() instead.
+//
+// Generated from API version 2024-04-01
 type FilesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type FilesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewFilesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*FilesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewFilesClient(subscriptionID string, credential azcore.TokenCredential, op
 
 // Create - Creates a new file under a workspace for the specified subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - fileName - The name of the FileDetails
 //   - createFileParameters - Create file object
@@ -61,19 +64,14 @@ func (client *FilesClient) Create(ctx context.Context, fileWorkspaceName string,
 	if err != nil {
 		return FilesClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return FilesClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusCreated)
 }
 
 // createCreateRequest creates the Create request.
 func (client *FilesClient) createCreateRequest(ctx context.Context, fileWorkspaceName string, fileName string, createFileParameters FileDetails, _ *FilesClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}/files/{fileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if fileWorkspaceName == "" {
@@ -89,8 +87,8 @@ func (client *FilesClient) createCreateRequest(ctx context.Context, fileWorkspac
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, createFileParameters); err != nil {
@@ -100,8 +98,11 @@ func (client *FilesClient) createCreateRequest(ctx context.Context, fileWorkspac
 }
 
 // createHandleResponse handles the Create response.
-func (client *FilesClient) createHandleResponse(resp *http.Response) (FilesClientCreateResponse, error) {
+func (client *FilesClient) createHandleResponse(resp *http.Response, successCodes ...int) (FilesClientCreateResponse, error) {
 	result := FilesClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileDetails); err != nil {
 		return FilesClientCreateResponse{}, err
 	}
@@ -110,8 +111,6 @@ func (client *FilesClient) createHandleResponse(resp *http.Response) (FilesClien
 
 // Get - Returns details of a specific file in a work space.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - fileName - The name of the FileDetails
 //   - options - FilesClientGetOptions contains the optional parameters for the FilesClient.Get method.
@@ -129,19 +128,14 @@ func (client *FilesClient) Get(ctx context.Context, fileWorkspaceName string, fi
 	if err != nil {
 		return FilesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return FilesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *FilesClient) getCreateRequest(ctx context.Context, fileWorkspaceName string, fileName string, _ *FilesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}/files/{fileName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if fileWorkspaceName == "" {
@@ -157,15 +151,18 @@ func (client *FilesClient) getCreateRequest(ctx context.Context, fileWorkspaceNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *FilesClient) getHandleResponse(resp *http.Response) (FilesClientGetResponse, error) {
+func (client *FilesClient) getHandleResponse(resp *http.Response, successCodes ...int) (FilesClientGetResponse, error) {
 	result := FilesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FileDetails); err != nil {
 		return FilesClientGetResponse{}, err
 	}
@@ -173,8 +170,6 @@ func (client *FilesClient) getHandleResponse(resp *http.Response) (FilesClientGe
 }
 
 // NewListPager - Lists all the Files information under a workspace for an Azure subscription.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - options - FilesClientListOptions contains the optional parameters for the FilesClient.NewListPager method.
 func (client *FilesClient) NewListPager(fileWorkspaceName string, options *FilesClientListOptions) *runtime.Pager[FilesClientListResponse] {
@@ -188,43 +183,57 @@ func (client *FilesClient) NewListPager(fileWorkspaceName string, options *Files
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, fileWorkspaceName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, fileWorkspaceName, nextLink, options)
 			if err != nil {
 				return FilesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return FilesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *FilesClient) listCreateRequest(ctx context.Context, fileWorkspaceName string, _ *FilesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}/files"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *FilesClient) listCreateRequest(ctx context.Context, fileWorkspaceName string, nextLink string, _ *FilesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}/files"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if fileWorkspaceName == "" {
+			return nil, errors.New("parameter fileWorkspaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{fileWorkspaceName}", url.PathEscape(fileWorkspaceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if fileWorkspaceName == "" {
-		return nil, errors.New("parameter fileWorkspaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{fileWorkspaceName}", url.PathEscape(fileWorkspaceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *FilesClient) listHandleResponse(resp *http.Response) (FilesClientListResponse, error) {
+func (client *FilesClient) listHandleResponse(resp *http.Response, successCodes ...int) (FilesClientListResponse, error) {
 	result := FilesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.FilesListResult); err != nil {
 		return FilesClientListResponse{}, err
 	}
@@ -233,8 +242,6 @@ func (client *FilesClient) listHandleResponse(resp *http.Response) (FilesClientL
 
 // Upload - This API allows you to upload content to a file
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01
 //   - fileWorkspaceName - The name of the FileWorkspaceDetails
 //   - fileName - The name of the FileDetails
 //   - uploadFile - UploadFile object
@@ -254,8 +261,7 @@ func (client *FilesClient) Upload(ctx context.Context, fileWorkspaceName string,
 		return FilesClientUploadResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return FilesClientUploadResponse{}, err
+		return FilesClientUploadResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return FilesClientUploadResponse{}, nil
 }
@@ -264,7 +270,7 @@ func (client *FilesClient) Upload(ctx context.Context, fileWorkspaceName string,
 func (client *FilesClient) uploadCreateRequest(ctx context.Context, fileWorkspaceName string, fileName string, uploadFile UploadFile, _ *FilesClientUploadOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Support/fileWorkspaces/{fileWorkspaceName}/files/{fileName}/upload"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if fileWorkspaceName == "" {
@@ -280,8 +286,8 @@ func (client *FilesClient) uploadCreateRequest(ctx context.Context, fileWorkspac
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, uploadFile); err != nil {
 		return nil, err

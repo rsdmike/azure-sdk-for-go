@@ -18,6 +18,8 @@ import (
 
 // OperationResultsClient contains the methods for the OperationResults group.
 // Don't use this type directly, use NewOperationResultsClient() instead.
+//
+// Generated from API version 2026-05-01-preview
 type OperationResultsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type OperationResultsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewOperationResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*OperationResultsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewOperationResultsClient(subscriptionID string, credential azcore.TokenCre
 //
 // Get long running operation result.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01
 //   - location - The name of the Azure region.
 //   - operationID - operation identifier.
 //   - options - OperationResultsClientGetOptions contains the optional parameters for the OperationResultsClient.Get method.
@@ -62,19 +65,14 @@ func (client *OperationResultsClient) Get(ctx context.Context, location string, 
 	if err != nil {
 		return OperationResultsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return OperationResultsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent)
 }
 
 // getCreateRequest creates the Get request.
 func (client *OperationResultsClient) getCreateRequest(ctx context.Context, location string, operationID string, _ *OperationResultsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.ServiceFabric/locations/{location}/managedClusterOperationResults/{operationId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -90,15 +88,18 @@ func (client *OperationResultsClient) getCreateRequest(ctx context.Context, loca
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260501Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *OperationResultsClient) getHandleResponse(resp *http.Response) (OperationResultsClientGetResponse, error) {
+func (client *OperationResultsClient) getHandleResponse(resp *http.Response, successCodes ...int) (OperationResultsClientGetResponse, error) {
 	result := OperationResultsClientGetResponse{}
-	if val := resp.Header.Get("location"); val != "" {
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
+	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
 	return result, nil

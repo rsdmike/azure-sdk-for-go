@@ -30,7 +30,7 @@ func ExamplePrivateLinkResourcesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.PrivateLinkResourcesClientGetResponse{
-	// 	PrivateLinkResource: &armpostgresqlhsc.PrivateLinkResource{
+	// 	PrivateLinkResource: armpostgresqlhsc.PrivateLinkResource{
 	// 		Name: to.Ptr("plr"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2/privateLinkResources"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster/privateLinkResources/plr"),
@@ -44,10 +44,10 @@ func ExamplePrivateLinkResourcesClient_Get() {
 	// 			},
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -94,10 +94,10 @@ func ExamplePrivateLinkResourcesClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -116,10 +116,10 @@ func ExamplePrivateLinkResourcesClient_NewListByClusterPager() {
 		// 					},
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},

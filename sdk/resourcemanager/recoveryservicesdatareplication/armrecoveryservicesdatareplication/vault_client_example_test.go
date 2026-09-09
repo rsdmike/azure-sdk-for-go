@@ -37,13 +37,13 @@ func ExampleVaultClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.VaultClientCreateResponse{
-	// 	VaultModel: &armrecoveryservicesdatareplication.VaultModel{
+	// 	VaultModel: armrecoveryservicesdatareplication.VaultModel{
 	// 		Location: to.Ptr("eck"),
 	// 		Properties: &armrecoveryservicesdatareplication.VaultModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
@@ -56,10 +56,10 @@ func ExampleVaultClient_BeginCreate() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("rm"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("uojlfokjrhzgqoodsvgz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("gkojzu"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("jua")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 		},
 	// 		Tags: map[string]*string{
 	// 			"key5359": to.Ptr("ljfilxolxzuxrauopwtyxghrp"),
@@ -85,7 +85,7 @@ func ExampleVaultClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -108,7 +108,7 @@ func ExampleVaultClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.VaultClientGetResponse{
-	// 	VaultModel: &armrecoveryservicesdatareplication.VaultModel{
+	// 	VaultModel: armrecoveryservicesdatareplication.VaultModel{
 	// 		Location: to.Ptr("eck"),
 	// 		Properties: &armrecoveryservicesdatareplication.VaultModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
@@ -121,10 +121,10 @@ func ExampleVaultClient_Get() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("rm"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("uojlfokjrhzgqoodsvgz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("gkojzu"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("jua")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 		},
 	// 		Tags: map[string]*string{
 	// 			"key5359": to.Ptr("ljfilxolxzuxrauopwtyxghrp"),
@@ -172,10 +172,10 @@ func ExampleVaultClient_NewListPager() {
 		// 				SystemData: &armrecoveryservicesdatareplication.SystemData{
 		// 					CreatedBy: to.Ptr("rm"),
 		// 					CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("uojlfokjrhzgqoodsvgz")),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("gkojzu"),
 		// 					LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("jua")),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 					"key5359": to.Ptr("ljfilxolxzuxrauopwtyxghrp"),
@@ -225,10 +225,10 @@ func ExampleVaultClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armrecoveryservicesdatareplication.SystemData{
 		// 					CreatedBy: to.Ptr("rm"),
 		// 					CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("uojlfokjrhzgqoodsvgz")),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("gkojzu"),
 		// 					LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("jua")),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 					"key5359": to.Ptr("ljfilxolxzuxrauopwtyxghrp"),
@@ -264,13 +264,13 @@ func ExampleVaultClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.VaultClientUpdateResponse{
-	// 	VaultModel: &armrecoveryservicesdatareplication.VaultModel{
+	// 	VaultModel: armrecoveryservicesdatareplication.VaultModel{
 	// 		Location: to.Ptr("eck"),
 	// 		Properties: &armrecoveryservicesdatareplication.VaultModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
@@ -283,10 +283,10 @@ func ExampleVaultClient_BeginUpdate() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("rm"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("uojlfokjrhzgqoodsvgz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("gkojzu"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("jua")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:58.092Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 58, 92000000, time.UTC)),
 	// 		},
 	// 		Tags: map[string]*string{
 	// 			"key5359": to.Ptr("ljfilxolxzuxrauopwtyxghrp"),

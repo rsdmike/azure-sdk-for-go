@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // DomainsClient contains the methods for the Domains group.
 // Don't use this type directly, use NewDomainsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type DomainsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type DomainsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DomainsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, 
 //
 // Asynchronously creates or updates a new domain with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - domainInfo - Domain information.
@@ -73,8 +75,6 @@ func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 //
 // Asynchronously creates or updates a new domain with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domainInfo Domain, options *DomainsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainsClient.BeginCreateOrUpdate"
@@ -90,8 +90,7 @@ func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -100,7 +99,7 @@ func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupNa
 func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, domainInfo Domain, _ *DomainsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +115,8 @@ func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domainInfo); err != nil {
@@ -130,8 +129,6 @@ func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, re
 //
 // Delete existing domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientBeginDeleteOptions contains the optional parameters for the DomainsClient.BeginDelete method.
@@ -156,8 +153,6 @@ func (client *DomainsClient) BeginDelete(ctx context.Context, resourceGroupName 
 //
 // Delete existing domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainsClient) deleteOperation(ctx context.Context, resourceGroupName string, domainName string, options *DomainsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainsClient.BeginDelete"
@@ -173,8 +168,7 @@ func (client *DomainsClient) deleteOperation(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -183,7 +177,7 @@ func (client *DomainsClient) deleteOperation(ctx context.Context, resourceGroupN
 func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -199,8 +193,8 @@ func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -208,8 +202,6 @@ func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGr
 //
 // Get properties of a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientGetOptions contains the optional parameters for the DomainsClient.Get method.
@@ -227,19 +219,14 @@ func (client *DomainsClient) Get(ctx context.Context, resourceGroupName string, 
 	if err != nil {
 		return DomainsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -255,15 +242,18 @@ func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClientGetResponse, error) {
+func (client *DomainsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientGetResponse, error) {
 	result := DomainsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientGetResponse{}, err
 	}
@@ -273,8 +263,6 @@ func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClie
 // NewListByResourceGroupPager - List domains under a resource group.
 //
 // List all the domains under a resource group.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DomainsClientListByResourceGroupOptions contains the optional parameters for the DomainsClient.NewListByResourceGroupPager
 //     method.
@@ -289,49 +277,63 @@ func (client *DomainsClient) NewListByResourceGroupPager(resourceGroupName strin
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return DomainsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *DomainsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *DomainsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response) (DomainsClientListByResourceGroupResponse, error) {
+func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListByResourceGroupResponse, error) {
 	result := DomainsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainsListResult); err != nil {
 		return DomainsClientListByResourceGroupResponse{}, err
 	}
@@ -341,8 +343,6 @@ func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Respon
 // NewListBySubscriptionPager - List domains under an Azure subscription.
 //
 // List all the domains under an Azure subscription.
-//
-// Generated from API version 2025-07-15-preview
 //   - options - DomainsClientListBySubscriptionOptions contains the optional parameters for the DomainsClient.NewListBySubscriptionPager
 //     method.
 func (client *DomainsClient) NewListBySubscriptionPager(options *DomainsClientListBySubscriptionOptions) *runtime.Pager[DomainsClientListBySubscriptionResponse] {
@@ -356,45 +356,59 @@ func (client *DomainsClient) NewListBySubscriptionPager(options *DomainsClientLi
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DomainsClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *DomainsClient) listBySubscriptionCreateRequest(ctx context.Context, options *DomainsClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EventGrid/domains"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *DomainsClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EventGrid/domains"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *DomainsClient) listBySubscriptionHandleResponse(resp *http.Response) (DomainsClientListBySubscriptionResponse, error) {
+func (client *DomainsClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListBySubscriptionResponse, error) {
 	result := DomainsClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainsListResult); err != nil {
 		return DomainsClientListBySubscriptionResponse{}, err
 	}
@@ -405,8 +419,6 @@ func (client *DomainsClient) listBySubscriptionHandleResponse(resp *http.Respons
 //
 // List the two keys used to publish to a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientListSharedAccessKeysOptions contains the optional parameters for the DomainsClient.ListSharedAccessKeys
@@ -425,19 +437,14 @@ func (client *DomainsClient) ListSharedAccessKeys(ctx context.Context, resourceG
 	if err != nil {
 		return DomainsClientListSharedAccessKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientListSharedAccessKeysResponse{}, err
-	}
-	resp, err := client.listSharedAccessKeysHandleResponse(httpResp)
-	return resp, err
+	return client.listSharedAccessKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // listSharedAccessKeysCreateRequest creates the ListSharedAccessKeys request.
 func (client *DomainsClient) listSharedAccessKeysCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientListSharedAccessKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/listKeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -453,15 +460,18 @@ func (client *DomainsClient) listSharedAccessKeysCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listSharedAccessKeysHandleResponse handles the ListSharedAccessKeys response.
-func (client *DomainsClient) listSharedAccessKeysHandleResponse(resp *http.Response) (DomainsClientListSharedAccessKeysResponse, error) {
+func (client *DomainsClient) listSharedAccessKeysHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListSharedAccessKeysResponse, error) {
 	result := DomainsClientListSharedAccessKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainSharedAccessKeys); err != nil {
 		return DomainsClientListSharedAccessKeysResponse{}, err
 	}
@@ -472,8 +482,6 @@ func (client *DomainsClient) listSharedAccessKeysHandleResponse(resp *http.Respo
 //
 // Regenerate a shared access key for a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - regenerateKeyRequest - Request body to regenerate key.
@@ -492,19 +500,14 @@ func (client *DomainsClient) RegenerateKey(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return DomainsClientRegenerateKeyResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientRegenerateKeyResponse{}, err
-	}
-	resp, err := client.regenerateKeyHandleResponse(httpResp)
-	return resp, err
+	return client.regenerateKeyHandleResponse(httpResp, http.StatusOK)
 }
 
 // regenerateKeyCreateRequest creates the RegenerateKey request.
 func (client *DomainsClient) regenerateKeyCreateRequest(ctx context.Context, resourceGroupName string, domainName string, regenerateKeyRequest DomainRegenerateKeyRequest, _ *DomainsClientRegenerateKeyOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}/regenerateKey"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -520,8 +523,8 @@ func (client *DomainsClient) regenerateKeyCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, regenerateKeyRequest); err != nil {
@@ -531,8 +534,11 @@ func (client *DomainsClient) regenerateKeyCreateRequest(ctx context.Context, res
 }
 
 // regenerateKeyHandleResponse handles the RegenerateKey response.
-func (client *DomainsClient) regenerateKeyHandleResponse(resp *http.Response) (DomainsClientRegenerateKeyResponse, error) {
+func (client *DomainsClient) regenerateKeyHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientRegenerateKeyResponse, error) {
 	result := DomainsClientRegenerateKeyResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainSharedAccessKeys); err != nil {
 		return DomainsClientRegenerateKeyResponse{}, err
 	}
@@ -543,8 +549,6 @@ func (client *DomainsClient) regenerateKeyHandleResponse(resp *http.Response) (D
 //
 // Asynchronously updates a domain with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - domainUpdateParameters - Domain update information.
@@ -570,8 +574,6 @@ func (client *DomainsClient) BeginUpdate(ctx context.Context, resourceGroupName 
 //
 // Asynchronously updates a domain with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *DomainsClient) update(ctx context.Context, resourceGroupName string, domainName string, domainUpdateParameters DomainUpdateParameters, options *DomainsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainsClient.BeginUpdate"
@@ -587,8 +589,7 @@ func (client *DomainsClient) update(ctx context.Context, resourceGroupName strin
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -597,7 +598,7 @@ func (client *DomainsClient) update(ctx context.Context, resourceGroupName strin
 func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, domainUpdateParameters DomainUpdateParameters, _ *DomainsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -613,8 +614,8 @@ func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domainUpdateParameters); err != nil {

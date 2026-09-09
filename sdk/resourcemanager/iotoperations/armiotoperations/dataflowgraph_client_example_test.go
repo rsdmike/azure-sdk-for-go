@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-03-01/DataflowGraph_CreateOrUpdate_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/DataflowGraph_CreateOrUpdate_MaximumSet_Gen.json
 func ExampleDataflowGraphClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -122,13 +122,13 @@ func ExampleDataflowGraphClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowGraphClientCreateOrUpdateResponse{
-	// 	DataflowGraphResource: &armiotoperations.DataflowGraphResource{
+	// 	DataflowGraphResource: armiotoperations.DataflowGraphResource{
 	// 		ID: to.Ptr("/subscriptions/F8C729F9-DF9C-4743-848F-96EE433D8E53/resourceGroups/rgiotoperations/providers/Microsoft.IoTOperations/instances/resource-123/dataflowProfiles/resource-123/dataflowGraphs/resource-123"),
 	// 		Properties: &armiotoperations.DataflowGraphProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
@@ -226,7 +226,7 @@ func ExampleDataflowGraphClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2026-03-01/DataflowGraph_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/DataflowGraph_Delete_MaximumSet_Gen.json
 func ExampleDataflowGraphClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -243,11 +243,11 @@ func ExampleDataflowGraphClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-03-01/DataflowGraph_Get_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/DataflowGraph_Get_MaximumSet_Gen.json
 func ExampleDataflowGraphClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -266,7 +266,7 @@ func ExampleDataflowGraphClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowGraphClientGetResponse{
-	// 	DataflowGraphResource: &armiotoperations.DataflowGraphResource{
+	// 	DataflowGraphResource: armiotoperations.DataflowGraphResource{
 	// 		ID: to.Ptr("/subscriptions/F8C729F9-DF9C-4743-848F-96EE433D8E53/resourceGroups/rgiotoperations/providers/Microsoft.IoTOperations/instances/resource-123/dataflowProfiles/resource-123/dataflowGraphs/resource-123"),
 	// 		Properties: &armiotoperations.DataflowGraphProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
@@ -364,7 +364,7 @@ func ExampleDataflowGraphClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-03-01/DataflowGraph_ListByDataflowProfile_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/DataflowGraph_ListByDataflowProfile_MaximumSet_Gen.json
 func ExampleDataflowGraphClient_NewListByDataflowProfilePager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {

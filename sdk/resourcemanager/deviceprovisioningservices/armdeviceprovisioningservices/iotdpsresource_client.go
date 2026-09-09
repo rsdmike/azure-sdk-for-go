@@ -18,6 +18,8 @@ import (
 
 // IotDpsResourceClient contains the methods for the IotDpsResource group.
 // Don't use this type directly, use NewIotDpsResourceClient() instead.
+//
+// Generated from API version 2026-08-31
 type IotDpsResourceClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type IotDpsResourceClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewIotDpsResourceClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*IotDpsResourceClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +49,6 @@ func NewIotDpsResourceClient(subscriptionID string, credential azcore.TokenCrede
 // Check if a provisioning service name is available. This will validate if the name is syntactically valid and if the name
 // is usable
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - arguments - The request body
 //   - options - IotDpsResourceClientCheckProvisioningServiceNameAvailabilityOptions contains the optional parameters for the
 //     IotDpsResourceClient.CheckProvisioningServiceNameAvailability method.
@@ -63,19 +66,14 @@ func (client *IotDpsResourceClient) CheckProvisioningServiceNameAvailability(ctx
 	if err != nil {
 		return IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}, err
-	}
-	resp, err := client.checkProvisioningServiceNameAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkProvisioningServiceNameAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkProvisioningServiceNameAvailabilityCreateRequest creates the CheckProvisioningServiceNameAvailability request.
 func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityCreateRequest(ctx context.Context, arguments OperationInputs, _ *IotDpsResourceClientCheckProvisioningServiceNameAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Devices/checkProvisioningServiceNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -83,8 +81,8 @@ func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, arguments); err != nil {
@@ -94,8 +92,11 @@ func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityCrea
 }
 
 // checkProvisioningServiceNameAvailabilityHandleResponse handles the CheckProvisioningServiceNameAvailability response.
-func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityHandleResponse(resp *http.Response) (IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse, error) {
+func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse, error) {
 	result := IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameAvailabilityInfo); err != nil {
 		return IotDpsResourceClientCheckProvisioningServiceNameAvailabilityResponse{}, err
 	}
@@ -106,8 +107,6 @@ func (client *IotDpsResourceClient) checkProvisioningServiceNameAvailabilityHand
 // is to retrieve the provisioning service metadata and security metadata, and then combine them with the modified values
 // in a new body to update the provisioning service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - provisioningServiceName - Name of the provisioning service to retrieve.
 //   - iotDpsDescription - Description of the provisioning service to create or update.
@@ -134,8 +133,6 @@ func (client *IotDpsResourceClient) BeginCreateOrUpdate(ctx context.Context, res
 // retrieve the provisioning service metadata and security metadata, and then combine them with the modified values in a new
 // body to update the provisioning service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 func (client *IotDpsResourceClient) createOrUpdate(ctx context.Context, resourceGroupName string, provisioningServiceName string, iotDpsDescription ProvisioningServiceDescription, options *IotDpsResourceClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IotDpsResourceClient.BeginCreateOrUpdate"
@@ -151,8 +148,7 @@ func (client *IotDpsResourceClient) createOrUpdate(ctx context.Context, resource
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -161,7 +157,7 @@ func (client *IotDpsResourceClient) createOrUpdate(ctx context.Context, resource
 func (client *IotDpsResourceClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, provisioningServiceName string, iotDpsDescription ProvisioningServiceDescription, _ *IotDpsResourceClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -177,8 +173,8 @@ func (client *IotDpsResourceClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, iotDpsDescription); err != nil {
@@ -190,8 +186,6 @@ func (client *IotDpsResourceClient) createOrUpdateCreateRequest(ctx context.Cont
 // BeginCreateOrUpdatePrivateEndpointConnection - Create or update the status of a private endpoint connection with the specified
 // name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - privateEndpointConnectionName - The name of the private endpoint connection
@@ -218,8 +212,6 @@ func (client *IotDpsResourceClient) BeginCreateOrUpdatePrivateEndpointConnection
 // CreateOrUpdatePrivateEndpointConnection - Create or update the status of a private endpoint connection with the specified
 // name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnection(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, privateEndpointConnection PrivateEndpointConnection, options *IotDpsResourceClientBeginCreateOrUpdatePrivateEndpointConnectionOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IotDpsResourceClient.BeginCreateOrUpdatePrivateEndpointConnection"
@@ -235,8 +227,7 @@ func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnection(ctx 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -245,7 +236,7 @@ func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnection(ctx 
 func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, privateEndpointConnection PrivateEndpointConnection, _ *IotDpsResourceClientBeginCreateOrUpdatePrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -265,8 +256,8 @@ func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnectionCreat
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, privateEndpointConnection); err != nil {
@@ -277,8 +268,6 @@ func (client *IotDpsResourceClient) createOrUpdatePrivateEndpointConnectionCreat
 
 // BeginDelete - Deletes the Provisioning Service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientBeginDeleteOptions contains the optional parameters for the IotDpsResourceClient.BeginDelete
 //     method.
@@ -301,8 +290,6 @@ func (client *IotDpsResourceClient) BeginDelete(ctx context.Context, provisionin
 
 // Delete - Deletes the Provisioning Service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 func (client *IotDpsResourceClient) deleteOperation(ctx context.Context, provisioningServiceName string, resourceGroupName string, options *IotDpsResourceClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IotDpsResourceClient.BeginDelete"
@@ -318,8 +305,7 @@ func (client *IotDpsResourceClient) deleteOperation(ctx context.Context, provisi
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusNotFound) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -328,7 +314,7 @@ func (client *IotDpsResourceClient) deleteOperation(ctx context.Context, provisi
 func (client *IotDpsResourceClient) deleteCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, _ *IotDpsResourceClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if provisioningServiceName == "" {
@@ -344,15 +330,13 @@ func (client *IotDpsResourceClient) deleteCreateRequest(ctx context.Context, pro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginDeletePrivateEndpointConnection - Delete private endpoint connection with the specified name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - privateEndpointConnectionName - The name of the private endpoint connection
@@ -377,8 +361,6 @@ func (client *IotDpsResourceClient) BeginDeletePrivateEndpointConnection(ctx con
 
 // DeletePrivateEndpointConnection - Delete private endpoint connection with the specified name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 func (client *IotDpsResourceClient) deletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, options *IotDpsResourceClientBeginDeletePrivateEndpointConnectionOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IotDpsResourceClient.BeginDeletePrivateEndpointConnection"
@@ -394,8 +376,7 @@ func (client *IotDpsResourceClient) deletePrivateEndpointConnection(ctx context.
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -404,7 +385,7 @@ func (client *IotDpsResourceClient) deletePrivateEndpointConnection(ctx context.
 func (client *IotDpsResourceClient) deletePrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, _ *IotDpsResourceClientBeginDeletePrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -424,16 +405,14 @@ func (client *IotDpsResourceClient) deletePrivateEndpointConnectionCreateRequest
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // Get - Get the metadata of the provisioning service without SAS keys.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientGetOptions contains the optional parameters for the IotDpsResourceClient.Get method.
 func (client *IotDpsResourceClient) Get(ctx context.Context, provisioningServiceName string, resourceGroupName string, options *IotDpsResourceClientGetOptions) (IotDpsResourceClientGetResponse, error) {
@@ -450,19 +429,14 @@ func (client *IotDpsResourceClient) Get(ctx context.Context, provisioningService
 	if err != nil {
 		return IotDpsResourceClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *IotDpsResourceClient) getCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, _ *IotDpsResourceClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if provisioningServiceName == "" {
@@ -478,15 +452,18 @@ func (client *IotDpsResourceClient) getCreateRequest(ctx context.Context, provis
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *IotDpsResourceClient) getHandleResponse(resp *http.Response) (IotDpsResourceClientGetResponse, error) {
+func (client *IotDpsResourceClient) getHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientGetResponse, error) {
 	result := IotDpsResourceClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescription); err != nil {
 		return IotDpsResourceClientGetResponse{}, err
 	}
@@ -495,8 +472,6 @@ func (client *IotDpsResourceClient) getHandleResponse(resp *http.Response) (IotD
 
 // GetOperationResult - Gets the status of a long running operation, such as create, update or delete a provisioning service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - asyncinfo - Async header used to poll on the status of the operation, obtained while creating the long running operation.
 //   - options - IotDpsResourceClientGetOperationResultOptions contains the optional parameters for the IotDpsResourceClient.GetOperationResult
@@ -515,19 +490,14 @@ func (client *IotDpsResourceClient) GetOperationResult(ctx context.Context, oper
 	if err != nil {
 		return IotDpsResourceClientGetOperationResultResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientGetOperationResultResponse{}, err
-	}
-	resp, err := client.getOperationResultHandleResponse(httpResp)
-	return resp, err
+	return client.getOperationResultHandleResponse(httpResp, http.StatusOK)
 }
 
 // getOperationResultCreateRequest creates the GetOperationResult request.
 func (client *IotDpsResourceClient) getOperationResultCreateRequest(ctx context.Context, operationID string, resourceGroupName string, provisioningServiceName string, asyncinfo string, _ *IotDpsResourceClientGetOperationResultOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/operationresults/{operationId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if operationID == "" {
@@ -547,16 +517,19 @@ func (client *IotDpsResourceClient) getOperationResultCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
+	reqQP.Set("api-version", version20260831)
 	reqQP.Set("asyncinfo", asyncinfo)
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getOperationResultHandleResponse handles the GetOperationResult response.
-func (client *IotDpsResourceClient) getOperationResultHandleResponse(resp *http.Response) (IotDpsResourceClientGetOperationResultResponse, error) {
+func (client *IotDpsResourceClient) getOperationResultHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientGetOperationResultResponse, error) {
 	result := IotDpsResourceClientGetOperationResultResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AsyncOperationResult); err != nil {
 		return IotDpsResourceClientGetOperationResultResponse{}, err
 	}
@@ -565,8 +538,6 @@ func (client *IotDpsResourceClient) getOperationResultHandleResponse(resp *http.
 
 // GetPrivateEndpointConnection - Get private endpoint connection properties
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - privateEndpointConnectionName - The name of the private endpoint connection
@@ -586,19 +557,14 @@ func (client *IotDpsResourceClient) GetPrivateEndpointConnection(ctx context.Con
 	if err != nil {
 		return IotDpsResourceClientGetPrivateEndpointConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientGetPrivateEndpointConnectionResponse{}, err
-	}
-	resp, err := client.getPrivateEndpointConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.getPrivateEndpointConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // getPrivateEndpointConnectionCreateRequest creates the GetPrivateEndpointConnection request.
 func (client *IotDpsResourceClient) getPrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, privateEndpointConnectionName string, _ *IotDpsResourceClientGetPrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -618,15 +584,18 @@ func (client *IotDpsResourceClient) getPrivateEndpointConnectionCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
-func (client *IotDpsResourceClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (IotDpsResourceClientGetPrivateEndpointConnectionResponse, error) {
+func (client *IotDpsResourceClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientGetPrivateEndpointConnectionResponse, error) {
 	result := IotDpsResourceClientGetPrivateEndpointConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnection); err != nil {
 		return IotDpsResourceClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -635,8 +604,6 @@ func (client *IotDpsResourceClient) getPrivateEndpointConnectionHandleResponse(r
 
 // GetPrivateLinkResources - Get the specified private link resource for the given provisioning service
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - groupID - The name of the private link resource
@@ -656,19 +623,14 @@ func (client *IotDpsResourceClient) GetPrivateLinkResources(ctx context.Context,
 	if err != nil {
 		return IotDpsResourceClientGetPrivateLinkResourcesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientGetPrivateLinkResourcesResponse{}, err
-	}
-	resp, err := client.getPrivateLinkResourcesHandleResponse(httpResp)
-	return resp, err
+	return client.getPrivateLinkResourcesHandleResponse(httpResp, http.StatusOK)
 }
 
 // getPrivateLinkResourcesCreateRequest creates the GetPrivateLinkResources request.
 func (client *IotDpsResourceClient) getPrivateLinkResourcesCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, groupID string, _ *IotDpsResourceClientGetPrivateLinkResourcesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateLinkResources/{groupId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -688,15 +650,18 @@ func (client *IotDpsResourceClient) getPrivateLinkResourcesCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
-func (client *IotDpsResourceClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (IotDpsResourceClientGetPrivateLinkResourcesResponse, error) {
+func (client *IotDpsResourceClient) getPrivateLinkResourcesHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientGetPrivateLinkResourcesResponse, error) {
 	result := IotDpsResourceClientGetPrivateLinkResourcesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GroupIDInformation); err != nil {
 		return IotDpsResourceClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -704,8 +669,6 @@ func (client *IotDpsResourceClient) getPrivateLinkResourcesHandleResponse(resp *
 }
 
 // NewListByResourceGroupPager - Get a list of all provisioning services in the given resource group.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientListByResourceGroupOptions contains the optional parameters for the IotDpsResourceClient.NewListByResourceGroupPager
 //     method.
@@ -720,43 +683,57 @@ func (client *IotDpsResourceClient) NewListByResourceGroupPager(resourceGroupNam
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return IotDpsResourceClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return IotDpsResourceClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *IotDpsResourceClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *IotDpsResourceClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *IotDpsResourceClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *IotDpsResourceClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260831)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *IotDpsResourceClient) listByResourceGroupHandleResponse(resp *http.Response) (IotDpsResourceClientListByResourceGroupResponse, error) {
+func (client *IotDpsResourceClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListByResourceGroupResponse, error) {
 	result := IotDpsResourceClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescriptionListResult); err != nil {
 		return IotDpsResourceClientListByResourceGroupResponse{}, err
 	}
@@ -764,8 +741,6 @@ func (client *IotDpsResourceClient) listByResourceGroupHandleResponse(resp *http
 }
 
 // NewListBySubscriptionPager - List all the provisioning services for a given subscription id.
-//
-// Generated from API version 2025-02-01-preview
 //   - options - IotDpsResourceClientListBySubscriptionOptions contains the optional parameters for the IotDpsResourceClient.NewListBySubscriptionPager
 //     method.
 func (client *IotDpsResourceClient) NewListBySubscriptionPager(options *IotDpsResourceClientListBySubscriptionOptions) *runtime.Pager[IotDpsResourceClientListBySubscriptionResponse] {
@@ -779,39 +754,53 @@ func (client *IotDpsResourceClient) NewListBySubscriptionPager(options *IotDpsRe
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return IotDpsResourceClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return IotDpsResourceClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *IotDpsResourceClient) listBySubscriptionCreateRequest(ctx context.Context, _ *IotDpsResourceClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Devices/provisioningServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *IotDpsResourceClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *IotDpsResourceClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Devices/provisioningServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260831)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *IotDpsResourceClient) listBySubscriptionHandleResponse(resp *http.Response) (IotDpsResourceClientListBySubscriptionResponse, error) {
+func (client *IotDpsResourceClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListBySubscriptionResponse, error) {
 	result := IotDpsResourceClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ProvisioningServiceDescriptionListResult); err != nil {
 		return IotDpsResourceClientListBySubscriptionResponse{}, err
 	}
@@ -819,8 +808,6 @@ func (client *IotDpsResourceClient) listBySubscriptionHandleResponse(resp *http.
 }
 
 // NewListKeysPager - List the primary and secondary keys for a provisioning service.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientListKeysOptions contains the optional parameters for the IotDpsResourceClient.NewListKeysPager
 //     method.
@@ -835,47 +822,61 @@ func (client *IotDpsResourceClient) NewListKeysPager(provisioningServiceName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listKeysCreateRequest(ctx, provisioningServiceName, resourceGroupName, options)
-			}, nil)
+			req, err := client.listKeysCreateRequest(ctx, provisioningServiceName, resourceGroupName, nextLink, options)
 			if err != nil {
 				return IotDpsResourceClientListKeysResponse{}, err
 			}
-			return client.listKeysHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return IotDpsResourceClientListKeysResponse{}, err
+			}
+			return client.listKeysHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listKeysCreateRequest creates the ListKeys request.
-func (client *IotDpsResourceClient) listKeysCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, _ *IotDpsResourceClientListKeysOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/listkeys"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *IotDpsResourceClient) listKeysCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, nextLink string, _ *IotDpsResourceClientListKeysOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/listkeys"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if provisioningServiceName == "" {
+			return nil, errors.New("parameter provisioningServiceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{provisioningServiceName}", url.PathEscape(provisioningServiceName))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if provisioningServiceName == "" {
-		return nil, errors.New("parameter provisioningServiceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{provisioningServiceName}", url.PathEscape(provisioningServiceName))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260831)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listKeysHandleResponse handles the ListKeys response.
-func (client *IotDpsResourceClient) listKeysHandleResponse(resp *http.Response) (IotDpsResourceClientListKeysResponse, error) {
+func (client *IotDpsResourceClient) listKeysHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListKeysResponse, error) {
 	result := IotDpsResourceClientListKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRuleListResult); err != nil {
 		return IotDpsResourceClientListKeysResponse{}, err
 	}
@@ -884,8 +885,6 @@ func (client *IotDpsResourceClient) listKeysHandleResponse(resp *http.Response) 
 
 // ListKeysForKeyName - List primary and secondary keys for a specific key name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientListKeysForKeyNameOptions contains the optional parameters for the IotDpsResourceClient.ListKeysForKeyName
 //     method.
@@ -903,19 +902,14 @@ func (client *IotDpsResourceClient) ListKeysForKeyName(ctx context.Context, prov
 	if err != nil {
 		return IotDpsResourceClientListKeysForKeyNameResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientListKeysForKeyNameResponse{}, err
-	}
-	resp, err := client.listKeysForKeyNameHandleResponse(httpResp)
-	return resp, err
+	return client.listKeysForKeyNameHandleResponse(httpResp, http.StatusOK)
 }
 
 // listKeysForKeyNameCreateRequest creates the ListKeysForKeyName request.
 func (client *IotDpsResourceClient) listKeysForKeyNameCreateRequest(ctx context.Context, provisioningServiceName string, keyName string, resourceGroupName string, _ *IotDpsResourceClientListKeysForKeyNameOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/keys/{keyName}/listkeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if provisioningServiceName == "" {
@@ -935,15 +929,18 @@ func (client *IotDpsResourceClient) listKeysForKeyNameCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listKeysForKeyNameHandleResponse handles the ListKeysForKeyName response.
-func (client *IotDpsResourceClient) listKeysForKeyNameHandleResponse(resp *http.Response) (IotDpsResourceClientListKeysForKeyNameResponse, error) {
+func (client *IotDpsResourceClient) listKeysForKeyNameHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListKeysForKeyNameResponse, error) {
 	result := IotDpsResourceClientListKeysForKeyNameResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SharedAccessSignatureAuthorizationRuleAccessRightsDescription); err != nil {
 		return IotDpsResourceClientListKeysForKeyNameResponse{}, err
 	}
@@ -952,8 +949,6 @@ func (client *IotDpsResourceClient) listKeysForKeyNameHandleResponse(resp *http.
 
 // ListPrivateEndpointConnections - List private endpoint connection properties
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - options - IotDpsResourceClientListPrivateEndpointConnectionsOptions contains the optional parameters for the IotDpsResourceClient.ListPrivateEndpointConnections
@@ -972,19 +967,14 @@ func (client *IotDpsResourceClient) ListPrivateEndpointConnections(ctx context.C
 	if err != nil {
 		return IotDpsResourceClientListPrivateEndpointConnectionsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientListPrivateEndpointConnectionsResponse{}, err
-	}
-	resp, err := client.listPrivateEndpointConnectionsHandleResponse(httpResp)
-	return resp, err
+	return client.listPrivateEndpointConnectionsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listPrivateEndpointConnectionsCreateRequest creates the ListPrivateEndpointConnections request.
 func (client *IotDpsResourceClient) listPrivateEndpointConnectionsCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *IotDpsResourceClientListPrivateEndpointConnectionsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateEndpointConnections"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1000,15 +990,18 @@ func (client *IotDpsResourceClient) listPrivateEndpointConnectionsCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listPrivateEndpointConnectionsHandleResponse handles the ListPrivateEndpointConnections response.
-func (client *IotDpsResourceClient) listPrivateEndpointConnectionsHandleResponse(resp *http.Response) (IotDpsResourceClientListPrivateEndpointConnectionsResponse, error) {
+func (client *IotDpsResourceClient) listPrivateEndpointConnectionsHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListPrivateEndpointConnectionsResponse, error) {
 	result := IotDpsResourceClientListPrivateEndpointConnectionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionArray); err != nil {
 		return IotDpsResourceClientListPrivateEndpointConnectionsResponse{}, err
 	}
@@ -1017,8 +1010,6 @@ func (client *IotDpsResourceClient) listPrivateEndpointConnectionsHandleResponse
 
 // ListPrivateLinkResources - List private link resources for the given provisioning service
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - Name of the provisioning service to retrieve.
 //   - options - IotDpsResourceClientListPrivateLinkResourcesOptions contains the optional parameters for the IotDpsResourceClient.ListPrivateLinkResources
@@ -1037,19 +1028,14 @@ func (client *IotDpsResourceClient) ListPrivateLinkResources(ctx context.Context
 	if err != nil {
 		return IotDpsResourceClientListPrivateLinkResourcesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IotDpsResourceClientListPrivateLinkResourcesResponse{}, err
-	}
-	resp, err := client.listPrivateLinkResourcesHandleResponse(httpResp)
-	return resp, err
+	return client.listPrivateLinkResourcesHandleResponse(httpResp, http.StatusOK)
 }
 
 // listPrivateLinkResourcesCreateRequest creates the ListPrivateLinkResources request.
 func (client *IotDpsResourceClient) listPrivateLinkResourcesCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *IotDpsResourceClientListPrivateLinkResourcesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{resourceName}/privateLinkResources"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1065,15 +1051,18 @@ func (client *IotDpsResourceClient) listPrivateLinkResourcesCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listPrivateLinkResourcesHandleResponse handles the ListPrivateLinkResources response.
-func (client *IotDpsResourceClient) listPrivateLinkResourcesHandleResponse(resp *http.Response) (IotDpsResourceClientListPrivateLinkResourcesResponse, error) {
+func (client *IotDpsResourceClient) listPrivateLinkResourcesHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListPrivateLinkResourcesResponse, error) {
 	result := IotDpsResourceClientListPrivateLinkResourcesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResources); err != nil {
 		return IotDpsResourceClientListPrivateLinkResourcesResponse{}, err
 	}
@@ -1081,8 +1070,6 @@ func (client *IotDpsResourceClient) listPrivateLinkResourcesHandleResponse(resp 
 }
 
 // NewListValidSKUsPager - Gets the list of valid SKUs and tiers for a provisioning service.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - IotDpsResourceClientListValidSKUsOptions contains the optional parameters for the IotDpsResourceClient.NewListValidSKUsPager
 //     method.
@@ -1097,47 +1084,61 @@ func (client *IotDpsResourceClient) NewListValidSKUsPager(provisioningServiceNam
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listValidSKUsCreateRequest(ctx, provisioningServiceName, resourceGroupName, options)
-			}, nil)
+			req, err := client.listValidSKUsCreateRequest(ctx, provisioningServiceName, resourceGroupName, nextLink, options)
 			if err != nil {
 				return IotDpsResourceClientListValidSKUsResponse{}, err
 			}
-			return client.listValidSKUsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return IotDpsResourceClientListValidSKUsResponse{}, err
+			}
+			return client.listValidSKUsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listValidSKUsCreateRequest creates the ListValidSKUs request.
-func (client *IotDpsResourceClient) listValidSKUsCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, _ *IotDpsResourceClientListValidSKUsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/skus"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *IotDpsResourceClient) listValidSKUsCreateRequest(ctx context.Context, provisioningServiceName string, resourceGroupName string, nextLink string, _ *IotDpsResourceClientListValidSKUsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/skus"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if provisioningServiceName == "" {
+			return nil, errors.New("parameter provisioningServiceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{provisioningServiceName}", url.PathEscape(provisioningServiceName))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if provisioningServiceName == "" {
-		return nil, errors.New("parameter provisioningServiceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{provisioningServiceName}", url.PathEscape(provisioningServiceName))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260831)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listValidSKUsHandleResponse handles the ListValidSKUs response.
-func (client *IotDpsResourceClient) listValidSKUsHandleResponse(resp *http.Response) (IotDpsResourceClientListValidSKUsResponse, error) {
+func (client *IotDpsResourceClient) listValidSKUsHandleResponse(resp *http.Response, successCodes ...int) (IotDpsResourceClientListValidSKUsResponse, error) {
 	result := IotDpsResourceClientListValidSKUsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.IotDpsSKUDefinitionListResult); err != nil {
 		return IotDpsResourceClientListValidSKUsResponse{}, err
 	}
@@ -1146,8 +1147,6 @@ func (client *IotDpsResourceClient) listValidSKUsHandleResponse(resp *http.Respo
 
 // BeginUpdate - Update an existing provisioning service's tags. to update other fields use the CreateOrUpdate method
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - provisioningServiceName - Name of the provisioning service to retrieve.
 //   - provisioningServiceTags - Updated tag information to set into the provisioning service instance.
@@ -1172,8 +1171,6 @@ func (client *IotDpsResourceClient) BeginUpdate(ctx context.Context, resourceGro
 
 // Update - Update an existing provisioning service's tags. to update other fields use the CreateOrUpdate method
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 func (client *IotDpsResourceClient) update(ctx context.Context, resourceGroupName string, provisioningServiceName string, provisioningServiceTags TagsResource, options *IotDpsResourceClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "IotDpsResourceClient.BeginUpdate"
@@ -1189,8 +1186,7 @@ func (client *IotDpsResourceClient) update(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1199,7 +1195,7 @@ func (client *IotDpsResourceClient) update(ctx context.Context, resourceGroupNam
 func (client *IotDpsResourceClient) updateCreateRequest(ctx context.Context, resourceGroupName string, provisioningServiceName string, provisioningServiceTags TagsResource, _ *IotDpsResourceClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1215,8 +1211,8 @@ func (client *IotDpsResourceClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, provisioningServiceTags); err != nil {

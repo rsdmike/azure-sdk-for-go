@@ -18,6 +18,8 @@ import (
 
 // SolutionClient contains the methods for the Solution group.
 // Don't use this type directly, use NewSolutionClient() instead.
+//
+// Generated from API version 2024-03-01-preview
 type SolutionClient struct {
 	internal *arm.Client
 }
@@ -44,8 +46,6 @@ func NewSolutionClient(credential azcore.TokenCredential, options *arm.ClientOpt
 // instructions. <br/> All these components are seamlessly converged into unified solutions tailored to address a specific
 // support problem area.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - solutionResourceName - Solution resource Name.
 //   - solutionRequestBody - The required request body for this solution resource creation.
@@ -75,8 +75,6 @@ func (client *SolutionClient) BeginCreate(ctx context.Context, scope string, sol
 // instructions. <br/> All these components are seamlessly converged into unified solutions tailored to address a specific
 // support problem area.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 func (client *SolutionClient) create(ctx context.Context, scope string, solutionResourceName string, solutionRequestBody SolutionResource, options *SolutionClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SolutionClient.BeginCreate"
@@ -92,8 +90,7 @@ func (client *SolutionClient) create(ctx context.Context, scope string, solution
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -114,8 +111,8 @@ func (client *SolutionClient) createCreateRequest(ctx context.Context, scope str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, solutionRequestBody); err != nil {
@@ -126,8 +123,6 @@ func (client *SolutionClient) createCreateRequest(ctx context.Context, scope str
 
 // Get - Get the solution using the applicable solutionResourceName while creating the solution.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - solutionResourceName - Solution resource Name.
 //   - options - SolutionClientGetOptions contains the optional parameters for the SolutionClient.Get method.
@@ -145,12 +140,7 @@ func (client *SolutionClient) Get(ctx context.Context, scope string, solutionRes
 	if err != nil {
 		return SolutionClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SolutionClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -169,15 +159,18 @@ func (client *SolutionClient) getCreateRequest(ctx context.Context, scope string
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SolutionClient) getHandleResponse(resp *http.Response) (SolutionClientGetResponse, error) {
+func (client *SolutionClient) getHandleResponse(resp *http.Response, successCodes ...int) (SolutionClientGetResponse, error) {
 	result := SolutionClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SolutionResource); err != nil {
 		return SolutionClientGetResponse{}, err
 	}
@@ -186,8 +179,6 @@ func (client *SolutionClient) getHandleResponse(resp *http.Response) (SolutionCl
 
 // BeginUpdate - Update the requiredInputs or additional information needed to execute the solution
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - solutionResourceName - Solution resource Name.
 //   - solutionPatchRequestBody - The required request body for updating a solution resource.
@@ -211,8 +202,6 @@ func (client *SolutionClient) BeginUpdate(ctx context.Context, scope string, sol
 
 // Update - Update the requiredInputs or additional information needed to execute the solution
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 func (client *SolutionClient) update(ctx context.Context, scope string, solutionResourceName string, solutionPatchRequestBody SolutionPatchRequestBody, options *SolutionClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SolutionClient.BeginUpdate"
@@ -228,8 +217,7 @@ func (client *SolutionClient) update(ctx context.Context, scope string, solution
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -250,8 +238,8 @@ func (client *SolutionClient) updateCreateRequest(ctx context.Context, scope str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, solutionPatchRequestBody); err != nil {
@@ -262,8 +250,6 @@ func (client *SolutionClient) updateCreateRequest(ctx context.Context, scope str
 
 // WarmUp - Warm up the solution resource by preloading asynchronous diagnostics results into cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - solutionResourceName - Solution resource Name.
 //   - options - SolutionClientWarmUpOptions contains the optional parameters for the SolutionClient.WarmUp method.
@@ -282,8 +268,7 @@ func (client *SolutionClient) WarmUp(ctx context.Context, scope string, solution
 		return SolutionClientWarmUpResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return SolutionClientWarmUpResponse{}, err
+		return SolutionClientWarmUpResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return SolutionClientWarmUpResponse{}, nil
 }
@@ -304,8 +289,8 @@ func (client *SolutionClient) warmUpCreateRequest(ctx context.Context, scope str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.SolutionWarmUpRequestBody != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
 		if err := runtime.MarshalAsJSON(req, *options.SolutionWarmUpRequestBody); err != nil {

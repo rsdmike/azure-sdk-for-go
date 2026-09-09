@@ -18,6 +18,8 @@ import (
 
 // QuotasClient - Operations for managing Playwright quota resources at the subscription level.
 // Don't use this type directly, use NewQuotasClient() instead.
+//
+// Generated from API version 2026-02-01-preview
 type QuotasClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type QuotasClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewQuotasClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*QuotasClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewQuotasClient(subscriptionID string, credential azcore.TokenCredential, o
 
 // Get - Gets a subscription-level location-based Playwright quota resource by name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-02-01-preview
 //   - location - The name of the Azure region.
 //   - playwrightQuotaName - The name of the PlaywrightQuota
 //   - options - QuotasClientGetOptions contains the optional parameters for the QuotasClient.Get method.
@@ -60,19 +63,14 @@ func (client *QuotasClient) Get(ctx context.Context, location string, playwright
 	if err != nil {
 		return QuotasClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return QuotasClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *QuotasClient) getCreateRequest(ctx context.Context, location string, playwrightQuotaName QuotaName, _ *QuotasClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.LoadTestService/locations/{location}/playwrightQuotas/{playwrightQuotaName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -88,15 +86,18 @@ func (client *QuotasClient) getCreateRequest(ctx context.Context, location strin
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260201Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *QuotasClient) getHandleResponse(resp *http.Response) (QuotasClientGetResponse, error) {
+func (client *QuotasClient) getHandleResponse(resp *http.Response, successCodes ...int) (QuotasClientGetResponse, error) {
 	result := QuotasClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Quota); err != nil {
 		return QuotasClientGetResponse{}, err
 	}
@@ -104,8 +105,6 @@ func (client *QuotasClient) getHandleResponse(resp *http.Response) (QuotasClient
 }
 
 // NewListBySubscriptionPager - Lists Playwright quota resources for a given subscription ID.
-//
-// Generated from API version 2026-02-01-preview
 //   - location - The name of the Azure region.
 //   - options - QuotasClientListBySubscriptionOptions contains the optional parameters for the QuotasClient.NewListBySubscriptionPager
 //     method.
@@ -120,43 +119,57 @@ func (client *QuotasClient) NewListBySubscriptionPager(location string, options 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, location, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, location, nextLink, options)
 			if err != nil {
 				return QuotasClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return QuotasClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *QuotasClient) listBySubscriptionCreateRequest(ctx context.Context, location string, _ *QuotasClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.LoadTestService/locations/{location}/playwrightQuotas"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *QuotasClient) listBySubscriptionCreateRequest(ctx context.Context, location string, nextLink string, _ *QuotasClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.LoadTestService/locations/{location}/playwrightQuotas"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if location == "" {
+			return nil, errors.New("parameter location cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if location == "" {
-		return nil, errors.New("parameter location cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260201Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *QuotasClient) listBySubscriptionHandleResponse(resp *http.Response) (QuotasClientListBySubscriptionResponse, error) {
+func (client *QuotasClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (QuotasClientListBySubscriptionResponse, error) {
 	result := QuotasClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.QuotaListResult); err != nil {
 		return QuotasClientListBySubscriptionResponse{}, err
 	}

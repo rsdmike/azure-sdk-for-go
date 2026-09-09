@@ -18,6 +18,8 @@ import (
 
 // SingleSignOnClient contains the methods for the SingleSignOn group.
 // Don't use this type directly, use NewSingleSignOnClient() instead.
+//
+// Generated from API version 2024-04-24
 type SingleSignOnClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type SingleSignOnClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSingleSignOnClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SingleSignOnClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewSingleSignOnClient(subscriptionID string, credential azcore.TokenCredent
 
 // BeginCreateOrUpdate - Create a DynatraceSingleSignOnResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-24
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - configurationName - Single Sign On Configuration Name
@@ -68,8 +71,6 @@ func (client *SingleSignOnClient) BeginCreateOrUpdate(ctx context.Context, resou
 
 // CreateOrUpdate - Create a DynatraceSingleSignOnResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-24
 func (client *SingleSignOnClient) createOrUpdate(ctx context.Context, resourceGroupName string, monitorName string, configurationName string, resource SingleSignOnResource, options *SingleSignOnClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SingleSignOnClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *SingleSignOnClient) createOrUpdate(ctx context.Context, resourceGr
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *SingleSignOnClient) createOrUpdate(ctx context.Context, resourceGr
 func (client *SingleSignOnClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, configurationName string, resource SingleSignOnResource, _ *SingleSignOnClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Dynatrace.Observability/monitors/{monitorName}/singleSignOnConfigurations/{configurationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *SingleSignOnClient) createOrUpdateCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-24")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240424)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *SingleSignOnClient) createOrUpdateCreateRequest(ctx context.Contex
 
 // Get - Get a DynatraceSingleSignOnResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-24
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - configurationName - Single Sign On Configuration Name
@@ -147,19 +145,14 @@ func (client *SingleSignOnClient) Get(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return SingleSignOnClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SingleSignOnClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *SingleSignOnClient) getCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, configurationName string, _ *SingleSignOnClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Dynatrace.Observability/monitors/{monitorName}/singleSignOnConfigurations/{configurationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -179,15 +172,18 @@ func (client *SingleSignOnClient) getCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-24")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240424)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SingleSignOnClient) getHandleResponse(resp *http.Response) (SingleSignOnClientGetResponse, error) {
+func (client *SingleSignOnClient) getHandleResponse(resp *http.Response, successCodes ...int) (SingleSignOnClientGetResponse, error) {
 	result := SingleSignOnClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SingleSignOnResource); err != nil {
 		return SingleSignOnClientGetResponse{}, err
 	}
@@ -195,8 +191,6 @@ func (client *SingleSignOnClient) getHandleResponse(resp *http.Response) (Single
 }
 
 // NewListPager - List all DynatraceSingleSignOnResource by monitorName
-//
-// Generated from API version 2024-04-24
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Monitor resource name
 //   - options - SingleSignOnClientListOptions contains the optional parameters for the SingleSignOnClient.NewListPager method.
@@ -211,47 +205,61 @@ func (client *SingleSignOnClient) NewListPager(resourceGroupName string, monitor
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, monitorName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, monitorName, nextLink, options)
 			if err != nil {
 				return SingleSignOnClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return SingleSignOnClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *SingleSignOnClient) listCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *SingleSignOnClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Dynatrace.Observability/monitors/{monitorName}/singleSignOnConfigurations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *SingleSignOnClient) listCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, nextLink string, _ *SingleSignOnClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Dynatrace.Observability/monitors/{monitorName}/singleSignOnConfigurations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-24")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240424)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *SingleSignOnClient) listHandleResponse(resp *http.Response) (SingleSignOnClientListResponse, error) {
+func (client *SingleSignOnClient) listHandleResponse(resp *http.Response, successCodes ...int) (SingleSignOnClientListResponse, error) {
 	result := SingleSignOnClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SingleSignOnResourceListResult); err != nil {
 		return SingleSignOnClientListResponse{}, err
 	}

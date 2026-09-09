@@ -41,13 +41,13 @@ func ExampleHardwareSettingsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdisconnectedoperations.HardwareSettingsClientCreateOrUpdateResponse{
-	// 	HardwareSetting: &armdisconnectedoperations.HardwareSetting{
+	// 	HardwareSetting: armdisconnectedoperations.HardwareSetting{
 	// 		Properties: &armdisconnectedoperations.HardwareSettingProperties{
 	// 			ProvisioningState: to.Ptr(armdisconnectedoperations.ResourceProvisioningStateSucceeded),
 	// 			TotalCores: to.Ptr[int32](200),
@@ -66,10 +66,10 @@ func ExampleHardwareSettingsClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armdisconnectedoperations.SystemData{
 	// 			CreatedBy: to.Ptr("kisu"),
 	// 			CreatedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("alaunn"),
 	// 			LastModifiedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -92,7 +92,7 @@ func ExampleHardwareSettingsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -115,7 +115,7 @@ func ExampleHardwareSettingsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdisconnectedoperations.HardwareSettingsClientGetResponse{
-	// 	HardwareSetting: &armdisconnectedoperations.HardwareSetting{
+	// 	HardwareSetting: armdisconnectedoperations.HardwareSetting{
 	// 		Properties: &armdisconnectedoperations.HardwareSettingProperties{
 	// 			ProvisioningState: to.Ptr(armdisconnectedoperations.ResourceProvisioningStateSucceeded),
 	// 			TotalCores: to.Ptr[int32](200),
@@ -134,10 +134,10 @@ func ExampleHardwareSettingsClient_Get() {
 	// 		SystemData: &armdisconnectedoperations.SystemData{
 	// 			CreatedBy: to.Ptr("kisu"),
 	// 			CreatedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("alaunn"),
 	// 			LastModifiedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -187,10 +187,10 @@ func ExampleHardwareSettingsClient_NewListByParentPager() {
 		// 				SystemData: &armdisconnectedoperations.SystemData{
 		// 					CreatedBy: to.Ptr("kisu"),
 		// 					CreatedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("alaunn"),
 		// 					LastModifiedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-08-15T22:59:45.585Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.August, 15, 22, 59, 45, 585000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

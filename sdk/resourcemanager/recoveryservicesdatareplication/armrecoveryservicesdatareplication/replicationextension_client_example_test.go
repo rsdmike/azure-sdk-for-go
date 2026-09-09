@@ -35,13 +35,13 @@ func ExampleReplicationExtensionClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.ReplicationExtensionClientCreateResponse{
-	// 	ReplicationExtensionModel: &armrecoveryservicesdatareplication.ReplicationExtensionModel{
+	// 	ReplicationExtensionModel: armrecoveryservicesdatareplication.ReplicationExtensionModel{
 	// 		Properties: &armrecoveryservicesdatareplication.ReplicationExtensionModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
 	// 			CustomProperties: &armrecoveryservicesdatareplication.HyperVToAzStackHCIReplicationExtensionModelCustomProperties{
@@ -54,10 +54,10 @@ func ExampleReplicationExtensionClient_BeginCreate() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("lagtinqhksctfdxmfbpf"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("dsqllpglanwztdmisrknjtqz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("suwjpejlaya"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("nrfjuyghtbivwihr")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -80,7 +80,7 @@ func ExampleReplicationExtensionClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -103,7 +103,7 @@ func ExampleReplicationExtensionClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.ReplicationExtensionClientGetResponse{
-	// 	ReplicationExtensionModel: &armrecoveryservicesdatareplication.ReplicationExtensionModel{
+	// 	ReplicationExtensionModel: armrecoveryservicesdatareplication.ReplicationExtensionModel{
 	// 		Properties: &armrecoveryservicesdatareplication.ReplicationExtensionModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
 	// 			CustomProperties: &armrecoveryservicesdatareplication.HyperVToAzStackHCIReplicationExtensionModelCustomProperties{
@@ -116,10 +116,10 @@ func ExampleReplicationExtensionClient_Get() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("lagtinqhksctfdxmfbpf"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("dsqllpglanwztdmisrknjtqz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("suwjpejlaya"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("nrfjuyghtbivwihr")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -163,10 +163,10 @@ func ExampleReplicationExtensionClient_NewListPager() {
 		// 				SystemData: &armrecoveryservicesdatareplication.SystemData{
 		// 					CreatedBy: to.Ptr("lagtinqhksctfdxmfbpf"),
 		// 					CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("dsqllpglanwztdmisrknjtqz")),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("suwjpejlaya"),
 		// 					LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("nrfjuyghtbivwihr")),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:56.732Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 56, 732000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

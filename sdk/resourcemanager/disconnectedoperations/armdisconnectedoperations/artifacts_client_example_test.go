@@ -30,7 +30,7 @@ func ExampleArtifactsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdisconnectedoperations.ArtifactsClientGetResponse{
-	// 	Artifact: &armdisconnectedoperations.Artifact{
+	// 	Artifact: armdisconnectedoperations.Artifact{
 	// 		Properties: &armdisconnectedoperations.ArtifactProperties{
 	// 			ProvisioningState: to.Ptr(armdisconnectedoperations.ResourceProvisioningStateSucceeded),
 	// 			ArtifactOrder: to.Ptr[int32](1),
@@ -44,10 +44,10 @@ func ExampleArtifactsClient_Get() {
 	// 		SystemData: &armdisconnectedoperations.SystemData{
 	// 			CreatedBy: to.Ptr("bwpmoygkcv"),
 	// 			CreatedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-14T19:03:52.617Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.May, 14, 19, 3, 52, 617000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("tottbcqgtvsjebkejjlhxibnaifijd"),
 	// 			LastModifiedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-14T19:03:52.617Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.May, 14, 19, 3, 52, 617000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -92,10 +92,10 @@ func ExampleArtifactsClient_NewListByParentPager() {
 		// 				SystemData: &armdisconnectedoperations.SystemData{
 		// 					CreatedBy: to.Ptr("bwpmoygkcv"),
 		// 					CreatedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-14T19:03:52.617Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.May, 14, 19, 3, 52, 617000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("tottbcqgtvsjebkejjlhxibnaifijd"),
 		// 					LastModifiedByType: to.Ptr(armdisconnectedoperations.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-14T19:03:52.617Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.May, 14, 19, 3, 52, 617000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -124,14 +124,14 @@ func ExampleArtifactsClient_ListDownloadURI() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdisconnectedoperations.ArtifactsClientListDownloadURIResponse{
-	// 	ArtifactDownloadResult: &armdisconnectedoperations.ArtifactDownloadResult{
+	// 	ArtifactDownloadResult: armdisconnectedoperations.ArtifactDownloadResult{
 	// 		ProvisioningState: to.Ptr(armdisconnectedoperations.ResourceProvisioningStateSucceeded),
 	// 		ArtifactOrder: to.Ptr[int32](1),
 	// 		Title: to.Ptr("artifact pat 1"),
 	// 		Description: to.Ptr("the first part of the image"),
 	// 		Size: to.Ptr[int64](29000),
 	// 		DownloadLink: to.Ptr("https://microsoft.com/a"),
-	// 		LinkExpiry: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-05-14T19:03:53.740Z"); return t}()),
+	// 		LinkExpiry: to.Ptr(time.Date(2025, time.May, 14, 19, 3, 53, 740000000, time.UTC)),
 	// 	},
 	// }
 }

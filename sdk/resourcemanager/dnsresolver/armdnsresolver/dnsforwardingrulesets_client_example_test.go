@@ -44,13 +44,13 @@ func ExampleDNSForwardingRulesetsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSForwardingRulesetsClientCreateOrUpdateResponse{
-	// 	DNSForwardingRuleset: &armdnsresolver.DNSForwardingRuleset{
+	// 	DNSForwardingRuleset: armdnsresolver.DNSForwardingRuleset{
 	// 		Name: to.Ptr("sampleDnsForwardingRuleset"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsForwardingRulesets"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -69,9 +69,9 @@ func ExampleDNSForwardingRulesetsClient_BeginCreateOrUpdate() {
 	// 			ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -98,7 +98,7 @@ func ExampleDNSForwardingRulesetsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -126,7 +126,7 @@ func ExampleDNSForwardingRulesetsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSForwardingRulesetsClientGetResponse{
-	// 	DNSForwardingRuleset: &armdnsresolver.DNSForwardingRuleset{
+	// 	DNSForwardingRuleset: armdnsresolver.DNSForwardingRuleset{
 	// 		Name: to.Ptr("sampleDnsForwardingRuleset"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsForwardingRulesets"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -145,9 +145,9 @@ func ExampleDNSForwardingRulesetsClient_Get() {
 	// 			ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -202,9 +202,9 @@ func ExampleDNSForwardingRulesetsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -230,9 +230,9 @@ func ExampleDNSForwardingRulesetsClient_NewListPager() {
 		// 					ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 4, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-05T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 5, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -290,9 +290,9 @@ func ExampleDNSForwardingRulesetsClient_NewListByResourceGroupPager() {
 		// 					ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -318,9 +318,9 @@ func ExampleDNSForwardingRulesetsClient_NewListByResourceGroupPager() {
 		// 					ResourceGUID: to.Ptr("c2aed17a-708d-48d1-89c3-d6a9b648d222"),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 4, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-05T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 5, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -393,13 +393,13 @@ func ExampleDNSForwardingRulesetsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSForwardingRulesetsClientUpdateResponse{
-	// 	DNSForwardingRuleset: &armdnsresolver.DNSForwardingRuleset{
+	// 	DNSForwardingRuleset: armdnsresolver.DNSForwardingRuleset{
 	// 		Name: to.Ptr("sampleDnsForwardingRuleset"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsForwardingRulesets"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -418,9 +418,9 @@ func ExampleDNSForwardingRulesetsClient_BeginUpdate() {
 	// 			ResourceGUID: to.Ptr("a7e1a32c-498c-401c-a805-5bc3518257b8"),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-03T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 3, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-04T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 4, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{

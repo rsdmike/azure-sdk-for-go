@@ -19,6 +19,8 @@ import (
 
 // DomainsClient contains the methods for the Domains group.
 // Don't use this type directly, use NewDomainsClient() instead.
+//
+// Generated from API version 2024-11-01
 type DomainsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type DomainsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DomainsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +49,6 @@ func NewDomainsClient(subscriptionID string, credential azcore.TokenCredential, 
 //
 // Description for Check if a domain is available for registration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - identifier - The request body
 //   - options - DomainsClientCheckAvailabilityOptions contains the optional parameters for the DomainsClient.CheckAvailability
 //     method.
@@ -63,19 +66,14 @@ func (client *DomainsClient) CheckAvailability(ctx context.Context, identifier N
 	if err != nil {
 		return DomainsClientCheckAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientCheckAvailabilityResponse{}, err
-	}
-	resp, err := client.checkAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkAvailabilityCreateRequest creates the CheckAvailability request.
 func (client *DomainsClient) checkAvailabilityCreateRequest(ctx context.Context, identifier NameIdentifier, _ *DomainsClientCheckAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/checkDomainAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -83,8 +81,8 @@ func (client *DomainsClient) checkAvailabilityCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, identifier); err != nil {
@@ -94,8 +92,11 @@ func (client *DomainsClient) checkAvailabilityCreateRequest(ctx context.Context,
 }
 
 // checkAvailabilityHandleResponse handles the CheckAvailability response.
-func (client *DomainsClient) checkAvailabilityHandleResponse(resp *http.Response) (DomainsClientCheckAvailabilityResponse, error) {
+func (client *DomainsClient) checkAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientCheckAvailabilityResponse, error) {
 	result := DomainsClientCheckAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainAvailabilityCheckResult); err != nil {
 		return DomainsClientCheckAvailabilityResponse{}, err
 	}
@@ -106,8 +107,6 @@ func (client *DomainsClient) checkAvailabilityHandleResponse(resp *http.Response
 //
 // Description for Creates or updates a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - domain - Domain registration information.
@@ -134,8 +133,6 @@ func (client *DomainsClient) BeginCreateOrUpdate(ctx context.Context, resourceGr
 //
 // Description for Creates or updates a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupName string, domainName string, domain Domain, options *DomainsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DomainsClient.BeginCreateOrUpdate"
@@ -151,8 +148,7 @@ func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -161,7 +157,7 @@ func (client *DomainsClient) createOrUpdate(ctx context.Context, resourceGroupNa
 func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, domain Domain, _ *DomainsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -177,8 +173,8 @@ func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domain); err != nil {
@@ -192,8 +188,6 @@ func (client *DomainsClient) createOrUpdateCreateRequest(ctx context.Context, re
 //
 // Description for Creates an ownership identifier for a domain or updates identifier details for an existing identifier
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - name - Name of identifier.
@@ -214,19 +208,14 @@ func (client *DomainsClient) CreateOrUpdateOwnershipIdentifier(ctx context.Conte
 	if err != nil {
 		return DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}, err
-	}
-	resp, err := client.createOrUpdateOwnershipIdentifierHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateOwnershipIdentifierHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateOwnershipIdentifierCreateRequest creates the CreateOrUpdateOwnershipIdentifier request.
 func (client *DomainsClient) createOrUpdateOwnershipIdentifierCreateRequest(ctx context.Context, resourceGroupName string, domainName string, name string, domainOwnershipIdentifier DomainOwnershipIdentifier, _ *DomainsClientCreateOrUpdateOwnershipIdentifierOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -246,8 +235,8 @@ func (client *DomainsClient) createOrUpdateOwnershipIdentifierCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domainOwnershipIdentifier); err != nil {
@@ -257,8 +246,11 @@ func (client *DomainsClient) createOrUpdateOwnershipIdentifierCreateRequest(ctx 
 }
 
 // createOrUpdateOwnershipIdentifierHandleResponse handles the CreateOrUpdateOwnershipIdentifier response.
-func (client *DomainsClient) createOrUpdateOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientCreateOrUpdateOwnershipIdentifierResponse, error) {
+func (client *DomainsClient) createOrUpdateOwnershipIdentifierHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientCreateOrUpdateOwnershipIdentifierResponse, error) {
 	result := DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientCreateOrUpdateOwnershipIdentifierResponse{}, err
 	}
@@ -269,8 +261,6 @@ func (client *DomainsClient) createOrUpdateOwnershipIdentifierHandleResponse(res
 //
 // Description for Delete a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientDeleteOptions contains the optional parameters for the DomainsClient.Delete method.
@@ -289,8 +279,7 @@ func (client *DomainsClient) Delete(ctx context.Context, resourceGroupName strin
 		return DomainsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientDeleteResponse{}, err
+		return DomainsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return DomainsClientDeleteResponse{}, nil
 }
@@ -299,7 +288,7 @@ func (client *DomainsClient) Delete(ctx context.Context, resourceGroupName strin
 func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, domainName string, options *DomainsClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -315,11 +304,11 @@ func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
+	reqQP.Set("api-version", version20241101)
 	if options != nil && options.ForceHardDeleteDomain != nil {
 		reqQP.Set("forceHardDeleteDomain", strconv.FormatBool(*options.ForceHardDeleteDomain))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -327,8 +316,6 @@ func (client *DomainsClient) deleteCreateRequest(ctx context.Context, resourceGr
 //
 // Description for Delete ownership identifier for domain
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - name - Name of identifier.
@@ -349,8 +336,7 @@ func (client *DomainsClient) DeleteOwnershipIdentifier(ctx context.Context, reso
 		return DomainsClientDeleteOwnershipIdentifierResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientDeleteOwnershipIdentifierResponse{}, err
+		return DomainsClientDeleteOwnershipIdentifierResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return DomainsClientDeleteOwnershipIdentifierResponse{}, nil
 }
@@ -359,7 +345,7 @@ func (client *DomainsClient) DeleteOwnershipIdentifier(ctx context.Context, reso
 func (client *DomainsClient) deleteOwnershipIdentifierCreateRequest(ctx context.Context, resourceGroupName string, domainName string, name string, _ *DomainsClientDeleteOwnershipIdentifierOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -379,8 +365,8 @@ func (client *DomainsClient) deleteOwnershipIdentifierCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -388,8 +374,6 @@ func (client *DomainsClient) deleteOwnershipIdentifierCreateRequest(ctx context.
 //
 // Description for Get a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientGetOptions contains the optional parameters for the DomainsClient.Get method.
@@ -407,19 +391,14 @@ func (client *DomainsClient) Get(ctx context.Context, resourceGroupName string, 
 	if err != nil {
 		return DomainsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -435,15 +414,18 @@ func (client *DomainsClient) getCreateRequest(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClientGetResponse, error) {
+func (client *DomainsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientGetResponse, error) {
 	result := DomainsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientGetResponse{}, err
 	}
@@ -454,8 +436,6 @@ func (client *DomainsClient) getHandleResponse(resp *http.Response) (DomainsClie
 //
 // Description for Generate a single sign-on request for the domain management portal.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - options - DomainsClientGetControlCenterSsoRequestOptions contains the optional parameters for the DomainsClient.GetControlCenterSsoRequest
 //     method.
 func (client *DomainsClient) GetControlCenterSsoRequest(ctx context.Context, options *DomainsClientGetControlCenterSsoRequestOptions) (DomainsClientGetControlCenterSsoRequestResponse, error) {
@@ -472,19 +452,14 @@ func (client *DomainsClient) GetControlCenterSsoRequest(ctx context.Context, opt
 	if err != nil {
 		return DomainsClientGetControlCenterSsoRequestResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientGetControlCenterSsoRequestResponse{}, err
-	}
-	resp, err := client.getControlCenterSsoRequestHandleResponse(httpResp)
-	return resp, err
+	return client.getControlCenterSsoRequestHandleResponse(httpResp, http.StatusOK)
 }
 
 // getControlCenterSsoRequestCreateRequest creates the GetControlCenterSsoRequest request.
 func (client *DomainsClient) getControlCenterSsoRequestCreateRequest(ctx context.Context, _ *DomainsClientGetControlCenterSsoRequestOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/generateSsoRequest"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
@@ -492,15 +467,18 @@ func (client *DomainsClient) getControlCenterSsoRequestCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getControlCenterSsoRequestHandleResponse handles the GetControlCenterSsoRequest response.
-func (client *DomainsClient) getControlCenterSsoRequestHandleResponse(resp *http.Response) (DomainsClientGetControlCenterSsoRequestResponse, error) {
+func (client *DomainsClient) getControlCenterSsoRequestHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientGetControlCenterSsoRequestResponse, error) {
 	result := DomainsClientGetControlCenterSsoRequestResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainControlCenterSsoRequest); err != nil {
 		return DomainsClientGetControlCenterSsoRequestResponse{}, err
 	}
@@ -511,8 +489,6 @@ func (client *DomainsClient) getControlCenterSsoRequestHandleResponse(resp *http
 //
 // Description for Get ownership identifier for domain
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - name - Name of identifier.
@@ -532,19 +508,14 @@ func (client *DomainsClient) GetOwnershipIdentifier(ctx context.Context, resourc
 	if err != nil {
 		return DomainsClientGetOwnershipIdentifierResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientGetOwnershipIdentifierResponse{}, err
-	}
-	resp, err := client.getOwnershipIdentifierHandleResponse(httpResp)
-	return resp, err
+	return client.getOwnershipIdentifierHandleResponse(httpResp, http.StatusOK)
 }
 
 // getOwnershipIdentifierCreateRequest creates the GetOwnershipIdentifier request.
 func (client *DomainsClient) getOwnershipIdentifierCreateRequest(ctx context.Context, resourceGroupName string, domainName string, name string, _ *DomainsClientGetOwnershipIdentifierOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -564,15 +535,18 @@ func (client *DomainsClient) getOwnershipIdentifierCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getOwnershipIdentifierHandleResponse handles the GetOwnershipIdentifier response.
-func (client *DomainsClient) getOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientGetOwnershipIdentifierResponse, error) {
+func (client *DomainsClient) getOwnershipIdentifierHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientGetOwnershipIdentifierResponse, error) {
 	result := DomainsClientGetOwnershipIdentifierResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientGetOwnershipIdentifierResponse{}, err
 	}
@@ -582,8 +556,6 @@ func (client *DomainsClient) getOwnershipIdentifierHandleResponse(resp *http.Res
 // NewListPager - Get all domains in a subscription.
 //
 // Description for Get all domains in a subscription.
-//
-// Generated from API version 2024-11-01
 //   - options - DomainsClientListOptions contains the optional parameters for the DomainsClient.NewListPager method.
 func (client *DomainsClient) NewListPager(options *DomainsClientListOptions) *runtime.Pager[DomainsClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[DomainsClientListResponse]{
@@ -596,39 +568,53 @@ func (client *DomainsClient) NewListPager(options *DomainsClientListOptions) *ru
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DomainsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DomainsClient) listCreateRequest(ctx context.Context, _ *DomainsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/domains"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listCreateRequest(ctx context.Context, nextLink string, _ *DomainsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/domains"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DomainsClient) listHandleResponse(resp *http.Response) (DomainsClientListResponse, error) {
+func (client *DomainsClient) listHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListResponse, error) {
 	result := DomainsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainCollection); err != nil {
 		return DomainsClientListResponse{}, err
 	}
@@ -638,8 +624,6 @@ func (client *DomainsClient) listHandleResponse(resp *http.Response) (DomainsCli
 // NewListByResourceGroupPager - Get all domains in a resource group.
 //
 // Description for Get all domains in a resource group.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DomainsClientListByResourceGroupOptions contains the optional parameters for the DomainsClient.NewListByResourceGroupPager
 //     method.
@@ -654,43 +638,57 @@ func (client *DomainsClient) NewListByResourceGroupPager(resourceGroupName strin
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return DomainsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *DomainsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *DomainsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response) (DomainsClientListByResourceGroupResponse, error) {
+func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListByResourceGroupResponse, error) {
 	result := DomainsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainCollection); err != nil {
 		return DomainsClientListByResourceGroupResponse{}, err
 	}
@@ -700,8 +698,6 @@ func (client *DomainsClient) listByResourceGroupHandleResponse(resp *http.Respon
 // NewListOwnershipIdentifiersPager - Lists domain ownership identifiers.
 //
 // Description for Lists domain ownership identifiers.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientListOwnershipIdentifiersOptions contains the optional parameters for the DomainsClient.NewListOwnershipIdentifiersPager
@@ -717,47 +713,61 @@ func (client *DomainsClient) NewListOwnershipIdentifiersPager(resourceGroupName 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listOwnershipIdentifiersCreateRequest(ctx, resourceGroupName, domainName, options)
-			}, nil)
+			req, err := client.listOwnershipIdentifiersCreateRequest(ctx, resourceGroupName, domainName, nextLink, options)
 			if err != nil {
 				return DomainsClientListOwnershipIdentifiersResponse{}, err
 			}
-			return client.listOwnershipIdentifiersHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListOwnershipIdentifiersResponse{}, err
+			}
+			return client.listOwnershipIdentifiersHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listOwnershipIdentifiersCreateRequest creates the ListOwnershipIdentifiers request.
-func (client *DomainsClient) listOwnershipIdentifiersCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientListOwnershipIdentifiersOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listOwnershipIdentifiersCreateRequest(ctx context.Context, resourceGroupName string, domainName string, nextLink string, _ *DomainsClientListOwnershipIdentifiersOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if domainName == "" {
+			return nil, errors.New("parameter domainName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if domainName == "" {
-		return nil, errors.New("parameter domainName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{domainName}", url.PathEscape(domainName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listOwnershipIdentifiersHandleResponse handles the ListOwnershipIdentifiers response.
-func (client *DomainsClient) listOwnershipIdentifiersHandleResponse(resp *http.Response) (DomainsClientListOwnershipIdentifiersResponse, error) {
+func (client *DomainsClient) listOwnershipIdentifiersHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListOwnershipIdentifiersResponse, error) {
 	result := DomainsClientListOwnershipIdentifiersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifierCollection); err != nil {
 		return DomainsClientListOwnershipIdentifiersResponse{}, err
 	}
@@ -767,8 +777,6 @@ func (client *DomainsClient) listOwnershipIdentifiersHandleResponse(resp *http.R
 // NewListRecommendationsPager - Get domain name recommendations based on keywords.
 //
 // Description for Get domain name recommendations based on keywords.
-//
-// Generated from API version 2024-11-01
 //   - parameters - The request body
 //   - options - DomainsClientListRecommendationsOptions contains the optional parameters for the DomainsClient.NewListRecommendationsPager
 //     method.
@@ -783,43 +791,57 @@ func (client *DomainsClient) NewListRecommendationsPager(parameters DomainRecomm
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listRecommendationsCreateRequest(ctx, parameters, options)
-			}, nil)
+			req, err := client.listRecommendationsCreateRequest(ctx, parameters, nextLink, options)
 			if err != nil {
 				return DomainsClientListRecommendationsResponse{}, err
 			}
-			return client.listRecommendationsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DomainsClientListRecommendationsResponse{}, err
+			}
+			return client.listRecommendationsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listRecommendationsCreateRequest creates the ListRecommendations request.
-func (client *DomainsClient) listRecommendationsCreateRequest(ctx context.Context, parameters DomainRecommendationSearchParameters, _ *DomainsClientListRecommendationsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/listDomainRecommendations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DomainsClient) listRecommendationsCreateRequest(ctx context.Context, parameters DomainRecommendationSearchParameters, nextLink string, _ *DomainsClientListRecommendationsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DomainRegistration/listDomainRecommendations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
-	req.Raw().Header["Content-Type"] = []string{"application/json"}
-	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
-		return nil, err
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+		req.Raw().Header["Content-Type"] = []string{"application/json"}
+		if err := runtime.MarshalAsJSON(req, parameters); err != nil {
+			return nil, err
+		}
 	}
 	return req, nil
 }
 
 // listRecommendationsHandleResponse handles the ListRecommendations response.
-func (client *DomainsClient) listRecommendationsHandleResponse(resp *http.Response) (DomainsClientListRecommendationsResponse, error) {
+func (client *DomainsClient) listRecommendationsHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientListRecommendationsResponse, error) {
 	result := DomainsClientListRecommendationsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NameIdentifierCollection); err != nil {
 		return DomainsClientListRecommendationsResponse{}, err
 	}
@@ -830,8 +852,6 @@ func (client *DomainsClient) listRecommendationsHandleResponse(resp *http.Respon
 //
 // Description for Renew a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientRenewOptions contains the optional parameters for the DomainsClient.Renew method.
@@ -850,8 +870,7 @@ func (client *DomainsClient) Renew(ctx context.Context, resourceGroupName string
 		return DomainsClientRenewResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientRenewResponse{}, err
+		return DomainsClientRenewResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return DomainsClientRenewResponse{}, nil
 }
@@ -860,7 +879,7 @@ func (client *DomainsClient) Renew(ctx context.Context, resourceGroupName string
 func (client *DomainsClient) renewCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientRenewOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/renew"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -876,8 +895,8 @@ func (client *DomainsClient) renewCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -885,8 +904,6 @@ func (client *DomainsClient) renewCreateRequest(ctx context.Context, resourceGro
 //
 // Transfer out domain to another registrar
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - options - DomainsClientTransferOutOptions contains the optional parameters for the DomainsClient.TransferOut method.
@@ -904,19 +921,14 @@ func (client *DomainsClient) TransferOut(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DomainsClientTransferOutResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientTransferOutResponse{}, err
-	}
-	resp, err := client.transferOutHandleResponse(httpResp)
-	return resp, err
+	return client.transferOutHandleResponse(httpResp, http.StatusOK)
 }
 
 // transferOutCreateRequest creates the TransferOut request.
 func (client *DomainsClient) transferOutCreateRequest(ctx context.Context, resourceGroupName string, domainName string, _ *DomainsClientTransferOutOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/transferOut"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -932,15 +944,18 @@ func (client *DomainsClient) transferOutCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // transferOutHandleResponse handles the TransferOut response.
-func (client *DomainsClient) transferOutHandleResponse(resp *http.Response) (DomainsClientTransferOutResponse, error) {
+func (client *DomainsClient) transferOutHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientTransferOutResponse, error) {
 	result := DomainsClientTransferOutResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientTransferOutResponse{}, err
 	}
@@ -951,8 +966,6 @@ func (client *DomainsClient) transferOutHandleResponse(resp *http.Response) (Dom
 //
 // Description for Creates or updates a domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - domain - Domain registration information.
@@ -971,19 +984,14 @@ func (client *DomainsClient) Update(ctx context.Context, resourceGroupName strin
 	if err != nil {
 		return DomainsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK, http.StatusAccepted)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, domainName string, domain DomainPatchResource, _ *DomainsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -999,8 +1007,8 @@ func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domain); err != nil {
@@ -1010,8 +1018,11 @@ func (client *DomainsClient) updateCreateRequest(ctx context.Context, resourceGr
 }
 
 // updateHandleResponse handles the Update response.
-func (client *DomainsClient) updateHandleResponse(resp *http.Response) (DomainsClientUpdateResponse, error) {
+func (client *DomainsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientUpdateResponse, error) {
 	result := DomainsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Domain); err != nil {
 		return DomainsClientUpdateResponse{}, err
 	}
@@ -1023,8 +1034,6 @@ func (client *DomainsClient) updateHandleResponse(resp *http.Response) (DomainsC
 //
 // Description for Creates an ownership identifier for a domain or updates identifier details for an existing identifier
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - domainName - Name of the domain.
 //   - name - Name of identifier.
@@ -1045,19 +1054,14 @@ func (client *DomainsClient) UpdateOwnershipIdentifier(ctx context.Context, reso
 	if err != nil {
 		return DomainsClientUpdateOwnershipIdentifierResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DomainsClientUpdateOwnershipIdentifierResponse{}, err
-	}
-	resp, err := client.updateOwnershipIdentifierHandleResponse(httpResp)
-	return resp, err
+	return client.updateOwnershipIdentifierHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateOwnershipIdentifierCreateRequest creates the UpdateOwnershipIdentifier request.
 func (client *DomainsClient) updateOwnershipIdentifierCreateRequest(ctx context.Context, resourceGroupName string, domainName string, name string, domainOwnershipIdentifier DomainOwnershipIdentifier, _ *DomainsClientUpdateOwnershipIdentifierOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DomainRegistration/domains/{domainName}/domainOwnershipIdentifiers/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1077,8 +1081,8 @@ func (client *DomainsClient) updateOwnershipIdentifierCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, domainOwnershipIdentifier); err != nil {
@@ -1088,8 +1092,11 @@ func (client *DomainsClient) updateOwnershipIdentifierCreateRequest(ctx context.
 }
 
 // updateOwnershipIdentifierHandleResponse handles the UpdateOwnershipIdentifier response.
-func (client *DomainsClient) updateOwnershipIdentifierHandleResponse(resp *http.Response) (DomainsClientUpdateOwnershipIdentifierResponse, error) {
+func (client *DomainsClient) updateOwnershipIdentifierHandleResponse(resp *http.Response, successCodes ...int) (DomainsClientUpdateOwnershipIdentifierResponse, error) {
 	result := DomainsClientUpdateOwnershipIdentifierResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DomainOwnershipIdentifier); err != nil {
 		return DomainsClientUpdateOwnershipIdentifierResponse{}, err
 	}

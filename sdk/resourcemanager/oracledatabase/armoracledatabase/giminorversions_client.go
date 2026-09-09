@@ -18,6 +18,8 @@ import (
 
 // GiMinorVersionsClient contains the methods for the GiMinorVersions group.
 // Don't use this type directly, use NewGiMinorVersionsClient() instead.
+//
+// Generated from API version 2025-09-01
 type GiMinorVersionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type GiMinorVersionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewGiMinorVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*GiMinorVersionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewGiMinorVersionsClient(subscriptionID string, credential azcore.TokenCred
 
 // Get - Get a GiMinorVersion
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - location - The name of the Azure region.
 //   - giversionname - GiVersion name
 //   - giMinorVersionName - The name of the GiMinorVersion
@@ -61,19 +64,14 @@ func (client *GiMinorVersionsClient) Get(ctx context.Context, location string, g
 	if err != nil {
 		return GiMinorVersionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GiMinorVersionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *GiMinorVersionsClient) getCreateRequest(ctx context.Context, location string, giversionname string, giMinorVersionName string, _ *GiMinorVersionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Oracle.Database/locations/{location}/giVersions/{giversionname}/giMinorVersions/{giMinorVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -93,15 +91,18 @@ func (client *GiMinorVersionsClient) getCreateRequest(ctx context.Context, locat
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *GiMinorVersionsClient) getHandleResponse(resp *http.Response) (GiMinorVersionsClientGetResponse, error) {
+func (client *GiMinorVersionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (GiMinorVersionsClientGetResponse, error) {
 	result := GiMinorVersionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GiMinorVersion); err != nil {
 		return GiMinorVersionsClientGetResponse{}, err
 	}
@@ -109,8 +110,6 @@ func (client *GiMinorVersionsClient) getHandleResponse(resp *http.Response) (GiM
 }
 
 // NewListByParentPager - List GiMinorVersion resources by GiVersion
-//
-// Generated from API version 2025-09-01
 //   - location - The name of the Azure region.
 //   - giversionname - GiVersion name
 //   - options - GiMinorVersionsClientListByParentOptions contains the optional parameters for the GiMinorVersionsClient.NewListByParentPager
@@ -126,53 +125,67 @@ func (client *GiMinorVersionsClient) NewListByParentPager(location string, giver
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByParentCreateRequest(ctx, location, giversionname, options)
-			}, nil)
+			req, err := client.listByParentCreateRequest(ctx, location, giversionname, nextLink, options)
 			if err != nil {
 				return GiMinorVersionsClientListByParentResponse{}, err
 			}
-			return client.listByParentHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return GiMinorVersionsClientListByParentResponse{}, err
+			}
+			return client.listByParentHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByParentCreateRequest creates the ListByParent request.
-func (client *GiMinorVersionsClient) listByParentCreateRequest(ctx context.Context, location string, giversionname string, options *GiMinorVersionsClientListByParentOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Oracle.Database/locations/{location}/giVersions/{giversionname}/giMinorVersions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *GiMinorVersionsClient) listByParentCreateRequest(ctx context.Context, location string, giversionname string, nextLink string, options *GiMinorVersionsClientListByParentOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Oracle.Database/locations/{location}/giVersions/{giversionname}/giMinorVersions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if location == "" {
+			return nil, errors.New("parameter location cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
+		if giversionname == "" {
+			return nil, errors.New("parameter giversionname cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{giversionname}", url.PathEscape(giversionname))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if location == "" {
-		return nil, errors.New("parameter location cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
-	if giversionname == "" {
-		return nil, errors.New("parameter giversionname cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{giversionname}", url.PathEscape(giversionname))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	if options != nil && options.ShapeFamily != nil {
-		reqQP.Set("shapeFamily", string(*options.ShapeFamily))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		if options != nil && options.ShapeFamily != nil {
+			reqQP.Set("shapeFamily", string(*options.ShapeFamily))
+		}
+		if options != nil && options.Zone != nil {
+			reqQP.Set("zone", *options.Zone)
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Zone != nil {
-		reqQP.Set("zone", *options.Zone)
-	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByParentHandleResponse handles the ListByParent response.
-func (client *GiMinorVersionsClient) listByParentHandleResponse(resp *http.Response) (GiMinorVersionsClientListByParentResponse, error) {
+func (client *GiMinorVersionsClient) listByParentHandleResponse(resp *http.Response, successCodes ...int) (GiMinorVersionsClientListByParentResponse, error) {
 	result := GiMinorVersionsClientListByParentResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.GiMinorVersionListResult); err != nil {
 		return GiMinorVersionsClientListByParentResponse{}, err
 	}

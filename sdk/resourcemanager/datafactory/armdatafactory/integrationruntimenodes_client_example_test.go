@@ -53,7 +53,7 @@ func ExampleIntegrationRuntimeNodesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatafactory.IntegrationRuntimeNodesClientGetResponse{
-	// 	SelfHostedIntegrationRuntimeNode: &armdatafactory.SelfHostedIntegrationRuntimeNode{
+	// 	SelfHostedIntegrationRuntimeNode: armdatafactory.SelfHostedIntegrationRuntimeNode{
 	// 		Capabilities: map[string]*string{
 	// 			"connectedToResourceManager": to.Ptr("True"),
 	// 			"credentialInSync": to.Ptr("True"),
@@ -63,13 +63,13 @@ func ExampleIntegrationRuntimeNodesClient_Get() {
 	// 		},
 	// 		HostServiceURI: to.Ptr("https://yanzhang-dt.fareast.corp.microsoft.com:8050/HostServiceRemote.svc/"),
 	// 		IsActiveDispatcher: to.Ptr(true),
-	// 		LastConnectTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-08-17T06:30:46.6262976Z"); return t}()),
-	// 		LastStartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-08-17T03:45:30.8499851Z"); return t}()),
+	// 		LastConnectTime: to.Ptr(time.Date(2018, time.August, 17, 6, 30, 46, 626297600, time.UTC)),
+	// 		LastStartTime: to.Ptr(time.Date(2018, time.August, 17, 3, 45, 30, 849985100, time.UTC)),
 	// 		LastUpdateResult: to.Ptr(armdatafactory.IntegrationRuntimeUpdateResultNone),
 	// 		MachineName: to.Ptr("YANZHANG-DT"),
 	// 		MaxConcurrentJobs: to.Ptr[int32](20),
 	// 		NodeName: to.Ptr("Node_1"),
-	// 		RegisterTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-08-17T03:44:55.8012825Z"); return t}()),
+	// 		RegisterTime: to.Ptr(time.Date(2018, time.August, 17, 3, 44, 55, 801282500, time.UTC)),
 	// 		Status: to.Ptr(armdatafactory.SelfHostedIntegrationRuntimeNodeStatusOnline),
 	// 		Version: to.Ptr("3.8.6743.6"),
 	// 		VersionStatus: to.Ptr("UpToDate"),
@@ -96,7 +96,7 @@ func ExampleIntegrationRuntimeNodesClient_GetIPAddress() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatafactory.IntegrationRuntimeNodesClientGetIPAddressResponse{
-	// 	IntegrationRuntimeNodeIPAddress: &armdatafactory.IntegrationRuntimeNodeIPAddress{
+	// 	IntegrationRuntimeNodeIPAddress: armdatafactory.IntegrationRuntimeNodeIPAddress{
 	// 		IPAddress: to.Ptr("**********"),
 	// 	},
 	// }
@@ -123,7 +123,7 @@ func ExampleIntegrationRuntimeNodesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdatafactory.IntegrationRuntimeNodesClientUpdateResponse{
-	// 	SelfHostedIntegrationRuntimeNode: &armdatafactory.SelfHostedIntegrationRuntimeNode{
+	// 	SelfHostedIntegrationRuntimeNode: armdatafactory.SelfHostedIntegrationRuntimeNode{
 	// 		Capabilities: map[string]*string{
 	// 			"connectedToResourceManager": to.Ptr("True"),
 	// 			"credentialInSync": to.Ptr("True"),
@@ -134,13 +134,13 @@ func ExampleIntegrationRuntimeNodesClient_Update() {
 	// 		ConcurrentJobsLimit: to.Ptr[int32](2),
 	// 		HostServiceURI: to.Ptr("https://yanzhang-dt.fareast.corp.microsoft.com:8050/HostServiceRemote.svc/"),
 	// 		IsActiveDispatcher: to.Ptr(true),
-	// 		LastConnectTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-06-14T15:00:35.7544322Z"); return t}()),
-	// 		LastStartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-06-14T14:52:59.8933313Z"); return t}()),
+	// 		LastConnectTime: to.Ptr(time.Date(2018, time.June, 14, 15, 0, 35, 754432200, time.UTC)),
+	// 		LastStartTime: to.Ptr(time.Date(2018, time.June, 14, 14, 52, 59, 893331300, time.UTC)),
 	// 		LastUpdateResult: to.Ptr(armdatafactory.IntegrationRuntimeUpdateResultNone),
 	// 		MachineName: to.Ptr("YANZHANG-DT"),
 	// 		MaxConcurrentJobs: to.Ptr[int32](56),
 	// 		NodeName: to.Ptr("Node_1"),
-	// 		RegisterTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-06-14T14:51:44.9237069Z"); return t}()),
+	// 		RegisterTime: to.Ptr(time.Date(2018, time.June, 14, 14, 51, 44, 923706900, time.UTC)),
 	// 		Status: to.Ptr(armdatafactory.SelfHostedIntegrationRuntimeNodeStatusOnline),
 	// 		Version: to.Ptr("3.8.6730.2"),
 	// 		VersionStatus: to.Ptr("UpToDate"),

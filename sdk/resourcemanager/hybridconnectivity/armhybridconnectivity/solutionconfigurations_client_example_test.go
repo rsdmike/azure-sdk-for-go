@@ -36,7 +36,7 @@ func ExampleSolutionConfigurationsClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridconnectivity.SolutionConfigurationsClientCreateOrUpdateResponse{
-	// 	SolutionConfiguration: &armhybridconnectivity.SolutionConfiguration{
+	// 	SolutionConfiguration: armhybridconnectivity.SolutionConfiguration{
 	// 		Properties: &armhybridconnectivity.SolutionConfigurationProperties{
 	// 			SolutionType: to.Ptr("nmtqllkyohwtsthxaimsye"),
 	// 			SolutionSettings: &armhybridconnectivity.SolutionSettings{
@@ -44,7 +44,7 @@ func ExampleSolutionConfigurationsClient_CreateOrUpdate() {
 	// 			ProvisioningState: to.Ptr(armhybridconnectivity.ResourceProvisioningStateSucceeded),
 	// 			Status: to.Ptr(armhybridconnectivity.SolutionConfigurationStatusNew),
 	// 			StatusDetails: to.Ptr("rqbrzildwecankrpukkbjjqrczxboz"),
-	// 			LastSyncTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-20T03:24:15.820Z"); return t}()),
+	// 			LastSyncTime: to.Ptr(time.Date(2024, time.January, 20, 3, 24, 15, 820000000, time.UTC)),
 	// 		},
 	// 		ID: to.Ptr("/subscriptions/testSubcrptions/resourceGroups/testResourceGroup/providers/Microsoft.HybridConnectivity/SolutionConfigurations/qpwubemzmootxmtlxaerir"),
 	// 		Name: to.Ptr("qpwubemzmootxmtlxaerir"),
@@ -52,10 +52,10 @@ func ExampleSolutionConfigurationsClient_CreateOrUpdate() {
 	// 		SystemData: &armhybridconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("rpxzkcrobprrdvuoqxz"),
 	// 			CreatedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jidegyskxi"),
 	// 			LastModifiedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -102,7 +102,7 @@ func ExampleSolutionConfigurationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridconnectivity.SolutionConfigurationsClientGetResponse{
-	// 	SolutionConfiguration: &armhybridconnectivity.SolutionConfiguration{
+	// 	SolutionConfiguration: armhybridconnectivity.SolutionConfiguration{
 	// 		Properties: &armhybridconnectivity.SolutionConfigurationProperties{
 	// 			SolutionType: to.Ptr("nmtqllkyohwtsthxaimsye"),
 	// 			SolutionSettings: &armhybridconnectivity.SolutionSettings{
@@ -110,7 +110,7 @@ func ExampleSolutionConfigurationsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armhybridconnectivity.ResourceProvisioningStateSucceeded),
 	// 			Status: to.Ptr(armhybridconnectivity.SolutionConfigurationStatusNew),
 	// 			StatusDetails: to.Ptr("rqbrzildwecankrpukkbjjqrczxboz"),
-	// 			LastSyncTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-20T03:24:15.820Z"); return t}()),
+	// 			LastSyncTime: to.Ptr(time.Date(2024, time.January, 20, 3, 24, 15, 820000000, time.UTC)),
 	// 		},
 	// 		ID: to.Ptr("/subscriptions/testSubcrptions/resourceGroups/testResourceGroup/providers/Microsoft.HybridConnectivity/SolutionConfigurations/qpwubemzmootxmtlxaerir"),
 	// 		Name: to.Ptr("qpwubemzmootxmtlxaerir"),
@@ -118,10 +118,10 @@ func ExampleSolutionConfigurationsClient_Get() {
 	// 		SystemData: &armhybridconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("rpxzkcrobprrdvuoqxz"),
 	// 			CreatedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jidegyskxi"),
 	// 			LastModifiedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -160,7 +160,7 @@ func ExampleSolutionConfigurationsClient_NewListPager() {
 		// 					ProvisioningState: to.Ptr(armhybridconnectivity.ResourceProvisioningStateSucceeded),
 		// 					Status: to.Ptr(armhybridconnectivity.SolutionConfigurationStatus("AuthorizationPending")),
 		// 					StatusDetails: to.Ptr("Aws authorization validation pending in Aws account"),
-		// 					LastSyncTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-20T03:24:15.820Z"); return t}()),
+		// 					LastSyncTime: to.Ptr(time.Date(2024, time.January, 20, 3, 24, 15, 820000000, time.UTC)),
 		// 				},
 		// 				ID: to.Ptr("/subscriptions/testSubcrptions/resourceGroups/testResourceGroup/providers/Microsoft.HybridConnectivity/SolutionConfigurations/solutionconfigurationtest"),
 		// 				Name: to.Ptr("solutionconfigurationtest"),
@@ -168,10 +168,10 @@ func ExampleSolutionConfigurationsClient_NewListPager() {
 		// 				SystemData: &armhybridconnectivity.SystemData{
 		// 					CreatedBy: to.Ptr("rpxzkcrobprrdvuoqxz"),
 		// 					CreatedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("jidegyskxi"),
 		// 					LastModifiedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 		// 				},
 		// 			},
 		// 			{
@@ -182,7 +182,7 @@ func ExampleSolutionConfigurationsClient_NewListPager() {
 		// 					ProvisioningState: to.Ptr(armhybridconnectivity.ResourceProvisioningStateSucceeded),
 		// 					Status: to.Ptr(armhybridconnectivity.SolutionConfigurationStatus("AuthorizationSuccess")),
 		// 					StatusDetails: to.Ptr("Aws authorization validation succeeded in Aws account"),
-		// 					LastSyncTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-20T03:24:15.820Z"); return t}()),
+		// 					LastSyncTime: to.Ptr(time.Date(2024, time.January, 20, 3, 24, 15, 820000000, time.UTC)),
 		// 				},
 		// 				ID: to.Ptr("/subscriptions/testSubcrptions/resourceGroups/testResourceGroup/providers/Microsoft.HybridConnectivity/SolutionConfigurations/solutionconfigurationtest2"),
 		// 				Name: to.Ptr("solutionconfigurationtest2"),
@@ -190,10 +190,10 @@ func ExampleSolutionConfigurationsClient_NewListPager() {
 		// 				SystemData: &armhybridconnectivity.SystemData{
 		// 					CreatedBy: to.Ptr("rpxzkcrobprrdvuoqxz"),
 		// 					CreatedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("jidegyskxi"),
 		// 					LastModifiedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -220,20 +220,20 @@ func ExampleSolutionConfigurationsClient_BeginSyncNow() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridconnectivity.SolutionConfigurationsClientSyncNowResponse{
-	// 	OperationStatusResult: &armhybridconnectivity.OperationStatusResult{
+	// 	OperationStatusResult: armhybridconnectivity.OperationStatusResult{
 	// 		ID: to.Ptr("/subscriptions/5ACC4579-DB34-4C2F-8F8C-25061168F342/providers/Microsoft.HybridConnectivity/PublicCloudConnectors/esixipkbydb"),
 	// 		ResourceID: to.Ptr("/subscriptions/5ACC4579-DB34-4C2F-8F8C-25061168F342/providers/Microsoft.HybridConnectivity/PublicCloudConnectors/esixipkbydb"),
 	// 		Name: to.Ptr("svqtraeuwvyvblujlvqilypwpdrt"),
 	// 		Status: to.Ptr("bevmrejij"),
 	// 		PercentComplete: to.Ptr[float64](15),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T18:38:19.143Z"); return t}()),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T18:38:19.143Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2024, time.October, 2, 18, 38, 19, 143000000, time.UTC)),
+	// 		EndTime: to.Ptr(time.Date(2024, time.October, 2, 18, 38, 19, 143000000, time.UTC)),
 	// 		Operations: []*armhybridconnectivity.OperationStatusResult{
 	// 		},
 	// 		Error: &armhybridconnectivity.ErrorDetail{
@@ -278,7 +278,7 @@ func ExampleSolutionConfigurationsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhybridconnectivity.SolutionConfigurationsClientUpdateResponse{
-	// 	SolutionConfiguration: &armhybridconnectivity.SolutionConfiguration{
+	// 	SolutionConfiguration: armhybridconnectivity.SolutionConfiguration{
 	// 		Properties: &armhybridconnectivity.SolutionConfigurationProperties{
 	// 			SolutionType: to.Ptr("nmtqllkyohwtsthxaimsye"),
 	// 			SolutionSettings: &armhybridconnectivity.SolutionSettings{
@@ -286,7 +286,7 @@ func ExampleSolutionConfigurationsClient_Update() {
 	// 			ProvisioningState: to.Ptr(armhybridconnectivity.ResourceProvisioningStateSucceeded),
 	// 			Status: to.Ptr(armhybridconnectivity.SolutionConfigurationStatusNew),
 	// 			StatusDetails: to.Ptr("rqbrzildwecankrpukkbjjqrczxboz"),
-	// 			LastSyncTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-20T03:24:15.820Z"); return t}()),
+	// 			LastSyncTime: to.Ptr(time.Date(2024, time.January, 20, 3, 24, 15, 820000000, time.UTC)),
 	// 		},
 	// 		ID: to.Ptr("/subscriptions/testSubcrptions/resourceGroups/testResourceGroup/providers/Microsoft.HybridConnectivity/SolutionConfigurations/qpwubemzmootxmtlxaerir"),
 	// 		Name: to.Ptr("qpwubemzmootxmtlxaerir"),
@@ -294,10 +294,10 @@ func ExampleSolutionConfigurationsClient_Update() {
 	// 		SystemData: &armhybridconnectivity.SystemData{
 	// 			CreatedBy: to.Ptr("rpxzkcrobprrdvuoqxz"),
 	// 			CreatedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("jidegyskxi"),
 	// 			LastModifiedByType: to.Ptr(armhybridconnectivity.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-18T22:52:07.890Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.January, 18, 22, 52, 7, 890000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

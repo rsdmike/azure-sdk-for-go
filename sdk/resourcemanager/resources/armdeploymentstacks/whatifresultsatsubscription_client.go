@@ -19,6 +19,8 @@ import (
 
 // WhatIfResultsAtSubscriptionClient contains the methods for the WhatIfResultsAtSubscription group.
 // Don't use this type directly, use NewWhatIfResultsAtSubscriptionClient() instead.
+//
+// Generated from API version 2025-07-01
 type WhatIfResultsAtSubscriptionClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type WhatIfResultsAtSubscriptionClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewWhatIfResultsAtSubscriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*WhatIfResultsAtSubscriptionClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewWhatIfResultsAtSubscriptionClient(subscriptionID string, credential azco
 
 // BeginCreateOrUpdate - Creates or updates a Deployment stack at the specified scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - resource - Resource create parameters.
 //   - options - WhatIfResultsAtSubscriptionClientBeginCreateOrUpdateOptions contains the optional parameters for the WhatIfResultsAtSubscriptionClient.BeginCreateOrUpdate
@@ -67,8 +70,6 @@ func (client *WhatIfResultsAtSubscriptionClient) BeginCreateOrUpdate(ctx context
 
 // CreateOrUpdate - Creates or updates a Deployment stack at the specified scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 func (client *WhatIfResultsAtSubscriptionClient) createOrUpdate(ctx context.Context, deploymentStacksWhatIfResultName string, resource WhatIfResult, options *WhatIfResultsAtSubscriptionClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WhatIfResultsAtSubscriptionClient.BeginCreateOrUpdate"
@@ -84,8 +85,7 @@ func (client *WhatIfResultsAtSubscriptionClient) createOrUpdate(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -94,7 +94,7 @@ func (client *WhatIfResultsAtSubscriptionClient) createOrUpdate(ctx context.Cont
 func (client *WhatIfResultsAtSubscriptionClient) createOrUpdateCreateRequest(ctx context.Context, deploymentStacksWhatIfResultName string, resource WhatIfResult, _ *WhatIfResultsAtSubscriptionClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults/{deploymentStacksWhatIfResultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deploymentStacksWhatIfResultName == "" {
@@ -106,8 +106,8 @@ func (client *WhatIfResultsAtSubscriptionClient) createOrUpdateCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -119,8 +119,6 @@ func (client *WhatIfResultsAtSubscriptionClient) createOrUpdateCreateRequest(ctx
 // Delete - Deletes a Deployment stack by name at the specified scope. When operation completes, status code 200 returned
 // without content.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtSubscriptionClientDeleteOptions contains the optional parameters for the WhatIfResultsAtSubscriptionClient.Delete
 //     method.
@@ -139,8 +137,7 @@ func (client *WhatIfResultsAtSubscriptionClient) Delete(ctx context.Context, dep
 		return WhatIfResultsAtSubscriptionClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return WhatIfResultsAtSubscriptionClientDeleteResponse{}, err
+		return WhatIfResultsAtSubscriptionClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return WhatIfResultsAtSubscriptionClientDeleteResponse{}, nil
 }
@@ -149,7 +146,7 @@ func (client *WhatIfResultsAtSubscriptionClient) Delete(ctx context.Context, dep
 func (client *WhatIfResultsAtSubscriptionClient) deleteCreateRequest(ctx context.Context, deploymentStacksWhatIfResultName string, options *WhatIfResultsAtSubscriptionClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults/{deploymentStacksWhatIfResultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deploymentStacksWhatIfResultName == "" {
@@ -161,7 +158,7 @@ func (client *WhatIfResultsAtSubscriptionClient) deleteCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
+	reqQP.Set("api-version", version20250701)
 	if options != nil && options.BypassStackOutOfSyncError != nil {
 		reqQP.Set("bypassStackOutOfSyncError", strconv.FormatBool(*options.BypassStackOutOfSyncError))
 	}
@@ -177,14 +174,12 @@ func (client *WhatIfResultsAtSubscriptionClient) deleteCreateRequest(ctx context
 	if options != nil && options.UnmanageActionResourcesWithoutDeleteSupport != nil {
 		reqQP.Set("unmanageAction.ResourcesWithoutDeleteSupport", string(*options.UnmanageActionResourcesWithoutDeleteSupport))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the Deployment stack with the given name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtSubscriptionClientGetOptions contains the optional parameters for the WhatIfResultsAtSubscriptionClient.Get
 //     method.
@@ -202,19 +197,14 @@ func (client *WhatIfResultsAtSubscriptionClient) Get(ctx context.Context, deploy
 	if err != nil {
 		return WhatIfResultsAtSubscriptionClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return WhatIfResultsAtSubscriptionClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *WhatIfResultsAtSubscriptionClient) getCreateRequest(ctx context.Context, deploymentStacksWhatIfResultName string, _ *WhatIfResultsAtSubscriptionClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults/{deploymentStacksWhatIfResultName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deploymentStacksWhatIfResultName == "" {
@@ -226,15 +216,18 @@ func (client *WhatIfResultsAtSubscriptionClient) getCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *WhatIfResultsAtSubscriptionClient) getHandleResponse(resp *http.Response) (WhatIfResultsAtSubscriptionClientGetResponse, error) {
+func (client *WhatIfResultsAtSubscriptionClient) getHandleResponse(resp *http.Response, successCodes ...int) (WhatIfResultsAtSubscriptionClientGetResponse, error) {
 	result := WhatIfResultsAtSubscriptionClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WhatIfResult); err != nil {
 		return WhatIfResultsAtSubscriptionClientGetResponse{}, err
 	}
@@ -242,8 +235,6 @@ func (client *WhatIfResultsAtSubscriptionClient) getHandleResponse(resp *http.Re
 }
 
 // NewListPager - Lists Deployment stacks at the specified scope.
-//
-// Generated from API version 2025-07-01
 //   - options - WhatIfResultsAtSubscriptionClientListOptions contains the optional parameters for the WhatIfResultsAtSubscriptionClient.NewListPager
 //     method.
 func (client *WhatIfResultsAtSubscriptionClient) NewListPager(options *WhatIfResultsAtSubscriptionClientListOptions) *runtime.Pager[WhatIfResultsAtSubscriptionClientListResponse] {
@@ -257,39 +248,53 @@ func (client *WhatIfResultsAtSubscriptionClient) NewListPager(options *WhatIfRes
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return WhatIfResultsAtSubscriptionClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return WhatIfResultsAtSubscriptionClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *WhatIfResultsAtSubscriptionClient) listCreateRequest(ctx context.Context, _ *WhatIfResultsAtSubscriptionClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *WhatIfResultsAtSubscriptionClient) listCreateRequest(ctx context.Context, nextLink string, _ *WhatIfResultsAtSubscriptionClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *WhatIfResultsAtSubscriptionClient) listHandleResponse(resp *http.Response) (WhatIfResultsAtSubscriptionClientListResponse, error) {
+func (client *WhatIfResultsAtSubscriptionClient) listHandleResponse(resp *http.Response, successCodes ...int) (WhatIfResultsAtSubscriptionClientListResponse, error) {
 	result := WhatIfResultsAtSubscriptionClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.WhatIfResultListResult); err != nil {
 		return WhatIfResultsAtSubscriptionClientListResponse{}, err
 	}
@@ -298,8 +303,6 @@ func (client *WhatIfResultsAtSubscriptionClient) listHandleResponse(resp *http.R
 
 // BeginWhatIf - Returns property-level changes that will be made by the deployment if executed.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 //   - deploymentStacksWhatIfResultName - Name of the deployment stack what-if result.
 //   - options - WhatIfResultsAtSubscriptionClientBeginWhatIfOptions contains the optional parameters for the WhatIfResultsAtSubscriptionClient.BeginWhatIf
 //     method.
@@ -322,8 +325,6 @@ func (client *WhatIfResultsAtSubscriptionClient) BeginWhatIf(ctx context.Context
 
 // WhatIf - Returns property-level changes that will be made by the deployment if executed.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-01
 func (client *WhatIfResultsAtSubscriptionClient) whatIf(ctx context.Context, deploymentStacksWhatIfResultName string, options *WhatIfResultsAtSubscriptionClientBeginWhatIfOptions) (*http.Response, error) {
 	var err error
 	const operationName = "WhatIfResultsAtSubscriptionClient.BeginWhatIf"
@@ -339,8 +340,7 @@ func (client *WhatIfResultsAtSubscriptionClient) whatIf(ctx context.Context, dep
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -349,7 +349,7 @@ func (client *WhatIfResultsAtSubscriptionClient) whatIf(ctx context.Context, dep
 func (client *WhatIfResultsAtSubscriptionClient) whatIfCreateRequest(ctx context.Context, deploymentStacksWhatIfResultName string, _ *WhatIfResultsAtSubscriptionClientBeginWhatIfOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Resources/deploymentStacksWhatIfResults/{deploymentStacksWhatIfResultName}/whatIf"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deploymentStacksWhatIfResultName == "" {
@@ -361,8 +361,8 @@ func (client *WhatIfResultsAtSubscriptionClient) whatIfCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

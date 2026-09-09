@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // ReplicationEligibilityResultsClient contains the methods for the ReplicationEligibilityResults group.
 // Don't use this type directly, use NewReplicationEligibilityResultsClient() instead.
+//
+// Generated from API version 2025-08-01
 type ReplicationEligibilityResultsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type ReplicationEligibilityResultsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewReplicationEligibilityResultsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ReplicationEligibilityResultsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewReplicationEligibilityResultsClient(subscriptionID string, credential az
 //
 // Validates whether a given VM can be protected or not in which case returns list of errors.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - virtualMachineName - Virtual Machine name.
 //   - options - ReplicationEligibilityResultsClientGetOptions contains the optional parameters for the ReplicationEligibilityResultsClient.Get
@@ -64,19 +66,14 @@ func (client *ReplicationEligibilityResultsClient) Get(ctx context.Context, reso
 	if err != nil {
 		return ReplicationEligibilityResultsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ReplicationEligibilityResultsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ReplicationEligibilityResultsClient) getCreateRequest(ctx context.Context, resourceGroupName string, virtualMachineName string, _ *ReplicationEligibilityResultsClientGetOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/microsoft.Compute/virtualMachines/{virtualMachineName}/providers/Microsoft.RecoveryServices/replicationEligibilityResults/default"
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{virtualMachineName}/providers/Microsoft.RecoveryServices/replicationEligibilityResults/default"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -92,15 +89,18 @@ func (client *ReplicationEligibilityResultsClient) getCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ReplicationEligibilityResultsClient) getHandleResponse(resp *http.Response) (ReplicationEligibilityResultsClientGetResponse, error) {
+func (client *ReplicationEligibilityResultsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ReplicationEligibilityResultsClientGetResponse, error) {
 	result := ReplicationEligibilityResultsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationEligibilityResults); err != nil {
 		return ReplicationEligibilityResultsClientGetResponse{}, err
 	}
@@ -111,8 +111,6 @@ func (client *ReplicationEligibilityResultsClient) getHandleResponse(resp *http.
 //
 // Validates whether a given VM can be protected or not in which case returns list of errors.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - virtualMachineName - Virtual Machine name.
 //   - options - ReplicationEligibilityResultsClientListOptions contains the optional parameters for the ReplicationEligibilityResultsClient.List
@@ -131,19 +129,14 @@ func (client *ReplicationEligibilityResultsClient) List(ctx context.Context, res
 	if err != nil {
 		return ReplicationEligibilityResultsClientListResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ReplicationEligibilityResultsClientListResponse{}, err
-	}
-	resp, err := client.listHandleResponse(httpResp)
-	return resp, err
+	return client.listHandleResponse(httpResp, http.StatusOK)
 }
 
 // listCreateRequest creates the List request.
 func (client *ReplicationEligibilityResultsClient) listCreateRequest(ctx context.Context, resourceGroupName string, virtualMachineName string, _ *ReplicationEligibilityResultsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/microsoft.Compute/virtualMachines/{virtualMachineName}/providers/Microsoft.RecoveryServices/replicationEligibilityResults"
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{virtualMachineName}/providers/Microsoft.RecoveryServices/replicationEligibilityResults"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -159,15 +152,18 @@ func (client *ReplicationEligibilityResultsClient) listCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ReplicationEligibilityResultsClient) listHandleResponse(resp *http.Response) (ReplicationEligibilityResultsClientListResponse, error) {
+func (client *ReplicationEligibilityResultsClient) listHandleResponse(resp *http.Response, successCodes ...int) (ReplicationEligibilityResultsClientListResponse, error) {
 	result := ReplicationEligibilityResultsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ReplicationEligibilityResultsCollection); err != nil {
 		return ReplicationEligibilityResultsClientListResponse{}, err
 	}

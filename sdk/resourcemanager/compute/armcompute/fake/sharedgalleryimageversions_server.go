@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // SharedGalleryImageVersionsServer is a fake server for instances of the armcompute.SharedGalleryImageVersionsClient type.
@@ -58,9 +59,7 @@ func (s *SharedGalleryImageVersionsServerTransport) Do(req *http.Request) (*http
 }
 
 func (s *SharedGalleryImageVersionsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchToMethodFake(req *ht
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchGet(req *http.Reques
 	if s.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sharedGalleries/(?P<galleryUniqueName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/images/(?P<galleryImageName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<galleryImageVersionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sharedGalleries/(?P<galleryUniqueName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/images/(?P<galleryImageName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<galleryImageVersionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -123,7 +119,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchGet(req *http.Reques
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SharedGalleryImageVersion, req)
@@ -139,7 +135,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchNewListPager(req *ht
 	}
 	newListPager := s.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/sharedGalleries/(?P<galleryUniqueName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/images/(?P<galleryImageName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/sharedGalleries/(?P<galleryUniqueName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/images/(?P<galleryImageName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -158,11 +154,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchNewListPager(req *ht
 		if err != nil {
 			return nil, err
 		}
-		sharedToUnescaped, err := url.QueryUnescape(qp.Get("sharedTo"))
-		if err != nil {
-			return nil, err
-		}
-		sharedToParam := getOptional(armcompute.SharedToValues(sharedToUnescaped))
+		sharedToParam := getOptional(armcompute.SharedToValues(qp.Get("sharedTo")))
 		var options *armcompute.SharedGalleryImageVersionsClientListOptions
 		if sharedToParam != nil {
 			options = &armcompute.SharedGalleryImageVersionsClientListOptions{
@@ -180,7 +172,7 @@ func (s *SharedGalleryImageVersionsServerTransport) dispatchNewListPager(req *ht
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

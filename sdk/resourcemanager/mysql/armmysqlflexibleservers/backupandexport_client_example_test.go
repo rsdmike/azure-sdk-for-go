@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2024-12-01-preview/BackupAndExport.json
+// Generated from example definition: 2024-12-30/BackupAndExport.json
 func ExampleBackupAndExportClient_BeginCreate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -40,16 +40,16 @@ func ExampleBackupAndExportClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.BackupAndExportClientCreateResponse{
-	// 	BackupAndExportResponse: &armmysqlflexibleservers.BackupAndExportResponse{
+	// 	BackupAndExportResponse: armmysqlflexibleservers.BackupAndExportResponse{
 	// 		Name: to.Ptr("custom-backup101"),
 	// 		Type: to.Ptr("Microsoft.DBforMySQL/flexibleServers/backupAndExport"),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-29T07:37:05.6406008Z"); return t}()),
+	// 		EndTime: to.Ptr(time.Date(2022, time.December, 29, 7, 37, 5, 640600800, time.UTC)),
 	// 		Error: &armmysqlflexibleservers.ErrorDetail{
 	// 			Code: to.Ptr("AggregateException"),
 	// 			Message: to.Ptr("System.AggregateException: One or more errors occurred. (Mismatch in count of number of Commited-Blocks from service.)"),
@@ -61,13 +61,13 @@ func ExampleBackupAndExportClient_BeginCreate() {
 	// 			DataTransferredInBytes: to.Ptr[int64](1024),
 	// 			DatasourceSizeInBytes: to.Ptr[int64](1024),
 	// 		},
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-12-29T07:34:02.328326Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2022, time.December, 29, 7, 34, 2, 328326000, time.UTC)),
 	// 		Status: to.Ptr(armmysqlflexibleservers.OperationStatusFailed),
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2024-12-01-preview/ValidateBackup.json
+// Generated from example definition: 2024-12-30/ValidateBackup.json
 func ExampleBackupAndExportClient_ValidateBackup() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -86,7 +86,7 @@ func ExampleBackupAndExportClient_ValidateBackup() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armmysqlflexibleservers.BackupAndExportClientValidateBackupResponse{
-	// 	ValidateBackupResponse: &armmysqlflexibleservers.ValidateBackupResponse{
+	// 	ValidateBackupResponse: armmysqlflexibleservers.ValidateBackupResponse{
 	// 		Properties: &armmysqlflexibleservers.ValidateBackupResponseProperties{
 	// 			NumberOfContainers: to.Ptr[int32](1),
 	// 		},

@@ -18,6 +18,8 @@ import (
 
 // InstanceHistoriesClient contains the methods for the InstanceHistories group.
 // Don't use this type directly, use NewInstanceHistoriesClient() instead.
+//
+// Generated from API version 2025-06-01
 type InstanceHistoriesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type InstanceHistoriesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewInstanceHistoriesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*InstanceHistoriesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewInstanceHistoriesClient(subscriptionID string, credential azcore.TokenCr
 
 // Get - Get InstanceHistory Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -63,19 +66,14 @@ func (client *InstanceHistoriesClient) Get(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return InstanceHistoriesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return InstanceHistoriesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *InstanceHistoriesClient) getCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, instanceHistoryName string, _ *InstanceHistoriesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}/histories/{instanceHistoryName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -103,15 +101,18 @@ func (client *InstanceHistoriesClient) getCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *InstanceHistoriesClient) getHandleResponse(resp *http.Response) (InstanceHistoriesClientGetResponse, error) {
+func (client *InstanceHistoriesClient) getHandleResponse(resp *http.Response, successCodes ...int) (InstanceHistoriesClientGetResponse, error) {
 	result := InstanceHistoriesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceHistory); err != nil {
 		return InstanceHistoriesClientGetResponse{}, err
 	}
@@ -119,8 +120,6 @@ func (client *InstanceHistoriesClient) getHandleResponse(resp *http.Response) (I
 }
 
 // NewListByInstancePager - List InstanceHistory Resources
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - targetName - Name of the target
 //   - solutionName - Name of the solution
@@ -138,55 +137,69 @@ func (client *InstanceHistoriesClient) NewListByInstancePager(resourceGroupName 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByInstanceCreateRequest(ctx, resourceGroupName, targetName, solutionName, instanceName, options)
-			}, nil)
+			req, err := client.listByInstanceCreateRequest(ctx, resourceGroupName, targetName, solutionName, instanceName, nextLink, options)
 			if err != nil {
 				return InstanceHistoriesClientListByInstanceResponse{}, err
 			}
-			return client.listByInstanceHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return InstanceHistoriesClientListByInstanceResponse{}, err
+			}
+			return client.listByInstanceHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByInstanceCreateRequest creates the ListByInstance request.
-func (client *InstanceHistoriesClient) listByInstanceCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, _ *InstanceHistoriesClientListByInstanceOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}/histories"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *InstanceHistoriesClient) listByInstanceCreateRequest(ctx context.Context, resourceGroupName string, targetName string, solutionName string, instanceName string, nextLink string, _ *InstanceHistoriesClientListByInstanceOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/targets/{targetName}/solutions/{solutionName}/instances/{instanceName}/histories"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if targetName == "" {
+			return nil, errors.New("parameter targetName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{targetName}", url.PathEscape(targetName))
+		if solutionName == "" {
+			return nil, errors.New("parameter solutionName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{solutionName}", url.PathEscape(solutionName))
+		if instanceName == "" {
+			return nil, errors.New("parameter instanceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{instanceName}", url.PathEscape(instanceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if targetName == "" {
-		return nil, errors.New("parameter targetName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{targetName}", url.PathEscape(targetName))
-	if solutionName == "" {
-		return nil, errors.New("parameter solutionName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{solutionName}", url.PathEscape(solutionName))
-	if instanceName == "" {
-		return nil, errors.New("parameter instanceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{instanceName}", url.PathEscape(instanceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByInstanceHandleResponse handles the ListByInstance response.
-func (client *InstanceHistoriesClient) listByInstanceHandleResponse(resp *http.Response) (InstanceHistoriesClientListByInstanceResponse, error) {
+func (client *InstanceHistoriesClient) listByInstanceHandleResponse(resp *http.Response, successCodes ...int) (InstanceHistoriesClientListByInstanceResponse, error) {
 	result := InstanceHistoriesClientListByInstanceResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.InstanceHistoryListResult); err != nil {
 		return InstanceHistoriesClientListByInstanceResponse{}, err
 	}

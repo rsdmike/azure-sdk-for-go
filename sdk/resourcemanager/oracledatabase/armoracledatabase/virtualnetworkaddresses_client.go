@@ -18,6 +18,8 @@ import (
 
 // VirtualNetworkAddressesClient contains the methods for the VirtualNetworkAddresses group.
 // Don't use this type directly, use NewVirtualNetworkAddressesClient() instead.
+//
+// Generated from API version 2025-09-01
 type VirtualNetworkAddressesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type VirtualNetworkAddressesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewVirtualNetworkAddressesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VirtualNetworkAddressesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewVirtualNetworkAddressesClient(subscriptionID string, credential azcore.T
 
 // BeginCreateOrUpdate - Create a VirtualNetworkAddress
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - virtualnetworkaddressname - Virtual IP address hostname.
@@ -68,8 +71,6 @@ func (client *VirtualNetworkAddressesClient) BeginCreateOrUpdate(ctx context.Con
 
 // CreateOrUpdate - Create a VirtualNetworkAddress
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *VirtualNetworkAddressesClient) createOrUpdate(ctx context.Context, resourceGroupName string, cloudvmclustername string, virtualnetworkaddressname string, resource VirtualNetworkAddress, options *VirtualNetworkAddressesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VirtualNetworkAddressesClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *VirtualNetworkAddressesClient) createOrUpdate(ctx context.Context,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *VirtualNetworkAddressesClient) createOrUpdate(ctx context.Context,
 func (client *VirtualNetworkAddressesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, virtualnetworkaddressname string, resource VirtualNetworkAddress, _ *VirtualNetworkAddressesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/virtualNetworkAddresses/{virtualnetworkaddressname}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *VirtualNetworkAddressesClient) createOrUpdateCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *VirtualNetworkAddressesClient) createOrUpdateCreateRequest(ctx con
 
 // BeginDelete - Delete a VirtualNetworkAddress
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - virtualnetworkaddressname - Virtual IP address hostname.
@@ -153,8 +151,6 @@ func (client *VirtualNetworkAddressesClient) BeginDelete(ctx context.Context, re
 
 // Delete - Delete a VirtualNetworkAddress
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *VirtualNetworkAddressesClient) deleteOperation(ctx context.Context, resourceGroupName string, cloudvmclustername string, virtualnetworkaddressname string, options *VirtualNetworkAddressesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "VirtualNetworkAddressesClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *VirtualNetworkAddressesClient) deleteOperation(ctx context.Context
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *VirtualNetworkAddressesClient) deleteOperation(ctx context.Context
 func (client *VirtualNetworkAddressesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, virtualnetworkaddressname string, _ *VirtualNetworkAddressesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/virtualNetworkAddresses/{virtualnetworkaddressname}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *VirtualNetworkAddressesClient) deleteCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a VirtualNetworkAddress
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - virtualnetworkaddressname - Virtual IP address hostname.
@@ -228,19 +221,14 @@ func (client *VirtualNetworkAddressesClient) Get(ctx context.Context, resourceGr
 	if err != nil {
 		return VirtualNetworkAddressesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return VirtualNetworkAddressesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *VirtualNetworkAddressesClient) getCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, virtualnetworkaddressname string, _ *VirtualNetworkAddressesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/virtualNetworkAddresses/{virtualnetworkaddressname}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -260,15 +248,18 @@ func (client *VirtualNetworkAddressesClient) getCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *VirtualNetworkAddressesClient) getHandleResponse(resp *http.Response) (VirtualNetworkAddressesClientGetResponse, error) {
+func (client *VirtualNetworkAddressesClient) getHandleResponse(resp *http.Response, successCodes ...int) (VirtualNetworkAddressesClientGetResponse, error) {
 	result := VirtualNetworkAddressesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkAddress); err != nil {
 		return VirtualNetworkAddressesClientGetResponse{}, err
 	}
@@ -276,8 +267,6 @@ func (client *VirtualNetworkAddressesClient) getHandleResponse(resp *http.Respon
 }
 
 // NewListByCloudVMClusterPager - List VirtualNetworkAddress resources by CloudVmCluster
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - cloudvmclustername - CloudVmCluster name
 //   - options - VirtualNetworkAddressesClientListByCloudVMClusterOptions contains the optional parameters for the VirtualNetworkAddressesClient.NewListByCloudVMClusterPager
@@ -293,47 +282,61 @@ func (client *VirtualNetworkAddressesClient) NewListByCloudVMClusterPager(resour
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByCloudVMClusterCreateRequest(ctx, resourceGroupName, cloudvmclustername, options)
-			}, nil)
+			req, err := client.listByCloudVMClusterCreateRequest(ctx, resourceGroupName, cloudvmclustername, nextLink, options)
 			if err != nil {
 				return VirtualNetworkAddressesClientListByCloudVMClusterResponse{}, err
 			}
-			return client.listByCloudVMClusterHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return VirtualNetworkAddressesClientListByCloudVMClusterResponse{}, err
+			}
+			return client.listByCloudVMClusterHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByCloudVMClusterCreateRequest creates the ListByCloudVMCluster request.
-func (client *VirtualNetworkAddressesClient) listByCloudVMClusterCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, _ *VirtualNetworkAddressesClientListByCloudVMClusterOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/virtualNetworkAddresses"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *VirtualNetworkAddressesClient) listByCloudVMClusterCreateRequest(ctx context.Context, resourceGroupName string, cloudvmclustername string, nextLink string, _ *VirtualNetworkAddressesClientListByCloudVMClusterOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Oracle.Database/cloudVmClusters/{cloudvmclustername}/virtualNetworkAddresses"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if cloudvmclustername == "" {
+			return nil, errors.New("parameter cloudvmclustername cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{cloudvmclustername}", url.PathEscape(cloudvmclustername))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if cloudvmclustername == "" {
-		return nil, errors.New("parameter cloudvmclustername cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{cloudvmclustername}", url.PathEscape(cloudvmclustername))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250901)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByCloudVMClusterHandleResponse handles the ListByCloudVMCluster response.
-func (client *VirtualNetworkAddressesClient) listByCloudVMClusterHandleResponse(resp *http.Response) (VirtualNetworkAddressesClientListByCloudVMClusterResponse, error) {
+func (client *VirtualNetworkAddressesClient) listByCloudVMClusterHandleResponse(resp *http.Response, successCodes ...int) (VirtualNetworkAddressesClientListByCloudVMClusterResponse, error) {
 	result := VirtualNetworkAddressesClientListByCloudVMClusterResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VirtualNetworkAddressListResult); err != nil {
 		return VirtualNetworkAddressesClientListByCloudVMClusterResponse{}, err
 	}

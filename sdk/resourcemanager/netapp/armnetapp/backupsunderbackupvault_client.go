@@ -18,6 +18,8 @@ import (
 
 // BackupsUnderBackupVaultClient contains the methods for the BackupsUnderBackupVault group.
 // Don't use this type directly, use NewBackupsUnderBackupVaultClient() instead.
+//
+// Generated from API version 2026-06-15-preview
 type BackupsUnderBackupVaultClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type BackupsUnderBackupVaultClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewBackupsUnderBackupVaultClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*BackupsUnderBackupVaultClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewBackupsUnderBackupVaultClient(subscriptionID string, credential azcore.T
 
 // BeginRestoreFiles - Restore the specified files from the specified backup to the active filesystem
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - backupVaultName - The name of the Backup Vault
@@ -69,8 +72,6 @@ func (client *BackupsUnderBackupVaultClient) BeginRestoreFiles(ctx context.Conte
 
 // RestoreFiles - Restore the specified files from the specified backup to the active filesystem
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *BackupsUnderBackupVaultClient) restoreFiles(ctx context.Context, resourceGroupName string, accountName string, backupVaultName string, backupName string, body BackupRestoreFiles, options *BackupsUnderBackupVaultClientBeginRestoreFilesOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BackupsUnderBackupVaultClient.BeginRestoreFiles"
@@ -86,8 +87,7 @@ func (client *BackupsUnderBackupVaultClient) restoreFiles(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *BackupsUnderBackupVaultClient) restoreFiles(ctx context.Context, r
 func (client *BackupsUnderBackupVaultClient) restoreFilesCreateRequest(ctx context.Context, resourceGroupName string, accountName string, backupVaultName string, backupName string, body BackupRestoreFiles, _ *BackupsUnderBackupVaultClientBeginRestoreFilesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/backupVaults/{backupVaultName}/backups/{backupName}/restoreFiles"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +120,8 @@ func (client *BackupsUnderBackupVaultClient) restoreFilesCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
 		return nil, err

@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // ReplicationVaultHealthClient contains the methods for the ReplicationVaultHealth group.
 // Don't use this type directly, use NewReplicationVaultHealthClient() instead.
+//
+// Generated from API version 2025-08-01
 type ReplicationVaultHealthClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type ReplicationVaultHealthClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewReplicationVaultHealthClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ReplicationVaultHealthClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewReplicationVaultHealthClient(subscriptionID string, credential azcore.To
 //
 // Gets the health details of the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the recovery services vault.
 //   - options - ReplicationVaultHealthClientGetOptions contains the optional parameters for the ReplicationVaultHealthClient.Get
@@ -64,19 +66,14 @@ func (client *ReplicationVaultHealthClient) Get(ctx context.Context, resourceGro
 	if err != nil {
 		return ReplicationVaultHealthClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ReplicationVaultHealthClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ReplicationVaultHealthClient) getCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ReplicationVaultHealthClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationVaultHealth"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -92,15 +89,18 @@ func (client *ReplicationVaultHealthClient) getCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ReplicationVaultHealthClient) getHandleResponse(resp *http.Response) (ReplicationVaultHealthClientGetResponse, error) {
+func (client *ReplicationVaultHealthClient) getHandleResponse(resp *http.Response, successCodes ...int) (ReplicationVaultHealthClientGetResponse, error) {
 	result := ReplicationVaultHealthClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultHealthDetails); err != nil {
 		return ReplicationVaultHealthClientGetResponse{}, err
 	}
@@ -111,8 +111,6 @@ func (client *ReplicationVaultHealthClient) getHandleResponse(resp *http.Respons
 //
 // Refreshes health summary of the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the recovery services vault.
 //   - options - ReplicationVaultHealthClientBeginRefreshOptions contains the optional parameters for the ReplicationVaultHealthClient.BeginRefresh
@@ -138,8 +136,6 @@ func (client *ReplicationVaultHealthClient) BeginRefresh(ctx context.Context, re
 //
 // Refreshes health summary of the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationVaultHealthClient) refresh(ctx context.Context, resourceGroupName string, resourceName string, options *ReplicationVaultHealthClientBeginRefreshOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationVaultHealthClient.BeginRefresh"
@@ -155,8 +151,7 @@ func (client *ReplicationVaultHealthClient) refresh(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -165,7 +160,7 @@ func (client *ReplicationVaultHealthClient) refresh(ctx context.Context, resourc
 func (client *ReplicationVaultHealthClient) refreshCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ReplicationVaultHealthClientBeginRefreshOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationVaultHealth/default/refresh"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -181,8 +176,8 @@ func (client *ReplicationVaultHealthClient) refreshCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

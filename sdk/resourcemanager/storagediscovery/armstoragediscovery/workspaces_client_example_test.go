@@ -71,7 +71,7 @@ func ExampleWorkspacesClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragediscovery.WorkspacesClientCreateOrUpdateResponse{
-	// 	Workspace: &armstoragediscovery.Workspace{
+	// 	Workspace: armstoragediscovery.Workspace{
 	// 		ID: to.Ptr("/subscriptions/b79cb3ba-745e-5d9a-8903-4a02327a7e09/resourceGroups/sample-rg/providers/Microsoft.StorageDiscovery/storageDiscoveryWorkspaces/sampleworkspace"),
 	// 		Name: to.Ptr("sampleworkspace"),
 	// 		Type: to.Ptr("Microsoft.StorageDiscovery/storageDiscoveryWorkspaces"),
@@ -119,10 +119,10 @@ func ExampleWorkspacesClient_CreateOrUpdate() {
 	// 		SystemData: &armstoragediscovery.SystemData{
 	// 			CreatedBy: to.Ptr("iewyxsnriqktsvp"),
 	// 			CreatedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xrchbnnuzierzpxw"),
 	// 			LastModifiedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -169,7 +169,7 @@ func ExampleWorkspacesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragediscovery.WorkspacesClientGetResponse{
-	// 	Workspace: &armstoragediscovery.Workspace{
+	// 	Workspace: armstoragediscovery.Workspace{
 	// 		ID: to.Ptr("/subscriptions/b79cb3ba-745e-5d9a-8903-4a02327a7e09/resourceGroups/sample-rg/providers/Microsoft.StorageDiscovery/storageDiscoveryWorkspaces/sampleworkspace"),
 	// 		Name: to.Ptr("sampleworkspace"),
 	// 		Type: to.Ptr("Microsoft.StorageDiscovery/storageDiscoveryWorkspaces"),
@@ -217,10 +217,10 @@ func ExampleWorkspacesClient_Get() {
 	// 		SystemData: &armstoragediscovery.SystemData{
 	// 			CreatedBy: to.Ptr("iewyxsnriqktsvp"),
 	// 			CreatedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xrchbnnuzierzpxw"),
 	// 			LastModifiedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -360,10 +360,10 @@ func ExampleWorkspacesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armstoragediscovery.SystemData{
 		// 					CreatedBy: to.Ptr("iewyxsnriqktsvp"),
 		// 					CreatedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xrchbnnuzierzpxw"),
 		// 					LastModifiedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 		// 				},
 		// 				Properties: &armstoragediscovery.WorkspaceProperties{
 		// 					ProvisioningState: to.Ptr(armstoragediscovery.ResourceProvisioningStateSucceeded),
@@ -402,10 +402,10 @@ func ExampleWorkspacesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armstoragediscovery.SystemData{
 		// 					CreatedBy: to.Ptr("iewyxsnriqktsvp"),
 		// 					CreatedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xrchbnnuzierzpxw"),
 		// 					LastModifiedByType: to.Ptr(armstoragediscovery.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-05-19T00:28:48.610Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.May, 19, 0, 28, 48, 610000000, time.UTC)),
 		// 				},
 		// 				Properties: &armstoragediscovery.WorkspaceProperties{
 		// 					ProvisioningState: to.Ptr(armstoragediscovery.ResourceProvisioningStateSucceeded),
@@ -479,7 +479,7 @@ func ExampleWorkspacesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragediscovery.WorkspacesClientUpdateResponse{
-	// 	Workspace: &armstoragediscovery.Workspace{
+	// 	Workspace: armstoragediscovery.Workspace{
 	// 		ID: to.Ptr("/subscriptions/b79cb3ba-745e-5d9a-8903-4a02327a7e09/resourceGroups/sample-rg/providers/Microsoft.StorageDiscovery/storageDiscoveryWorkspaces/sampleworkspace"),
 	// 		Name: to.Ptr("sampleworkspace"),
 	// 		Type: to.Ptr("Microsoft.StorageDiscovery/storageDiscoveryWorkspaces"),

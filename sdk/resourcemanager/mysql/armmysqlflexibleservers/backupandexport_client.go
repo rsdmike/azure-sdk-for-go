@@ -18,6 +18,8 @@ import (
 
 // BackupAndExportClient contains the methods for the BackupAndExport group.
 // Don't use this type directly, use NewBackupAndExportClient() instead.
+//
+// Generated from API version 2024-12-30
 type BackupAndExportClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type BackupAndExportClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewBackupAndExportClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*BackupAndExportClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewBackupAndExportClient(subscriptionID string, credential azcore.TokenCred
 
 // BeginCreate - Exports the backup of the given server by creating a backup if not existing.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - parameters - The required parameters for creating and exporting backup of the given server.
@@ -67,8 +70,6 @@ func (client *BackupAndExportClient) BeginCreate(ctx context.Context, resourceGr
 
 // Create - Exports the backup of the given server by creating a backup if not existing.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 func (client *BackupAndExportClient) create(ctx context.Context, resourceGroupName string, serverName string, parameters BackupAndExportRequest, options *BackupAndExportClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "BackupAndExportClient.BeginCreate"
@@ -84,8 +85,7 @@ func (client *BackupAndExportClient) create(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -94,7 +94,7 @@ func (client *BackupAndExportClient) create(ctx context.Context, resourceGroupNa
 func (client *BackupAndExportClient) createCreateRequest(ctx context.Context, resourceGroupName string, serverName string, parameters BackupAndExportRequest, _ *BackupAndExportClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforMySQL/flexibleServers/{serverName}/backupAndExport"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -110,8 +110,8 @@ func (client *BackupAndExportClient) createCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-12-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241230)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -122,8 +122,6 @@ func (client *BackupAndExportClient) createCreateRequest(ctx context.Context, re
 
 // ValidateBackup - Validates if backup can be performed for given server.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - options - BackupAndExportClientValidateBackupOptions contains the optional parameters for the BackupAndExportClient.ValidateBackup
@@ -142,19 +140,14 @@ func (client *BackupAndExportClient) ValidateBackup(ctx context.Context, resourc
 	if err != nil {
 		return BackupAndExportClientValidateBackupResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return BackupAndExportClientValidateBackupResponse{}, err
-	}
-	resp, err := client.validateBackupHandleResponse(httpResp)
-	return resp, err
+	return client.validateBackupHandleResponse(httpResp, http.StatusOK)
 }
 
 // validateBackupCreateRequest creates the ValidateBackup request.
 func (client *BackupAndExportClient) validateBackupCreateRequest(ctx context.Context, resourceGroupName string, serverName string, _ *BackupAndExportClientValidateBackupOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforMySQL/flexibleServers/{serverName}/validateBackup"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -170,15 +163,18 @@ func (client *BackupAndExportClient) validateBackupCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-12-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241230)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // validateBackupHandleResponse handles the ValidateBackup response.
-func (client *BackupAndExportClient) validateBackupHandleResponse(resp *http.Response) (BackupAndExportClientValidateBackupResponse, error) {
+func (client *BackupAndExportClient) validateBackupHandleResponse(resp *http.Response, successCodes ...int) (BackupAndExportClientValidateBackupResponse, error) {
 	result := BackupAndExportClientValidateBackupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ValidateBackupResponse); err != nil {
 		return BackupAndExportClientValidateBackupResponse{}, err
 	}

@@ -8,11 +8,11 @@ import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud/v2"
 	"log"
 )
 
-// Generated from example definition: 2025-09-01/KubernetesClusterFeatures_Create.json
+// Generated from example definition: 2026-07-01/KubernetesClusterFeatures_Create.json
 func ExampleKubernetesClusterFeaturesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -43,13 +43,13 @@ func ExampleKubernetesClusterFeaturesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.KubernetesClusterFeaturesClientCreateOrUpdateResponse{
-	// 	KubernetesClusterFeature: &armnetworkcloud.KubernetesClusterFeature{
+	// 	KubernetesClusterFeature: armnetworkcloud.KubernetesClusterFeature{
 	// 		ID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.NetworkCloud/kubernetesClusters/kubernetesClusterName/features/featureName"),
 	// 		Location: to.Ptr("location"),
 	// 		Name: to.Ptr("featureName"),
@@ -68,10 +68,10 @@ func ExampleKubernetesClusterFeaturesClient_BeginCreateOrUpdate() {
 	// 			Version: to.Ptr("1.2.3"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -84,7 +84,7 @@ func ExampleKubernetesClusterFeaturesClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/KubernetesClusterFeatures_Delete.json
+// Generated from example definition: 2026-07-01/KubernetesClusterFeatures_Delete.json
 func ExampleKubernetesClusterFeaturesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -101,11 +101,11 @@ func ExampleKubernetesClusterFeaturesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/KubernetesClusterFeatures_Get.json
+// Generated from example definition: 2026-07-01/KubernetesClusterFeatures_Get.json
 func ExampleKubernetesClusterFeaturesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -124,7 +124,7 @@ func ExampleKubernetesClusterFeaturesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.KubernetesClusterFeaturesClientGetResponse{
-	// 	KubernetesClusterFeature: &armnetworkcloud.KubernetesClusterFeature{
+	// 	KubernetesClusterFeature: armnetworkcloud.KubernetesClusterFeature{
 	// 		ID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.NetworkCloud/kubernetesClusters/kubernetesClusterName/features/featureName"),
 	// 		Location: to.Ptr("location"),
 	// 		Name: to.Ptr("featureName"),
@@ -143,10 +143,10 @@ func ExampleKubernetesClusterFeaturesClient_Get() {
 	// 			Version: to.Ptr("1.2.3"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -159,7 +159,7 @@ func ExampleKubernetesClusterFeaturesClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/KubernetesClusterFeatures_ListByKubernetesCluster.json
+// Generated from example definition: 2026-07-01/KubernetesClusterFeatures_ListByKubernetesCluster.json
 func ExampleKubernetesClusterFeaturesClient_NewListByKubernetesClusterPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -203,10 +203,10 @@ func ExampleKubernetesClusterFeaturesClient_NewListByKubernetesClusterPager() {
 		// 					Version: to.Ptr("1.2.3"),
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -222,7 +222,7 @@ func ExampleKubernetesClusterFeaturesClient_NewListByKubernetesClusterPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/KubernetesClusterFeatures_Patch.json
+// Generated from example definition: 2026-07-01/KubernetesClusterFeatures_Patch.json
 func ExampleKubernetesClusterFeaturesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -252,13 +252,13 @@ func ExampleKubernetesClusterFeaturesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.KubernetesClusterFeaturesClientUpdateResponse{
-	// 	KubernetesClusterFeature: &armnetworkcloud.KubernetesClusterFeature{
+	// 	KubernetesClusterFeature: armnetworkcloud.KubernetesClusterFeature{
 	// 		ID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.NetworkCloud/kubernetesClusters/kubernetesClusterName/features/featureName"),
 	// 		Location: to.Ptr("location"),
 	// 		Name: to.Ptr("featureName"),
@@ -277,10 +277,10 @@ func ExampleKubernetesClusterFeaturesClient_BeginUpdate() {
 	// 			Version: to.Ptr("1.2.3"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},

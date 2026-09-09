@@ -6,10 +6,9 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/ClusterRecoveryPoints_ListByReplicationProtectionCluster.json
@@ -50,7 +49,7 @@ func ExampleClusterRecoveryPointsClient_NewListByReplicationProtectionClusterPag
 		// 						},
 		// 						RecoveryPointSyncType: to.Ptr(armrecoveryservicessiterecovery.RecoveryPointSyncTypeMultiVMSyncRecoveryPoint),
 		// 					},
-		// 					RecoveryPointTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-19T08:55:51.1764251Z"); return t}()),
+		// 					RecoveryPointTime: to.Ptr(time.Date(2024, time.January, 19, 8, 55, 51, 176425100, time.UTC)),
 		// 					RecoveryPointType: to.Ptr(armrecoveryservicessiterecovery.ClusterRecoveryPointTypeCrashConsistent),
 		// 				},
 		// 			},

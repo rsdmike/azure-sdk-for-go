@@ -18,6 +18,8 @@ import (
 
 // NamespaceDiscoveredAssetsClient contains the methods for the NamespaceDiscoveredAssets group.
 // Don't use this type directly, use NewNamespaceDiscoveredAssetsClient() instead.
+//
+// Generated from API version 2026-03-01-preview
 type NamespaceDiscoveredAssetsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type NamespaceDiscoveredAssetsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewNamespaceDiscoveredAssetsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*NamespaceDiscoveredAssetsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewNamespaceDiscoveredAssetsClient(subscriptionID string, credential azcore
 
 // BeginCreateOrReplace - Create a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - The name of the namespace.
 //   - discoveredAssetName - The name of the discovered asset.
@@ -68,8 +71,6 @@ func (client *NamespaceDiscoveredAssetsClient) BeginCreateOrReplace(ctx context.
 
 // CreateOrReplace - Create a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 func (client *NamespaceDiscoveredAssetsClient) createOrReplace(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, resource NamespaceDiscoveredAsset, options *NamespaceDiscoveredAssetsClientBeginCreateOrReplaceOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceDiscoveredAssetsClient.BeginCreateOrReplace"
@@ -85,8 +86,7 @@ func (client *NamespaceDiscoveredAssetsClient) createOrReplace(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *NamespaceDiscoveredAssetsClient) createOrReplace(ctx context.Conte
 func (client *NamespaceDiscoveredAssetsClient) createOrReplaceCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, resource NamespaceDiscoveredAsset, _ *NamespaceDiscoveredAssetsClientBeginCreateOrReplaceOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets/{discoveredAssetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *NamespaceDiscoveredAssetsClient) createOrReplaceCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *NamespaceDiscoveredAssetsClient) createOrReplaceCreateRequest(ctx 
 
 // BeginDelete - Delete a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - The name of the namespace.
 //   - discoveredAssetName - The name of the discovered asset.
@@ -153,8 +151,6 @@ func (client *NamespaceDiscoveredAssetsClient) BeginDelete(ctx context.Context, 
 
 // Delete - Delete a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 func (client *NamespaceDiscoveredAssetsClient) deleteOperation(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, options *NamespaceDiscoveredAssetsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceDiscoveredAssetsClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *NamespaceDiscoveredAssetsClient) deleteOperation(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *NamespaceDiscoveredAssetsClient) deleteOperation(ctx context.Conte
 func (client *NamespaceDiscoveredAssetsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, _ *NamespaceDiscoveredAssetsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets/{discoveredAssetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *NamespaceDiscoveredAssetsClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - The name of the namespace.
 //   - discoveredAssetName - The name of the discovered asset.
@@ -228,19 +221,14 @@ func (client *NamespaceDiscoveredAssetsClient) Get(ctx context.Context, resource
 	if err != nil {
 		return NamespaceDiscoveredAssetsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return NamespaceDiscoveredAssetsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *NamespaceDiscoveredAssetsClient) getCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, _ *NamespaceDiscoveredAssetsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets/{discoveredAssetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -260,15 +248,18 @@ func (client *NamespaceDiscoveredAssetsClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *NamespaceDiscoveredAssetsClient) getHandleResponse(resp *http.Response) (NamespaceDiscoveredAssetsClientGetResponse, error) {
+func (client *NamespaceDiscoveredAssetsClient) getHandleResponse(resp *http.Response, successCodes ...int) (NamespaceDiscoveredAssetsClientGetResponse, error) {
 	result := NamespaceDiscoveredAssetsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceDiscoveredAsset); err != nil {
 		return NamespaceDiscoveredAssetsClientGetResponse{}, err
 	}
@@ -276,8 +267,6 @@ func (client *NamespaceDiscoveredAssetsClient) getHandleResponse(resp *http.Resp
 }
 
 // NewListByResourceGroupPager - List NamespaceDiscoveredAsset resources by Namespace
-//
-// Generated from API version 2026-03-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - The name of the namespace.
 //   - options - NamespaceDiscoveredAssetsClientListByResourceGroupOptions contains the optional parameters for the NamespaceDiscoveredAssetsClient.NewListByResourceGroupPager
@@ -293,47 +282,61 @@ func (client *NamespaceDiscoveredAssetsClient) NewListByResourceGroupPager(resou
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, namespaceName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, namespaceName, nextLink, options)
 			if err != nil {
 				return NamespaceDiscoveredAssetsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return NamespaceDiscoveredAssetsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *NamespaceDiscoveredAssetsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, _ *NamespaceDiscoveredAssetsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *NamespaceDiscoveredAssetsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, nextLink string, _ *NamespaceDiscoveredAssetsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if namespaceName == "" {
+			return nil, errors.New("parameter namespaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if namespaceName == "" {
-		return nil, errors.New("parameter namespaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260301Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *NamespaceDiscoveredAssetsClient) listByResourceGroupHandleResponse(resp *http.Response) (NamespaceDiscoveredAssetsClientListByResourceGroupResponse, error) {
+func (client *NamespaceDiscoveredAssetsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (NamespaceDiscoveredAssetsClientListByResourceGroupResponse, error) {
 	result := NamespaceDiscoveredAssetsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceDiscoveredAssetListResult); err != nil {
 		return NamespaceDiscoveredAssetsClientListByResourceGroupResponse{}, err
 	}
@@ -342,8 +345,6 @@ func (client *NamespaceDiscoveredAssetsClient) listByResourceGroupHandleResponse
 
 // BeginUpdate - Update a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - The name of the namespace.
 //   - discoveredAssetName - The name of the discovered asset.
@@ -369,8 +370,6 @@ func (client *NamespaceDiscoveredAssetsClient) BeginUpdate(ctx context.Context, 
 
 // Update - Update a NamespaceDiscoveredAsset
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-03-01-preview
 func (client *NamespaceDiscoveredAssetsClient) update(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, properties NamespaceDiscoveredAssetUpdate, options *NamespaceDiscoveredAssetsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceDiscoveredAssetsClient.BeginUpdate"
@@ -386,8 +385,7 @@ func (client *NamespaceDiscoveredAssetsClient) update(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -396,7 +394,7 @@ func (client *NamespaceDiscoveredAssetsClient) update(ctx context.Context, resou
 func (client *NamespaceDiscoveredAssetsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, discoveredAssetName string, properties NamespaceDiscoveredAssetUpdate, _ *NamespaceDiscoveredAssetsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DeviceRegistry/namespaces/{namespaceName}/discoveredAssets/{discoveredAssetName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -416,8 +414,8 @@ func (client *NamespaceDiscoveredAssetsClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {

@@ -35,13 +35,13 @@ func ExampleMetricsObjectFirewallClient_BeginCreateOrUpdate_metricsObjectFirewal
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.MetricsObjectFirewallClientCreateOrUpdateResponse{
-	// 	MetricsObjectFirewallResource: &armpanngfw.MetricsObjectFirewallResource{
+	// 	MetricsObjectFirewallResource: armpanngfw.MetricsObjectFirewallResource{
 	// 		Name: to.Ptr("aaaaaaaaaaaaaaaaaa"),
 	// 		Type: to.Ptr("aaaaaaaaaaaaaaaaaaaaaaa"),
 	// 		ID: to.Ptr("aaaaaaaaaaaa"),
@@ -52,10 +52,10 @@ func ExampleMetricsObjectFirewallClient_BeginCreateOrUpdate_metricsObjectFirewal
 	// 			ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armpanngfw.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-04T09:21:06.704Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.July, 4, 9, 21, 6, 704000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("aaaaaaaaaaaaaaaaaaaaaaaa"),
 	// 			CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-04T09:21:06.704Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.July, 4, 9, 21, 6, 704000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("aaaaaaaaaaa"),
 	// 			LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 	// 		},
@@ -85,13 +85,13 @@ func ExampleMetricsObjectFirewallClient_BeginCreateOrUpdate_metricsObjectFirewal
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.MetricsObjectFirewallClientCreateOrUpdateResponse{
-	// 	MetricsObjectFirewallResource: &armpanngfw.MetricsObjectFirewallResource{
+	// 	MetricsObjectFirewallResource: armpanngfw.MetricsObjectFirewallResource{
 	// 		ID: to.Ptr("aaaaaaaaaaaa"),
 	// 		Properties: &armpanngfw.MetricsObject{
 	// 			ApplicationInsightsConnectionString: to.Ptr("aaa"),
@@ -118,7 +118,7 @@ func ExampleMetricsObjectFirewallClient_BeginDelete_metricsObjectFirewallDeleteM
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -139,7 +139,7 @@ func ExampleMetricsObjectFirewallClient_BeginDelete_metricsObjectFirewallDeleteM
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -162,7 +162,7 @@ func ExampleMetricsObjectFirewallClient_Get_metricsObjectFirewallGetMaximumSetGe
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.MetricsObjectFirewallClientGetResponse{
-	// 	MetricsObjectFirewallResource: &armpanngfw.MetricsObjectFirewallResource{
+	// 	MetricsObjectFirewallResource: armpanngfw.MetricsObjectFirewallResource{
 	// 		Name: to.Ptr("aaaaaaaaaaaaaaaaaa"),
 	// 		Type: to.Ptr("aaaaaaaaaaaaaaaaaaaaaaa"),
 	// 		ID: to.Ptr("aaaaaaaaaaaa"),
@@ -173,10 +173,10 @@ func ExampleMetricsObjectFirewallClient_Get_metricsObjectFirewallGetMaximumSetGe
 	// 			ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armpanngfw.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-04T09:21:06.704Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2025, time.July, 4, 9, 21, 6, 704000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("aaaaaaaaaaaaaaaaaaaaaaaa"),
 	// 			CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-04T09:21:06.704Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2025, time.July, 4, 9, 21, 6, 704000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("aaaaaaaaaaa"),
 	// 			LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 	// 		},
@@ -203,7 +203,7 @@ func ExampleMetricsObjectFirewallClient_Get_metricsObjectFirewallGetMinimumSetGe
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.MetricsObjectFirewallClientGetResponse{
-	// 	MetricsObjectFirewallResource: &armpanngfw.MetricsObjectFirewallResource{
+	// 	MetricsObjectFirewallResource: armpanngfw.MetricsObjectFirewallResource{
 	// 		ID: to.Ptr("aaaaaaaaaaaa"),
 	// 		Properties: &armpanngfw.MetricsObject{
 	// 			ApplicationInsightsConnectionString: to.Ptr("aaa"),
@@ -250,10 +250,10 @@ func ExampleMetricsObjectFirewallClient_NewListByFirewallsPager_metricsObjectFir
 		// 					ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 		// 				},
 		// 				SystemData: &armpanngfw.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-17T09:12:09.452Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2025, time.July, 17, 9, 12, 9, 452000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("aaaaaaaaaaaaaaa"),
 		// 					CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-07-17T09:12:09.452Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2025, time.July, 17, 9, 12, 9, 452000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("aaaaaaaaaaaaaaaaaaaaaa"),
 		// 					LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 		// 				},

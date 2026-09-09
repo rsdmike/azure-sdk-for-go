@@ -18,6 +18,8 @@ import (
 
 // ServerThreatProtectionSettingsClient contains the methods for the ServerThreatProtectionSettings group.
 // Don't use this type directly, use NewServerThreatProtectionSettingsClient() instead.
+//
+// Generated from API version 2026-04-01-preview
 type ServerThreatProtectionSettingsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ServerThreatProtectionSettingsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewServerThreatProtectionSettingsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ServerThreatProtectionSettingsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewServerThreatProtectionSettingsClient(subscriptionID string, credential a
 
 // BeginCreateOrUpdate - Creates or updates a server's Advanced Threat Protection settings.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - threatProtectionName - Name of the advanced threat protection settings.
@@ -69,8 +72,6 @@ func (client *ServerThreatProtectionSettingsClient) BeginCreateOrUpdate(ctx cont
 
 // CreateOrUpdate - Creates or updates a server's Advanced Threat Protection settings.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 func (client *ServerThreatProtectionSettingsClient) createOrUpdate(ctx context.Context, resourceGroupName string, serverName string, threatProtectionName ThreatProtectionName, parameters AdvancedThreatProtectionSettingsModel, options *ServerThreatProtectionSettingsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ServerThreatProtectionSettingsClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *ServerThreatProtectionSettingsClient) createOrUpdate(ctx context.C
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *ServerThreatProtectionSettingsClient) createOrUpdate(ctx context.C
 func (client *ServerThreatProtectionSettingsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, serverName string, threatProtectionName ThreatProtectionName, parameters AdvancedThreatProtectionSettingsModel, _ *ServerThreatProtectionSettingsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/advancedThreatProtectionSettings/{threatProtectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *ServerThreatProtectionSettingsClient) createOrUpdateCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
 		return nil, err

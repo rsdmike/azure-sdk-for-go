@@ -62,13 +62,13 @@ func ExampleStorageTasksClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstorageactions.StorageTasksClientCreateResponse{
-	// 	StorageTask: &armstorageactions.StorageTask{
+	// 	StorageTask: armstorageactions.StorageTask{
 	// 		Name: to.Ptr("mytask1"),
 	// 		Type: to.Ptr("Microsoft.StorageActions/storageTasks"),
 	// 		ID: to.Ptr("/subscriptions/c86a9c18-8373-41fa-92d4-1d7bdc16977b/resourceGroups/res4228/providers/Microsoft.StorageActions/storageTasks/mytask1"),
@@ -104,7 +104,7 @@ func ExampleStorageTasksClient_BeginCreate() {
 	// 					},
 	// 				},
 	// 			},
-	// 			CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+	// 			CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 	// 			Enabled: to.Ptr(true),
 	// 			ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 	// 			TaskVersion: to.Ptr[int64](1),
@@ -130,7 +130,7 @@ func ExampleStorageTasksClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -153,7 +153,7 @@ func ExampleStorageTasksClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstorageactions.StorageTasksClientGetResponse{
-	// 	StorageTask: &armstorageactions.StorageTask{
+	// 	StorageTask: armstorageactions.StorageTask{
 	// 		Name: to.Ptr("mytask1"),
 	// 		Type: to.Ptr("Microsoft.StorageActions/storageTasks"),
 	// 		ID: to.Ptr("/subscriptions/1f31ba14-ce16-4281-b9b4-3e78da6e1616/resourceGroups/res4228/providers/Microsoft.StorageActions/storageTasks/mytask1"),
@@ -189,7 +189,7 @@ func ExampleStorageTasksClient_Get() {
 	// 					},
 	// 				},
 	// 			},
-	// 			CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+	// 			CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 	// 			Enabled: to.Ptr(true),
 	// 			ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 	// 			TaskVersion: to.Ptr[int64](1),
@@ -247,7 +247,7 @@ func ExampleStorageTasksClient_NewListByResourceGroupPager() {
 		// 							},
 		// 						},
 		// 					},
-		// 					CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-05T23:06:50.7722358Z"); return t}()),
+		// 					CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 5, 23, 6, 50, 772235800, time.UTC)),
 		// 					Enabled: to.Ptr(true),
 		// 					ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 		// 					TaskVersion: to.Ptr[int64](1),
@@ -293,7 +293,7 @@ func ExampleStorageTasksClient_NewListByResourceGroupPager() {
 		// 							},
 		// 						},
 		// 					},
-		// 					CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+		// 					CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 		// 					Enabled: to.Ptr(true),
 		// 					ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 		// 					TaskVersion: to.Ptr[int64](1),
@@ -354,7 +354,7 @@ func ExampleStorageTasksClient_NewListBySubscriptionPager() {
 		// 							},
 		// 						},
 		// 					},
-		// 					CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-05T23:06:50.7722358Z"); return t}()),
+		// 					CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 5, 23, 6, 50, 772235800, time.UTC)),
 		// 					Enabled: to.Ptr(true),
 		// 					ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 		// 					TaskVersion: to.Ptr[int64](1),
@@ -400,7 +400,7 @@ func ExampleStorageTasksClient_NewListBySubscriptionPager() {
 		// 							},
 		// 						},
 		// 					},
-		// 					CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+		// 					CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 		// 					Enabled: to.Ptr(true),
 		// 					ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 		// 					TaskVersion: to.Ptr[int64](1),
@@ -465,7 +465,7 @@ func ExampleStorageTasksClient_NewListBySubscriptionPager() {
 		// 							},
 		// 						},
 		// 					},
-		// 					CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+		// 					CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 		// 					Enabled: to.Ptr(true),
 		// 					ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 		// 					TaskVersion: to.Ptr[int64](1),
@@ -634,7 +634,7 @@ func ExampleStorageTasksClient_PreviewActions() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstorageactions.StorageTasksClientPreviewActionsResponse{
-	// 	StorageTaskPreviewAction: &armstorageactions.StorageTaskPreviewAction{
+	// 	StorageTaskPreviewAction: armstorageactions.StorageTaskPreviewAction{
 	// 		Properties: &armstorageactions.StorageTaskPreviewActionProperties{
 	// 			Action: &armstorageactions.StorageTaskPreviewActionCondition{
 	// 				ElseBlockExists: to.Ptr(true),
@@ -829,13 +829,13 @@ func ExampleStorageTasksClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstorageactions.StorageTasksClientUpdateResponse{
-	// 	StorageTask: &armstorageactions.StorageTask{
+	// 	StorageTask: armstorageactions.StorageTask{
 	// 		Name: to.Ptr("mytask1"),
 	// 		Type: to.Ptr("Microsoft.StorageActions/storageTasks"),
 	// 		ID: to.Ptr("/subscriptions/c86a9c18-8373-41fa-92d4-1d7bdc16977b/resourceGroups/res4228/providers/Microsoft.StorageActions/storageTasks/mytask1"),
@@ -875,7 +875,7 @@ func ExampleStorageTasksClient_BeginUpdate() {
 	// 					},
 	// 				},
 	// 			},
-	// 			CreationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-06T00:24:59.1441663Z"); return t}()),
+	// 			CreationTimeInUTC: to.Ptr(time.Date(2023, time.July, 6, 0, 24, 59, 144166300, time.UTC)),
 	// 			Enabled: to.Ptr(true),
 	// 			ProvisioningState: to.Ptr(armstorageactions.ProvisioningStateSucceeded),
 	// 			TaskVersion: to.Ptr[int64](1),

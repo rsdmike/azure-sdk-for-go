@@ -18,6 +18,8 @@ import (
 
 // ConnectionsClient contains the methods for the Connections group.
 // Don't use this type directly, use NewConnectionsClient() instead.
+//
+// Generated from API version 2025-12-01
 type ConnectionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ConnectionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ConnectionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewConnectionsClient(subscriptionID string, credential azcore.TokenCredenti
 
 // CreateOrUpdate - Creates or updates a Connection resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - connectionName - The name of the Connection resource.
@@ -62,19 +65,14 @@ func (client *ConnectionsClient) CreateOrUpdate(ctx context.Context, resourceGro
 	if err != nil {
 		return ConnectionsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ConnectionsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ConnectionsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, connectionName string, connection Connection, _ *ConnectionsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/connections/{connectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *ConnectionsClient) createOrUpdateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, connection); err != nil {
@@ -105,8 +103,11 @@ func (client *ConnectionsClient) createOrUpdateCreateRequest(ctx context.Context
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ConnectionsClient) createOrUpdateHandleResponse(resp *http.Response) (ConnectionsClientCreateOrUpdateResponse, error) {
+func (client *ConnectionsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ConnectionsClientCreateOrUpdateResponse, error) {
 	result := ConnectionsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connection); err != nil {
 		return ConnectionsClientCreateOrUpdateResponse{}, err
 	}
@@ -116,8 +117,6 @@ func (client *ConnectionsClient) createOrUpdateHandleResponse(resp *http.Respons
 // BeginDelete - Deletes a Connection resource.
 // Returns 409 if there are active jobs using this connection.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - connectionName - The name of the Connection resource.
@@ -142,8 +141,6 @@ func (client *ConnectionsClient) BeginDelete(ctx context.Context, resourceGroupN
 // Delete - Deletes a Connection resource.
 // Returns 409 if there are active jobs using this connection.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 func (client *ConnectionsClient) deleteOperation(ctx context.Context, resourceGroupName string, storageMoverName string, connectionName string, options *ConnectionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ConnectionsClient.BeginDelete"
@@ -159,8 +156,7 @@ func (client *ConnectionsClient) deleteOperation(ctx context.Context, resourceGr
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -169,7 +165,7 @@ func (client *ConnectionsClient) deleteOperation(ctx context.Context, resourceGr
 func (client *ConnectionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, connectionName string, _ *ConnectionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/connections/{connectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -189,15 +185,13 @@ func (client *ConnectionsClient) deleteCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets a Connection resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - connectionName - The name of the Connection resource.
@@ -216,19 +210,14 @@ func (client *ConnectionsClient) Get(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return ConnectionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ConnectionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ConnectionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, connectionName string, _ *ConnectionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/connections/{connectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -248,15 +237,18 @@ func (client *ConnectionsClient) getCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251201)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ConnectionsClient) getHandleResponse(resp *http.Response) (ConnectionsClientGetResponse, error) {
+func (client *ConnectionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ConnectionsClientGetResponse, error) {
 	result := ConnectionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Connection); err != nil {
 		return ConnectionsClientGetResponse{}, err
 	}
@@ -264,8 +256,6 @@ func (client *ConnectionsClient) getHandleResponse(resp *http.Response) (Connect
 }
 
 // NewListPager - Lists all Connections in a Storage Mover.
-//
-// Generated from API version 2025-12-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - storageMoverName - The name of the Storage Mover resource.
 //   - options - ConnectionsClientListOptions contains the optional parameters for the ConnectionsClient.NewListPager method.
@@ -280,47 +270,61 @@ func (client *ConnectionsClient) NewListPager(resourceGroupName string, storageM
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, storageMoverName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, storageMoverName, nextLink, options)
 			if err != nil {
 				return ConnectionsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ConnectionsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ConnectionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, _ *ConnectionsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/connections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ConnectionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, storageMoverName string, nextLink string, _ *ConnectionsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.StorageMover/storageMovers/{storageMoverName}/connections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if storageMoverName == "" {
+			return nil, errors.New("parameter storageMoverName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{storageMoverName}", url.PathEscape(storageMoverName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if storageMoverName == "" {
-		return nil, errors.New("parameter storageMoverName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{storageMoverName}", url.PathEscape(storageMoverName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-12-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251201)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ConnectionsClient) listHandleResponse(resp *http.Response) (ConnectionsClientListResponse, error) {
+func (client *ConnectionsClient) listHandleResponse(resp *http.Response, successCodes ...int) (ConnectionsClientListResponse, error) {
 	result := ConnectionsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ConnectionList); err != nil {
 		return ConnectionsClientListResponse{}, err
 	}

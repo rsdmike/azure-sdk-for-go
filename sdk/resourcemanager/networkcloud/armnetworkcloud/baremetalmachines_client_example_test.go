@@ -8,11 +8,11 @@ import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/networkcloud/armnetworkcloud/v2"
 	"log"
 )
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Cordon.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Cordon.json
 func ExampleBareMetalMachinesClient_BeginCordon() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -32,11 +32,11 @@ func ExampleBareMetalMachinesClient_BeginCordon() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Create.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Create.json
 func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -78,13 +78,13 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachinesClientCreateOrUpdateResponse{
-	// 	BareMetalMachine: &armnetworkcloud.BareMetalMachine{
+	// 	BareMetalMachine: armnetworkcloud.BareMetalMachine{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -95,7 +95,7 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 		Properties: &armnetworkcloud.BareMetalMachineProperties{
 	// 			ActionStates: []*armnetworkcloud.ActionState{
 	// 				{
-	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/BareMetalMachines/reimage/action"),
+	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/bareMetalMachines/reimage/action"),
 	// 					CorrelationID: to.Ptr("a45a00bb-3b02-42d5-baaf-033497574e97"),
 	// 					EndTime: to.Ptr("2023-04-29T12:00:00Z"),
 	// 					Message: to.Ptr("Action completed successfully"),
@@ -126,6 +126,8 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 			BmcCredentials: &armnetworkcloud.AdministrativeCredentials{
 	// 				Username: to.Ptr("bmcuser"),
 	// 			},
+	// 			BmcIPv4Address: to.Ptr("10.10.10.16"),
+	// 			BmcIPv6Address: to.Ptr("2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
 	// 			BmcMacAddress: to.Ptr("00:00:4f:00:57:00"),
 	// 			BootMacAddress: to.Ptr("00:00:4e:00:58:af"),
 	// 			CaCertificate: &armnetworkcloud.CertificateInfo{
@@ -148,7 +150,7 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 				},
 	// 			},
 	// 			HardwareValidationStatus: &armnetworkcloud.HardwareValidationStatus{
-	// 				LastValidationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-30T13:27:03.008Z"); return t}()),
+	// 				LastValidationTime: to.Ptr(time.Date(2022, time.September, 30, 13, 27, 3, 8000000, time.UTC)),
 	// 				Result: to.Ptr(armnetworkcloud.BareMetalMachineHardwareValidationResultPass),
 	// 			},
 	// 			KubernetesNodeName: to.Ptr("node01"),
@@ -160,6 +162,10 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 				to.Ptr("platform.afo-nc.microsoft.com/management-plane=true"),
 	// 			},
 	// 			MachineSKUID: to.Ptr("684E-3B16-399E"),
+	// 			MonitoringConfigurationStatus: &armnetworkcloud.BareMetalMachineMonitoringConfigurationStatus{
+	// 				LogLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusLogLevelDefault),
+	// 				MetricsLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusMetricsLevelDefault),
+	// 			},
 	// 			OamIPv4Address: to.Ptr("192.0.2.1"),
 	// 			OamIPv6Address: to.Ptr("0:0:0:0:0:FFFF:7F00:0001"),
 	// 			OSImage: to.Ptr("v20220805e"),
@@ -169,16 +175,24 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 			RackSlot: to.Ptr[int64](1),
 	// 			ReadyState: to.Ptr(armnetworkcloud.BareMetalMachineReadyStateTrue),
 	// 			RuntimeProtectionStatus: &armnetworkcloud.RuntimeProtectionStatus{
-	// 				DefinitionsLastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-28T13:27:03.008Z"); return t}()),
+	// 				AgentHealthStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentHealthStatusUnhealthy),
+	// 				AgentHealthStatusIssues: []*string{
+	// 					to.Ptr("Issue1"),
+	// 					to.Ptr("Issue2"),
+	// 				},
+	// 				AgentLicenseStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentLicenseStatusLicensed),
+	// 				DefinitionUpdateMode: to.Ptr(armnetworkcloud.RuntimeProtectionDefinitionUpdateModeNone),
+	// 				DefinitionsLastUpdated: to.Ptr(time.Date(2023, time.September, 28, 13, 27, 3, 8000000, time.UTC)),
 	// 				DefinitionsVersion: to.Ptr("1.2.3"),
-	// 				ScanCompletedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
-	// 				ScanScheduledTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-01T13:00:00.000Z"); return t}()),
-	// 				ScanStartedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:00:03.008Z"); return t}()),
+	// 				EnforcementLevel: to.Ptr(armnetworkcloud.RuntimeProtectionEnforcementLevelOnDemand),
+	// 				ScanCompletedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
+	// 				ScanScheduledTime: to.Ptr(time.Date(2023, time.October, 1, 13, 0, 0, 0, time.UTC)),
+	// 				ScanStartedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 0, 3, 8000000, time.UTC)),
 	// 			},
 	// 			SecretRotationStatus: []*armnetworkcloud.SecretRotationStatus{
 	// 				{
 	// 					ExpirePeriodDays: to.Ptr[int64](90),
-	// 					LastRotationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
+	// 					LastRotationTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
 	// 					RotationPeriodDays: to.Ptr[int64](60),
 	// 					SecretArchiveReference: &armnetworkcloud.SecretArchiveReference{
 	// 						KeyVaultID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/keyVaultName"),
@@ -192,10 +206,10 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// 			ServiceTag: to.Ptr("ST1219XXX"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -208,7 +222,7 @@ func ExampleBareMetalMachinesClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Delete.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Delete.json
 func ExampleBareMetalMachinesClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -225,11 +239,11 @@ func ExampleBareMetalMachinesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Get.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Get.json
 func ExampleBareMetalMachinesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -248,7 +262,7 @@ func ExampleBareMetalMachinesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachinesClientGetResponse{
-	// 	BareMetalMachine: &armnetworkcloud.BareMetalMachine{
+	// 	BareMetalMachine: armnetworkcloud.BareMetalMachine{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -259,7 +273,7 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 		Properties: &armnetworkcloud.BareMetalMachineProperties{
 	// 			ActionStates: []*armnetworkcloud.ActionState{
 	// 				{
-	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/BareMetalMachines/reimage/action"),
+	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/bareMetalMachines/reimage/action"),
 	// 					CorrelationID: to.Ptr("a45a00bb-3b02-42d5-baaf-033497574e97"),
 	// 					EndTime: to.Ptr("2023-04-29T12:00:00Z"),
 	// 					Message: to.Ptr("Action completed successfully"),
@@ -290,6 +304,8 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 			BmcCredentials: &armnetworkcloud.AdministrativeCredentials{
 	// 				Username: to.Ptr("bmcuser"),
 	// 			},
+	// 			BmcIPv4Address: to.Ptr("10.10.10.16"),
+	// 			BmcIPv6Address: to.Ptr("2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
 	// 			BmcMacAddress: to.Ptr("00:00:4f:00:57:00"),
 	// 			BootMacAddress: to.Ptr("00:00:4e:00:58:af"),
 	// 			CaCertificate: &armnetworkcloud.CertificateInfo{
@@ -312,7 +328,7 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 				},
 	// 			},
 	// 			HardwareValidationStatus: &armnetworkcloud.HardwareValidationStatus{
-	// 				LastValidationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-30T13:27:03.008Z"); return t}()),
+	// 				LastValidationTime: to.Ptr(time.Date(2022, time.September, 30, 13, 27, 3, 8000000, time.UTC)),
 	// 				Result: to.Ptr(armnetworkcloud.BareMetalMachineHardwareValidationResultPass),
 	// 			},
 	// 			KubernetesNodeName: to.Ptr("node01"),
@@ -324,6 +340,10 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 				to.Ptr("platform.afo-nc.microsoft.com/management-plane=true"),
 	// 			},
 	// 			MachineSKUID: to.Ptr("684E-3B16-399E"),
+	// 			MonitoringConfigurationStatus: &armnetworkcloud.BareMetalMachineMonitoringConfigurationStatus{
+	// 				LogLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusLogLevelDefault),
+	// 				MetricsLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusMetricsLevelDefault),
+	// 			},
 	// 			OamIPv4Address: to.Ptr("192.0.2.1"),
 	// 			OamIPv6Address: to.Ptr("0:0:0:0:0:FFFF:7F00:0001"),
 	// 			OSImage: to.Ptr("v20220805e"),
@@ -333,16 +353,24 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 			RackSlot: to.Ptr[int64](1),
 	// 			ReadyState: to.Ptr(armnetworkcloud.BareMetalMachineReadyStateTrue),
 	// 			RuntimeProtectionStatus: &armnetworkcloud.RuntimeProtectionStatus{
-	// 				DefinitionsLastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-28T13:27:03.008Z"); return t}()),
+	// 				AgentHealthStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentHealthStatusUnhealthy),
+	// 				AgentHealthStatusIssues: []*string{
+	// 					to.Ptr("Issue1"),
+	// 					to.Ptr("Issue2"),
+	// 				},
+	// 				AgentLicenseStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentLicenseStatusLicensed),
+	// 				DefinitionUpdateMode: to.Ptr(armnetworkcloud.RuntimeProtectionDefinitionUpdateModeNone),
+	// 				DefinitionsLastUpdated: to.Ptr(time.Date(2023, time.September, 28, 13, 27, 3, 8000000, time.UTC)),
 	// 				DefinitionsVersion: to.Ptr("1.2.3"),
-	// 				ScanCompletedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
-	// 				ScanScheduledTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-01T13:00:00.000Z"); return t}()),
-	// 				ScanStartedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:00:03.008Z"); return t}()),
+	// 				EnforcementLevel: to.Ptr(armnetworkcloud.RuntimeProtectionEnforcementLevelOnDemand),
+	// 				ScanCompletedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
+	// 				ScanScheduledTime: to.Ptr(time.Date(2023, time.October, 1, 13, 0, 0, 0, time.UTC)),
+	// 				ScanStartedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 0, 3, 8000000, time.UTC)),
 	// 			},
 	// 			SecretRotationStatus: []*armnetworkcloud.SecretRotationStatus{
 	// 				{
 	// 					ExpirePeriodDays: to.Ptr[int64](90),
-	// 					LastRotationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
+	// 					LastRotationTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
 	// 					RotationPeriodDays: to.Ptr[int64](60),
 	// 					SecretArchiveReference: &armnetworkcloud.SecretArchiveReference{
 	// 						KeyVaultID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/keyVaultName"),
@@ -356,10 +384,10 @@ func ExampleBareMetalMachinesClient_Get() {
 	// 			ServiceTag: to.Ptr("ST1219XXX"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},
@@ -372,7 +400,7 @@ func ExampleBareMetalMachinesClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_ListByResourceGroup.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_ListByResourceGroup.json
 func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -409,7 +437,7 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 				Properties: &armnetworkcloud.BareMetalMachineProperties{
 		// 					ActionStates: []*armnetworkcloud.ActionState{
 		// 						{
-		// 							ActionType: to.Ptr("Microsoft.NetworkCloud/BareMetalMachines/reimage/action"),
+		// 							ActionType: to.Ptr("Microsoft.NetworkCloud/bareMetalMachines/reimage/action"),
 		// 							CorrelationID: to.Ptr("a45a00bb-3b02-42d5-baaf-033497574e97"),
 		// 							EndTime: to.Ptr("2023-04-29T12:00:00Z"),
 		// 							Message: to.Ptr("Action completed successfully"),
@@ -440,6 +468,8 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 					BmcCredentials: &armnetworkcloud.AdministrativeCredentials{
 		// 						Username: to.Ptr("bmcuser"),
 		// 					},
+		// 					BmcIPv4Address: to.Ptr("10.10.10.16"),
+		// 					BmcIPv6Address: to.Ptr("2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
 		// 					BmcMacAddress: to.Ptr("00:00:4f:00:57:00"),
 		// 					BootMacAddress: to.Ptr("00:00:4e:00:58:af"),
 		// 					CaCertificate: &armnetworkcloud.CertificateInfo{
@@ -462,7 +492,7 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 						},
 		// 					},
 		// 					HardwareValidationStatus: &armnetworkcloud.HardwareValidationStatus{
-		// 						LastValidationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-30T13:27:03.008Z"); return t}()),
+		// 						LastValidationTime: to.Ptr(time.Date(2022, time.September, 30, 13, 27, 3, 8000000, time.UTC)),
 		// 						Result: to.Ptr(armnetworkcloud.BareMetalMachineHardwareValidationResultPass),
 		// 					},
 		// 					KubernetesNodeName: to.Ptr("node01"),
@@ -474,6 +504,10 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 						to.Ptr("platform.afo-nc.microsoft.com/management-plane=true"),
 		// 					},
 		// 					MachineSKUID: to.Ptr("684E-3B16-399E"),
+		// 					MonitoringConfigurationStatus: &armnetworkcloud.BareMetalMachineMonitoringConfigurationStatus{
+		// 						LogLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusLogLevelDefault),
+		// 						MetricsLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusMetricsLevelDefault),
+		// 					},
 		// 					OamIPv4Address: to.Ptr("192.0.2.1"),
 		// 					OamIPv6Address: to.Ptr("0:0:0:0:0:FFFF:7F00:0001"),
 		// 					OSImage: to.Ptr("v20220805e"),
@@ -483,16 +517,24 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 					RackSlot: to.Ptr[int64](1),
 		// 					ReadyState: to.Ptr(armnetworkcloud.BareMetalMachineReadyStateTrue),
 		// 					RuntimeProtectionStatus: &armnetworkcloud.RuntimeProtectionStatus{
-		// 						DefinitionsLastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-28T13:27:03.008Z"); return t}()),
+		// 						AgentHealthStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentHealthStatusUnhealthy),
+		// 						AgentHealthStatusIssues: []*string{
+		// 							to.Ptr("Issue1"),
+		// 							to.Ptr("Issue2"),
+		// 						},
+		// 						AgentLicenseStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentLicenseStatusLicensed),
+		// 						DefinitionUpdateMode: to.Ptr(armnetworkcloud.RuntimeProtectionDefinitionUpdateModeNone),
+		// 						DefinitionsLastUpdated: to.Ptr(time.Date(2023, time.September, 28, 13, 27, 3, 8000000, time.UTC)),
 		// 						DefinitionsVersion: to.Ptr("1.2.3"),
-		// 						ScanCompletedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
-		// 						ScanScheduledTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-01T13:00:00.000Z"); return t}()),
-		// 						ScanStartedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:00:03.008Z"); return t}()),
+		// 						EnforcementLevel: to.Ptr(armnetworkcloud.RuntimeProtectionEnforcementLevelOnDemand),
+		// 						ScanCompletedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
+		// 						ScanScheduledTime: to.Ptr(time.Date(2023, time.October, 1, 13, 0, 0, 0, time.UTC)),
+		// 						ScanStartedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 0, 3, 8000000, time.UTC)),
 		// 					},
 		// 					SecretRotationStatus: []*armnetworkcloud.SecretRotationStatus{
 		// 						{
 		// 							ExpirePeriodDays: to.Ptr[int64](90),
-		// 							LastRotationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
+		// 							LastRotationTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
 		// 							RotationPeriodDays: to.Ptr[int64](60),
 		// 							SecretArchiveReference: &armnetworkcloud.SecretArchiveReference{
 		// 								KeyVaultID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/keyVaultName"),
@@ -506,10 +548,10 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 		// 					ServiceTag: to.Ptr("ST1219XXX"),
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -525,7 +567,7 @@ func ExampleBareMetalMachinesClient_NewListByResourceGroupPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_ListBySubscription.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_ListBySubscription.json
 func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -562,7 +604,7 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 				Properties: &armnetworkcloud.BareMetalMachineProperties{
 		// 					ActionStates: []*armnetworkcloud.ActionState{
 		// 						{
-		// 							ActionType: to.Ptr("Microsoft.NetworkCloud/BareMetalMachines/reimage/action"),
+		// 							ActionType: to.Ptr("Microsoft.NetworkCloud/bareMetalMachines/reimage/action"),
 		// 							CorrelationID: to.Ptr("a45a00bb-3b02-42d5-baaf-033497574e97"),
 		// 							EndTime: to.Ptr("2023-04-29T12:00:00Z"),
 		// 							Message: to.Ptr("Action completed successfully"),
@@ -593,6 +635,8 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 					BmcCredentials: &armnetworkcloud.AdministrativeCredentials{
 		// 						Username: to.Ptr("bmcuser"),
 		// 					},
+		// 					BmcIPv4Address: to.Ptr("10.10.10.16"),
+		// 					BmcIPv6Address: to.Ptr("2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
 		// 					BmcMacAddress: to.Ptr("00:00:4f:00:57:00"),
 		// 					BootMacAddress: to.Ptr("00:00:4e:00:58:af"),
 		// 					CaCertificate: &armnetworkcloud.CertificateInfo{
@@ -615,7 +659,7 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 						},
 		// 					},
 		// 					HardwareValidationStatus: &armnetworkcloud.HardwareValidationStatus{
-		// 						LastValidationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-30T13:27:03.008Z"); return t}()),
+		// 						LastValidationTime: to.Ptr(time.Date(2022, time.September, 30, 13, 27, 3, 8000000, time.UTC)),
 		// 						Result: to.Ptr(armnetworkcloud.BareMetalMachineHardwareValidationResultPass),
 		// 					},
 		// 					KubernetesNodeName: to.Ptr("node01"),
@@ -627,6 +671,10 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 						to.Ptr("platform.afo-nc.microsoft.com/management-plane=true"),
 		// 					},
 		// 					MachineSKUID: to.Ptr("684E-3B16-399E"),
+		// 					MonitoringConfigurationStatus: &armnetworkcloud.BareMetalMachineMonitoringConfigurationStatus{
+		// 						LogLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusLogLevelDefault),
+		// 						MetricsLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusMetricsLevelDefault),
+		// 					},
 		// 					OamIPv4Address: to.Ptr("192.0.2.1"),
 		// 					OamIPv6Address: to.Ptr("0:0:0:0:0:FFFF:7F00:0001"),
 		// 					OSImage: to.Ptr("v20220805e"),
@@ -636,16 +684,24 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 					RackSlot: to.Ptr[int64](1),
 		// 					ReadyState: to.Ptr(armnetworkcloud.BareMetalMachineReadyStateTrue),
 		// 					RuntimeProtectionStatus: &armnetworkcloud.RuntimeProtectionStatus{
-		// 						DefinitionsLastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-28T13:27:03.008Z"); return t}()),
+		// 						AgentHealthStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentHealthStatusUnhealthy),
+		// 						AgentHealthStatusIssues: []*string{
+		// 							to.Ptr("Issue1"),
+		// 							to.Ptr("Issue2"),
+		// 						},
+		// 						AgentLicenseStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentLicenseStatusLicensed),
+		// 						DefinitionUpdateMode: to.Ptr(armnetworkcloud.RuntimeProtectionDefinitionUpdateModeNone),
+		// 						DefinitionsLastUpdated: to.Ptr(time.Date(2023, time.September, 28, 13, 27, 3, 8000000, time.UTC)),
 		// 						DefinitionsVersion: to.Ptr("1.2.3"),
-		// 						ScanCompletedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
-		// 						ScanScheduledTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-01T13:00:00.000Z"); return t}()),
-		// 						ScanStartedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:00:03.008Z"); return t}()),
+		// 						EnforcementLevel: to.Ptr(armnetworkcloud.RuntimeProtectionEnforcementLevelOnDemand),
+		// 						ScanCompletedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
+		// 						ScanScheduledTime: to.Ptr(time.Date(2023, time.October, 1, 13, 0, 0, 0, time.UTC)),
+		// 						ScanStartedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 0, 3, 8000000, time.UTC)),
 		// 					},
 		// 					SecretRotationStatus: []*armnetworkcloud.SecretRotationStatus{
 		// 						{
 		// 							ExpirePeriodDays: to.Ptr[int64](90),
-		// 							LastRotationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
+		// 							LastRotationTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
 		// 							RotationPeriodDays: to.Ptr[int64](60),
 		// 							SecretArchiveReference: &armnetworkcloud.SecretArchiveReference{
 		// 								KeyVaultID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/keyVaultName"),
@@ -659,10 +715,10 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 		// 					ServiceTag: to.Ptr("ST1219XXX"),
 		// 				},
 		// 				SystemData: &armnetworkcloud.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("identityA"),
 		// 					CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("identityB"),
 		// 					LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 		// 				},
@@ -678,7 +734,7 @@ func ExampleBareMetalMachinesClient_NewListBySubscriptionPager() {
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_PowerOff.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_PowerOff.json
 func ExampleBareMetalMachinesClient_BeginPowerOff() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -698,11 +754,11 @@ func ExampleBareMetalMachinesClient_BeginPowerOff() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Reimage.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Reimage.json
 func ExampleBareMetalMachinesClient_BeginReimage() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -713,17 +769,20 @@ func ExampleBareMetalMachinesClient_BeginReimage() {
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
-	poller, err := clientFactory.NewBareMetalMachinesClient().BeginReimage(ctx, "resourceGroupName", "bareMetalMachineName", nil)
+	poller, err := clientFactory.NewBareMetalMachinesClient().BeginReimage(ctx, "resourceGroupName", "bareMetalMachineName", &armnetworkcloud.BareMetalMachinesClientBeginReimageOptions{
+		Body: &armnetworkcloud.BareMetalMachineReimageParameters{
+			SafeguardMode: to.Ptr(armnetworkcloud.BareMetalMachineReimageSafeguardModeAll),
+		}})
 	if err != nil {
 		log.Fatalf("failed to finish the request: %v", err)
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Replace.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Replace.json
 func ExampleBareMetalMachinesClient_BeginReplace() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -752,11 +811,11 @@ func ExampleBareMetalMachinesClient_BeginReplace() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Restart.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Restart.json
 func ExampleBareMetalMachinesClient_BeginRestart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -773,11 +832,11 @@ func ExampleBareMetalMachinesClient_BeginRestart() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_RunCommand.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_RunCommand.json
 func ExampleBareMetalMachinesClient_BeginRunCommand() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -801,11 +860,11 @@ func ExampleBareMetalMachinesClient_BeginRunCommand() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_RunDataExtracts.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_RunDataExtracts.json
 func ExampleBareMetalMachinesClient_BeginRunDataExtracts() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -833,11 +892,11 @@ func ExampleBareMetalMachinesClient_BeginRunDataExtracts() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_RunDataExtractsRestricted.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_RunDataExtractsRestricted.json
 func ExampleBareMetalMachinesClient_BeginRunDataExtractsRestricted() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -864,11 +923,11 @@ func ExampleBareMetalMachinesClient_BeginRunDataExtractsRestricted() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_RunReadCommands_Hostname.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_RunReadCommands_Hostname.json
 func ExampleBareMetalMachinesClient_BeginRunReadCommands_runAndRetrieveOutputFromASingleReadOnlyCommandOnBareMetalMachine() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -892,11 +951,11 @@ func ExampleBareMetalMachinesClient_BeginRunReadCommands_runAndRetrieveOutputFro
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_RunReadCommands_Multiple.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_RunReadCommands_Multiple.json
 func ExampleBareMetalMachinesClient_BeginRunReadCommands_runAndRetrieveOutputFromReadOnlyCommandsOnBareMetalMachine() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -932,11 +991,11 @@ func ExampleBareMetalMachinesClient_BeginRunReadCommands_runAndRetrieveOutputFro
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Start.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Start.json
 func ExampleBareMetalMachinesClient_BeginStart() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -953,11 +1012,11 @@ func ExampleBareMetalMachinesClient_BeginStart() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Uncordon.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Uncordon.json
 func ExampleBareMetalMachinesClient_BeginUncordon() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -974,11 +1033,11 @@ func ExampleBareMetalMachinesClient_BeginUncordon() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-09-01/BareMetalMachines_Patch.json
+// Generated from example definition: 2026-07-01/BareMetalMachines_Patch.json
 func ExampleBareMetalMachinesClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1003,13 +1062,13 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnetworkcloud.BareMetalMachinesClientUpdateResponse{
-	// 	BareMetalMachine: &armnetworkcloud.BareMetalMachine{
+	// 	BareMetalMachine: armnetworkcloud.BareMetalMachine{
 	// 		ExtendedLocation: &armnetworkcloud.ExtendedLocation{
 	// 			Name: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.ExtendedLocation/customLocations/clusterExtendedLocationName"),
 	// 			Type: to.Ptr("CustomLocation"),
@@ -1020,7 +1079,7 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 		Properties: &armnetworkcloud.BareMetalMachineProperties{
 	// 			ActionStates: []*armnetworkcloud.ActionState{
 	// 				{
-	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/BareMetalMachines/reimage/action"),
+	// 					ActionType: to.Ptr("Microsoft.NetworkCloud/bareMetalMachines/reimage/action"),
 	// 					CorrelationID: to.Ptr("a45a00bb-3b02-42d5-baaf-033497574e97"),
 	// 					EndTime: to.Ptr("2023-04-29T12:00:00Z"),
 	// 					Message: to.Ptr("Action completed successfully"),
@@ -1051,6 +1110,8 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 			BmcCredentials: &armnetworkcloud.AdministrativeCredentials{
 	// 				Username: to.Ptr("bmcuser"),
 	// 			},
+	// 			BmcIPv4Address: to.Ptr("10.10.10.16"),
+	// 			BmcIPv6Address: to.Ptr("2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
 	// 			BmcMacAddress: to.Ptr("00:00:4f:00:57:00"),
 	// 			BootMacAddress: to.Ptr("00:00:4e:00:58:af"),
 	// 			CaCertificate: &armnetworkcloud.CertificateInfo{
@@ -1073,7 +1134,7 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 				},
 	// 			},
 	// 			HardwareValidationStatus: &armnetworkcloud.HardwareValidationStatus{
-	// 				LastValidationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-30T13:27:03.008Z"); return t}()),
+	// 				LastValidationTime: to.Ptr(time.Date(2022, time.September, 30, 13, 27, 3, 8000000, time.UTC)),
 	// 				Result: to.Ptr(armnetworkcloud.BareMetalMachineHardwareValidationResultPass),
 	// 			},
 	// 			KubernetesNodeName: to.Ptr("node01"),
@@ -1085,6 +1146,10 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 				to.Ptr("platform.afo-nc.microsoft.com/management-plane=true"),
 	// 			},
 	// 			MachineSKUID: to.Ptr("684E-3B16-399E"),
+	// 			MonitoringConfigurationStatus: &armnetworkcloud.BareMetalMachineMonitoringConfigurationStatus{
+	// 				LogLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusLogLevelDefault),
+	// 				MetricsLevel: to.Ptr(armnetworkcloud.BareMetalMachineMonitoringConfigurationStatusMetricsLevelDefault),
+	// 			},
 	// 			OamIPv4Address: to.Ptr("192.0.2.1"),
 	// 			OamIPv6Address: to.Ptr("0:0:0:0:0:FFFF:7F00:0001"),
 	// 			OSImage: to.Ptr("v20220805e"),
@@ -1094,16 +1159,24 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 			RackSlot: to.Ptr[int64](1),
 	// 			ReadyState: to.Ptr(armnetworkcloud.BareMetalMachineReadyStateTrue),
 	// 			RuntimeProtectionStatus: &armnetworkcloud.RuntimeProtectionStatus{
-	// 				DefinitionsLastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-28T13:27:03.008Z"); return t}()),
+	// 				AgentHealthStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentHealthStatusUnhealthy),
+	// 				AgentHealthStatusIssues: []*string{
+	// 					to.Ptr("Issue1"),
+	// 					to.Ptr("Issue2"),
+	// 				},
+	// 				AgentLicenseStatus: to.Ptr(armnetworkcloud.RuntimeProtectionAgentLicenseStatusLicensed),
+	// 				DefinitionUpdateMode: to.Ptr(armnetworkcloud.RuntimeProtectionDefinitionUpdateModeNone),
+	// 				DefinitionsLastUpdated: to.Ptr(time.Date(2023, time.September, 28, 13, 27, 3, 8000000, time.UTC)),
 	// 				DefinitionsVersion: to.Ptr("1.2.3"),
-	// 				ScanCompletedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
-	// 				ScanScheduledTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-10-01T13:00:00.000Z"); return t}()),
-	// 				ScanStartedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:00:03.008Z"); return t}()),
+	// 				EnforcementLevel: to.Ptr(armnetworkcloud.RuntimeProtectionEnforcementLevelOnDemand),
+	// 				ScanCompletedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
+	// 				ScanScheduledTime: to.Ptr(time.Date(2023, time.October, 1, 13, 0, 0, 0, time.UTC)),
+	// 				ScanStartedTime: to.Ptr(time.Date(2023, time.September, 30, 13, 0, 3, 8000000, time.UTC)),
 	// 			},
 	// 			SecretRotationStatus: []*armnetworkcloud.SecretRotationStatus{
 	// 				{
 	// 					ExpirePeriodDays: to.Ptr[int64](90),
-	// 					LastRotationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-30T13:27:23.103Z"); return t}()),
+	// 					LastRotationTime: to.Ptr(time.Date(2023, time.September, 30, 13, 27, 23, 103000000, time.UTC)),
 	// 					RotationPeriodDays: to.Ptr[int64](60),
 	// 					SecretArchiveReference: &armnetworkcloud.SecretArchiveReference{
 	// 						KeyVaultID: to.Ptr("/subscriptions/123e4567-e89b-12d3-a456-426655440000/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/keyVaultName"),
@@ -1117,10 +1190,10 @@ func ExampleBareMetalMachinesClient_BeginUpdate() {
 	// 			ServiceTag: to.Ptr("ST1219XXX"),
 	// 		},
 	// 		SystemData: &armnetworkcloud.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:27:03.008Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 27, 3, 8000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("identityA"),
 	// 			CreatedByType: to.Ptr(armnetworkcloud.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-22T13:29:03.001Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 22, 13, 29, 3, 1000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("identityB"),
 	// 			LastModifiedByType: to.Ptr(armnetworkcloud.CreatedByTypeUser),
 	// 		},

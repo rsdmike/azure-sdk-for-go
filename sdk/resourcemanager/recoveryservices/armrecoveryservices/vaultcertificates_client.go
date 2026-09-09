@@ -18,6 +18,8 @@ import (
 
 // VaultCertificatesClient contains the methods for the VaultCertificates group.
 // Don't use this type directly, use NewVaultCertificatesClient() instead.
+//
+// Generated from API version 2026-07-01
 type VaultCertificatesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type VaultCertificatesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewVaultCertificatesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*VaultCertificatesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewVaultCertificatesClient(subscriptionID string, credential azcore.TokenCr
 
 // Create - Uploads a certificate for a resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - vaultName - The name of the recovery services vault.
 //   - certificateName - Certificate friendly name.
@@ -63,19 +66,14 @@ func (client *VaultCertificatesClient) Create(ctx context.Context, resourceGroup
 	if err != nil {
 		return VaultCertificatesClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return VaultCertificatesClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusOK)
 }
 
 // createCreateRequest creates the Create request.
 func (client *VaultCertificatesClient) createCreateRequest(ctx context.Context, resourceGroupName string, vaultName string, certificateName string, certificateRequest CertificateRequest, _ *VaultCertificatesClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/certificates/{certificateName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -95,8 +93,8 @@ func (client *VaultCertificatesClient) createCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, certificateRequest); err != nil {
@@ -106,8 +104,11 @@ func (client *VaultCertificatesClient) createCreateRequest(ctx context.Context, 
 }
 
 // createHandleResponse handles the Create response.
-func (client *VaultCertificatesClient) createHandleResponse(resp *http.Response) (VaultCertificatesClientCreateResponse, error) {
+func (client *VaultCertificatesClient) createHandleResponse(resp *http.Response, successCodes ...int) (VaultCertificatesClientCreateResponse, error) {
 	result := VaultCertificatesClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VaultCertificateResponse); err != nil {
 		return VaultCertificatesClientCreateResponse{}, err
 	}

@@ -19,6 +19,8 @@ import (
 
 // KubernetesClusterFeaturesClient contains the methods for the KubernetesClusterFeatures group.
 // Don't use this type directly, use NewKubernetesClusterFeaturesClient() instead.
+//
+// Generated from API version 2026-07-01
 type KubernetesClusterFeaturesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type KubernetesClusterFeaturesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewKubernetesClusterFeaturesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*KubernetesClusterFeaturesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewKubernetesClusterFeaturesClient(subscriptionID string, credential azcore
 // BeginCreateOrUpdate - Create a new Kubernetes cluster feature or update properties of the Kubernetes cluster feature if
 // it exists.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - kubernetesClusterName - The name of the Kubernetes cluster.
 //   - featureName - The name of the feature.
@@ -70,8 +73,6 @@ func (client *KubernetesClusterFeaturesClient) BeginCreateOrUpdate(ctx context.C
 
 // CreateOrUpdate - Create a new Kubernetes cluster feature or update properties of the Kubernetes cluster feature if it exists.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *KubernetesClusterFeaturesClient) createOrUpdate(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, kubernetesClusterFeatureParameters KubernetesClusterFeature, options *KubernetesClusterFeaturesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "KubernetesClusterFeaturesClient.BeginCreateOrUpdate"
@@ -87,8 +88,7 @@ func (client *KubernetesClusterFeaturesClient) createOrUpdate(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -97,7 +97,7 @@ func (client *KubernetesClusterFeaturesClient) createOrUpdate(ctx context.Contex
 func (client *KubernetesClusterFeaturesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, kubernetesClusterFeatureParameters KubernetesClusterFeature, options *KubernetesClusterFeaturesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features/{featureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -117,8 +117,8 @@ func (client *KubernetesClusterFeaturesClient) createOrUpdateCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -135,8 +135,6 @@ func (client *KubernetesClusterFeaturesClient) createOrUpdateCreateRequest(ctx c
 
 // BeginDelete - Delete the provided Kubernetes cluster feature.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - kubernetesClusterName - The name of the Kubernetes cluster.
 //   - featureName - The name of the feature.
@@ -161,8 +159,6 @@ func (client *KubernetesClusterFeaturesClient) BeginDelete(ctx context.Context, 
 
 // Delete - Delete the provided Kubernetes cluster feature.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *KubernetesClusterFeaturesClient) deleteOperation(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, options *KubernetesClusterFeaturesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "KubernetesClusterFeaturesClient.BeginDelete"
@@ -178,8 +174,7 @@ func (client *KubernetesClusterFeaturesClient) deleteOperation(ctx context.Conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -188,7 +183,7 @@ func (client *KubernetesClusterFeaturesClient) deleteOperation(ctx context.Conte
 func (client *KubernetesClusterFeaturesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, options *KubernetesClusterFeaturesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features/{featureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -208,8 +203,8 @@ func (client *KubernetesClusterFeaturesClient) deleteCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -221,8 +216,6 @@ func (client *KubernetesClusterFeaturesClient) deleteCreateRequest(ctx context.C
 
 // Get - Get properties of the provided the Kubernetes cluster feature.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - kubernetesClusterName - The name of the Kubernetes cluster.
 //   - featureName - The name of the feature.
@@ -242,19 +235,14 @@ func (client *KubernetesClusterFeaturesClient) Get(ctx context.Context, resource
 	if err != nil {
 		return KubernetesClusterFeaturesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return KubernetesClusterFeaturesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *KubernetesClusterFeaturesClient) getCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, _ *KubernetesClusterFeaturesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features/{featureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -274,15 +262,18 @@ func (client *KubernetesClusterFeaturesClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *KubernetesClusterFeaturesClient) getHandleResponse(resp *http.Response) (KubernetesClusterFeaturesClientGetResponse, error) {
+func (client *KubernetesClusterFeaturesClient) getHandleResponse(resp *http.Response, successCodes ...int) (KubernetesClusterFeaturesClientGetResponse, error) {
 	result := KubernetesClusterFeaturesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubernetesClusterFeature); err != nil {
 		return KubernetesClusterFeaturesClientGetResponse{}, err
 	}
@@ -290,8 +281,6 @@ func (client *KubernetesClusterFeaturesClient) getHandleResponse(resp *http.Resp
 }
 
 // NewListByKubernetesClusterPager - Get a list of features for the provided Kubernetes cluster.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - kubernetesClusterName - The name of the Kubernetes cluster.
 //   - options - KubernetesClusterFeaturesClientListByKubernetesClusterOptions contains the optional parameters for the KubernetesClusterFeaturesClient.NewListByKubernetesClusterPager
@@ -307,53 +296,67 @@ func (client *KubernetesClusterFeaturesClient) NewListByKubernetesClusterPager(r
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByKubernetesClusterCreateRequest(ctx, resourceGroupName, kubernetesClusterName, options)
-			}, nil)
+			req, err := client.listByKubernetesClusterCreateRequest(ctx, resourceGroupName, kubernetesClusterName, nextLink, options)
 			if err != nil {
 				return KubernetesClusterFeaturesClientListByKubernetesClusterResponse{}, err
 			}
-			return client.listByKubernetesClusterHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return KubernetesClusterFeaturesClientListByKubernetesClusterResponse{}, err
+			}
+			return client.listByKubernetesClusterHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByKubernetesClusterCreateRequest creates the ListByKubernetesCluster request.
-func (client *KubernetesClusterFeaturesClient) listByKubernetesClusterCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, options *KubernetesClusterFeaturesClientListByKubernetesClusterOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *KubernetesClusterFeaturesClient) listByKubernetesClusterCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, nextLink string, options *KubernetesClusterFeaturesClientListByKubernetesClusterOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if kubernetesClusterName == "" {
+			return nil, errors.New("parameter kubernetesClusterName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{kubernetesClusterName}", url.PathEscape(kubernetesClusterName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if kubernetesClusterName == "" {
-		return nil, errors.New("parameter kubernetesClusterName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{kubernetesClusterName}", url.PathEscape(kubernetesClusterName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByKubernetesClusterHandleResponse handles the ListByKubernetesCluster response.
-func (client *KubernetesClusterFeaturesClient) listByKubernetesClusterHandleResponse(resp *http.Response) (KubernetesClusterFeaturesClientListByKubernetesClusterResponse, error) {
+func (client *KubernetesClusterFeaturesClient) listByKubernetesClusterHandleResponse(resp *http.Response, successCodes ...int) (KubernetesClusterFeaturesClientListByKubernetesClusterResponse, error) {
 	result := KubernetesClusterFeaturesClientListByKubernetesClusterResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KubernetesClusterFeatureList); err != nil {
 		return KubernetesClusterFeaturesClientListByKubernetesClusterResponse{}, err
 	}
@@ -362,8 +365,6 @@ func (client *KubernetesClusterFeaturesClient) listByKubernetesClusterHandleResp
 
 // BeginUpdate - Patch properties of the provided Kubernetes cluster feature.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - kubernetesClusterName - The name of the Kubernetes cluster.
 //   - featureName - The name of the feature.
@@ -389,8 +390,6 @@ func (client *KubernetesClusterFeaturesClient) BeginUpdate(ctx context.Context, 
 
 // Update - Patch properties of the provided Kubernetes cluster feature.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *KubernetesClusterFeaturesClient) update(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, kubernetesClusterFeatureUpdateParameters KubernetesClusterFeaturePatchParameters, options *KubernetesClusterFeaturesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "KubernetesClusterFeaturesClient.BeginUpdate"
@@ -406,8 +405,7 @@ func (client *KubernetesClusterFeaturesClient) update(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -416,7 +414,7 @@ func (client *KubernetesClusterFeaturesClient) update(ctx context.Context, resou
 func (client *KubernetesClusterFeaturesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, kubernetesClusterName string, featureName string, kubernetesClusterFeatureUpdateParameters KubernetesClusterFeaturePatchParameters, options *KubernetesClusterFeaturesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/kubernetesClusters/{kubernetesClusterName}/features/{featureName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -436,8 +434,8 @@ func (client *KubernetesClusterFeaturesClient) updateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}

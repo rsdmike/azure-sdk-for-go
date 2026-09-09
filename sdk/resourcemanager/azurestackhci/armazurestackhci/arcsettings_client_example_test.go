@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-04-01-preview/ConsentAndInstallDefaultExtensions.json
+// Generated from example definition: 2026-04-30/ConsentAndInstallDefaultExtensions.json
 func ExampleArcSettingsClient_ConsentAndInstallDefaultExtensions() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -31,7 +31,7 @@ func ExampleArcSettingsClient_ConsentAndInstallDefaultExtensions() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientConsentAndInstallDefaultExtensionsResponse{
-	// 	ArcSetting: &armazurestackhci.ArcSetting{
+	// 	ArcSetting: armazurestackhci.ArcSetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default"),
 	// 		Properties: &armazurestackhci.ArcSettingProperties{
@@ -45,7 +45,7 @@ func ExampleArcSettingsClient_ConsentAndInstallDefaultExtensions() {
 	// 			DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 	// 				{
 	// 					Category: to.Ptr("Telemetry"),
-	// 					ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+	// 					ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 				},
 	// 			},
 	// 			PerNodeDetails: []*armazurestackhci.PerNodeState{
@@ -63,10 +63,10 @@ func ExampleArcSettingsClient_ConsentAndInstallDefaultExtensions() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -74,7 +74,7 @@ func ExampleArcSettingsClient_ConsentAndInstallDefaultExtensions() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/PutArcSetting.json
+// Generated from example definition: 2026-04-30/PutArcSetting.json
 func ExampleArcSettingsClient_Create() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -93,7 +93,7 @@ func ExampleArcSettingsClient_Create() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientCreateResponse{
-	// 	ArcSetting: &armazurestackhci.ArcSetting{
+	// 	ArcSetting: armazurestackhci.ArcSetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default"),
 	// 		Properties: &armazurestackhci.ArcSettingProperties{
@@ -107,7 +107,7 @@ func ExampleArcSettingsClient_Create() {
 	// 			DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 	// 				{
 	// 					Category: to.Ptr("Telemetry"),
-	// 					ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+	// 					ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 				},
 	// 			},
 	// 			PerNodeDetails: []*armazurestackhci.PerNodeState{
@@ -125,10 +125,10 @@ func ExampleArcSettingsClient_Create() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -136,7 +136,7 @@ func ExampleArcSettingsClient_Create() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/CreateArcIdentity.json
+// Generated from example definition: 2026-04-30/CreateArcIdentity.json
 func ExampleArcSettingsClient_BeginCreateIdentity() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -153,13 +153,13 @@ func ExampleArcSettingsClient_BeginCreateIdentity() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientCreateIdentityResponse{
-	// 	ArcIdentityResponse: &armazurestackhci.ArcIdentityResponse{
+	// 	ArcIdentityResponse: armazurestackhci.ArcIdentityResponse{
 	// 		Properties: &armazurestackhci.ArcIdentityResponseProperties{
 	// 			ArcApplicationClientID: to.Ptr("7b93bf67-60ac-4909-a987-ac438e69f9ba"),
 	// 			ArcApplicationObjectID: to.Ptr("400bd05f-395f-45a6-ba75-72601df80107"),
@@ -170,7 +170,7 @@ func ExampleArcSettingsClient_BeginCreateIdentity() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/DeleteArcSetting.json
+// Generated from example definition: 2026-04-30/DeleteArcSetting.json
 func ExampleArcSettingsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -187,7 +187,7 @@ func ExampleArcSettingsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -196,7 +196,7 @@ func ExampleArcSettingsClient_BeginDelete() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/GeneratePassword.json
+// Generated from example definition: 2026-04-30/GeneratePassword.json
 func ExampleArcSettingsClient_GeneratePassword() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -215,16 +215,16 @@ func ExampleArcSettingsClient_GeneratePassword() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientGeneratePasswordResponse{
-	// 	PasswordCredential: &armazurestackhci.PasswordCredential{
-	// 		EndDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2121-02-17T16:24:23.6264377+05:30"); return t}()),
+	// 	PasswordCredential: armazurestackhci.PasswordCredential{
+	// 		EndDateTime: to.Ptr(time.Date(2121, time.February, 17, 10, 54, 23, 626437700, time.UTC)),
 	// 		KeyID: to.Ptr("00000000-2d47-4fb2-8ed2-fed71a5c197b"),
 	// 		SecretText: to.Ptr("secretText"),
-	// 		StartDateTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-17T16:24:23.6264005+05:30"); return t}()),
+	// 		StartDateTime: to.Ptr(time.Date(2022, time.February, 17, 10, 54, 23, 626400500, time.UTC)),
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/GetArcSetting.json
+// Generated from example definition: 2026-04-30/GetArcSetting.json
 func ExampleArcSettingsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -243,7 +243,7 @@ func ExampleArcSettingsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientGetResponse{
-	// 	ArcSetting: &armazurestackhci.ArcSetting{
+	// 	ArcSetting: armazurestackhci.ArcSetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default"),
 	// 		Properties: &armazurestackhci.ArcSettingProperties{
@@ -261,7 +261,7 @@ func ExampleArcSettingsClient_Get() {
 	// 			DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 	// 				{
 	// 					Category: to.Ptr("Telemetry"),
-	// 					ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+	// 					ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 				},
 	// 				{
 	// 					Category: to.Ptr("Supportability"),
@@ -282,10 +282,10 @@ func ExampleArcSettingsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -293,7 +293,7 @@ func ExampleArcSettingsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/InitializeDisableProcess.json
+// Generated from example definition: 2026-04-30/InitializeDisableProcess.json
 func ExampleArcSettingsClient_BeginInitializeDisableProcess() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -310,7 +310,7 @@ func ExampleArcSettingsClient_BeginInitializeDisableProcess() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -319,7 +319,7 @@ func ExampleArcSettingsClient_BeginInitializeDisableProcess() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/ListArcSettingsByCluster.json
+// Generated from example definition: 2026-04-30/ListArcSettingsByCluster.json
 func ExampleArcSettingsClient_NewListByClusterPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -362,7 +362,7 @@ func ExampleArcSettingsClient_NewListByClusterPager() {
 		// 					DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 		// 						{
 		// 							Category: to.Ptr("Telemetry"),
-		// 							ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+		// 							ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 						},
 		// 						{
 		// 							Category: to.Ptr("Supportability"),
@@ -383,10 +383,10 @@ func ExampleArcSettingsClient_NewListByClusterPager() {
 		// 					ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armazurestackhci.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 		// 				},
@@ -397,7 +397,7 @@ func ExampleArcSettingsClient_NewListByClusterPager() {
 	}
 }
 
-// Generated from example definition: 2026-04-01-preview/reconcileArcSettings.json
+// Generated from example definition: 2026-04-30/reconcileArcSettings.json
 func ExampleArcSettingsClient_BeginReconcile() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -421,13 +421,13 @@ func ExampleArcSettingsClient_BeginReconcile() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientReconcileResponse{
-	// 	ArcSetting: &armazurestackhci.ArcSetting{
+	// 	ArcSetting: armazurestackhci.ArcSetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default"),
 	// 		Properties: &armazurestackhci.ArcSettingProperties{
@@ -445,7 +445,7 @@ func ExampleArcSettingsClient_BeginReconcile() {
 	// 			DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 	// 				{
 	// 					Category: to.Ptr("Telemetry"),
-	// 					ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+	// 					ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 				},
 	// 				{
 	// 					Category: to.Ptr("Supportability"),
@@ -468,10 +468,10 @@ func ExampleArcSettingsClient_BeginReconcile() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -479,7 +479,7 @@ func ExampleArcSettingsClient_BeginReconcile() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/PatchArcSetting.json
+// Generated from example definition: 2026-04-30/PatchArcSetting.json
 func ExampleArcSettingsClient_Update() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -510,7 +510,7 @@ func ExampleArcSettingsClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ArcSettingsClientUpdateResponse{
-	// 	ArcSetting: &armazurestackhci.ArcSetting{
+	// 	ArcSetting: armazurestackhci.ArcSetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default"),
 	// 		Properties: &armazurestackhci.ArcSettingProperties{
@@ -528,7 +528,7 @@ func ExampleArcSettingsClient_Update() {
 	// 			DefaultExtensions: []*armazurestackhci.DefaultExtensionDetails{
 	// 				{
 	// 					Category: to.Ptr("Telemetry"),
-	// 					ConsentTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-01-01T17:18:19.1234567Z"); return t}()),
+	// 					ConsentTime: to.Ptr(time.Date(2023, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 				},
 	// 				{
 	// 					Category: to.Ptr("Supportability"),
@@ -549,10 +549,10 @@ func ExampleArcSettingsClient_Update() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},

@@ -6,16 +6,18 @@ package armpurview
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"strings"
 )
 
 // DefaultAccountsClient contains the methods for the DefaultAccounts group.
 // Don't use this type directly, use NewDefaultAccountsClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type DefaultAccountsClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewDefaultAccountsClient(credential azcore.TokenCredential, options *arm.Cl
 //
 // Get the default account for the scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - scopeTenantID - The tenant ID.
 //   - scopeType - The scope for the default account.
 //   - options - DefaultAccountsClientGetOptions contains the optional parameters for the DefaultAccountsClient.Get method.
@@ -57,12 +57,7 @@ func (client *DefaultAccountsClient) Get(ctx context.Context, scopeTenantID stri
 	if err != nil {
 		return DefaultAccountsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DefaultAccountsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -73,20 +68,23 @@ func (client *DefaultAccountsClient) getCreateRequest(ctx context.Context, scope
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
+	reqQP.Set("api-version", version20240401Preview)
 	if options != nil && options.Scope != nil {
 		reqQP.Set("scope", *options.Scope)
 	}
 	reqQP.Set("scopeTenantId", scopeTenantID)
 	reqQP.Set("scopeType", string(scopeType))
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DefaultAccountsClient) getHandleResponse(resp *http.Response) (DefaultAccountsClientGetResponse, error) {
+func (client *DefaultAccountsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DefaultAccountsClientGetResponse, error) {
 	result := DefaultAccountsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefaultAccountPayload); err != nil {
 		return DefaultAccountsClientGetResponse{}, err
 	}
@@ -97,8 +95,6 @@ func (client *DefaultAccountsClient) getHandleResponse(resp *http.Response) (Def
 //
 // Removes the default account from the scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - scopeTenantID - The tenant ID.
 //   - scopeType - The scope for the default account.
 //   - options - DefaultAccountsClientRemoveOptions contains the optional parameters for the DefaultAccountsClient.Remove method.
@@ -117,8 +113,7 @@ func (client *DefaultAccountsClient) Remove(ctx context.Context, scopeTenantID s
 		return DefaultAccountsClientRemoveResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return DefaultAccountsClientRemoveResponse{}, err
+		return DefaultAccountsClientRemoveResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return DefaultAccountsClientRemoveResponse{}, nil
 }
@@ -131,13 +126,13 @@ func (client *DefaultAccountsClient) removeCreateRequest(ctx context.Context, sc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
+	reqQP.Set("api-version", version20240401Preview)
 	if options != nil && options.Scope != nil {
 		reqQP.Set("scope", *options.Scope)
 	}
 	reqQP.Set("scopeTenantId", scopeTenantID)
 	reqQP.Set("scopeType", string(scopeType))
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -145,8 +140,6 @@ func (client *DefaultAccountsClient) removeCreateRequest(ctx context.Context, sc
 //
 // Sets the default account for the scope.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - defaultAccountPayload - The request body
 //   - options - DefaultAccountsClientSetOptions contains the optional parameters for the DefaultAccountsClient.Set method.
 func (client *DefaultAccountsClient) Set(ctx context.Context, defaultAccountPayload DefaultAccountPayload, options *DefaultAccountsClientSetOptions) (DefaultAccountsClientSetResponse, error) {
@@ -163,12 +156,7 @@ func (client *DefaultAccountsClient) Set(ctx context.Context, defaultAccountPayl
 	if err != nil {
 		return DefaultAccountsClientSetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DefaultAccountsClientSetResponse{}, err
-	}
-	resp, err := client.setHandleResponse(httpResp)
-	return resp, err
+	return client.setHandleResponse(httpResp, http.StatusOK)
 }
 
 // setCreateRequest creates the Set request.
@@ -179,8 +167,8 @@ func (client *DefaultAccountsClient) setCreateRequest(ctx context.Context, defau
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, defaultAccountPayload); err != nil {
@@ -190,8 +178,11 @@ func (client *DefaultAccountsClient) setCreateRequest(ctx context.Context, defau
 }
 
 // setHandleResponse handles the Set response.
-func (client *DefaultAccountsClient) setHandleResponse(resp *http.Response) (DefaultAccountsClientSetResponse, error) {
+func (client *DefaultAccountsClient) setHandleResponse(resp *http.Response, successCodes ...int) (DefaultAccountsClientSetResponse, error) {
 	result := DefaultAccountsClientSetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DefaultAccountPayload); err != nil {
 		return DefaultAccountsClientSetResponse{}, err
 	}

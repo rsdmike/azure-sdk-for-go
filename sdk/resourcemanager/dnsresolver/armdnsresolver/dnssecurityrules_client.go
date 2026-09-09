@@ -19,6 +19,8 @@ import (
 
 // DNSSecurityRulesClient contains the methods for the DNSSecurityRules group.
 // Don't use this type directly, use NewDNSSecurityRulesClient() instead.
+//
+// Generated from API version 2025-10-01-preview
 type DNSSecurityRulesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type DNSSecurityRulesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDNSSecurityRulesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DNSSecurityRulesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewDNSSecurityRulesClient(subscriptionID string, credential azcore.TokenCre
 
 // BeginCreateOrUpdate - Creates or updates a DNS security rule for a DNS resolver policy.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsSecurityRuleName - The name of the DNS security rule.
@@ -69,8 +72,6 @@ func (client *DNSSecurityRulesClient) BeginCreateOrUpdate(ctx context.Context, r
 
 // CreateOrUpdate - Creates or updates a DNS security rule for a DNS resolver policy.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSSecurityRulesClient) createOrUpdate(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, parameters DNSSecurityRule, options *DNSSecurityRulesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSSecurityRulesClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *DNSSecurityRulesClient) createOrUpdate(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *DNSSecurityRulesClient) createOrUpdate(ctx context.Context, resour
 func (client *DNSSecurityRulesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, parameters DNSSecurityRule, options *DNSSecurityRulesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules/{dnsSecurityRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *DNSSecurityRulesClient) createOrUpdateCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
@@ -134,8 +134,6 @@ func (client *DNSSecurityRulesClient) createOrUpdateCreateRequest(ctx context.Co
 
 // BeginDelete - Deletes a DNS security rule for a DNS resolver policy. WARNING: This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsSecurityRuleName - The name of the DNS security rule.
@@ -160,8 +158,6 @@ func (client *DNSSecurityRulesClient) BeginDelete(ctx context.Context, resourceG
 
 // Delete - Deletes a DNS security rule for a DNS resolver policy. WARNING: This operation cannot be undone.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSSecurityRulesClient) deleteOperation(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, options *DNSSecurityRulesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSSecurityRulesClient.BeginDelete"
@@ -177,8 +173,7 @@ func (client *DNSSecurityRulesClient) deleteOperation(ctx context.Context, resou
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -187,7 +182,7 @@ func (client *DNSSecurityRulesClient) deleteOperation(ctx context.Context, resou
 func (client *DNSSecurityRulesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, options *DNSSecurityRulesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules/{dnsSecurityRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -207,8 +202,8 @@ func (client *DNSSecurityRulesClient) deleteCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}
 	}
@@ -217,8 +212,6 @@ func (client *DNSSecurityRulesClient) deleteCreateRequest(ctx context.Context, r
 
 // Get - Gets properties of a DNS security rule for a DNS resolver policy.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsSecurityRuleName - The name of the DNS security rule.
@@ -237,19 +230,14 @@ func (client *DNSSecurityRulesClient) Get(ctx context.Context, resourceGroupName
 	if err != nil {
 		return DNSSecurityRulesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DNSSecurityRulesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DNSSecurityRulesClient) getCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, _ *DNSSecurityRulesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules/{dnsSecurityRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -269,15 +257,18 @@ func (client *DNSSecurityRulesClient) getCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DNSSecurityRulesClient) getHandleResponse(resp *http.Response) (DNSSecurityRulesClientGetResponse, error) {
+func (client *DNSSecurityRulesClient) getHandleResponse(resp *http.Response, successCodes ...int) (DNSSecurityRulesClientGetResponse, error) {
 	result := DNSSecurityRulesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DNSSecurityRule); err != nil {
 		return DNSSecurityRulesClientGetResponse{}, err
 	}
@@ -285,8 +276,6 @@ func (client *DNSSecurityRulesClient) getHandleResponse(resp *http.Response) (DN
 }
 
 // NewListPager - Lists DNS security rules for a DNS resolver policy.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - options - DNSSecurityRulesClientListOptions contains the optional parameters for the DNSSecurityRulesClient.NewListPager
@@ -302,50 +291,64 @@ func (client *DNSSecurityRulesClient) NewListPager(resourceGroupName string, dns
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, dnsResolverPolicyName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, dnsResolverPolicyName, nextLink, options)
 			if err != nil {
 				return DNSSecurityRulesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DNSSecurityRulesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DNSSecurityRulesClient) listCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, options *DNSSecurityRulesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DNSSecurityRulesClient) listCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, nextLink string, options *DNSSecurityRulesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if dnsResolverPolicyName == "" {
+			return nil, errors.New("parameter dnsResolverPolicyName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{dnsResolverPolicyName}", url.PathEscape(dnsResolverPolicyName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if dnsResolverPolicyName == "" {
-		return nil, errors.New("parameter dnsResolverPolicyName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{dnsResolverPolicyName}", url.PathEscape(dnsResolverPolicyName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DNSSecurityRulesClient) listHandleResponse(resp *http.Response) (DNSSecurityRulesClientListResponse, error) {
+func (client *DNSSecurityRulesClient) listHandleResponse(resp *http.Response, successCodes ...int) (DNSSecurityRulesClientListResponse, error) {
 	result := DNSSecurityRulesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DNSSecurityRuleListResult); err != nil {
 		return DNSSecurityRulesClientListResponse{}, err
 	}
@@ -354,8 +357,6 @@ func (client *DNSSecurityRulesClient) listHandleResponse(resp *http.Response) (D
 
 // BeginUpdate - Updates a DNS security rule.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - dnsResolverPolicyName - The name of the DNS resolver policy.
 //   - dnsSecurityRuleName - The name of the DNS security rule.
@@ -381,8 +382,6 @@ func (client *DNSSecurityRulesClient) BeginUpdate(ctx context.Context, resourceG
 
 // Update - Updates a DNS security rule.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *DNSSecurityRulesClient) update(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, parameters DNSSecurityRulePatch, options *DNSSecurityRulesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DNSSecurityRulesClient.BeginUpdate"
@@ -398,8 +397,7 @@ func (client *DNSSecurityRulesClient) update(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -408,7 +406,7 @@ func (client *DNSSecurityRulesClient) update(ctx context.Context, resourceGroupN
 func (client *DNSSecurityRulesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, dnsResolverPolicyName string, dnsSecurityRuleName string, parameters DNSSecurityRulePatch, options *DNSSecurityRulesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/dnsResolverPolicies/{dnsResolverPolicyName}/dnsSecurityRules/{dnsSecurityRuleName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -428,8 +426,8 @@ func (client *DNSSecurityRulesClient) updateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["if-match"] = []string{*options.IfMatch}

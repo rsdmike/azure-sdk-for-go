@@ -19,6 +19,8 @@ import (
 
 // ClusterManagersClient contains the methods for the ClusterManagers group.
 // Don't use this type directly, use NewClusterManagersClient() instead.
+//
+// Generated from API version 2026-07-01
 type ClusterManagersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type ClusterManagersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewClusterManagersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ClusterManagersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewClusterManagersClient(subscriptionID string, credential azcore.TokenCred
 
 // BeginCreateOrUpdate - Create a new cluster manager or update properties of the cluster manager if it exists.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterManagerName - The name of the cluster manager.
 //   - clusterManagerParameters - The request body.
@@ -68,8 +71,6 @@ func (client *ClusterManagersClient) BeginCreateOrUpdate(ctx context.Context, re
 
 // CreateOrUpdate - Create a new cluster manager or update properties of the cluster manager if it exists.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *ClusterManagersClient) createOrUpdate(ctx context.Context, resourceGroupName string, clusterManagerName string, clusterManagerParameters ClusterManager, options *ClusterManagersClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ClusterManagersClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *ClusterManagersClient) createOrUpdate(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *ClusterManagersClient) createOrUpdate(ctx context.Context, resourc
 func (client *ClusterManagersClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, clusterManagerName string, clusterManagerParameters ClusterManager, options *ClusterManagersClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers/{clusterManagerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -111,8 +111,8 @@ func (client *ClusterManagersClient) createOrUpdateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -129,8 +129,6 @@ func (client *ClusterManagersClient) createOrUpdateCreateRequest(ctx context.Con
 
 // BeginDelete - Delete the provided cluster manager.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterManagerName - The name of the cluster manager.
 //   - options - ClusterManagersClientBeginDeleteOptions contains the optional parameters for the ClusterManagersClient.BeginDelete
@@ -154,8 +152,6 @@ func (client *ClusterManagersClient) BeginDelete(ctx context.Context, resourceGr
 
 // Delete - Delete the provided cluster manager.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 func (client *ClusterManagersClient) deleteOperation(ctx context.Context, resourceGroupName string, clusterManagerName string, options *ClusterManagersClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ClusterManagersClient.BeginDelete"
@@ -171,8 +167,7 @@ func (client *ClusterManagersClient) deleteOperation(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -181,7 +176,7 @@ func (client *ClusterManagersClient) deleteOperation(ctx context.Context, resour
 func (client *ClusterManagersClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, clusterManagerName string, options *ClusterManagersClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers/{clusterManagerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -197,8 +192,8 @@ func (client *ClusterManagersClient) deleteCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
 	}
@@ -210,8 +205,6 @@ func (client *ClusterManagersClient) deleteCreateRequest(ctx context.Context, re
 
 // Get - Get the properties of the provided cluster manager.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterManagerName - The name of the cluster manager.
 //   - options - ClusterManagersClientGetOptions contains the optional parameters for the ClusterManagersClient.Get method.
@@ -229,19 +222,14 @@ func (client *ClusterManagersClient) Get(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ClusterManagersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClusterManagersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ClusterManagersClient) getCreateRequest(ctx context.Context, resourceGroupName string, clusterManagerName string, _ *ClusterManagersClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers/{clusterManagerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -257,15 +245,18 @@ func (client *ClusterManagersClient) getCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ClusterManagersClient) getHandleResponse(resp *http.Response) (ClusterManagersClientGetResponse, error) {
+func (client *ClusterManagersClient) getHandleResponse(resp *http.Response, successCodes ...int) (ClusterManagersClientGetResponse, error) {
 	result := ClusterManagersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterManager); err != nil {
 		return ClusterManagersClientGetResponse{}, err
 	}
@@ -273,8 +264,6 @@ func (client *ClusterManagersClient) getHandleResponse(resp *http.Response) (Clu
 }
 
 // NewListByResourceGroupPager - Get a list of cluster managers in the provided resource group.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - ClusterManagersClientListByResourceGroupOptions contains the optional parameters for the ClusterManagersClient.NewListByResourceGroupPager
 //     method.
@@ -289,49 +278,63 @@ func (client *ClusterManagersClient) NewListByResourceGroupPager(resourceGroupNa
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return ClusterManagersClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClusterManagersClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *ClusterManagersClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, options *ClusterManagersClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ClusterManagersClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, options *ClusterManagersClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *ClusterManagersClient) listByResourceGroupHandleResponse(resp *http.Response) (ClusterManagersClientListByResourceGroupResponse, error) {
+func (client *ClusterManagersClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (ClusterManagersClientListByResourceGroupResponse, error) {
 	result := ClusterManagersClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterManagerList); err != nil {
 		return ClusterManagersClientListByResourceGroupResponse{}, err
 	}
@@ -339,8 +342,6 @@ func (client *ClusterManagersClient) listByResourceGroupHandleResponse(resp *htt
 }
 
 // NewListBySubscriptionPager - Get a list of cluster managers in the provided subscription.
-//
-// Generated from API version 2025-09-01
 //   - options - ClusterManagersClientListBySubscriptionOptions contains the optional parameters for the ClusterManagersClient.NewListBySubscriptionPager
 //     method.
 func (client *ClusterManagersClient) NewListBySubscriptionPager(options *ClusterManagersClientListBySubscriptionOptions) *runtime.Pager[ClusterManagersClientListBySubscriptionResponse] {
@@ -354,45 +355,59 @@ func (client *ClusterManagersClient) NewListBySubscriptionPager(options *Cluster
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ClusterManagersClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClusterManagersClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *ClusterManagersClient) listBySubscriptionCreateRequest(ctx context.Context, options *ClusterManagersClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/clusterManagers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ClusterManagersClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, options *ClusterManagersClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.NetworkCloud/clusterManagers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20260701)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *ClusterManagersClient) listBySubscriptionHandleResponse(resp *http.Response) (ClusterManagersClientListBySubscriptionResponse, error) {
+func (client *ClusterManagersClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (ClusterManagersClientListBySubscriptionResponse, error) {
 	result := ClusterManagersClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterManagerList); err != nil {
 		return ClusterManagersClientListBySubscriptionResponse{}, err
 	}
@@ -402,8 +417,6 @@ func (client *ClusterManagersClient) listBySubscriptionHandleResponse(resp *http
 // Update - Patch properties of the provided cluster manager, or update the tags assigned to the cluster manager. Properties
 // and tag updates can be done independently.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - clusterManagerName - The name of the cluster manager.
 //   - clusterManagerUpdateParameters - The request body.
@@ -422,19 +435,14 @@ func (client *ClusterManagersClient) Update(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return ClusterManagersClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClusterManagersClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *ClusterManagersClient) updateCreateRequest(ctx context.Context, resourceGroupName string, clusterManagerName string, clusterManagerUpdateParameters ClusterManagerPatchParameters, options *ClusterManagersClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers/{clusterManagerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -450,8 +458,8 @@ func (client *ClusterManagersClient) updateCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -467,10 +475,94 @@ func (client *ClusterManagersClient) updateCreateRequest(ctx context.Context, re
 }
 
 // updateHandleResponse handles the Update response.
-func (client *ClusterManagersClient) updateHandleResponse(resp *http.Response) (ClusterManagersClientUpdateResponse, error) {
+func (client *ClusterManagersClient) updateHandleResponse(resp *http.Response, successCodes ...int) (ClusterManagersClientUpdateResponse, error) {
 	result := ClusterManagersClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ClusterManager); err != nil {
 		return ClusterManagersClientUpdateResponse{}, err
 	}
 	return result, nil
+}
+
+// BeginUpdateRelayPrivateEndpointConnection - Update the private endpoint connection for the Azure Relay namespace managed
+// by the specified cluster manager. Use this operation to approve or reject a pending private endpoint connection request
+// for the relay namespace managed by the cluster manager.
+// If the operation fails it returns an *azcore.ResponseError type.
+//   - resourceGroupName - The name of the resource group. The name is case insensitive.
+//   - clusterManagerName - The name of the cluster manager.
+//   - options - ClusterManagersClientBeginUpdateRelayPrivateEndpointConnectionOptions contains the optional parameters for the
+//     ClusterManagersClient.BeginUpdateRelayPrivateEndpointConnection method.
+func (client *ClusterManagersClient) BeginUpdateRelayPrivateEndpointConnection(ctx context.Context, resourceGroupName string, clusterManagerName string, options *ClusterManagersClientBeginUpdateRelayPrivateEndpointConnectionOptions) (*runtime.Poller[ClusterManagersClientUpdateRelayPrivateEndpointConnectionResponse], error) {
+	if options == nil || options.ResumeToken == "" {
+		resp, err := client.updateRelayPrivateEndpointConnection(ctx, resourceGroupName, clusterManagerName, options)
+		if err != nil {
+			return nil, err
+		}
+		poller, err := runtime.NewPoller(resp, client.internal.Pipeline(), &runtime.NewPollerOptions[ClusterManagersClientUpdateRelayPrivateEndpointConnectionResponse]{
+			Tracer: client.internal.Tracer(),
+		})
+		return poller, err
+	} else {
+		return runtime.NewPollerFromResumeToken(options.ResumeToken, client.internal.Pipeline(), &runtime.NewPollerFromResumeTokenOptions[ClusterManagersClientUpdateRelayPrivateEndpointConnectionResponse]{
+			Tracer: client.internal.Tracer(),
+		})
+	}
+}
+
+// UpdateRelayPrivateEndpointConnection - Update the private endpoint connection for the Azure Relay namespace managed by
+// the specified cluster manager. Use this operation to approve or reject a pending private endpoint connection request for
+// the relay namespace managed by the cluster manager.
+// If the operation fails it returns an *azcore.ResponseError type.
+func (client *ClusterManagersClient) updateRelayPrivateEndpointConnection(ctx context.Context, resourceGroupName string, clusterManagerName string, options *ClusterManagersClientBeginUpdateRelayPrivateEndpointConnectionOptions) (*http.Response, error) {
+	var err error
+	const operationName = "ClusterManagersClient.BeginUpdateRelayPrivateEndpointConnection"
+	ctx = context.WithValue(ctx, runtime.CtxAPINameKey{}, operationName)
+	ctx, endSpan := runtime.StartSpan(ctx, operationName, client.internal.Tracer(), nil)
+	defer func() { endSpan(err) }()
+	req, err := client.updateRelayPrivateEndpointConnectionCreateRequest(ctx, resourceGroupName, clusterManagerName, options)
+	if err != nil {
+		return nil, err
+	}
+	httpResp, err := client.internal.Pipeline().Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if !runtime.HasStatusCode(httpResp, http.StatusAccepted) {
+		return nil, runtime.NewResponseError(httpResp)
+	}
+	return httpResp, nil
+}
+
+// updateRelayPrivateEndpointConnectionCreateRequest creates the UpdateRelayPrivateEndpointConnection request.
+func (client *ClusterManagersClient) updateRelayPrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, clusterManagerName string, options *ClusterManagersClientBeginUpdateRelayPrivateEndpointConnectionOptions) (*policy.Request, error) {
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetworkCloud/clusterManagers/{clusterManagerName}/updateRelayPrivateEndpointConnection"
+	if client.subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+	if resourceGroupName == "" {
+		return nil, errors.New("parameter resourceGroupName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+	if clusterManagerName == "" {
+		return nil, errors.New("parameter clusterManagerName cannot be empty")
+	}
+	urlPath = strings.ReplaceAll(urlPath, "{clusterManagerName}", url.PathEscape(clusterManagerName))
+	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	if err != nil {
+		return nil, err
+	}
+	reqQP := req.Raw().URL.Query()
+	reqQP.Set("api-version", version20260701)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+	if options != nil && options.ClusterManagerUpdateRelayPrivateEndpointConnectionParameters != nil {
+		req.Raw().Header["Content-Type"] = []string{"application/json"}
+		if err := runtime.MarshalAsJSON(req, *options.ClusterManagerUpdateRelayPrivateEndpointConnectionParameters); err != nil {
+			return nil, err
+		}
+		return req, nil
+	}
+	return req, nil
 }

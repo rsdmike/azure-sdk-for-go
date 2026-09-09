@@ -22,6 +22,28 @@ func NewSharedKeyCredential(accountName, accountKey string) (*SharedKeyCredentia
 	return exported.NewSharedKeyCredential(accountName, accountKey)
 }
 
+// ExpectContinueMode is the mode for applying the HTTP "Expect: 100-continue" header to
+// operations that include a request body.
+type ExpectContinueMode = exported.ExpectContinueMode
+
+const (
+	// ExpectContinueModeApplyOnThrottle indicates that Expect-Continue will not be applied
+	// until specific errors are encountered from the service, at which point it will be
+	// applied for a fixed window of time after the last triggering error. This is the default.
+	ExpectContinueModeApplyOnThrottle = exported.ExpectContinueModeApplyOnThrottle
+
+	// ExpectContinueModeOn indicates Expect-Continue will be applied regardless of recent
+	// error status. The ContentLengthThreshold option still applies.
+	ExpectContinueModeOn = exported.ExpectContinueModeOn
+
+	// ExpectContinueModeOff indicates Expect-Continue will never be applied.
+	ExpectContinueModeOff = exported.ExpectContinueModeOff
+)
+
+// ExpectContinueOptions configures the behavior for applying the HTTP "Expect: 100-continue"
+// header to operations that include a request body.
+type ExpectContinueOptions = exported.ExpectContinueOptions
+
 // UserDelegationCredential contains an account's name and its user delegation key.
 type UserDelegationCredential = exported.UserDelegationCredential
 
@@ -311,20 +333,30 @@ type BatchDeleteOptions struct {
 	Snapshot  *string
 }
 
-func (o *BatchDeleteOptions) format() (*generated.BlobClientDeleteOptions, *generated.LeaseAccessConditions, *generated.ModifiedAccessConditions) {
+func (o *BatchDeleteOptions) format() *generated.BlobClientDeleteOptions {
 	if o == nil {
-		return nil, nil, nil
+		return nil
 	}
-
-	basics := generated.BlobClientDeleteOptions{
+	opts := &generated.BlobClientDeleteOptions{
 		DeleteSnapshots: o.DeleteSnapshots,
-		DeleteType:      o.BlobDeleteType, // None by default
+		BlobDeleteType:  o.BlobDeleteType, // None by default
 		Snapshot:        o.Snapshot,
 		VersionID:       o.VersionID,
 	}
+	if o.AccessConditions != nil {
+		if o.AccessConditions.LeaseAccessConditions != nil {
+			opts.LeaseID = o.AccessConditions.LeaseAccessConditions.LeaseID
+		}
+		if o.AccessConditions.ModifiedAccessConditions != nil {
+			opts.IfMatch = o.AccessConditions.ModifiedAccessConditions.IfMatch
+			opts.IfModifiedSince = o.AccessConditions.ModifiedAccessConditions.IfModifiedSince
+			opts.IfNoneMatch = o.AccessConditions.ModifiedAccessConditions.IfNoneMatch
+			opts.IfUnmodifiedSince = o.AccessConditions.ModifiedAccessConditions.IfUnmodifiedSince
+			opts.IfTags = o.AccessConditions.ModifiedAccessConditions.IfTags
+		}
+	}
 
-	leaseAccessConditions, modifiedAccessConditions := exported.FormatBlobAccessConditions(o.AccessConditions)
-	return &basics, leaseAccessConditions, modifiedAccessConditions
+	return opts
 }
 
 // BatchSetTierOptions contains the optional parameters for the BatchBuilder.SetTier method.
@@ -334,19 +366,24 @@ type BatchSetTierOptions struct {
 	Snapshot  *string
 }
 
-func (o *BatchSetTierOptions) format() (*generated.BlobClientSetTierOptions, *generated.LeaseAccessConditions, *generated.ModifiedAccessConditions) {
+func (o *BatchSetTierOptions) format() *generated.BlobClientSetTierOptions {
 	if o == nil {
-		return nil, nil, nil
+		return nil
 	}
 
-	basics := generated.BlobClientSetTierOptions{
+	opts := &generated.BlobClientSetTierOptions{
 		RehydratePriority: o.RehydratePriority,
 		Snapshot:          o.Snapshot,
 		VersionID:         o.VersionID,
 	}
+	if o.AccessConditions != nil && o.AccessConditions.LeaseAccessConditions != nil {
+		opts.LeaseID = o.AccessConditions.LeaseAccessConditions.LeaseID
+	}
+	if o.AccessConditions != nil && o.AccessConditions.ModifiedAccessConditions != nil {
+		opts.IfTags = o.AccessConditions.ModifiedAccessConditions.IfTags
+	}
 
-	leaseAccessConditions, modifiedAccessConditions := exported.FormatBlobAccessConditions(o.AccessConditions)
-	return &basics, leaseAccessConditions, modifiedAccessConditions
+	return opts
 }
 
 // SubmitBatchOptions contains the optional parameters for the Client.SubmitBatch method.

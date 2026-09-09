@@ -35,7 +35,7 @@ func ExampleClustersClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCheckNameAvailabilityResponse{
-	// 	NameAvailability: &armpostgresqlhsc.NameAvailability{
+	// 	NameAvailability: armpostgresqlhsc.NameAvailability{
 	// 		Name: to.Ptr("name1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		Message: to.Ptr(""),
@@ -79,13 +79,13 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeBurstable1VCoreCluste
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-burstablev1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-burstablev1"),
@@ -132,10 +132,10 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeBurstable1VCoreCluste
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -181,13 +181,13 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeBurstable2VCoresClust
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-burstablev2"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-burstablev2"),
@@ -234,10 +234,10 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeBurstable2VCoresClust
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -284,13 +284,13 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithCustomDatabaseName()
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-custom-db-name"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-custom-db-name"),
@@ -337,10 +337,10 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithCustomDatabaseName()
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -388,13 +388,13 @@ func ExampleClustersClient_BeginCreate_createANewMultiNodeCluster() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-multinode"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-multinode"),
@@ -453,10 +453,10 @@ func ExampleClustersClient_BeginCreate_createANewMultiNodeCluster() {
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -480,7 +480,7 @@ func ExampleClustersClient_BeginCreate_createANewClusterAsAPointInTimeRestore() 
 	poller, err := clientFactory.NewClustersClient().BeginCreate(ctx, "TestGroup", "testcluster", armpostgresqlhsc.Cluster{
 		Location: to.Ptr("westus"),
 		Properties: &armpostgresqlhsc.ClusterProperties{
-			PointInTimeUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-12-14T00:00:37.467Z"); return t }()),
+			PointInTimeUTC:   to.Ptr(time.Date(2017, time.December, 14, 0, 0, 37, 467000000, time.UTC)),
 			SourceLocation:   to.Ptr("westus"),
 			SourceResourceID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/source-cluster"),
 		},
@@ -490,13 +490,13 @@ func ExampleClustersClient_BeginCreate_createANewClusterAsAPointInTimeRestore() 
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -548,10 +548,10 @@ func ExampleClustersClient_BeginCreate_createANewClusterAsAPointInTimeRestore() 
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -582,13 +582,13 @@ func ExampleClustersClient_BeginCreate_createANewClusterAsAReadReplica() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -640,10 +640,10 @@ func ExampleClustersClient_BeginCreate_createANewClusterAsAReadReplica() {
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -686,13 +686,13 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeCluster() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-singlenode"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-singlenode"),
@@ -739,10 +739,10 @@ func ExampleClustersClient_BeginCreate_createANewSingleNodeCluster() {
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -802,13 +802,13 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithAzureActiveDirectory
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-multinode"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-multinode"),
@@ -880,10 +880,10 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithAzureActiveDirectory
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -942,13 +942,13 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithCustomerManagedKeyCm
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientCreateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster-multinode"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster-multinode"),
@@ -1022,10 +1022,10 @@ func ExampleClustersClient_BeginCreate_createANewClusterWithCustomerManagedKeyCm
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -1052,7 +1052,7 @@ func ExampleClustersClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1080,7 +1080,7 @@ func ExampleClustersClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientGetResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster1"),
@@ -1097,7 +1097,7 @@ func ExampleClustersClient_Get() {
 	// 				Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 	// 			},
 	// 			DatabaseName: to.Ptr("citus"),
-	// 			EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+	// 			EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 	// 			EnableHa: to.Ptr(false),
 	// 			EnableShardsOnCoordinator: to.Ptr(false),
 	// 			MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1138,10 +1138,10 @@ func ExampleClustersClient_Get() {
 	// 			State: to.Ptr("Ready"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -1196,7 +1196,7 @@ func ExampleClustersClient_NewListPager() {
 		// 						Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 		// 					},
 		// 					DatabaseName: to.Ptr("citus"),
-		// 					EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+		// 					EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 		// 					EnableHa: to.Ptr(false),
 		// 					EnableShardsOnCoordinator: to.Ptr(false),
 		// 					MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1237,10 +1237,10 @@ func ExampleClustersClient_NewListPager() {
 		// 					State: to.Ptr("Ready"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -1265,7 +1265,7 @@ func ExampleClustersClient_NewListPager() {
 		// 						Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 		// 					},
 		// 					DatabaseName: to.Ptr("citus"),
-		// 					EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-15T00:01:32.317Z"); return t}()),
+		// 					EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 15, 0, 1, 32, 317000000, time.UTC)),
 		// 					EnableHa: to.Ptr(true),
 		// 					EnableShardsOnCoordinator: to.Ptr(false),
 		// 					MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1300,10 +1300,10 @@ func ExampleClustersClient_NewListPager() {
 		// 					State: to.Ptr("Ready"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -1359,7 +1359,7 @@ func ExampleClustersClient_NewListByResourceGroupPager() {
 		// 						Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 		// 					},
 		// 					DatabaseName: to.Ptr("citus"),
-		// 					EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+		// 					EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 		// 					EnableHa: to.Ptr(false),
 		// 					EnableShardsOnCoordinator: to.Ptr(false),
 		// 					MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1404,10 +1404,10 @@ func ExampleClustersClient_NewListByResourceGroupPager() {
 		// 					State: to.Ptr("Ready"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -1432,7 +1432,7 @@ func ExampleClustersClient_NewListByResourceGroupPager() {
 		// 						Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 		// 					},
 		// 					DatabaseName: to.Ptr("citus"),
-		// 					EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-15T00:01:32.317Z"); return t}()),
+		// 					EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 15, 0, 1, 32, 317000000, time.UTC)),
 		// 					EnableHa: to.Ptr(true),
 		// 					EnableShardsOnCoordinator: to.Ptr(false),
 		// 					MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1471,10 +1471,10 @@ func ExampleClustersClient_NewListByResourceGroupPager() {
 		// 					State: to.Ptr("Ready"),
 		// 				},
 		// 				SystemData: &armpostgresqlhsc.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 		// 				},
@@ -1505,7 +1505,7 @@ func ExampleClustersClient_BeginPromoteReadReplica() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -1526,7 +1526,7 @@ func ExampleClustersClient_BeginRestart() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -1547,7 +1547,7 @@ func ExampleClustersClient_BeginStart() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1573,7 +1573,7 @@ func ExampleClustersClient_BeginStop() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -1603,13 +1603,13 @@ func ExampleClustersClient_BeginUpdate_scaleOutAddNewWorkerNodes() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientUpdateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -1664,10 +1664,10 @@ func ExampleClustersClient_BeginUpdate_scaleOutAddNewWorkerNodes() {
 	// 			State: to.Ptr("Provisioning"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -1696,13 +1696,13 @@ func ExampleClustersClient_BeginUpdate_scaleComputeUpOrDown() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientUpdateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -1719,7 +1719,7 @@ func ExampleClustersClient_BeginUpdate_scaleComputeUpOrDown() {
 	// 				Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 	// 			},
 	// 			DatabaseName: to.Ptr("citus"),
-	// 			EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+	// 			EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 	// 			EnableHa: to.Ptr(false),
 	// 			EnableShardsOnCoordinator: to.Ptr(false),
 	// 			MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1762,10 +1762,10 @@ func ExampleClustersClient_BeginUpdate_scaleComputeUpOrDown() {
 	// 			State: to.Ptr("Ready"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -1794,13 +1794,13 @@ func ExampleClustersClient_BeginUpdate_scaleUpStorage() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientUpdateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -1817,7 +1817,7 @@ func ExampleClustersClient_BeginUpdate_scaleUpStorage() {
 	// 				Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 	// 			},
 	// 			DatabaseName: to.Ptr("citus"),
-	// 			EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+	// 			EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 	// 			EnableHa: to.Ptr(false),
 	// 			EnableShardsOnCoordinator: to.Ptr(false),
 	// 			MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1860,10 +1860,10 @@ func ExampleClustersClient_BeginUpdate_scaleUpStorage() {
 	// 			State: to.Ptr("Ready"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -1895,13 +1895,13 @@ func ExampleClustersClient_BeginUpdate_updateMultipleConfigurationSettingsOfTheC
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientUpdateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster1"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster1"),
@@ -1918,7 +1918,7 @@ func ExampleClustersClient_BeginUpdate_updateMultipleConfigurationSettingsOfTheC
 	// 				Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 	// 			},
 	// 			DatabaseName: to.Ptr("citus"),
-	// 			EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+	// 			EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 	// 			EnableHa: to.Ptr(false),
 	// 			EnableShardsOnCoordinator: to.Ptr(false),
 	// 			MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -1967,10 +1967,10 @@ func ExampleClustersClient_BeginUpdate_updateMultipleConfigurationSettingsOfTheC
 	// 			State: to.Ptr("Ready"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},
@@ -2009,13 +2009,13 @@ func ExampleClustersClient_BeginUpdate_updateOrDefineMaintenanceWindow() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpostgresqlhsc.ClustersClientUpdateResponse{
-	// 	Cluster: &armpostgresqlhsc.Cluster{
+	// 	Cluster: armpostgresqlhsc.Cluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.DBforPostgreSQL/serverGroupsv2"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/TestResourceGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/testcluster"),
@@ -2032,7 +2032,7 @@ func ExampleClustersClient_BeginUpdate_updateOrDefineMaintenanceWindow() {
 	// 				Type: to.Ptr(armpostgresqlhsc.DataEncryptionType("SystemManaged")),
 	// 			},
 	// 			DatabaseName: to.Ptr("citus"),
-	// 			EarliestRestoreTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-09-14T00:00:37.467Z"); return t}()),
+	// 			EarliestRestoreTime: to.Ptr(time.Date(2020, time.September, 14, 0, 0, 37, 467000000, time.UTC)),
 	// 			EnableHa: to.Ptr(false),
 	// 			EnableShardsOnCoordinator: to.Ptr(false),
 	// 			MaintenanceWindow: &armpostgresqlhsc.MaintenanceWindow{
@@ -2071,10 +2071,10 @@ func ExampleClustersClient_BeginUpdate_updateOrDefineMaintenanceWindow() {
 	// 			State: to.Ptr("Ready"),
 	// 		},
 	// 		SystemData: &armpostgresqlhsc.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpostgresqlhsc.CreatedByTypeUser),
 	// 		},

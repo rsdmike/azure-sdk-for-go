@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-03-01/AkriConnector_CreateOrUpdate_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/AkriConnector_CreateOrUpdate_MaximumSet_Gen.json
 func ExampleAkriConnectorClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -35,13 +35,13 @@ func ExampleAkriConnectorClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.AkriConnectorClientCreateOrUpdateResponse{
-	// 	AkriConnectorResource: &armiotoperations.AkriConnectorResource{
+	// 	AkriConnectorResource: armiotoperations.AkriConnectorResource{
 	// 		Properties: &armiotoperations.AkriConnectorProperties{
 	// 			ProvisioningState: to.Ptr(armiotoperations.ProvisioningStateSucceeded),
 	// 		},
@@ -55,16 +55,16 @@ func ExampleAkriConnectorClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/AkriConnector_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/AkriConnector_Delete_MaximumSet_Gen.json
 func ExampleAkriConnectorClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -81,11 +81,11 @@ func ExampleAkriConnectorClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-03-01/AkriConnector_Get_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/AkriConnector_Get_MaximumSet_Gen.json
 func ExampleAkriConnectorClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -104,7 +104,7 @@ func ExampleAkriConnectorClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.AkriConnectorClientGetResponse{
-	// 	AkriConnectorResource: &armiotoperations.AkriConnectorResource{
+	// 	AkriConnectorResource: armiotoperations.AkriConnectorResource{
 	// 		Properties: &armiotoperations.AkriConnectorProperties{
 	// 			ProvisioningState: to.Ptr(armiotoperations.ProvisioningStateSucceeded),
 	// 		},
@@ -118,16 +118,16 @@ func ExampleAkriConnectorClient_Get() {
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/AkriConnector_ListByTemplate_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/AkriConnector_ListByTemplate_MaximumSet_Gen.json
 func ExampleAkriConnectorClient_NewListByTemplatePager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -166,10 +166,10 @@ func ExampleAkriConnectorClient_NewListByTemplatePager() {
 		// 				SystemData: &armiotoperations.SystemData{
 		// 					CreatedBy: to.Ptr("contosouser"),
 		// 					CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("contosouser"),
 		// 					LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

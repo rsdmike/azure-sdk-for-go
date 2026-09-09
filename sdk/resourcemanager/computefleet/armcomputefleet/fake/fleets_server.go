@@ -21,10 +21,6 @@ import (
 
 // FleetsServer is a fake server for instances of the armcomputefleet.FleetsClient type.
 type FleetsServer struct {
-	// BeginCancel is the fake for method FleetsClient.BeginCancel
-	// HTTP status codes to indicate success: http.StatusOK, http.StatusAccepted, http.StatusNoContent
-	BeginCancel func(ctx context.Context, resourceGroupName string, fleetName string, options *armcomputefleet.FleetsClientBeginCancelOptions) (resp azfake.PollerResponder[armcomputefleet.FleetsClientCancelResponse], errResp azfake.ErrorResponder)
-
 	// BeginCreateOrUpdate is the fake for method FleetsClient.BeginCreateOrUpdate
 	// HTTP status codes to indicate success: http.StatusOK, http.StatusCreated
 	BeginCreateOrUpdate func(ctx context.Context, resourceGroupName string, fleetName string, resource armcomputefleet.Fleet, options *armcomputefleet.FleetsClientBeginCreateOrUpdateOptions) (resp azfake.PollerResponder[armcomputefleet.FleetsClientCreateOrUpdateResponse], errResp azfake.ErrorResponder)
@@ -64,7 +60,6 @@ type FleetsServer struct {
 func NewFleetsServerTransport(srv *FleetsServer) *FleetsServerTransport {
 	return &FleetsServerTransport{
 		srv:                                 srv,
-		beginCancel:                         newTracker[azfake.PollerResponder[armcomputefleet.FleetsClientCancelResponse]](),
 		beginCreateOrUpdate:                 newTracker[azfake.PollerResponder[armcomputefleet.FleetsClientCreateOrUpdateResponse]](),
 		beginDelete:                         newTracker[azfake.PollerResponder[armcomputefleet.FleetsClientDeleteResponse]](),
 		newListByResourceGroupPager:         newTracker[azfake.PagerResponder[armcomputefleet.FleetsClientListByResourceGroupResponse]](),
@@ -79,7 +74,6 @@ func NewFleetsServerTransport(srv *FleetsServer) *FleetsServerTransport {
 // Don't use this type directly, use NewFleetsServerTransport instead.
 type FleetsServerTransport struct {
 	srv                                 *FleetsServer
-	beginCancel                         *tracker[azfake.PollerResponder[armcomputefleet.FleetsClientCancelResponse]]
 	beginCreateOrUpdate                 *tracker[azfake.PollerResponder[armcomputefleet.FleetsClientCreateOrUpdateResponse]]
 	beginDelete                         *tracker[azfake.PollerResponder[armcomputefleet.FleetsClientDeleteResponse]]
 	newListByResourceGroupPager         *tracker[azfake.PagerResponder[armcomputefleet.FleetsClientListByResourceGroupResponse]]
@@ -110,8 +104,6 @@ func (f *FleetsServerTransport) dispatchToMethodFake(req *http.Request, method s
 		}
 		if !intercepted {
 			switch method {
-			case "FleetsClient.BeginCancel":
-				res.resp, res.err = f.dispatchBeginCancel(req)
 			case "FleetsClient.BeginCreateOrUpdate":
 				res.resp, res.err = f.dispatchBeginCreateOrUpdate(req)
 			case "FleetsClient.BeginDelete":
@@ -144,57 +136,13 @@ func (f *FleetsServerTransport) dispatchToMethodFake(req *http.Request, method s
 	}
 }
 
-func (f *FleetsServerTransport) dispatchBeginCancel(req *http.Request) (*http.Response, error) {
-	if f.srv.BeginCancel == nil {
-		return nil, &nonRetriableError{errors.New("fake for method BeginCancel not implemented")}
-	}
-	beginCancel := f.beginCancel.get(req)
-	if beginCancel == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/cancel`
-		regex := regexp.MustCompile(regexStr)
-		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
-		if len(matches) < 4 {
-			return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
-		}
-		resourceGroupNameParam, err := url.PathUnescape(matches[regex.SubexpIndex("resourceGroupName")])
-		if err != nil {
-			return nil, err
-		}
-		fleetNameParam, err := url.PathUnescape(matches[regex.SubexpIndex("fleetName")])
-		if err != nil {
-			return nil, err
-		}
-		respr, errRespr := f.srv.BeginCancel(req.Context(), resourceGroupNameParam, fleetNameParam, nil)
-		if respErr := server.GetError(errRespr, req); respErr != nil {
-			return nil, respErr
-		}
-		beginCancel = &respr
-		f.beginCancel.add(req, beginCancel)
-	}
-
-	resp, err := server.PollerResponderNext(beginCancel, req)
-	if err != nil {
-		return nil, err
-	}
-
-	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
-		f.beginCancel.remove(req)
-		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
-	}
-	if !server.PollerResponderMore(beginCancel) {
-		f.beginCancel.remove(req)
-	}
-
-	return resp, nil
-}
-
 func (f *FleetsServerTransport) dispatchBeginCreateOrUpdate(req *http.Request) (*http.Response, error) {
 	if f.srv.BeginCreateOrUpdate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method BeginCreateOrUpdate not implemented")}
 	}
 	beginCreateOrUpdate := f.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -242,7 +190,7 @@ func (f *FleetsServerTransport) dispatchBeginDelete(req *http.Request) (*http.Re
 	}
 	beginDelete := f.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -284,7 +232,7 @@ func (f *FleetsServerTransport) dispatchGet(req *http.Request) (*http.Response, 
 	if f.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -319,7 +267,7 @@ func (f *FleetsServerTransport) dispatchNewListByResourceGroupPager(req *http.Re
 	}
 	newListByResourceGroupPager := f.newListByResourceGroupPager.get(req)
 	if newListByResourceGroupPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -356,7 +304,7 @@ func (f *FleetsServerTransport) dispatchNewListBySubscriptionPager(req *http.Req
 	}
 	newListBySubscriptionPager := f.newListBySubscriptionPager.get(req)
 	if newListBySubscriptionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -389,7 +337,7 @@ func (f *FleetsServerTransport) dispatchNewListVirtualMachineScaleSetsPager(req 
 	}
 	newListVirtualMachineScaleSetsPager := f.newListVirtualMachineScaleSetsPager.get(req)
 	if newListVirtualMachineScaleSetsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachineScaleSets`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachineScaleSets`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -430,7 +378,7 @@ func (f *FleetsServerTransport) dispatchNewListVirtualMachinesPager(req *http.Re
 	}
 	newListVirtualMachinesPager := f.newListVirtualMachinesPager.get(req)
 	if newListVirtualMachinesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachines`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachines`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -481,7 +429,7 @@ func (f *FleetsServerTransport) dispatchBeginUpdate(req *http.Request) (*http.Re
 	}
 	beginUpdate := f.beginUpdate.get(req)
 	if beginUpdate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.AzureFleet/fleets/(?P<fleetName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {

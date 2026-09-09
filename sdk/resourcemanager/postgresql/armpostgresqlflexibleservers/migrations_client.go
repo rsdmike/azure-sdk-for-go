@@ -18,6 +18,8 @@ import (
 
 // MigrationsClient contains the methods for the Migrations group.
 // Don't use this type directly, use NewMigrationsClient() instead.
+//
+// Generated from API version 2026-04-01-preview
 type MigrationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type MigrationsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewMigrationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*MigrationsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewMigrationsClient(subscriptionID string, credential azcore.TokenCredentia
 
 // Cancel - Cancels an active migration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - migrationName - Name of migration.
@@ -61,19 +64,14 @@ func (client *MigrationsClient) Cancel(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return MigrationsClientCancelResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return MigrationsClientCancelResponse{}, err
-	}
-	resp, err := client.cancelHandleResponse(httpResp)
-	return resp, err
+	return client.cancelHandleResponse(httpResp, http.StatusOK, http.StatusNoContent)
 }
 
 // cancelCreateRequest creates the Cancel request.
 func (client *MigrationsClient) cancelCreateRequest(ctx context.Context, resourceGroupName string, serverName string, migrationName string, _ *MigrationsClientCancelOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations/{migrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -93,15 +91,18 @@ func (client *MigrationsClient) cancelCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // cancelHandleResponse handles the Cancel response.
-func (client *MigrationsClient) cancelHandleResponse(resp *http.Response) (MigrationsClientCancelResponse, error) {
+func (client *MigrationsClient) cancelHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientCancelResponse, error) {
 	result := MigrationsClientCancelResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Migration); err != nil {
 		return MigrationsClientCancelResponse{}, err
 	}
@@ -112,8 +113,6 @@ func (client *MigrationsClient) cancelHandleResponse(resp *http.Response) (Migra
 //
 // Checks if a proposed migration name is valid and available.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - parameters - Parameters required to check if a migration name is valid and available.
@@ -133,19 +132,14 @@ func (client *MigrationsClient) CheckNameAvailability(ctx context.Context, resou
 	if err != nil {
 		return MigrationsClientCheckNameAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MigrationsClientCheckNameAvailabilityResponse{}, err
-	}
-	resp, err := client.checkNameAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkNameAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkNameAvailabilityCreateRequest creates the CheckNameAvailability request.
 func (client *MigrationsClient) checkNameAvailabilityCreateRequest(ctx context.Context, resourceGroupName string, serverName string, parameters MigrationNameAvailability, _ *MigrationsClientCheckNameAvailabilityOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/checkMigrationNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -161,8 +155,8 @@ func (client *MigrationsClient) checkNameAvailabilityCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -172,8 +166,11 @@ func (client *MigrationsClient) checkNameAvailabilityCreateRequest(ctx context.C
 }
 
 // checkNameAvailabilityHandleResponse handles the CheckNameAvailability response.
-func (client *MigrationsClient) checkNameAvailabilityHandleResponse(resp *http.Response) (MigrationsClientCheckNameAvailabilityResponse, error) {
+func (client *MigrationsClient) checkNameAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientCheckNameAvailabilityResponse, error) {
 	result := MigrationsClientCheckNameAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrationNameAvailability); err != nil {
 		return MigrationsClientCheckNameAvailabilityResponse{}, err
 	}
@@ -182,8 +179,6 @@ func (client *MigrationsClient) checkNameAvailabilityHandleResponse(resp *http.R
 
 // Create - Creates a new migration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - migrationName - Name of migration.
@@ -203,19 +198,14 @@ func (client *MigrationsClient) Create(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return MigrationsClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return MigrationsClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createCreateRequest creates the Create request.
 func (client *MigrationsClient) createCreateRequest(ctx context.Context, resourceGroupName string, serverName string, migrationName string, parameters Migration, _ *MigrationsClientCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations/{migrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -235,8 +225,8 @@ func (client *MigrationsClient) createCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -246,8 +236,11 @@ func (client *MigrationsClient) createCreateRequest(ctx context.Context, resourc
 }
 
 // createHandleResponse handles the Create response.
-func (client *MigrationsClient) createHandleResponse(resp *http.Response) (MigrationsClientCreateResponse, error) {
+func (client *MigrationsClient) createHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientCreateResponse, error) {
 	result := MigrationsClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Migration); err != nil {
 		return MigrationsClientCreateResponse{}, err
 	}
@@ -256,8 +249,6 @@ func (client *MigrationsClient) createHandleResponse(resp *http.Response) (Migra
 
 // Get - Gets information about a migration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - migrationName - Name of migration.
@@ -276,19 +267,14 @@ func (client *MigrationsClient) Get(ctx context.Context, resourceGroupName strin
 	if err != nil {
 		return MigrationsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MigrationsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *MigrationsClient) getCreateRequest(ctx context.Context, resourceGroupName string, serverName string, migrationName string, _ *MigrationsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations/{migrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -308,15 +294,18 @@ func (client *MigrationsClient) getCreateRequest(ctx context.Context, resourceGr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *MigrationsClient) getHandleResponse(resp *http.Response) (MigrationsClientGetResponse, error) {
+func (client *MigrationsClient) getHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientGetResponse, error) {
 	result := MigrationsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Migration); err != nil {
 		return MigrationsClientGetResponse{}, err
 	}
@@ -324,8 +313,6 @@ func (client *MigrationsClient) getHandleResponse(resp *http.Response) (Migratio
 }
 
 // NewListByTargetServerPager - Lists all migrations of a target flexible server.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - options - MigrationsClientListByTargetServerOptions contains the optional parameters for the MigrationsClient.NewListByTargetServerPager
@@ -341,50 +328,64 @@ func (client *MigrationsClient) NewListByTargetServerPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByTargetServerCreateRequest(ctx, resourceGroupName, serverName, options)
-			}, nil)
+			req, err := client.listByTargetServerCreateRequest(ctx, resourceGroupName, serverName, nextLink, options)
 			if err != nil {
 				return MigrationsClientListByTargetServerResponse{}, err
 			}
-			return client.listByTargetServerHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MigrationsClientListByTargetServerResponse{}, err
+			}
+			return client.listByTargetServerHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByTargetServerCreateRequest creates the ListByTargetServer request.
-func (client *MigrationsClient) listByTargetServerCreateRequest(ctx context.Context, resourceGroupName string, serverName string, options *MigrationsClientListByTargetServerOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MigrationsClient) listByTargetServerCreateRequest(ctx context.Context, resourceGroupName string, serverName string, nextLink string, options *MigrationsClientListByTargetServerOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if serverName == "" {
+			return nil, errors.New("parameter serverName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{serverName}", url.PathEscape(serverName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if serverName == "" {
-		return nil, errors.New("parameter serverName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{serverName}", url.PathEscape(serverName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	if options != nil && options.MigrationListFilter != nil {
-		reqQP.Set("migrationListFilter", string(*options.MigrationListFilter))
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260401Preview)
+		if options != nil && options.MigrationListFilter != nil {
+			reqQP.Set("migrationListFilter", string(*options.MigrationListFilter))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByTargetServerHandleResponse handles the ListByTargetServer response.
-func (client *MigrationsClient) listByTargetServerHandleResponse(resp *http.Response) (MigrationsClientListByTargetServerResponse, error) {
+func (client *MigrationsClient) listByTargetServerHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientListByTargetServerResponse, error) {
 	result := MigrationsClientListByTargetServerResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MigrationList); err != nil {
 		return MigrationsClientListByTargetServerResponse{}, err
 	}
@@ -394,8 +395,6 @@ func (client *MigrationsClient) listByTargetServerHandleResponse(resp *http.Resp
 // Update - Updates an existing migration. The request body can contain one to many of the mutable properties present in the
 // migration definition. Certain property updates initiate migration state transitions.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - migrationName - Name of migration.
@@ -415,19 +414,14 @@ func (client *MigrationsClient) Update(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return MigrationsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MigrationsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *MigrationsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, serverName string, migrationName string, parameters MigrationResourceForPatch, _ *MigrationsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{serverName}/migrations/{migrationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -447,8 +441,8 @@ func (client *MigrationsClient) updateCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {
@@ -458,8 +452,11 @@ func (client *MigrationsClient) updateCreateRequest(ctx context.Context, resourc
 }
 
 // updateHandleResponse handles the Update response.
-func (client *MigrationsClient) updateHandleResponse(resp *http.Response) (MigrationsClientUpdateResponse, error) {
+func (client *MigrationsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (MigrationsClientUpdateResponse, error) {
 	result := MigrationsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Migration); err != nil {
 		return MigrationsClientUpdateResponse{}, err
 	}

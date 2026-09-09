@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+// cSpell:ignore azcosmostest
 
 package azcosmos
 
 import (
 	"context"
+	"encoding/json"
 	"io"
+	"math"
 	"net/http"
 	"net/url"
 	"strings"
@@ -15,6 +18,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	azruntime "github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/tracing"
 	"github.com/Azure/azure-sdk-for-go/sdk/internal/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -224,6 +228,148 @@ func TestBuildQueryChunksForRanges_Chunking(t *testing.T) {
 	require.Len(t, chunks, 2)
 	require.Equal(t, "0", chunks[0].rangeID)
 	require.Equal(t, "0", chunks[1].rangeID)
+}
+
+func TestReadManyItems_PartitionKeyHeader(t *testing.T) {
+	hierarchicalPK := NewPartitionKeyString("tenant").AppendString("user")
+	testCases := []struct {
+		name             string
+		partitionKeyDef  PartitionKeyDefinition
+		items            []ItemIdentity
+		expectedPKHeader string
+	}{
+		{
+			name: "same logical partition key",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/pk"},
+				Kind:    PartitionKeyKindHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: NewPartitionKeyString("pk1")},
+				{ID: "2", PartitionKey: NewPartitionKeyString("pk1")},
+			},
+			expectedPKHeader: `["pk1"]`,
+		},
+		{
+			name: "different logical partition keys",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/pk"},
+				Kind:    PartitionKeyKindHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: NewPartitionKeyString("pk1")},
+				{ID: "2", PartitionKey: NewPartitionKeyString("pk2")},
+			},
+		},
+		{
+			name: "different signed zero partition keys",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/pk"},
+				Kind:    PartitionKeyKindHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: NewPartitionKeyNumber(0)},
+				{ID: "2", PartitionKey: NewPartitionKeyNumber(math.Copysign(0, -1))},
+			},
+		},
+		{
+			name: "same hierarchical partition key",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/tenant", "/user"},
+				Kind:    PartitionKeyKindMultiHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: hierarchicalPK},
+				{ID: "2", PartitionKey: hierarchicalPK},
+			},
+			expectedPKHeader: `["tenant","user"]`,
+		},
+		{
+			name: "different hierarchical partition key component",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/tenant", "/user"},
+				Kind:    PartitionKeyKindMultiHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: hierarchicalPK},
+				{ID: "2", PartitionKey: NewPartitionKeyString("tenant").AppendString("other")},
+			},
+		},
+		{
+			name: "same partial hierarchical partition key",
+			partitionKeyDef: PartitionKeyDefinition{
+				Paths:   []string{"/tenant", "/user"},
+				Kind:    PartitionKeyKindMultiHash,
+				Version: 2,
+			},
+			items: []ItemIdentity{
+				{ID: "1", PartitionKey: NewPartitionKeyString("tenant")},
+				{ID: "2", PartitionKey: NewPartitionKeyString("tenant")},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			containerBody, err := json.Marshal(ContainerProperties{
+				ID:                     "containerId",
+				PartitionKeyDefinition: tc.partitionKeyDef,
+			})
+			require.NoError(t, err)
+
+			rangeBody, err := json.Marshal(struct {
+				PartitionKeyRanges []partitionKeyRange `json:"PartitionKeyRanges"`
+				Count              int                 `json:"_count"`
+			}{
+				PartitionKeyRanges: []partitionKeyRange{{ID: "0", MinInclusive: "", MaxExclusive: "FF"}},
+				Count:              1,
+			})
+			require.NoError(t, err)
+
+			srv, closeSrv := mock.NewTLSServer()
+			defer closeSrv()
+			srv.AppendResponse(mock.WithBody(containerBody), mock.WithStatusCode(http.StatusOK))
+			srv.AppendResponse(mock.WithBody(rangeBody), mock.WithStatusCode(http.StatusOK))
+			srv.AppendResponse(
+				mock.WithBody([]byte(`{"Documents":[]}`)),
+				mock.WithHeader(cosmosHeaderRequestCharge, "1.0"),
+				mock.WithStatusCode(http.StatusOK),
+			)
+
+			verifier := pipelineVerifier{}
+			internalClient, err := azcore.NewClient(
+				"azcosmostest",
+				"v1.0.0",
+				azruntime.PipelineOptions{PerCall: []policy.Policy{&headerPolicies{}, &verifier}},
+				&policy.ClientOptions{Transport: srv},
+			)
+			require.NoError(t, err)
+
+			defaultEndpoint, err := url.Parse(srv.URL())
+			require.NoError(t, err)
+			client := &Client{
+				endpoint:    srv.URL(),
+				endpointUrl: defaultEndpoint,
+				internal:    internalClient,
+				gem:         &globalEndpointManager{preferredLocations: []string{}},
+			}
+			database, err := newDatabase("databaseId", client)
+			require.NoError(t, err)
+			container, err := newContainer("containerId", database)
+			require.NoError(t, err)
+
+			_, err = container.ReadManyItems(context.Background(), tc.items, nil)
+			require.NoError(t, err)
+			require.Len(t, verifier.requests, 3)
+			require.Equal(t, tc.expectedPKHeader, verifier.requests[2].headers.Get(cosmosHeaderPartitionKey))
+			require.Equal(t, "0", verifier.requests[2].headers.Get(cosmosHeaderPartitionKeyRangeId))
+		})
+	}
 }
 
 // cancelOnNthQueryPolicy is a pipeline policy that cancels a context after the
@@ -739,4 +885,231 @@ func TestReadMany_410_nonGoneSubstatus_notRetried(t *testing.T) {
 	var respErr *azcore.ResponseError
 	require.ErrorAs(t, err, &respErr)
 	require.Equal(t, http.StatusGone, respErr.StatusCode)
+}
+
+func TestReadMany_createsQuerySpansForInternalQueries(t *testing.T) {
+	srv, closeSrv := mock.NewTLSServer()
+	defer closeSrv()
+
+	expectedSpan := "query_items containerId"
+	matcher := &spanMatcher{
+		ExpectedSpans: []string{expectedSpan},
+	}
+	tp := newSpanValidator(t, matcher)
+
+	defaultEndpoint, err := url.Parse(srv.URL())
+	require.NoError(t, err)
+
+	internalClient, err := azcore.NewClient("azcosmostest", "v1.0.0",
+		azruntime.PipelineOptions{Tracing: azruntime.TracingOptions{Namespace: "Microsoft.DocumentDB"}},
+		&policy.ClientOptions{Transport: srv, TracingProvider: tp})
+	require.NoError(t, err)
+
+	gem := &globalEndpointManager{preferredLocations: []string{}}
+	containerCache := newContainerPropertiesCache()
+	pkRangeCache := newPartitionKeyRangeCache()
+	client := &Client{
+		endpoint:    srv.URL(),
+		endpointUrl: defaultEndpoint,
+		internal:    internalClient,
+		gem:         gem,
+		caches: &sharedCacheSet{
+			containerCache: containerCache,
+			pkRangeCache:   pkRangeCache,
+		},
+	}
+
+	containerLink := "dbs/databaseId/colls/containerId"
+	containerCache.set(containerLink, &ContainerProperties{
+		ID:         "containerId",
+		ResourceID: "testRID",
+		PartitionKeyDefinition: PartitionKeyDefinition{
+			Paths:   []string{"/pk"},
+			Kind:    PartitionKeyKindHash,
+			Version: 2,
+		},
+	})
+	pkRangeCache.entries["testRID"] = &pkRangeCacheEntry{
+		routingMap: newCollectionRoutingMap([]partitionKeyRange{
+			{ID: "0", MinInclusive: "", MaxExclusive: "FF", ResourceID: "testRID"},
+		}, "etag1"),
+	}
+
+	queryResp := []byte(`{"Documents":[{"id":"item1","pk":"pkA"}]}`)
+	srv.AppendResponse(
+		mock.WithBody(queryResp),
+		mock.WithStatusCode(200),
+		mock.WithHeader(cosmosHeaderRequestCharge, "2.5"))
+
+	database, _ := newDatabase("databaseId", client)
+	container, _ := newContainer("containerId", database)
+
+	items := []ItemIdentity{{ID: "item1", PartitionKey: NewPartitionKeyString("pkA")}}
+	resp, err := container.ReadManyItems(context.Background(), items, nil)
+	require.NoError(t, err)
+	require.Len(t, resp.Items, 1)
+
+	// Verify the internal query created a query_items span
+	var querySpans []*matchingSpan
+	for _, s := range matcher.MatchedSpans {
+		if s.name == expectedSpan {
+			querySpans = append(querySpans, s)
+		}
+	}
+	require.Len(t, querySpans, 1, "expected exactly 1 query_items span from ReadManyItems")
+	require.True(t, querySpans[0].ended, "query_items span should be ended")
+}
+
+func TestReadMany_createsSpanPerPage(t *testing.T) {
+	srv, closeSrv := mock.NewTLSServer()
+	defer closeSrv()
+
+	expectedSpan := "query_items containerId"
+	matcher := &spanMatcher{
+		ExpectedSpans: []string{expectedSpan},
+	}
+	tp := newSpanValidator(t, matcher)
+
+	defaultEndpoint, err := url.Parse(srv.URL())
+	require.NoError(t, err)
+
+	internalClient, err := azcore.NewClient("azcosmostest", "v1.0.0",
+		azruntime.PipelineOptions{Tracing: azruntime.TracingOptions{Namespace: "Microsoft.DocumentDB"}},
+		&policy.ClientOptions{Transport: srv, TracingProvider: tp})
+	require.NoError(t, err)
+
+	gem := &globalEndpointManager{preferredLocations: []string{}}
+	containerCache := newContainerPropertiesCache()
+	pkRangeCache := newPartitionKeyRangeCache()
+	client := &Client{
+		endpoint:    srv.URL(),
+		endpointUrl: defaultEndpoint,
+		internal:    internalClient,
+		gem:         gem,
+		caches: &sharedCacheSet{
+			containerCache: containerCache,
+			pkRangeCache:   pkRangeCache,
+		},
+	}
+
+	containerLink := "dbs/databaseId/colls/containerId"
+	containerCache.set(containerLink, &ContainerProperties{
+		ID:         "containerId",
+		ResourceID: "testRID",
+		PartitionKeyDefinition: PartitionKeyDefinition{
+			Paths:   []string{"/pk"},
+			Kind:    PartitionKeyKindHash,
+			Version: 2,
+		},
+	})
+	pkRangeCache.entries["testRID"] = &pkRangeCacheEntry{
+		routingMap: newCollectionRoutingMap([]partitionKeyRange{
+			{ID: "0", MinInclusive: "", MaxExclusive: "FF", ResourceID: "testRID"},
+		}, "etag1"),
+	}
+
+	// Page 1: returns a continuation token
+	srv.AppendResponse(
+		mock.WithBody([]byte(`{"Documents":[{"id":"item1","pk":"pkA"}]}`)),
+		mock.WithStatusCode(200),
+		mock.WithHeader(cosmosHeaderRequestCharge, "2.0"),
+		mock.WithHeader(cosmosHeaderContinuationToken, "token123"))
+	// Page 2: no continuation token (final page)
+	srv.AppendResponse(
+		mock.WithBody([]byte(`{"Documents":[{"id":"item2","pk":"pkA"}]}`)),
+		mock.WithStatusCode(200),
+		mock.WithHeader(cosmosHeaderRequestCharge, "1.5"))
+
+	database, _ := newDatabase("databaseId", client)
+	container, _ := newContainer("containerId", database)
+
+	items := []ItemIdentity{{ID: "item1", PartitionKey: NewPartitionKeyString("pkA")}}
+	resp, err := container.ReadManyItems(context.Background(), items, nil)
+	require.NoError(t, err)
+	require.Len(t, resp.Items, 2)
+
+	// Verify one span per page (2 pages = 2 spans)
+	var querySpans []*matchingSpan
+	for _, s := range matcher.MatchedSpans {
+		if s.name == expectedSpan {
+			querySpans = append(querySpans, s)
+		}
+	}
+	require.Len(t, querySpans, 2, "expected 2 query_items spans (one per page)")
+	for i, s := range querySpans {
+		require.True(t, s.ended, "query_items span %d should be ended", i)
+	}
+	require.Equal(t, float32(3.5), resp.RequestCharge, "per-page charges must sum")
+}
+
+func TestReadMany_querySpanRecordsErrorOnFailure(t *testing.T) {
+	srv, closeSrv := mock.NewTLSServer()
+	defer closeSrv()
+
+	expectedSpan := "query_items containerId"
+	matcher := &spanMatcher{
+		ExpectedSpans: []string{expectedSpan},
+	}
+	tp := newSpanValidator(t, matcher)
+
+	defaultEndpoint, err := url.Parse(srv.URL())
+	require.NoError(t, err)
+
+	internalClient, err := azcore.NewClient("azcosmostest", "v1.0.0",
+		azruntime.PipelineOptions{Tracing: azruntime.TracingOptions{Namespace: "Microsoft.DocumentDB"}},
+		&policy.ClientOptions{
+			Transport:       srv,
+			TracingProvider: tp,
+			Retry:           policy.RetryOptions{MaxRetries: -1, StatusCodes: []int{}},
+		})
+	require.NoError(t, err)
+
+	gem := &globalEndpointManager{preferredLocations: []string{}}
+	containerCache := newContainerPropertiesCache()
+	pkRangeCache := newPartitionKeyRangeCache()
+	client := &Client{
+		endpoint:    srv.URL(),
+		endpointUrl: defaultEndpoint,
+		internal:    internalClient,
+		gem:         gem,
+		caches: &sharedCacheSet{
+			containerCache: containerCache,
+			pkRangeCache:   pkRangeCache,
+		},
+	}
+
+	containerLink := "dbs/databaseId/colls/containerId"
+	containerCache.set(containerLink, &ContainerProperties{
+		ID:         "containerId",
+		ResourceID: "testRID",
+		PartitionKeyDefinition: PartitionKeyDefinition{
+			Paths:   []string{"/pk"},
+			Kind:    PartitionKeyKindHash,
+			Version: 2,
+		},
+	})
+	pkRangeCache.entries["testRID"] = &pkRangeCacheEntry{
+		routingMap: newCollectionRoutingMap([]partitionKeyRange{
+			{ID: "0", MinInclusive: "", MaxExclusive: "FF", ResourceID: "testRID"},
+		}, "etag1"),
+	}
+
+	srv.SetResponse(mock.WithStatusCode(http.StatusInternalServerError))
+
+	database, _ := newDatabase("databaseId", client)
+	container, _ := newContainer("containerId", database)
+
+	items := []ItemIdentity{{ID: "item1", PartitionKey: NewPartitionKeyString("pkA")}}
+	_, err = container.ReadManyItems(context.Background(), items, nil)
+	require.Error(t, err)
+
+	var querySpans []*matchingSpan
+	for _, s := range matcher.MatchedSpans {
+		if s.name == expectedSpan {
+			querySpans = append(querySpans, s)
+		}
+	}
+	require.Len(t, querySpans, 1, "expected 1 query_items span even on error")
+	require.True(t, querySpans[0].ended, "span must be ended even on error")
+	require.Equal(t, tracing.SpanStatusError, querySpans[0].status)
 }

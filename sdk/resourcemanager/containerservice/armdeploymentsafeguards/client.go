@@ -17,6 +17,8 @@ import (
 
 // Client contains the methods for the service.
 // Don't use this type directly, use NewClient() instead.
+//
+// Generated from API version 2025-05-02-preview
 type Client struct {
 	internal *arm.Client
 }
@@ -37,8 +39,6 @@ func NewClient(credential azcore.TokenCredential, options *arm.ClientOptions) (*
 
 // BeginCreate - Creates or updates a deploymentSafeguard
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-02-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - resource - Resource create parameters.
 //   - options - ClientBeginCreateOptions contains the optional parameters for the Client.BeginCreate method.
@@ -61,8 +61,6 @@ func (client *Client) BeginCreate(ctx context.Context, resourceURI string, resou
 
 // Create - Creates or updates a deploymentSafeguard
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-02-preview
 func (client *Client) create(ctx context.Context, resourceURI string, resource DeploymentSafeguard, options *ClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "Client.BeginCreate"
@@ -78,8 +76,7 @@ func (client *Client) create(ctx context.Context, resourceURI string, resource D
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,8 +93,8 @@ func (client *Client) createCreateRequest(ctx context.Context, resourceURI strin
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-02-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250502Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -108,8 +105,6 @@ func (client *Client) createCreateRequest(ctx context.Context, resourceURI strin
 
 // BeginDelete - Delete DeploymentSafeguards
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-02-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - ClientBeginDeleteOptions contains the optional parameters for the Client.BeginDelete method.
 func (client *Client) BeginDelete(ctx context.Context, resourceURI string, options *ClientBeginDeleteOptions) (*runtime.Poller[ClientDeleteResponse], error) {
@@ -131,8 +126,6 @@ func (client *Client) BeginDelete(ctx context.Context, resourceURI string, optio
 
 // Delete - Delete DeploymentSafeguards
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-02-preview
 func (client *Client) deleteOperation(ctx context.Context, resourceURI string, options *ClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "Client.BeginDelete"
@@ -148,8 +141,7 @@ func (client *Client) deleteOperation(ctx context.Context, resourceURI string, o
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -166,15 +158,13 @@ func (client *Client) deleteCreateRequest(ctx context.Context, resourceURI strin
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-02-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250502Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Fetch a deployment safeguard by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-02-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - ClientGetOptions contains the optional parameters for the Client.Get method.
 func (client *Client) Get(ctx context.Context, resourceURI string, options *ClientGetOptions) (ClientGetResponse, error) {
@@ -191,12 +181,7 @@ func (client *Client) Get(ctx context.Context, resourceURI string, options *Clie
 	if err != nil {
 		return ClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -211,15 +196,18 @@ func (client *Client) getCreateRequest(ctx context.Context, resourceURI string, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-02-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250502Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse, error) {
+func (client *Client) getHandleResponse(resp *http.Response, successCodes ...int) (ClientGetResponse, error) {
 	result := ClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentSafeguard); err != nil {
 		return ClientGetResponse{}, err
 	}
@@ -227,8 +215,6 @@ func (client *Client) getHandleResponse(resp *http.Response) (ClientGetResponse,
 }
 
 // NewListPager - List DeploymentSafeguards by parent resource
-//
-// Generated from API version 2025-05-02-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - ClientListOptions contains the optional parameters for the Client.NewListPager method.
 func (client *Client) NewListPager(resourceURI string, options *ClientListOptions) *runtime.Pager[ClientListResponse] {
@@ -242,39 +228,53 @@ func (client *Client) NewListPager(resourceURI string, options *ClientListOption
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceURI, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceURI, nextLink, options)
 			if err != nil {
 				return ClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *Client) listCreateRequest(ctx context.Context, resourceURI string, _ *ClientListOptions) (*policy.Request, error) {
-	urlPath := "/{resourceUri}/providers/Microsoft.ContainerService/deploymentSafeguards"
-	if resourceURI == "" {
-		return nil, errors.New("parameter resourceURI cannot be empty")
+func (client *Client) listCreateRequest(ctx context.Context, resourceURI string, nextLink string, _ *ClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{resourceUri}/providers/Microsoft.ContainerService/deploymentSafeguards"
+		if resourceURI == "" {
+			return nil, errors.New("parameter resourceURI cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-02-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250502Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *Client) listHandleResponse(resp *http.Response) (ClientListResponse, error) {
+func (client *Client) listHandleResponse(resp *http.Response, successCodes ...int) (ClientListResponse, error) {
 	result := ClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentSafeguardListResult); err != nil {
 		return ClientListResponse{}, err
 	}

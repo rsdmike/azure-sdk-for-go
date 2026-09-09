@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-01-20-preview/Replicas_CreateOrUpdate.json
+// Generated from example definition: 2026-05-01-preview/Replicas_CreateOrUpdate.json
 func ExampleReplicasClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -34,13 +34,13 @@ func ExampleReplicasClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhorizondb.ReplicasClientCreateOrUpdateResponse{
-	// 	Replica: &armhorizondb.Replica{
+	// 	Replica: armhorizondb.Replica{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.HorizonDb/clusters/examplecluster/pools/examplepool/replicas/examplereplica"),
 	// 		Name: to.Ptr("examplereplica"),
 	// 		Type: to.Ptr("Microsoft.HorizonDb/clusters/pools/replicas"),
@@ -55,7 +55,7 @@ func ExampleReplicasClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2026-01-20-preview/Replicas_Delete.json
+// Generated from example definition: 2026-05-01-preview/Replicas_Delete.json
 func ExampleReplicasClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -72,11 +72,11 @@ func ExampleReplicasClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-01-20-preview/Replicas_Get.json
+// Generated from example definition: 2026-05-01-preview/Replicas_Get.json
 func ExampleReplicasClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -95,7 +95,7 @@ func ExampleReplicasClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhorizondb.ReplicasClientGetResponse{
-	// 	Replica: &armhorizondb.Replica{
+	// 	Replica: armhorizondb.Replica{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.HorizonDb/clusters/examplecluster/pools/examplepool/replicas/examplereplica"),
 	// 		Name: to.Ptr("examplereplica"),
 	// 		Type: to.Ptr("Microsoft.HorizonDb/clusters/pools/replicas"),
@@ -110,7 +110,7 @@ func ExampleReplicasClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-01-20-preview/Replicas_List.json
+// Generated from example definition: 2026-05-01-preview/Replicas_List.json
 func ExampleReplicasClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -165,7 +165,7 @@ func ExampleReplicasClient_NewListPager() {
 	}
 }
 
-// Generated from example definition: 2026-01-20-preview/Replicas_Update.json
+// Generated from example definition: 2026-05-01-preview/Replicas_Update.json
 func ExampleReplicasClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -186,13 +186,13 @@ func ExampleReplicasClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhorizondb.ReplicasClientUpdateResponse{
-	// 	Replica: &armhorizondb.Replica{
+	// 	Replica: armhorizondb.Replica{
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.HorizonDb/clusters/examplecluster/pools/examplepool/replicas/examplereplica"),
 	// 		Name: to.Ptr("examplereplica"),
 	// 		Type: to.Ptr("Microsoft.HorizonDb/clusters/pools/replicas"),

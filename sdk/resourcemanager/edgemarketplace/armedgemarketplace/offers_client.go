@@ -19,6 +19,8 @@ import (
 
 // OffersClient contains the methods for the Offers group.
 // Don't use this type directly, use NewOffersClient() instead.
+//
+// Generated from API version 2025-10-01-preview
 type OffersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type OffersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewOffersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*OffersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +47,6 @@ func NewOffersClient(subscriptionID string, credential azcore.TokenCredential, o
 
 // BeginGenerateAccessToken - A long-running resource action.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - offerID - Id of the offer
 //   - body - The content of the action request
@@ -68,8 +71,6 @@ func (client *OffersClient) BeginGenerateAccessToken(ctx context.Context, resour
 
 // GenerateAccessToken - A long-running resource action.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 func (client *OffersClient) generateAccessToken(ctx context.Context, resourceURI string, offerID string, body AccessTokenRequest, options *OffersClientBeginGenerateAccessTokenOptions) (*http.Response, error) {
 	var err error
 	const operationName = "OffersClient.BeginGenerateAccessToken"
@@ -85,8 +86,7 @@ func (client *OffersClient) generateAccessToken(ctx context.Context, resourceURI
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -107,8 +107,8 @@ func (client *OffersClient) generateAccessTokenCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -119,8 +119,6 @@ func (client *OffersClient) generateAccessTokenCreateRequest(ctx context.Context
 
 // Get - Get a Offer
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - offerID - Id of the offer
 //   - options - OffersClientGetOptions contains the optional parameters for the OffersClient.Get method.
@@ -138,12 +136,7 @@ func (client *OffersClient) Get(ctx context.Context, resourceURI string, offerID
 	if err != nil {
 		return OffersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return OffersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -162,15 +155,18 @@ func (client *OffersClient) getCreateRequest(ctx context.Context, resourceURI st
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *OffersClient) getHandleResponse(resp *http.Response) (OffersClientGetResponse, error) {
+func (client *OffersClient) getHandleResponse(resp *http.Response, successCodes ...int) (OffersClientGetResponse, error) {
 	result := OffersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Offer); err != nil {
 		return OffersClientGetResponse{}, err
 	}
@@ -179,8 +175,6 @@ func (client *OffersClient) getHandleResponse(resp *http.Response) (OffersClient
 
 // GetAccessToken - get access token.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - offerID - Id of the offer
 //   - body - The content of the action request
@@ -199,12 +193,7 @@ func (client *OffersClient) GetAccessToken(ctx context.Context, resourceURI stri
 	if err != nil {
 		return OffersClientGetAccessTokenResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return OffersClientGetAccessTokenResponse{}, err
-	}
-	resp, err := client.getAccessTokenHandleResponse(httpResp)
-	return resp, err
+	return client.getAccessTokenHandleResponse(httpResp, http.StatusOK)
 }
 
 // getAccessTokenCreateRequest creates the GetAccessToken request.
@@ -223,8 +212,8 @@ func (client *OffersClient) getAccessTokenCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -234,8 +223,11 @@ func (client *OffersClient) getAccessTokenCreateRequest(ctx context.Context, res
 }
 
 // getAccessTokenHandleResponse handles the GetAccessToken response.
-func (client *OffersClient) getAccessTokenHandleResponse(resp *http.Response) (OffersClientGetAccessTokenResponse, error) {
+func (client *OffersClient) getAccessTokenHandleResponse(resp *http.Response, successCodes ...int) (OffersClientGetAccessTokenResponse, error) {
 	result := OffersClientGetAccessTokenResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskAccessToken); err != nil {
 		return OffersClientGetAccessTokenResponse{}, err
 	}
@@ -243,8 +235,6 @@ func (client *OffersClient) getAccessTokenHandleResponse(resp *http.Response) (O
 }
 
 // NewListPager - List Offer resources by parent
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceURI - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - OffersClientListOptions contains the optional parameters for the OffersClient.NewListPager method.
 func (client *OffersClient) NewListPager(resourceURI string, options *OffersClientListOptions) *runtime.Pager[OffersClientListResponse] {
@@ -258,54 +248,68 @@ func (client *OffersClient) NewListPager(resourceURI string, options *OffersClie
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceURI, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceURI, nextLink, options)
 			if err != nil {
 				return OffersClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return OffersClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *OffersClient) listCreateRequest(ctx context.Context, resourceURI string, options *OffersClientListOptions) (*policy.Request, error) {
-	urlPath := "/{resourceUri}/providers/Microsoft.EdgeMarketplace/offers"
-	if resourceURI == "" {
-		return nil, errors.New("parameter resourceURI cannot be empty")
+func (client *OffersClient) listCreateRequest(ctx context.Context, resourceURI string, nextLink string, options *OffersClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{resourceUri}/providers/Microsoft.EdgeMarketplace/offers"
+		if resourceURI == "" {
+			return nil, errors.New("parameter resourceURI cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceUri}", resourceURI)
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20251001Preview)
+		if options != nil && options.Maxpagesize != nil {
+			reqQP.Set("maxpagesize", strconv.FormatInt(int64(*options.Maxpagesize), 10))
+		}
+		if options != nil && options.Skip != nil {
+			reqQP.Set("skip", strconv.FormatInt(int64(*options.Skip), 10))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
-	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-10-01-preview")
-	if options != nil && options.Maxpagesize != nil {
-		reqQP.Set("maxpagesize", strconv.FormatInt(int64(*options.Maxpagesize), 10))
-	}
-	if options != nil && options.Skip != nil {
-		reqQP.Set("skip", strconv.FormatInt(int64(*options.Skip), 10))
-	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *OffersClient) listHandleResponse(resp *http.Response) (OffersClientListResponse, error) {
+func (client *OffersClient) listHandleResponse(resp *http.Response, successCodes ...int) (OffersClientListResponse, error) {
 	result := OffersClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OfferListResult); err != nil {
 		return OffersClientListResponse{}, err
 	}
@@ -313,8 +317,6 @@ func (client *OffersClient) listHandleResponse(resp *http.Response) (OffersClien
 }
 
 // NewListBySubscriptionPager - List Offer resources by subscription ID
-//
-// Generated from API version 2025-10-01-preview
 //   - options - OffersClientListBySubscriptionOptions contains the optional parameters for the OffersClient.NewListBySubscriptionPager
 //     method.
 func (client *OffersClient) NewListBySubscriptionPager(options *OffersClientListBySubscriptionOptions) *runtime.Pager[OffersClientListBySubscriptionResponse] {
@@ -328,39 +330,53 @@ func (client *OffersClient) NewListBySubscriptionPager(options *OffersClientList
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return OffersClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return OffersClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *OffersClient) listBySubscriptionCreateRequest(ctx context.Context, _ *OffersClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EdgeMarketplace/offers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *OffersClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *OffersClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.EdgeMarketplace/offers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *OffersClient) listBySubscriptionHandleResponse(resp *http.Response) (OffersClientListBySubscriptionResponse, error) {
+func (client *OffersClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (OffersClientListBySubscriptionResponse, error) {
 	result := OffersClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OfferListResult); err != nil {
 		return OffersClientListBySubscriptionResponse{}, err
 	}

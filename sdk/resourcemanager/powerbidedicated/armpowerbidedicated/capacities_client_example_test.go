@@ -34,7 +34,7 @@ func ExampleCapacitiesClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientCheckNameAvailabilityResponse{
-	// 	CheckCapacityNameAvailabilityResult: &armpowerbidedicated.CheckCapacityNameAvailabilityResult{
+	// 	CheckCapacityNameAvailabilityResult: armpowerbidedicated.CheckCapacityNameAvailabilityResult{
 	// 		NameAvailable: to.Ptr(true),
 	// 	},
 	// }
@@ -74,13 +74,13 @@ func ExampleCapacitiesClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientCreateResponse{
-	// 	DedicatedCapacity: &armpowerbidedicated.DedicatedCapacity{
+	// 	DedicatedCapacity: armpowerbidedicated.DedicatedCapacity{
 	// 		Name: to.Ptr("azsdktest"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/capacities/azsdktest"),
 	// 		Location: to.Ptr("West US"),
@@ -99,10 +99,10 @@ func ExampleCapacitiesClient_BeginCreate() {
 	// 			Tier: to.Ptr(armpowerbidedicated.CapacitySKUTierPBIEAzure),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
 	// 		},
@@ -130,7 +130,7 @@ func ExampleCapacitiesClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -158,7 +158,7 @@ func ExampleCapacitiesClient_GetDetails() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientGetDetailsResponse{
-	// 	DedicatedCapacity: &armpowerbidedicated.DedicatedCapacity{
+	// 	DedicatedCapacity: armpowerbidedicated.DedicatedCapacity{
 	// 		Name: to.Ptr("azsdktest"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/capacities/azsdktest"),
 	// 		Location: to.Ptr("West US"),
@@ -176,10 +176,10 @@ func ExampleCapacitiesClient_GetDetails() {
 	// 			Tier: to.Ptr(armpowerbidedicated.CapacitySKUTierPBIEAzure),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
 	// 		},
@@ -354,7 +354,7 @@ func ExampleCapacitiesClient_ListSKUs() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientListSKUsResponse{
-	// 	SKUEnumerationForNewResourceResult: &armpowerbidedicated.SKUEnumerationForNewResourceResult{
+	// 	SKUEnumerationForNewResourceResult: armpowerbidedicated.SKUEnumerationForNewResourceResult{
 	// 		Value: []*armpowerbidedicated.CapacitySKU{
 	// 			{
 	// 				Name: to.Ptr("A1"),
@@ -398,7 +398,7 @@ func ExampleCapacitiesClient_ListSKUsForCapacity() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientListSKUsForCapacityResponse{
-	// 	SKUEnumerationForExistingResourceResult: &armpowerbidedicated.SKUEnumerationForExistingResourceResult{
+	// 	SKUEnumerationForExistingResourceResult: armpowerbidedicated.SKUEnumerationForExistingResourceResult{
 	// 		Value: []*armpowerbidedicated.SKUDetailsForExistingResource{
 	// 			{
 	// 				SKU: &armpowerbidedicated.CapacitySKU{
@@ -452,7 +452,7 @@ func ExampleCapacitiesClient_BeginResume() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -478,7 +478,7 @@ func ExampleCapacitiesClient_BeginSuspend() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -520,13 +520,13 @@ func ExampleCapacitiesClient_BeginUpdate_updateCapacityParameters() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientUpdateResponse{
-	// 	DedicatedCapacity: &armpowerbidedicated.DedicatedCapacity{
+	// 	DedicatedCapacity: armpowerbidedicated.DedicatedCapacity{
 	// 		Name: to.Ptr("azsdktest"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/capacities/azsdktest"),
 	// 		Location: to.Ptr("West US"),
@@ -545,10 +545,10 @@ func ExampleCapacitiesClient_BeginUpdate_updateCapacityParameters() {
 	// 			Tier: to.Ptr(armpowerbidedicated.CapacitySKUTierPBIEAzure),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
 	// 		},
@@ -587,13 +587,13 @@ func ExampleCapacitiesClient_BeginUpdate_updateCapacityToGeneration2() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpowerbidedicated.CapacitiesClientUpdateResponse{
-	// 	DedicatedCapacity: &armpowerbidedicated.DedicatedCapacity{
+	// 	DedicatedCapacity: armpowerbidedicated.DedicatedCapacity{
 	// 		Name: to.Ptr("azsdktest"),
 	// 		ID: to.Ptr("/subscriptions/613192d7-503f-477a-9cfe-4efc3ee2bd60/resourceGroups/TestRG/providers/Microsoft.PowerBIDedicated/capacities/azsdktest"),
 	// 		Location: to.Ptr("West US"),
@@ -613,10 +613,10 @@ func ExampleCapacitiesClient_BeginUpdate_updateCapacityToGeneration2() {
 	// 			Tier: to.Ptr(armpowerbidedicated.CapacitySKUTierPBIEAzure),
 	// 		},
 	// 		SystemData: &armpowerbidedicated.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T00:00:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 1, 0, 0, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armpowerbidedicated.CreatedByTypeUser),
 	// 		},

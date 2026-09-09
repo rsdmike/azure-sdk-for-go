@@ -18,6 +18,8 @@ import (
 
 // CheckNameAvailabilityClient contains the methods for the CheckNameAvailability group.
 // Don't use this type directly, use NewCheckNameAvailabilityClient() instead.
+//
+// Generated from API version 2024-09-01
 type CheckNameAvailabilityClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CheckNameAvailabilityClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCheckNameAvailabilityClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CheckNameAvailabilityClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewCheckNameAvailabilityClient(subscriptionID string, credential azcore.Tok
 //
 // Checks the resource name availability.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - location - The name of the Azure region.
 //   - options - CheckNameAvailabilityClientPostOptions contains the optional parameters for the CheckNameAvailabilityClient.Post
 //     method.
@@ -62,19 +65,14 @@ func (client *CheckNameAvailabilityClient) Post(ctx context.Context, location st
 	if err != nil {
 		return CheckNameAvailabilityClientPostResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CheckNameAvailabilityClientPostResponse{}, err
-	}
-	resp, err := client.postHandleResponse(httpResp)
-	return resp, err
+	return client.postHandleResponse(httpResp, http.StatusOK)
 }
 
 // postCreateRequest creates the Post request.
 func (client *CheckNameAvailabilityClient) postCreateRequest(ctx context.Context, location string, options *CheckNameAvailabilityClientPostOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.DataReplication/locations/{location}/checkNameAvailability"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -86,8 +84,8 @@ func (client *CheckNameAvailabilityClient) postCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.Body != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -100,8 +98,11 @@ func (client *CheckNameAvailabilityClient) postCreateRequest(ctx context.Context
 }
 
 // postHandleResponse handles the Post response.
-func (client *CheckNameAvailabilityClient) postHandleResponse(resp *http.Response) (CheckNameAvailabilityClientPostResponse, error) {
+func (client *CheckNameAvailabilityClient) postHandleResponse(resp *http.Response, successCodes ...int) (CheckNameAvailabilityClientPostResponse, error) {
 	result := CheckNameAvailabilityClientPostResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResponseModel); err != nil {
 		return CheckNameAvailabilityClientPostResponse{}, err
 	}

@@ -33,7 +33,7 @@ func ExampleNamespacesClient_CheckAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientCheckAvailabilityResponse{
-	// 	CheckAvailabilityResult: &armnotificationhubs.CheckAvailabilityResult{
+	// 	CheckAvailabilityResult: armnotificationhubs.CheckAvailabilityResult{
 	// 		Name: to.Ptr("sdk-Namespace-2924"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces/checkNamespaceAvailability"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/providers/Microsoft.NotificationHubs/namespaces/sdk-Namespace-2924"),
@@ -89,20 +89,20 @@ func ExampleNamespacesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientCreateOrUpdateResponse{
-	// 	NamespaceResource: &armnotificationhubs.NamespaceResource{
+	// 	NamespaceResource: armnotificationhubs.NamespaceResource{
 	// 		Name: to.Ptr("nh-sdk-ns"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns"),
 	// 		Location: to.Ptr("East US"),
 	// 		Properties: &armnotificationhubs.NamespaceProperties{
 	// 			Name: to.Ptr("nh-sdk-ns"),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 	// 			Critical: to.Ptr(false),
 	// 			Enabled: to.Ptr(true),
 	// 			NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -130,7 +130,7 @@ func ExampleNamespacesClient_BeginCreateOrUpdate() {
 	// 			ServiceBusEndpoint: to.Ptr("https://nh-sdk-ns.servicebus.windows.net:443/"),
 	// 			Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 	// 			SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-	// 			UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:16:17.697+00:00"); return t}()),
+	// 			UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 16, 17, 697000000, time.UTC)),
 	// 			ZoneRedundancy: to.Ptr(armnotificationhubs.ZoneRedundancyPreferenceEnabled),
 	// 		},
 	// 		SKU: &armnotificationhubs.SKU{
@@ -170,13 +170,13 @@ func ExampleNamespacesClient_CreateOrUpdateAuthorizationRule() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientCreateOrUpdateAuthorizationRuleResponse{
-	// 	SharedAccessAuthorizationRuleResource: &armnotificationhubs.SharedAccessAuthorizationRuleResource{
+	// 	SharedAccessAuthorizationRuleResource: armnotificationhubs.SharedAccessAuthorizationRuleResource{
 	// 		Name: to.Ptr("NewAuthorizationRule"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces/authorizationRules"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns/authorizationRules/NewAuthorizationRule"),
 	// 		Properties: &armnotificationhubs.SharedAccessAuthorizationRuleProperties{
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:09:19.9675121+00:00"); return t}()),
-	// 			ModifiedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:09:19.9675121+00:00"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 9, 19, 967512100, time.UTC)),
+	// 			ModifiedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 9, 19, 967512100, time.UTC)),
 	// 			Rights: []*armnotificationhubs.AccessRights{
 	// 				to.Ptr(armnotificationhubs.AccessRightsListen),
 	// 				to.Ptr(armnotificationhubs.AccessRightsSend),
@@ -249,14 +249,14 @@ func ExampleNamespacesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientGetResponse{
-	// 	NamespaceResource: &armnotificationhubs.NamespaceResource{
+	// 	NamespaceResource: armnotificationhubs.NamespaceResource{
 	// 		Name: to.Ptr("nh-sdk-ns"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns"),
 	// 		Location: to.Ptr("East US"),
 	// 		Properties: &armnotificationhubs.NamespaceProperties{
 	// 			Name: to.Ptr("nh-sdk-ns"),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 	// 			Critical: to.Ptr(false),
 	// 			Enabled: to.Ptr(true),
 	// 			NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -284,7 +284,7 @@ func ExampleNamespacesClient_Get() {
 	// 			ServiceBusEndpoint: to.Ptr("https://nh-sdk-ns.servicebus.windows.net:443/"),
 	// 			Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 	// 			SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-	// 			UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+	// 			UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 	// 		},
 	// 		SKU: &armnotificationhubs.SKU{
 	// 			Name: to.Ptr(armnotificationhubs.SKUNameStandard),
@@ -316,13 +316,13 @@ func ExampleNamespacesClient_GetAuthorizationRule() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientGetAuthorizationRuleResponse{
-	// 	SharedAccessAuthorizationRuleResource: &armnotificationhubs.SharedAccessAuthorizationRuleResource{
+	// 	SharedAccessAuthorizationRuleResource: armnotificationhubs.SharedAccessAuthorizationRuleResource{
 	// 		Name: to.Ptr("RootManageSharedAccessKey"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces/authorizationRules"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns/authorizationRules/RootManageSharedAccessKey"),
 	// 		Properties: &armnotificationhubs.SharedAccessAuthorizationRuleProperties{
-	// 			CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:19:36.3315279+00:00"); return t}()),
-	// 			ModifiedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:19:36.3315279+00:00"); return t}()),
+	// 			CreatedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 19, 36, 331527900, time.UTC)),
+	// 			ModifiedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 19, 36, 331527900, time.UTC)),
 	// 			Rights: []*armnotificationhubs.AccessRights{
 	// 				to.Ptr(armnotificationhubs.AccessRightsManage),
 	// 				to.Ptr(armnotificationhubs.AccessRightsListen),
@@ -352,7 +352,7 @@ func ExampleNamespacesClient_GetPnsCredentials() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientGetPnsCredentialsResponse{
-	// 	PnsCredentialsResource: &armnotificationhubs.PnsCredentialsResource{
+	// 	PnsCredentialsResource: armnotificationhubs.PnsCredentialsResource{
 	// 		Name: to.Ptr("nh-sdk-hub"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces/pnsCredentials"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns"),
@@ -400,7 +400,7 @@ func ExampleNamespacesClient_NewListPager() {
 		// 				Location: to.Ptr("East US"),
 		// 				Properties: &armnotificationhubs.NamespaceProperties{
 		// 					Name: to.Ptr("namespace-1"),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 		// 					Critical: to.Ptr(false),
 		// 					Enabled: to.Ptr(true),
 		// 					NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -428,7 +428,7 @@ func ExampleNamespacesClient_NewListPager() {
 		// 					ServiceBusEndpoint: to.Ptr("https://namespace-1.servicebus.windows.net:443/"),
 		// 					Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 		// 					SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-		// 					UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+		// 					UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 		// 				},
 		// 				SKU: &armnotificationhubs.SKU{
 		// 					Name: to.Ptr(armnotificationhubs.SKUNameStandard),
@@ -443,7 +443,7 @@ func ExampleNamespacesClient_NewListPager() {
 		// 				Location: to.Ptr("East US"),
 		// 				Properties: &armnotificationhubs.NamespaceProperties{
 		// 					Name: to.Ptr("namespace-2"),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 		// 					Critical: to.Ptr(false),
 		// 					Enabled: to.Ptr(true),
 		// 					NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -465,7 +465,7 @@ func ExampleNamespacesClient_NewListPager() {
 		// 					ServiceBusEndpoint: to.Ptr("https://namespace-2.servicebus.windows.net:443/"),
 		// 					Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 		// 					SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-		// 					UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+		// 					UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 		// 				},
 		// 				SKU: &armnotificationhubs.SKU{
 		// 					Name: to.Ptr(armnotificationhubs.SKUNameStandard),
@@ -514,7 +514,7 @@ func ExampleNamespacesClient_NewListAllPager() {
 		// 				Location: to.Ptr("East US"),
 		// 				Properties: &armnotificationhubs.NamespaceProperties{
 		// 					Name: to.Ptr("namespace-1"),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 		// 					Critical: to.Ptr(false),
 		// 					Enabled: to.Ptr(true),
 		// 					NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -542,7 +542,7 @@ func ExampleNamespacesClient_NewListAllPager() {
 		// 					ServiceBusEndpoint: to.Ptr("https://namespace-1.servicebus.windows.net:443/"),
 		// 					Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 		// 					SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-		// 					UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+		// 					UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 		// 				},
 		// 				SKU: &armnotificationhubs.SKU{
 		// 					Name: to.Ptr(armnotificationhubs.SKUNameStandard),
@@ -557,7 +557,7 @@ func ExampleNamespacesClient_NewListAllPager() {
 		// 				Location: to.Ptr("East US"),
 		// 				Properties: &armnotificationhubs.NamespaceProperties{
 		// 					Name: to.Ptr("namespace-2"),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 		// 					Critical: to.Ptr(false),
 		// 					Enabled: to.Ptr(true),
 		// 					NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -579,7 +579,7 @@ func ExampleNamespacesClient_NewListAllPager() {
 		// 					ServiceBusEndpoint: to.Ptr("https://namespace-2.servicebus.windows.net:443/"),
 		// 					Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 		// 					SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-		// 					UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+		// 					UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 		// 				},
 		// 				SKU: &armnotificationhubs.SKU{
 		// 					Name: to.Ptr(armnotificationhubs.SKUNameStandard),
@@ -625,8 +625,8 @@ func ExampleNamespacesClient_NewListAuthorizationRulesPager() {
 		// 				Type: to.Ptr("Microsoft.NotificationHubs/namespaces/authorizationRules"),
 		// 				ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns/authorizationRules/RootManageSharedAccessKey"),
 		// 				Properties: &armnotificationhubs.SharedAccessAuthorizationRuleProperties{
-		// 					CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.0407982+00:00"); return t}()),
-		// 					ModifiedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.0407987+00:00"); return t}()),
+		// 					CreatedTime: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 40798200, time.UTC)),
+		// 					ModifiedTime: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 40798700, time.UTC)),
 		// 					Rights: []*armnotificationhubs.AccessRights{
 		// 						to.Ptr(armnotificationhubs.AccessRightsManage),
 		// 						to.Ptr(armnotificationhubs.AccessRightsListen),
@@ -639,8 +639,8 @@ func ExampleNamespacesClient_NewListAuthorizationRulesPager() {
 		// 				Type: to.Ptr("Microsoft.NotificationHubs/namespaces/authorizationRules"),
 		// 				ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns/authorizationRules/NewAuthorizationRule"),
 		// 				Properties: &armnotificationhubs.SharedAccessAuthorizationRuleProperties{
-		// 					CreatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:09:19.9675121+00:00"); return t}()),
-		// 					ModifiedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T10:09:19.9675121+00:00"); return t}()),
+		// 					CreatedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 9, 19, 967512100, time.UTC)),
+		// 					ModifiedTime: to.Ptr(time.Date(2023, time.April, 26, 10, 9, 19, 967512100, time.UTC)),
 		// 					Rights: []*armnotificationhubs.AccessRights{
 		// 						to.Ptr(armnotificationhubs.AccessRightsListen),
 		// 						to.Ptr(armnotificationhubs.AccessRightsSend),
@@ -672,7 +672,7 @@ func ExampleNamespacesClient_ListKeys() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientListKeysResponse{
-	// 	ResourceListKeys: &armnotificationhubs.ResourceListKeys{
+	// 	ResourceListKeys: armnotificationhubs.ResourceListKeys{
 	// 		KeyName: to.Ptr("RootManageSharedAccessKey"),
 	// 		PrimaryConnectionString: to.Ptr("Endpoint=sb://nh-sdk-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=############################################"),
 	// 		PrimaryKey: to.Ptr("############################################"),
@@ -703,7 +703,7 @@ func ExampleNamespacesClient_RegenerateKeys() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientRegenerateKeysResponse{
-	// 	ResourceListKeys: &armnotificationhubs.ResourceListKeys{
+	// 	ResourceListKeys: armnotificationhubs.ResourceListKeys{
 	// 		KeyName: to.Ptr("RootManageSharedAccessKey"),
 	// 		PrimaryConnectionString: to.Ptr("Endpoint=sb://nh-sdk-ns.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=########################################"),
 	// 		PrimaryKey: to.Ptr("########################################"),
@@ -749,14 +749,14 @@ func ExampleNamespacesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armnotificationhubs.NamespacesClientUpdateResponse{
-	// 	NamespaceResource: &armnotificationhubs.NamespaceResource{
+	// 	NamespaceResource: armnotificationhubs.NamespaceResource{
 	// 		Name: to.Ptr("nh-sdk-ns"),
 	// 		Type: to.Ptr("Microsoft.NotificationHubs/namespaces"),
 	// 		ID: to.Ptr("/subscriptions/29cfa613-cbbc-4512-b1d6-1b3a92c7fa40/resourceGroups/5ktrial/providers/Microsoft.NotificationHubs/namespaces/nh-sdk-ns"),
 	// 		Location: to.Ptr("East US"),
 	// 		Properties: &armnotificationhubs.NamespaceProperties{
 	// 			Name: to.Ptr("nh-sdk-ns"),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.01+00:00"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 10000000, time.UTC)),
 	// 			Critical: to.Ptr(false),
 	// 			Enabled: to.Ptr(true),
 	// 			NamespaceType: to.Ptr(armnotificationhubs.NamespaceTypeNotificationHub),
@@ -784,7 +784,7 @@ func ExampleNamespacesClient_Update() {
 	// 			ServiceBusEndpoint: to.Ptr("https://nh-sdk-ns.servicebus.windows.net:443/"),
 	// 			Status: to.Ptr(armnotificationhubs.NamespaceStatusCreated),
 	// 			SubscriptionID: to.Ptr("29cfa613-cbbc-4512-b1d6-1b3a92c7fa40"),
-	// 			UpdatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-04-26T06:10:44.03+00:00"); return t}()),
+	// 			UpdatedAt: to.Ptr(time.Date(2023, time.April, 26, 6, 10, 44, 30000000, time.UTC)),
 	// 		},
 	// 		SKU: &armnotificationhubs.SKU{
 	// 			Name: to.Ptr(armnotificationhubs.SKUNameFree),

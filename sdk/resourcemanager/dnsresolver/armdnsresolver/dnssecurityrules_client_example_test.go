@@ -44,13 +44,13 @@ func ExampleDNSSecurityRulesClient_BeginCreateOrUpdate_upsertDnsSecurityRuleWith
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSSecurityRulesClientCreateOrUpdateResponse{
-	// 	DNSSecurityRule: &armdnsresolver.DNSSecurityRule{
+	// 	DNSSecurityRule: armdnsresolver.DNSSecurityRule{
 	// 		Name: to.Ptr("sampleDnsSecurityRule"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverPolicies/dnsSecurityRules"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -68,9 +68,9 @@ func ExampleDNSSecurityRulesClient_BeginCreateOrUpdate_upsertDnsSecurityRuleWith
 	// 			ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -114,13 +114,13 @@ func ExampleDNSSecurityRulesClient_BeginCreateOrUpdate_upsertDnsSecurityRule() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSSecurityRulesClientCreateOrUpdateResponse{
-	// 	DNSSecurityRule: &armdnsresolver.DNSSecurityRule{
+	// 	DNSSecurityRule: armdnsresolver.DNSSecurityRule{
 	// 		Name: to.Ptr("sampleDnsSecurityRule"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverPolicies/dnsSecurityRules"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -140,9 +140,9 @@ func ExampleDNSSecurityRulesClient_BeginCreateOrUpdate_upsertDnsSecurityRule() {
 	// 			ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -169,7 +169,7 @@ func ExampleDNSSecurityRulesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -192,7 +192,7 @@ func ExampleDNSSecurityRulesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSSecurityRulesClientGetResponse{
-	// 	DNSSecurityRule: &armdnsresolver.DNSSecurityRule{
+	// 	DNSSecurityRule: armdnsresolver.DNSSecurityRule{
 	// 		Name: to.Ptr("sampleDnsSecurityRule"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverPolicies/dnsSecurityRules"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -212,9 +212,9 @@ func ExampleDNSSecurityRulesClient_Get() {
 	// 			ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{
@@ -270,9 +270,9 @@ func ExampleDNSSecurityRulesClient_NewListPager() {
 		// 					ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -299,9 +299,9 @@ func ExampleDNSSecurityRulesClient_NewListPager() {
 		// 					ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armdnsresolver.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 					LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 		// 				},
 		// 				Tags: map[string]*string{
@@ -338,13 +338,13 @@ func ExampleDNSSecurityRulesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdnsresolver.DNSSecurityRulesClientUpdateResponse{
-	// 	DNSSecurityRule: &armdnsresolver.DNSSecurityRule{
+	// 	DNSSecurityRule: armdnsresolver.DNSSecurityRule{
 	// 		Name: to.Ptr("sampleDnsSecurityRule"),
 	// 		Type: to.Ptr("Microsoft.Network/dnsResolverPolicies/dnsSecurityRules"),
 	// 		Etag: to.Ptr("00000000-0000-0000-0000-000000000000"),
@@ -364,9 +364,9 @@ func ExampleDNSSecurityRulesClient_BeginUpdate() {
 	// 			ProvisioningState: to.Ptr(armdnsresolver.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armdnsresolver.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.April, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-04-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.April, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 			LastModifiedByType: to.Ptr(armdnsresolver.CreatedByTypeApplication),
 	// 		},
 	// 		Tags: map[string]*string{

@@ -18,6 +18,8 @@ import (
 
 // GlobalClient contains the methods for the Global group.
 // Don't use this type directly, use NewGlobalClient() instead.
+//
+// Generated from API version 2025-05-01
 type GlobalClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type GlobalClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewGlobalClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*GlobalClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewGlobalClient(subscriptionID string, credential azcore.TokenCredential, o
 //
 // Description for Get deleted app for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - deletedSiteID - The numeric ID of the deleted app, e.g. 12345
 //   - options - GlobalClientGetDeletedWebAppOptions contains the optional parameters for the GlobalClient.GetDeletedWebApp method.
 func (client *GlobalClient) GetDeletedWebApp(ctx context.Context, deletedSiteID string, options *GlobalClientGetDeletedWebAppOptions) (GlobalClientGetDeletedWebAppResponse, error) {
@@ -61,19 +64,14 @@ func (client *GlobalClient) GetDeletedWebApp(ctx context.Context, deletedSiteID 
 	if err != nil {
 		return GlobalClientGetDeletedWebAppResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GlobalClientGetDeletedWebAppResponse{}, err
-	}
-	resp, err := client.getDeletedWebAppHandleResponse(httpResp)
-	return resp, err
+	return client.getDeletedWebAppHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeletedWebAppCreateRequest creates the GetDeletedWebApp request.
 func (client *GlobalClient) getDeletedWebAppCreateRequest(ctx context.Context, deletedSiteID string, _ *GlobalClientGetDeletedWebAppOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites/{deletedSiteId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deletedSiteID == "" {
@@ -85,15 +83,18 @@ func (client *GlobalClient) getDeletedWebAppCreateRequest(ctx context.Context, d
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeletedWebAppHandleResponse handles the GetDeletedWebApp response.
-func (client *GlobalClient) getDeletedWebAppHandleResponse(resp *http.Response) (GlobalClientGetDeletedWebAppResponse, error) {
+func (client *GlobalClient) getDeletedWebAppHandleResponse(resp *http.Response, successCodes ...int) (GlobalClientGetDeletedWebAppResponse, error) {
 	result := GlobalClientGetDeletedWebAppResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeletedSite); err != nil {
 		return GlobalClientGetDeletedWebAppResponse{}, err
 	}
@@ -104,8 +105,6 @@ func (client *GlobalClient) getDeletedWebAppHandleResponse(resp *http.Response) 
 //
 // Description for Get all deleted apps for a subscription.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - deletedSiteID - The numeric ID of the deleted app, e.g. 12345
 //   - options - GlobalClientGetDeletedWebAppSnapshotsOptions contains the optional parameters for the GlobalClient.GetDeletedWebAppSnapshots
 //     method.
@@ -123,19 +122,14 @@ func (client *GlobalClient) GetDeletedWebAppSnapshots(ctx context.Context, delet
 	if err != nil {
 		return GlobalClientGetDeletedWebAppSnapshotsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return GlobalClientGetDeletedWebAppSnapshotsResponse{}, err
-	}
-	resp, err := client.getDeletedWebAppSnapshotsHandleResponse(httpResp)
-	return resp, err
+	return client.getDeletedWebAppSnapshotsHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDeletedWebAppSnapshotsCreateRequest creates the GetDeletedWebAppSnapshots request.
 func (client *GlobalClient) getDeletedWebAppSnapshotsCreateRequest(ctx context.Context, deletedSiteID string, _ *GlobalClientGetDeletedWebAppSnapshotsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/deletedSites/{deletedSiteId}/snapshots"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if deletedSiteID == "" {
@@ -147,15 +141,18 @@ func (client *GlobalClient) getDeletedWebAppSnapshotsCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDeletedWebAppSnapshotsHandleResponse handles the GetDeletedWebAppSnapshots response.
-func (client *GlobalClient) getDeletedWebAppSnapshotsHandleResponse(resp *http.Response) (GlobalClientGetDeletedWebAppSnapshotsResponse, error) {
+func (client *GlobalClient) getDeletedWebAppSnapshotsHandleResponse(resp *http.Response, successCodes ...int) (GlobalClientGetDeletedWebAppSnapshotsResponse, error) {
 	result := GlobalClientGetDeletedWebAppSnapshotsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SnapshotArray); err != nil {
 		return GlobalClientGetDeletedWebAppSnapshotsResponse{}, err
 	}
@@ -166,8 +163,6 @@ func (client *GlobalClient) getDeletedWebAppSnapshotsHandleResponse(resp *http.R
 //
 // Description for Gets an operation in a subscription and given region
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - location - The name of the Azure region.
 //   - operationID - Operation Id
 //   - options - GlobalClientGetSubscriptionOperationWithAsyncResponseOptions contains the optional parameters for the GlobalClient.GetSubscriptionOperationWithAsyncResponse
@@ -187,8 +182,7 @@ func (client *GlobalClient) GetSubscriptionOperationWithAsyncResponse(ctx contex
 		return GlobalClientGetSubscriptionOperationWithAsyncResponseResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return GlobalClientGetSubscriptionOperationWithAsyncResponseResponse{}, err
+		return GlobalClientGetSubscriptionOperationWithAsyncResponseResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return GlobalClientGetSubscriptionOperationWithAsyncResponseResponse{}, nil
 }
@@ -197,7 +191,7 @@ func (client *GlobalClient) GetSubscriptionOperationWithAsyncResponse(ctx contex
 func (client *GlobalClient) getSubscriptionOperationWithAsyncResponseCreateRequest(ctx context.Context, location string, operationID string, _ *GlobalClientGetSubscriptionOperationWithAsyncResponseOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/operations/{operationId}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -213,7 +207,7 @@ func (client *GlobalClient) getSubscriptionOperationWithAsyncResponseCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }

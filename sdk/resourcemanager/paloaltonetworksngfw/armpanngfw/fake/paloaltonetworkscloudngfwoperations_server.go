@@ -14,6 +14,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/paloaltonetworksngfw/armpanngfw/v2"
 	"net/http"
 	"regexp"
+	"slices"
 )
 
 // PaloAltoNetworksCloudngfwOperationsServer is a fake server for instances of the armpanngfw.PaloAltoNetworksCloudngfwOperationsClient type.
@@ -60,9 +61,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) Do(req *http.Reques
 }
 
 func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -84,10 +83,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchToMethodFak
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -102,7 +98,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchCreateProdu
 	if p.srv.CreateProductSerialNumber == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateProductSerialNumber not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/createProductSerialNumber`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/createProductSerialNumber`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -113,7 +109,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchCreateProdu
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProductSerialNumberRequestStatus, req)
@@ -127,7 +123,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListCloudMa
 	if p.srv.ListCloudManagerTenants == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListCloudManagerTenants not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/listCloudManagerTenants`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/listCloudManagerTenants`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -138,7 +134,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListCloudMa
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CloudManagerTenantList, req)
@@ -152,7 +148,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListProduct
 	if p.srv.ListProductSerialNumberStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListProductSerialNumberStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/listProductSerialNumberStatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/listProductSerialNumberStatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -163,7 +159,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListProduct
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNotFound}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNotFound}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNotFound", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProductSerialNumberStatus, req)
@@ -177,7 +173,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListSupport
 	if p.srv.ListSupportInfo == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListSupportInfo not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/PaloAltoNetworks\.Cloudngfw/listSupportInfo`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/PaloAltoNetworks\.Cloudngfw/listSupportInfo`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 2 {
@@ -188,7 +184,7 @@ func (p *PaloAltoNetworksCloudngfwOperationsServerTransport) dispatchListSupport
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SupportInfoModel, req)

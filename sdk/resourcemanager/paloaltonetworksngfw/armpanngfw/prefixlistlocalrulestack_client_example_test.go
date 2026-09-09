@@ -39,13 +39,13 @@ func ExamplePrefixListLocalRulestackClient_BeginCreateOrUpdate_prefixListLocalRu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.PrefixListLocalRulestackClientCreateOrUpdateResponse{
-	// 	PrefixListResource: &armpanngfw.PrefixListResource{
+	// 	PrefixListResource: armpanngfw.PrefixListResource{
 	// 		Name: to.Ptr("armid1"),
 	// 		Type: to.Ptr("certificates"),
 	// 		ID: to.Ptr("/providers/PaloAltoNetworks.Cloudngfw/globalrulestacks/armid1/certificates/armid1"),
@@ -59,10 +59,10 @@ func ExamplePrefixListLocalRulestackClient_BeginCreateOrUpdate_prefixListLocalRu
 	// 			ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armpanngfw.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("praval"),
 	// 			CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("praval"),
 	// 			LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 	// 		},
@@ -93,13 +93,13 @@ func ExamplePrefixListLocalRulestackClient_BeginCreateOrUpdate_prefixListLocalRu
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.PrefixListLocalRulestackClientCreateOrUpdateResponse{
-	// 	PrefixListResource: &armpanngfw.PrefixListResource{
+	// 	PrefixListResource: armpanngfw.PrefixListResource{
 	// 		ID: to.Ptr("/subscriptions/2bf4a339-294d-4c25-b0b2-ef649e9f5c27/resourcegroups/rgopenapi/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/praval/prefixlists/armid1"),
 	// 		Properties: &armpanngfw.PrefixObject{
 	// 			PrefixList: []*string{
@@ -127,7 +127,7 @@ func ExamplePrefixListLocalRulestackClient_BeginDelete_prefixListLocalRulestackD
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -153,7 +153,7 @@ func ExamplePrefixListLocalRulestackClient_BeginDelete_prefixListLocalRulestackD
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -181,7 +181,7 @@ func ExamplePrefixListLocalRulestackClient_Get_prefixListLocalRulestackGetMaximu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.PrefixListLocalRulestackClientGetResponse{
-	// 	PrefixListResource: &armpanngfw.PrefixListResource{
+	// 	PrefixListResource: armpanngfw.PrefixListResource{
 	// 		Name: to.Ptr("armid1"),
 	// 		Type: to.Ptr("certificates"),
 	// 		ID: to.Ptr("/providers/PaloAltoNetworks.Cloudngfw/globalrulestacks/armid1/certificates/armid1"),
@@ -195,10 +195,10 @@ func ExamplePrefixListLocalRulestackClient_Get_prefixListLocalRulestackGetMaximu
 	// 			ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armpanngfw.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("praval"),
 	// 			CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("praval"),
 	// 			LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 	// 		},
@@ -225,7 +225,7 @@ func ExamplePrefixListLocalRulestackClient_Get_prefixListLocalRulestackGetMinimu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpanngfw.PrefixListLocalRulestackClientGetResponse{
-	// 	PrefixListResource: &armpanngfw.PrefixListResource{
+	// 	PrefixListResource: armpanngfw.PrefixListResource{
 	// 		ID: to.Ptr("/subscriptions/2bf4a339-294d-4c25-b0b2-ef649e9f5c27/resourcegroups/rgopenapi/providers/PaloAltoNetworks.Cloudngfw/localRulestacks/praval/prefixlists/armid1"),
 	// 		Properties: &armpanngfw.PrefixObject{
 	// 			PrefixList: []*string{
@@ -276,10 +276,10 @@ func ExamplePrefixListLocalRulestackClient_NewListByLocalRulestacksPager_prefixL
 		// 					ProvisioningState: to.Ptr(armpanngfw.ProvisioningStateAccepted),
 		// 				},
 		// 				SystemData: &armpanngfw.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("praval"),
 		// 					CreatedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-09T05:08:24.229Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2022, time.September, 9, 5, 8, 24, 229000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("praval"),
 		// 					LastModifiedByType: to.Ptr(armpanngfw.CreatedByTypeUser),
 		// 				},

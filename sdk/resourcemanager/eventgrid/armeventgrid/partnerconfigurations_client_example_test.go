@@ -6,12 +6,11 @@ package armeventgrid_test
 
 import (
 	"context"
-	"log"
-	"time"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/eventgrid/armeventgrid/v2"
+	"log"
+	"time"
 )
 
 // Generated from example definition: 2025-07-15-preview/PartnerConfigurations_AuthorizePartner.json
@@ -26,7 +25,7 @@ func ExamplePartnerConfigurationsClient_AuthorizePartner() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 	res, err := clientFactory.NewPartnerConfigurationsClient().AuthorizePartner(ctx, "examplerg", armeventgrid.Partner{
-		AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t }()),
+		AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 		PartnerName:                      to.Ptr("Contoso.Finance"),
 		PartnerRegistrationImmutableID:   to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	}, nil)
@@ -37,7 +36,7 @@ func ExamplePartnerConfigurationsClient_AuthorizePartner() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerConfigurationsClientAuthorizePartnerResponse{
-	// 	PartnerConfiguration: &armeventgrid.PartnerConfiguration{
+	// 	PartnerConfiguration: armeventgrid.PartnerConfiguration{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerConfigurations/default"),
@@ -46,12 +45,12 @@ func ExamplePartnerConfigurationsClient_AuthorizePartner() {
 	// 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 	// 				AuthorizedPartnersList: []*armeventgrid.Partner{
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("Contoso.Finance"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	// 					},
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("fabrikam.HR"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 	// 					},
@@ -83,12 +82,12 @@ func ExamplePartnerConfigurationsClient_BeginCreateOrUpdate() {
 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 				AuthorizedPartnersList: []*armeventgrid.Partner{
 					{
-						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t }()),
+						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 						PartnerName:                      to.Ptr("Contoso.Finance"),
 						PartnerRegistrationImmutableID:   to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 					},
 					{
-						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t }()),
+						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 						PartnerName:                      to.Ptr("fabrikam.HR"),
 						PartnerRegistrationImmutableID:   to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 					},
@@ -102,13 +101,13 @@ func ExamplePartnerConfigurationsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerConfigurationsClientCreateOrUpdateResponse{
-	// 	PartnerConfiguration: &armeventgrid.PartnerConfiguration{
+	// 	PartnerConfiguration: armeventgrid.PartnerConfiguration{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerConfigurations/default"),
@@ -117,12 +116,12 @@ func ExamplePartnerConfigurationsClient_BeginCreateOrUpdate() {
 	// 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 	// 				AuthorizedPartnersList: []*armeventgrid.Partner{
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("Contoso.Finance"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	// 					},
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("fabrikam.HR"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 	// 					},
@@ -155,7 +154,7 @@ func ExamplePartnerConfigurationsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -183,7 +182,7 @@ func ExamplePartnerConfigurationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerConfigurationsClientGetResponse{
-	// 	PartnerConfiguration: &armeventgrid.PartnerConfiguration{
+	// 	PartnerConfiguration: armeventgrid.PartnerConfiguration{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerConfigurations/default"),
@@ -192,12 +191,12 @@ func ExamplePartnerConfigurationsClient_Get() {
 	// 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 	// 				AuthorizedPartnersList: []*armeventgrid.Partner{
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("Contoso.Finance"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	// 					},
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("fabrikam.HR"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 	// 					},
@@ -247,12 +246,12 @@ func ExamplePartnerConfigurationsClient_NewListByResourceGroupPager() {
 		// 					PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 		// 						AuthorizedPartnersList: []*armeventgrid.Partner{
 		// 							{
-		// 								AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+		// 								AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 		// 								PartnerName: to.Ptr("Contoso.Finance"),
 		// 								PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 		// 							},
 		// 							{
-		// 								AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+		// 								AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 		// 								PartnerName: to.Ptr("fabrikam.HR"),
 		// 								PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 		// 							},
@@ -305,12 +304,12 @@ func ExamplePartnerConfigurationsClient_NewListBySubscriptionPager() {
 		// 					PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 		// 						AuthorizedPartnersList: []*armeventgrid.Partner{
 		// 							{
-		// 								AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+		// 								AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 		// 								PartnerName: to.Ptr("Contoso.Finance"),
 		// 								PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 		// 							},
 		// 							{
-		// 								AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+		// 								AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 		// 								PartnerName: to.Ptr("fabrikam.HR"),
 		// 								PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 		// 							},
@@ -341,7 +340,7 @@ func ExamplePartnerConfigurationsClient_UnauthorizePartner() {
 		log.Fatalf("failed to create client: %v", err)
 	}
 	res, err := clientFactory.NewPartnerConfigurationsClient().UnauthorizePartner(ctx, "examplerg", armeventgrid.Partner{
-		AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t }()),
+		AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 		PartnerName:                      to.Ptr("Contoso.Finance"),
 		PartnerRegistrationImmutableID:   to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	}, nil)
@@ -352,7 +351,7 @@ func ExamplePartnerConfigurationsClient_UnauthorizePartner() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerConfigurationsClientUnauthorizePartnerResponse{
-	// 	PartnerConfiguration: &armeventgrid.PartnerConfiguration{
+	// 	PartnerConfiguration: armeventgrid.PartnerConfiguration{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerConfigurations/default"),
@@ -361,7 +360,7 @@ func ExamplePartnerConfigurationsClient_UnauthorizePartner() {
 	// 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 	// 				AuthorizedPartnersList: []*armeventgrid.Partner{
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("fabrikam.HR"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 	// 					},
@@ -402,13 +401,13 @@ func ExamplePartnerConfigurationsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.PartnerConfigurationsClientUpdateResponse{
-	// 	PartnerConfiguration: &armeventgrid.PartnerConfiguration{
+	// 	PartnerConfiguration: armeventgrid.PartnerConfiguration{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerConfigurations"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerConfigurations/default"),
@@ -417,12 +416,12 @@ func ExamplePartnerConfigurationsClient_BeginUpdate() {
 	// 			PartnerAuthorization: &armeventgrid.PartnerAuthorization{
 	// 				AuthorizedPartnersList: []*armeventgrid.Partner{
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-01-28T01:20:55.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.January, 28, 1, 20, 55, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("Contoso.Finance"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("941892bc-f5d0-4d1c-8fb5-477570fc2b71"),
 	// 					},
 	// 					{
-	// 						AuthorizationExpirationTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-02-20T01:00:00.142Z"); return t}()),
+	// 						AuthorizationExpirationTimeInUTC: to.Ptr(time.Date(2022, time.February, 20, 1, 0, 0, 142000000, time.UTC)),
 	// 						PartnerName: to.Ptr("fabrikam.HR"),
 	// 						PartnerRegistrationImmutableID: to.Ptr("5362bdb6-ce3e-4d0d-9a5b-3eb92c8aab38"),
 	// 					},

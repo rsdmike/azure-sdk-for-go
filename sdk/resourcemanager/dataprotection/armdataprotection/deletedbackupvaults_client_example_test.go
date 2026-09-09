@@ -30,7 +30,7 @@ func ExampleDeletedBackupVaultsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdataprotection.DeletedBackupVaultsClientGetResponse{
-	// 	DeletedBackupVaultResource: &armdataprotection.DeletedBackupVaultResource{
+	// 	DeletedBackupVaultResource: armdataprotection.DeletedBackupVaultResource{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.DataProtection/locations/westus/deletedBackupVaults/deleted-vault-01"),
 	// 		Name: to.Ptr("deleted-vault-01"),
 	// 		Type: to.Ptr("Microsoft.DataProtection/deletedBackupVaults"),
@@ -39,8 +39,8 @@ func ExampleDeletedBackupVaultsClient_Get() {
 	// 			OriginalBackupVaultName: to.Ptr("sample-vault"),
 	// 			OriginalBackupVaultResourcePath: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-rg/providers/Microsoft.DataProtection/backupVaults/sample-vault"),
 	// 			ResourceDeletionInfo: &armdataprotection.ResourceDeletionInfo{
-	// 				DeletionTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-09-18T10:00:00.000Z"); return t}()),
-	// 				ScheduledPurgeTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-10-18T10:00:00.000Z"); return t}()),
+	// 				DeletionTime: to.Ptr(time.Date(2025, time.September, 18, 10, 0, 0, 0, time.UTC)),
+	// 				ScheduledPurgeTime: to.Ptr(time.Date(2025, time.October, 18, 10, 0, 0, 0, time.UTC)),
 	// 				DeleteActivityID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 	// 			},
 	// 			MonitoringSettings: &armdataprotection.MonitoringSettings{
@@ -118,8 +118,8 @@ func ExampleDeletedBackupVaultsClient_NewListByLocationPager() {
 		// 					OriginalBackupVaultName: to.Ptr("sample-vault"),
 		// 					OriginalBackupVaultResourcePath: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sample-rg/providers/Microsoft.DataProtection/backupVaults/sample-vault"),
 		// 					ResourceDeletionInfo: &armdataprotection.ResourceDeletionInfo{
-		// 						DeletionTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-09-18T10:00:00.000Z"); return t}()),
-		// 						ScheduledPurgeTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-10-18T10:00:00.000Z"); return t}()),
+		// 						DeletionTime: to.Ptr(time.Date(2025, time.September, 18, 10, 0, 0, 0, time.UTC)),
+		// 						ScheduledPurgeTime: to.Ptr(time.Date(2025, time.October, 18, 10, 0, 0, 0, time.UTC)),
 		// 						DeleteActivityID: to.Ptr("00000000-0000-0000-0000-000000000000"),
 		// 					},
 		// 					MonitoringSettings: &armdataprotection.MonitoringSettings{

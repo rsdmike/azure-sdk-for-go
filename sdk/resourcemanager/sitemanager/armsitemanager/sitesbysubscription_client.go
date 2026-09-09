@@ -18,6 +18,8 @@ import (
 
 // SitesBySubscriptionClient contains the methods for the SitesBySubscription group.
 // Don't use this type directly, use NewSitesBySubscriptionClient() instead.
+//
+// Generated from API version 2025-06-01
 type SitesBySubscriptionClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type SitesBySubscriptionClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSitesBySubscriptionClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SitesBySubscriptionClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewSitesBySubscriptionClient(subscriptionID string, credential azcore.Token
 
 // BeginCreateOrUpdate - Create a Site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - siteName - The name of the Site
 //   - resource - Resource create parameters.
 //   - options - SitesBySubscriptionClientBeginCreateOrUpdateOptions contains the optional parameters for the SitesBySubscriptionClient.BeginCreateOrUpdate
@@ -66,8 +69,6 @@ func (client *SitesBySubscriptionClient) BeginCreateOrUpdate(ctx context.Context
 
 // CreateOrUpdate - Create a Site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *SitesBySubscriptionClient) createOrUpdate(ctx context.Context, siteName string, resource Site, options *SitesBySubscriptionClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SitesBySubscriptionClient.BeginCreateOrUpdate"
@@ -83,8 +84,7 @@ func (client *SitesBySubscriptionClient) createOrUpdate(ctx context.Context, sit
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -93,7 +93,7 @@ func (client *SitesBySubscriptionClient) createOrUpdate(ctx context.Context, sit
 func (client *SitesBySubscriptionClient) createOrUpdateCreateRequest(ctx context.Context, siteName string, resource Site, _ *SitesBySubscriptionClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites/{siteName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if siteName == "" {
@@ -105,8 +105,8 @@ func (client *SitesBySubscriptionClient) createOrUpdateCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -117,8 +117,6 @@ func (client *SitesBySubscriptionClient) createOrUpdateCreateRequest(ctx context
 
 // Delete - Delete a Site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - siteName - The name of the Site
 //   - options - SitesBySubscriptionClientDeleteOptions contains the optional parameters for the SitesBySubscriptionClient.Delete
 //     method.
@@ -137,8 +135,7 @@ func (client *SitesBySubscriptionClient) Delete(ctx context.Context, siteName st
 		return SitesBySubscriptionClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesBySubscriptionClientDeleteResponse{}, err
+		return SitesBySubscriptionClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return SitesBySubscriptionClientDeleteResponse{}, nil
 }
@@ -147,7 +144,7 @@ func (client *SitesBySubscriptionClient) Delete(ctx context.Context, siteName st
 func (client *SitesBySubscriptionClient) deleteCreateRequest(ctx context.Context, siteName string, _ *SitesBySubscriptionClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites/{siteName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if siteName == "" {
@@ -159,15 +156,13 @@ func (client *SitesBySubscriptionClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a Site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - siteName - The name of the Site
 //   - options - SitesBySubscriptionClientGetOptions contains the optional parameters for the SitesBySubscriptionClient.Get method.
 func (client *SitesBySubscriptionClient) Get(ctx context.Context, siteName string, options *SitesBySubscriptionClientGetOptions) (SitesBySubscriptionClientGetResponse, error) {
@@ -184,19 +179,14 @@ func (client *SitesBySubscriptionClient) Get(ctx context.Context, siteName strin
 	if err != nil {
 		return SitesBySubscriptionClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesBySubscriptionClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *SitesBySubscriptionClient) getCreateRequest(ctx context.Context, siteName string, _ *SitesBySubscriptionClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites/{siteName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if siteName == "" {
@@ -208,15 +198,18 @@ func (client *SitesBySubscriptionClient) getCreateRequest(ctx context.Context, s
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SitesBySubscriptionClient) getHandleResponse(resp *http.Response) (SitesBySubscriptionClientGetResponse, error) {
+func (client *SitesBySubscriptionClient) getHandleResponse(resp *http.Response, successCodes ...int) (SitesBySubscriptionClientGetResponse, error) {
 	result := SitesBySubscriptionClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return SitesBySubscriptionClientGetResponse{}, err
 	}
@@ -224,8 +217,6 @@ func (client *SitesBySubscriptionClient) getHandleResponse(resp *http.Response) 
 }
 
 // NewListPager - List Site resources by subscription ID
-//
-// Generated from API version 2025-06-01
 //   - options - SitesBySubscriptionClientListOptions contains the optional parameters for the SitesBySubscriptionClient.NewListPager
 //     method.
 func (client *SitesBySubscriptionClient) NewListPager(options *SitesBySubscriptionClientListOptions) *runtime.Pager[SitesBySubscriptionClientListResponse] {
@@ -239,39 +230,53 @@ func (client *SitesBySubscriptionClient) NewListPager(options *SitesBySubscripti
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return SitesBySubscriptionClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return SitesBySubscriptionClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *SitesBySubscriptionClient) listCreateRequest(ctx context.Context, _ *SitesBySubscriptionClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *SitesBySubscriptionClient) listCreateRequest(ctx context.Context, nextLink string, _ *SitesBySubscriptionClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *SitesBySubscriptionClient) listHandleResponse(resp *http.Response) (SitesBySubscriptionClientListResponse, error) {
+func (client *SitesBySubscriptionClient) listHandleResponse(resp *http.Response, successCodes ...int) (SitesBySubscriptionClientListResponse, error) {
 	result := SitesBySubscriptionClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SiteListResult); err != nil {
 		return SitesBySubscriptionClientListResponse{}, err
 	}
@@ -280,8 +285,6 @@ func (client *SitesBySubscriptionClient) listHandleResponse(resp *http.Response)
 
 // Update - Update a Site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - siteName - The name of the Site
 //   - properties - Resource create parameters.
 //   - options - SitesBySubscriptionClientUpdateOptions contains the optional parameters for the SitesBySubscriptionClient.Update
@@ -300,19 +303,14 @@ func (client *SitesBySubscriptionClient) Update(ctx context.Context, siteName st
 	if err != nil {
 		return SitesBySubscriptionClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SitesBySubscriptionClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *SitesBySubscriptionClient) updateCreateRequest(ctx context.Context, siteName string, properties SiteUpdate, _ *SitesBySubscriptionClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Edge/sites/{siteName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if siteName == "" {
@@ -324,8 +322,8 @@ func (client *SitesBySubscriptionClient) updateCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -335,8 +333,11 @@ func (client *SitesBySubscriptionClient) updateCreateRequest(ctx context.Context
 }
 
 // updateHandleResponse handles the Update response.
-func (client *SitesBySubscriptionClient) updateHandleResponse(resp *http.Response) (SitesBySubscriptionClientUpdateResponse, error) {
+func (client *SitesBySubscriptionClient) updateHandleResponse(resp *http.Response, successCodes ...int) (SitesBySubscriptionClientUpdateResponse, error) {
 	result := SitesBySubscriptionClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Site); err != nil {
 		return SitesBySubscriptionClientUpdateResponse{}, err
 	}

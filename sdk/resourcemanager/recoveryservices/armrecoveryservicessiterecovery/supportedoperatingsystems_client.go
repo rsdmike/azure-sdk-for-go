@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // SupportedOperatingSystemsClient contains the methods for the SupportedOperatingSystems group.
 // Don't use this type directly, use NewSupportedOperatingSystemsClient() instead.
+//
+// Generated from API version 2025-08-01
 type SupportedOperatingSystemsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type SupportedOperatingSystemsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSupportedOperatingSystemsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SupportedOperatingSystemsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewSupportedOperatingSystemsClient(subscriptionID string, credential azcore
 //
 // Gets the data of supported operating systems by SRS.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the recovery services vault.
 //   - options - SupportedOperatingSystemsClientGetOptions contains the optional parameters for the SupportedOperatingSystemsClient.Get
@@ -64,19 +66,14 @@ func (client *SupportedOperatingSystemsClient) Get(ctx context.Context, resource
 	if err != nil {
 		return SupportedOperatingSystemsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SupportedOperatingSystemsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *SupportedOperatingSystemsClient) getCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, options *SupportedOperatingSystemsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationSupportedOperatingSystems"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -92,18 +89,21 @@ func (client *SupportedOperatingSystemsClient) getCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
+	reqQP.Set("api-version", version20250801)
 	if options != nil && options.InstanceType != nil {
 		reqQP.Set("instanceType", *options.InstanceType)
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SupportedOperatingSystemsClient) getHandleResponse(resp *http.Response) (SupportedOperatingSystemsClientGetResponse, error) {
+func (client *SupportedOperatingSystemsClient) getHandleResponse(resp *http.Response, successCodes ...int) (SupportedOperatingSystemsClientGetResponse, error) {
 	result := SupportedOperatingSystemsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SupportedOperatingSystems); err != nil {
 		return SupportedOperatingSystemsClientGetResponse{}, err
 	}

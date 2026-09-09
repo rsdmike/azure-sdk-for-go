@@ -7,18 +7,19 @@ package armmaps
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // AccountsClient contains the methods for the Accounts group.
 // Don't use this type directly, use NewAccountsClient() instead.
+//
+// Generated from API version 2025-10-01-preview
 type AccountsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type AccountsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*AccountsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,8 +46,6 @@ func NewAccountsClient(subscriptionID string, credential azcore.TokenCredential,
 
 // CreateOrUpdate - Create or update a Maps Account. A Maps Account holds the keys which allow access to the Maps REST APIs.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - mapsAccount - The new or updated parameters for the Maps Account.
@@ -62,19 +64,14 @@ func (client *AccountsClient) CreateOrUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return AccountsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *AccountsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, mapsAccount Account, _ *AccountsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -90,8 +87,8 @@ func (client *AccountsClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, mapsAccount); err != nil {
@@ -101,8 +98,11 @@ func (client *AccountsClient) createOrUpdateCreateRequest(ctx context.Context, r
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *AccountsClient) createOrUpdateHandleResponse(resp *http.Response) (AccountsClientCreateOrUpdateResponse, error) {
+func (client *AccountsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientCreateOrUpdateResponse, error) {
 	result := AccountsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientCreateOrUpdateResponse{}, err
 	}
@@ -111,8 +111,6 @@ func (client *AccountsClient) createOrUpdateHandleResponse(resp *http.Response) 
 
 // Delete - Delete a Maps Account.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - options - AccountsClientDeleteOptions contains the optional parameters for the AccountsClient.Delete method.
@@ -131,8 +129,7 @@ func (client *AccountsClient) Delete(ctx context.Context, resourceGroupName stri
 		return AccountsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientDeleteResponse{}, err
+		return AccountsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return AccountsClientDeleteResponse{}, nil
 }
@@ -141,7 +138,7 @@ func (client *AccountsClient) Delete(ctx context.Context, resourceGroupName stri
 func (client *AccountsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *AccountsClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -157,15 +154,13 @@ func (client *AccountsClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a Maps Account.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - options - AccountsClientGetOptions contains the optional parameters for the AccountsClient.Get method.
@@ -183,19 +178,14 @@ func (client *AccountsClient) Get(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return AccountsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *AccountsClient) getCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *AccountsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -211,15 +201,18 @@ func (client *AccountsClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsClientGetResponse, error) {
+func (client *AccountsClient) getHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientGetResponse, error) {
 	result := AccountsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientGetResponse{}, err
 	}
@@ -227,8 +220,6 @@ func (client *AccountsClient) getHandleResponse(resp *http.Response) (AccountsCl
 }
 
 // NewListByResourceGroupPager - Get all Maps Accounts in a Resource Group
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - AccountsClientListByResourceGroupOptions contains the optional parameters for the AccountsClient.NewListByResourceGroupPager
 //     method.
@@ -243,43 +234,57 @@ func (client *AccountsClient) NewListByResourceGroupPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return AccountsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return AccountsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *AccountsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *AccountsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *AccountsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response) (AccountsClientListByResourceGroupResponse, error) {
+func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientListByResourceGroupResponse, error) {
 	result := AccountsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Accounts); err != nil {
 		return AccountsClientListByResourceGroupResponse{}, err
 	}
@@ -287,8 +292,6 @@ func (client *AccountsClient) listByResourceGroupHandleResponse(resp *http.Respo
 }
 
 // NewListBySubscriptionPager - Get all Maps Accounts in a Subscription
-//
-// Generated from API version 2025-10-01-preview
 //   - options - AccountsClientListBySubscriptionOptions contains the optional parameters for the AccountsClient.NewListBySubscriptionPager
 //     method.
 func (client *AccountsClient) NewListBySubscriptionPager(options *AccountsClientListBySubscriptionOptions) *runtime.Pager[AccountsClientListBySubscriptionResponse] {
@@ -302,39 +305,53 @@ func (client *AccountsClient) NewListBySubscriptionPager(options *AccountsClient
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return AccountsClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return AccountsClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *AccountsClient) listBySubscriptionCreateRequest(ctx context.Context, _ *AccountsClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Maps/accounts"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *AccountsClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *AccountsClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Maps/accounts"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251001Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Response) (AccountsClientListBySubscriptionResponse, error) {
+func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientListBySubscriptionResponse, error) {
 	result := AccountsClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Accounts); err != nil {
 		return AccountsClientListBySubscriptionResponse{}, err
 	}
@@ -344,8 +361,6 @@ func (client *AccountsClient) listBySubscriptionHandleResponse(resp *http.Respon
 // ListKeys - Get the keys to use with the Maps APIs. A key is used to authenticate and authorize access to the Maps REST
 // APIs. Only one key is needed at a time; two are given to provide seamless key regeneration.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - options - AccountsClientListKeysOptions contains the optional parameters for the AccountsClient.ListKeys method.
@@ -363,19 +378,14 @@ func (client *AccountsClient) ListKeys(ctx context.Context, resourceGroupName st
 	if err != nil {
 		return AccountsClientListKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientListKeysResponse{}, err
-	}
-	resp, err := client.listKeysHandleResponse(httpResp)
-	return resp, err
+	return client.listKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // listKeysCreateRequest creates the ListKeys request.
 func (client *AccountsClient) listKeysCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *AccountsClientListKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}/listKeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -391,15 +401,18 @@ func (client *AccountsClient) listKeysCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listKeysHandleResponse handles the ListKeys response.
-func (client *AccountsClient) listKeysHandleResponse(resp *http.Response) (AccountsClientListKeysResponse, error) {
+func (client *AccountsClient) listKeysHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientListKeysResponse, error) {
 	result := AccountsClientListKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return AccountsClientListKeysResponse{}, err
 	}
@@ -409,11 +422,11 @@ func (client *AccountsClient) listKeysHandleResponse(resp *http.Response) (Accou
 // ListSas - Create and list an account shared access signature token. Use this SAS token for authentication to Azure Maps
 // REST APIs through various Azure Maps SDKs. As prerequisite to create a SAS Token.
 // Prerequisites:
-// 1. Create or have an existing User Assigned Managed Identity in the same Azure region as the account.
-// 2. Create or update an Azure Maps account with the same Azure region as the User Assigned Managed Identity is placed.
-// If the operation fails it returns an *azcore.ResponseError type.
 //
-// Generated from API version 2025-10-01-preview
+//  1. Create or have an existing User Assigned Managed Identity in the same Azure region as the account.
+//  2. Create or update an Azure Maps account with the same Azure region as the User Assigned Managed Identity is placed.
+//
+// If the operation fails it returns an *azcore.ResponseError type.
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - mapsAccountSasParameters - The updated parameters for the Maps Account.
@@ -432,19 +445,14 @@ func (client *AccountsClient) ListSas(ctx context.Context, resourceGroupName str
 	if err != nil {
 		return AccountsClientListSasResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientListSasResponse{}, err
-	}
-	resp, err := client.listSasHandleResponse(httpResp)
-	return resp, err
+	return client.listSasHandleResponse(httpResp, http.StatusOK)
 }
 
 // listSasCreateRequest creates the ListSas request.
 func (client *AccountsClient) listSasCreateRequest(ctx context.Context, resourceGroupName string, accountName string, mapsAccountSasParameters AccountSasParameters, _ *AccountsClientListSasOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}/listSas"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -460,8 +468,8 @@ func (client *AccountsClient) listSasCreateRequest(ctx context.Context, resource
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, mapsAccountSasParameters); err != nil {
@@ -471,8 +479,11 @@ func (client *AccountsClient) listSasCreateRequest(ctx context.Context, resource
 }
 
 // listSasHandleResponse handles the ListSas response.
-func (client *AccountsClient) listSasHandleResponse(resp *http.Response) (AccountsClientListSasResponse, error) {
+func (client *AccountsClient) listSasHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientListSasResponse, error) {
 	result := AccountsClientListSasResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountSasToken); err != nil {
 		return AccountsClientListSasResponse{}, err
 	}
@@ -482,8 +493,6 @@ func (client *AccountsClient) listSasHandleResponse(resp *http.Response) (Accoun
 // RegenerateKeys - Regenerate either the primary or secondary key for use with the Maps APIs. The old key will stop working
 // immediately.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - keySpecification - Which key to regenerate: primary or secondary.
@@ -502,19 +511,14 @@ func (client *AccountsClient) RegenerateKeys(ctx context.Context, resourceGroupN
 	if err != nil {
 		return AccountsClientRegenerateKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientRegenerateKeysResponse{}, err
-	}
-	resp, err := client.regenerateKeysHandleResponse(httpResp)
-	return resp, err
+	return client.regenerateKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // regenerateKeysCreateRequest creates the RegenerateKeys request.
 func (client *AccountsClient) regenerateKeysCreateRequest(ctx context.Context, resourceGroupName string, accountName string, keySpecification KeySpecification, _ *AccountsClientRegenerateKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}/regenerateKey"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -530,8 +534,8 @@ func (client *AccountsClient) regenerateKeysCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, keySpecification); err != nil {
@@ -541,8 +545,11 @@ func (client *AccountsClient) regenerateKeysCreateRequest(ctx context.Context, r
 }
 
 // regenerateKeysHandleResponse handles the RegenerateKeys response.
-func (client *AccountsClient) regenerateKeysHandleResponse(resp *http.Response) (AccountsClientRegenerateKeysResponse, error) {
+func (client *AccountsClient) regenerateKeysHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientRegenerateKeysResponse, error) {
 	result := AccountsClientRegenerateKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AccountKeys); err != nil {
 		return AccountsClientRegenerateKeysResponse{}, err
 	}
@@ -551,8 +558,6 @@ func (client *AccountsClient) regenerateKeysHandleResponse(resp *http.Response) 
 
 // Update - Updates a Maps Account. Only a subset of the parameters may be updated after creation, such as Sku, Tags, Properties.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-10-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the Maps Account.
 //   - mapsAccountUpdateParameters - The updated parameters for the Maps Account.
@@ -571,19 +576,14 @@ func (client *AccountsClient) Update(ctx context.Context, resourceGroupName stri
 	if err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return AccountsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *AccountsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, mapsAccountUpdateParameters AccountUpdateParameters, _ *AccountsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Maps/accounts/{accountName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -599,8 +599,8 @@ func (client *AccountsClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-10-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251001Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, mapsAccountUpdateParameters); err != nil {
@@ -610,8 +610,11 @@ func (client *AccountsClient) updateCreateRequest(ctx context.Context, resourceG
 }
 
 // updateHandleResponse handles the Update response.
-func (client *AccountsClient) updateHandleResponse(resp *http.Response) (AccountsClientUpdateResponse, error) {
+func (client *AccountsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (AccountsClientUpdateResponse, error) {
 	result := AccountsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Account); err != nil {
 		return AccountsClientUpdateResponse{}, err
 	}

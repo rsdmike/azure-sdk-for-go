@@ -18,6 +18,8 @@ import (
 
 // LongRunningBackupClient contains the methods for the LongRunningBackup group.
 // Don't use this type directly, use NewLongRunningBackupClient() instead.
+//
+// Generated from API version 2024-12-30
 type LongRunningBackupClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type LongRunningBackupClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewLongRunningBackupClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*LongRunningBackupClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewLongRunningBackupClient(subscriptionID string, credential azcore.TokenCr
 
 // BeginCreate - Create backup for a given server with specified backup name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - serverName - The name of the server.
 //   - backupName - The name of the backup.
@@ -69,8 +72,6 @@ func (client *LongRunningBackupClient) BeginCreate(ctx context.Context, resource
 
 // Create - Create backup for a given server with specified backup name.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-12-01-preview
 func (client *LongRunningBackupClient) create(ctx context.Context, resourceGroupName string, serverName string, backupName string, parameters ServerBackupV2, options *LongRunningBackupClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "LongRunningBackupClient.BeginCreate"
@@ -86,8 +87,7 @@ func (client *LongRunningBackupClient) create(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *LongRunningBackupClient) create(ctx context.Context, resourceGroup
 func (client *LongRunningBackupClient) createCreateRequest(ctx context.Context, resourceGroupName string, serverName string, backupName string, parameters ServerBackupV2, _ *LongRunningBackupClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforMySQL/flexibleServers/{serverName}/backupsV2/{backupName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -116,8 +116,8 @@ func (client *LongRunningBackupClient) createCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-12-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20241230)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, parameters); err != nil {

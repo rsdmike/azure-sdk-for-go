@@ -44,7 +44,7 @@ func ExampleWorkspacesClient_Create_workspacesCreateMaximumSetGenGeneratedByMaxi
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientCreateResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Properties: &armiotfirmwaredefense.WorkspaceProperties{
 	// 			ProvisioningState: to.Ptr(armiotfirmwaredefense.ProvisioningStateSucceeded),
 	// 		},
@@ -64,10 +64,10 @@ func ExampleWorkspacesClient_Create_workspacesCreateMaximumSetGenGeneratedByMaxi
 	// 		SystemData: &armiotfirmwaredefense.SystemData{
 	// 			CreatedBy: to.Ptr("UserName"),
 	// 			CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("UserName"),
 	// 			LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -95,7 +95,7 @@ func ExampleWorkspacesClient_Create_workspacesCreateMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientCreateResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Name: to.Ptr("blah"),
 	// 		Type: to.Ptr("Microsoft.IoTFirmwareDefense/workspaces"),
 	// 		ID: to.Ptr("/subscriptions/blah/resourceGroups/blah/providers/blah/workspaces/blah"),
@@ -121,7 +121,7 @@ func ExampleWorkspacesClient_BeginDelete_workspacesDeleteMaximumSetGenGeneratedB
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -142,7 +142,7 @@ func ExampleWorkspacesClient_BeginDelete_workspacesDeleteMinimumSetGen() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -167,7 +167,7 @@ func ExampleWorkspacesClient_GenerateUploadURL_workspacesGenerateUploadUrlMaximu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientGenerateUploadURLResponse{
-	// 	URLToken: &armiotfirmwaredefense.URLToken{
+	// 	URLToken: armiotfirmwaredefense.URLToken{
 	// 		URL: to.Ptr("https://microsoft.com/a"),
 	// 	},
 	// }
@@ -194,7 +194,7 @@ func ExampleWorkspacesClient_GenerateUploadURL_workspacesGenerateUploadUrlMinimu
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientGenerateUploadURLResponse{
-	// 	URLToken: &armiotfirmwaredefense.URLToken{
+	// 	URLToken: armiotfirmwaredefense.URLToken{
 	// 	},
 	// }
 }
@@ -218,7 +218,7 @@ func ExampleWorkspacesClient_Get_workspacesGetMaximumSetGenGeneratedByMaximumSet
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientGetResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Properties: &armiotfirmwaredefense.WorkspaceProperties{
 	// 			ProvisioningState: to.Ptr(armiotfirmwaredefense.ProvisioningStateSucceeded),
 	// 		},
@@ -239,10 +239,10 @@ func ExampleWorkspacesClient_Get_workspacesGetMaximumSetGenGeneratedByMaximumSet
 	// 		SystemData: &armiotfirmwaredefense.SystemData{
 	// 			CreatedBy: to.Ptr("UserName"),
 	// 			CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("UserName"),
 	// 			LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -267,7 +267,7 @@ func ExampleWorkspacesClient_Get_workspacesGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientGetResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Name: to.Ptr("E_US"),
 	// 		Type: to.Ptr("Microsoft.IoTFirmwareDefense/workspaces"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rgworkspaces/providers/Microsoft.IoTFirmwareDefense/workspaces/E_US"),
@@ -322,10 +322,10 @@ func ExampleWorkspacesClient_NewListByResourceGroupPager_workspacesListByResourc
 		// 				SystemData: &armiotfirmwaredefense.SystemData{
 		// 					CreatedBy: to.Ptr("UserName"),
 		// 					CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("UserName"),
 		// 					LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -416,10 +416,10 @@ func ExampleWorkspacesClient_NewListBySubscriptionPager_workspacesListBySubscrip
 		// 				SystemData: &armiotfirmwaredefense.SystemData{
 		// 					CreatedBy: to.Ptr("UserName"),
 		// 					CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("UserName"),
 		// 					LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -492,7 +492,7 @@ func ExampleWorkspacesClient_Update_workspacesUpdateMaximumSetGenGeneratedByMaxi
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientUpdateResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Properties: &armiotfirmwaredefense.WorkspaceProperties{
 	// 			ProvisioningState: to.Ptr(armiotfirmwaredefense.ProvisioningStateSucceeded),
 	// 		},
@@ -513,10 +513,10 @@ func ExampleWorkspacesClient_Update_workspacesUpdateMaximumSetGenGeneratedByMaxi
 	// 		SystemData: &armiotfirmwaredefense.SystemData{
 	// 			CreatedBy: to.Ptr("UserName"),
 	// 			CreatedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("UserName"),
 	// 			LastModifiedByType: to.Ptr(armiotfirmwaredefense.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-06-13T15:22:45.940Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.June, 13, 15, 22, 45, 940000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -541,7 +541,7 @@ func ExampleWorkspacesClient_Update_workspacesUpdateMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotfirmwaredefense.WorkspacesClientUpdateResponse{
-	// 	Workspace: &armiotfirmwaredefense.Workspace{
+	// 	Workspace: armiotfirmwaredefense.Workspace{
 	// 		Location: to.Ptr("East US"),
 	// 	},
 	// }

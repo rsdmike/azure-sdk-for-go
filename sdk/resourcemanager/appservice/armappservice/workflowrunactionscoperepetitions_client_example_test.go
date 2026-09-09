@@ -30,7 +30,7 @@ func ExampleWorkflowRunActionScopeRepetitionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armappservice.WorkflowRunActionScopeRepetitionsClientGetResponse{
-	// 	WorkflowRunActionRepetitionDefinition: &armappservice.WorkflowRunActionRepetitionDefinition{
+	// 	WorkflowRunActionRepetitionDefinition: armappservice.WorkflowRunActionRepetitionDefinition{
 	// 		Name: to.Ptr("000000"),
 	// 		Type: to.Ptr("Microsoft.Web/sites/workflows/runs/actions/scopeRepetitions"),
 	// 		ID: to.Ptr("/subscriptions/34adfa4f-cedf-4dc0-ba29-b6d1a69ab345/resourceGroups/testResourceGroup/providers/Microsoft.Web/sites/test-name/workflows/testFlow/runs/08586776228332053161046300351/actions/for_each/scopeRepetitions/000000"),
@@ -41,14 +41,14 @@ func ExampleWorkflowRunActionScopeRepetitionsClient_Get() {
 	// 				ActionTrackingID: to.Ptr("5c0e7c24-4891-44e8-b631-8084c5531dd5"),
 	// 				ClientTrackingID: to.Ptr("08586775357427610445444523191"),
 	// 			},
-	// 			EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.6240967Z"); return t}()),
+	// 			EndTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 624096700, time.UTC)),
 	// 			RepetitionIndexes: []*armappservice.RepetitionIndex{
 	// 				{
 	// 					ItemIndex: to.Ptr[int32](0),
 	// 					ScopeName: to.Ptr("For_each"),
 	// 				},
 	// 			},
-	// 			StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.209588Z"); return t}()),
+	// 			StartTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 209588000, time.UTC)),
 	// 			Status: to.Ptr(armappservice.WorkflowStatusSucceeded),
 	// 		},
 	// 	},
@@ -91,14 +91,14 @@ func ExampleWorkflowRunActionScopeRepetitionsClient_NewListPager() {
 		// 						ActionTrackingID: to.Ptr("5c0e7c24-4891-44e8-b631-8084c5531dd5"),
 		// 						ClientTrackingID: to.Ptr("08586775357427610445444523191"),
 		// 					},
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.6240967Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 624096700, time.UTC)),
 		// 					RepetitionIndexes: []*armappservice.RepetitionIndex{
 		// 						{
 		// 							ItemIndex: to.Ptr[int32](0),
 		// 							ScopeName: to.Ptr("For_each"),
 		// 						},
 		// 					},
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.209588Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 209588000, time.UTC)),
 		// 					Status: to.Ptr(armappservice.WorkflowStatusSucceeded),
 		// 				},
 		// 			},
@@ -113,14 +113,14 @@ func ExampleWorkflowRunActionScopeRepetitionsClient_NewListPager() {
 		// 						ActionTrackingID: to.Ptr("1682d0bd-7189-4478-b333-fe364a80bd69"),
 		// 						ClientTrackingID: to.Ptr("08586775357427610445444523191"),
 		// 					},
-		// 					EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.2272796Z"); return t}()),
+		// 					EndTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 227279600, time.UTC)),
 		// 					RepetitionIndexes: []*armappservice.RepetitionIndex{
 		// 						{
 		// 							ItemIndex: to.Ptr[int32](1),
 		// 							ScopeName: to.Ptr("For_each"),
 		// 						},
 		// 					},
-		// 					StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-04-18T17:05:57.0686808Z"); return t}()),
+		// 					StartTime: to.Ptr(time.Date(2018, time.April, 18, 17, 5, 57, 68680800, time.UTC)),
 		// 					Status: to.Ptr(armappservice.WorkflowStatusSucceeded),
 		// 				},
 		// 			},

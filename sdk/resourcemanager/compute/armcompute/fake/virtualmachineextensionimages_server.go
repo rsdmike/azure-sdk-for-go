@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -58,9 +59,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) Do(req *http.Request) (*h
 }
 
 func (v *VirtualMachineExtensionImagesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -80,10 +79,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchToMethodFake(req 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -98,7 +94,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchGet(req *http.Req
 	if v.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmextension/types/(?P<type>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<version>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmextension/types/(?P<type>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<version>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 6 {
@@ -125,7 +121,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchGet(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineExtensionImage, req)
@@ -139,7 +135,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListTypes(req *ht
 	if v.srv.ListTypes == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListTypes not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmextension/types`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmextension/types`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -158,7 +154,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListTypes(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineExtensionImageArray, req)
@@ -172,7 +168,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListVersions(req 
 	if v.srv.ListVersions == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListVersions not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Compute/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/publishers/(?P<publisherName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/artifacttypes/vmextension/types/(?P<type>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Compute/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/publishers/(?P<publisherName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/artifacttypes/vmextension/types/(?P<type>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -191,16 +187,8 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListVersions(req 
 	if err != nil {
 		return nil, err
 	}
-	filterUnescaped, err := url.QueryUnescape(qp.Get("$filter"))
-	if err != nil {
-		return nil, err
-	}
-	filterParam := getOptional(filterUnescaped)
-	topUnescaped, err := url.QueryUnescape(qp.Get("$top"))
-	if err != nil {
-		return nil, err
-	}
-	topParam, err := parseOptional(topUnescaped, func(v string) (int32, error) {
+	filterParam := getOptional(qp.Get("$filter"))
+	topParam, err := parseOptional(qp.Get("$top"), func(v string) (int32, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 32)
 		if parseErr != nil {
 			return 0, parseErr
@@ -210,17 +198,15 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListVersions(req 
 	if err != nil {
 		return nil, err
 	}
-	orderbyUnescaped, err := url.QueryUnescape(qp.Get("$orderby"))
-	if err != nil {
-		return nil, err
-	}
-	orderbyParam := getOptional(orderbyUnescaped)
+	orderbyParam := getOptional(qp.Get("$orderby"))
+	expandParam := getOptional(armcompute.ListVersionsExpandOptions(qp.Get("$expand")))
 	var options *armcompute.VirtualMachineExtensionImagesClientListVersionsOptions
-	if filterParam != nil || topParam != nil || orderbyParam != nil {
+	if filterParam != nil || topParam != nil || orderbyParam != nil || expandParam != nil {
 		options = &armcompute.VirtualMachineExtensionImagesClientListVersionsOptions{
 			Filter:  filterParam,
 			Top:     topParam,
 			Orderby: orderbyParam,
+			Expand:  expandParam,
 		}
 	}
 	respr, errRespr := v.srv.ListVersions(req.Context(), locationParam, publisherNameParam, typeParamParam, options)
@@ -228,7 +214,7 @@ func (v *VirtualMachineExtensionImagesServerTransport) dispatchListVersions(req 
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).VirtualMachineExtensionImageArray, req)

@@ -18,6 +18,8 @@ import (
 
 // HierarchySettingsClient contains the methods for the HierarchySettings group.
 // Don't use this type directly, use NewHierarchySettingsClient() instead.
+//
+// Generated from API version 2023-04-01
 type HierarchySettingsClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewHierarchySettingsClient(credential azcore.TokenCredential, options *arm.
 
 // CreateOrUpdate - Creates or updates the hierarchy settings defined at the Management Group level.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-04-01
 //   - groupID - Management Group ID.
 //   - createTenantSettingsRequest - Tenant level settings request parameter.
 //   - options - HierarchySettingsClientCreateOrUpdateOptions contains the optional parameters for the HierarchySettingsClient.CreateOrUpdate
@@ -58,12 +58,7 @@ func (client *HierarchySettingsClient) CreateOrUpdate(ctx context.Context, group
 	if err != nil {
 		return HierarchySettingsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HierarchySettingsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -78,8 +73,8 @@ func (client *HierarchySettingsClient) createOrUpdateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, createTenantSettingsRequest); err != nil {
@@ -89,8 +84,11 @@ func (client *HierarchySettingsClient) createOrUpdateCreateRequest(ctx context.C
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *HierarchySettingsClient) createOrUpdateHandleResponse(resp *http.Response) (HierarchySettingsClientCreateOrUpdateResponse, error) {
+func (client *HierarchySettingsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (HierarchySettingsClientCreateOrUpdateResponse, error) {
 	result := HierarchySettingsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -99,8 +97,6 @@ func (client *HierarchySettingsClient) createOrUpdateHandleResponse(resp *http.R
 
 // Delete - Deletes the hierarchy settings defined at the Management Group level.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-04-01
 //   - groupID - Management Group ID.
 //   - options - HierarchySettingsClientDeleteOptions contains the optional parameters for the HierarchySettingsClient.Delete
 //     method.
@@ -119,8 +115,7 @@ func (client *HierarchySettingsClient) Delete(ctx context.Context, groupID strin
 		return HierarchySettingsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HierarchySettingsClientDeleteResponse{}, err
+		return HierarchySettingsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return HierarchySettingsClientDeleteResponse{}, nil
 }
@@ -137,16 +132,14 @@ func (client *HierarchySettingsClient) deleteCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets the hierarchy settings defined at the Management Group level. Settings can only be set on the root Management
 // Group of the hierarchy.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-04-01
 //   - groupID - Management Group ID.
 //   - options - HierarchySettingsClientGetOptions contains the optional parameters for the HierarchySettingsClient.Get method.
 func (client *HierarchySettingsClient) Get(ctx context.Context, groupID string, options *HierarchySettingsClientGetOptions) (HierarchySettingsClientGetResponse, error) {
@@ -163,12 +156,7 @@ func (client *HierarchySettingsClient) Get(ctx context.Context, groupID string, 
 	if err != nil {
 		return HierarchySettingsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HierarchySettingsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -183,15 +171,18 @@ func (client *HierarchySettingsClient) getCreateRequest(ctx context.Context, gro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *HierarchySettingsClient) getHandleResponse(resp *http.Response) (HierarchySettingsClientGetResponse, error) {
+func (client *HierarchySettingsClient) getHandleResponse(resp *http.Response, successCodes ...int) (HierarchySettingsClientGetResponse, error) {
 	result := HierarchySettingsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientGetResponse{}, err
 	}
@@ -201,8 +192,6 @@ func (client *HierarchySettingsClient) getHandleResponse(resp *http.Response) (H
 // List - Gets all the hierarchy settings defined at the Management Group level. Settings can only be set on the root Management
 // Group of the hierarchy.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-04-01
 //   - groupID - Management Group ID.
 //   - options - HierarchySettingsClientListOptions contains the optional parameters for the HierarchySettingsClient.List method.
 func (client *HierarchySettingsClient) List(ctx context.Context, groupID string, options *HierarchySettingsClientListOptions) (HierarchySettingsClientListResponse, error) {
@@ -219,12 +208,7 @@ func (client *HierarchySettingsClient) List(ctx context.Context, groupID string,
 	if err != nil {
 		return HierarchySettingsClientListResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HierarchySettingsClientListResponse{}, err
-	}
-	resp, err := client.listHandleResponse(httpResp)
-	return resp, err
+	return client.listHandleResponse(httpResp, http.StatusOK)
 }
 
 // listCreateRequest creates the List request.
@@ -239,15 +223,18 @@ func (client *HierarchySettingsClient) listCreateRequest(ctx context.Context, gr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *HierarchySettingsClient) listHandleResponse(resp *http.Response) (HierarchySettingsClientListResponse, error) {
+func (client *HierarchySettingsClient) listHandleResponse(resp *http.Response, successCodes ...int) (HierarchySettingsClientListResponse, error) {
 	result := HierarchySettingsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettingsList); err != nil {
 		return HierarchySettingsClientListResponse{}, err
 	}
@@ -256,8 +243,6 @@ func (client *HierarchySettingsClient) listHandleResponse(resp *http.Response) (
 
 // Update - Updates the hierarchy settings defined at the Management Group level.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2023-04-01
 //   - groupID - Management Group ID.
 //   - createTenantSettingsRequest - Tenant level settings request parameter.
 //   - options - HierarchySettingsClientUpdateOptions contains the optional parameters for the HierarchySettingsClient.Update
@@ -276,12 +261,7 @@ func (client *HierarchySettingsClient) Update(ctx context.Context, groupID strin
 	if err != nil {
 		return HierarchySettingsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return HierarchySettingsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
@@ -296,8 +276,8 @@ func (client *HierarchySettingsClient) updateCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2023-04-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20230401)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, createTenantSettingsRequest); err != nil {
@@ -307,8 +287,11 @@ func (client *HierarchySettingsClient) updateCreateRequest(ctx context.Context, 
 }
 
 // updateHandleResponse handles the Update response.
-func (client *HierarchySettingsClient) updateHandleResponse(resp *http.Response) (HierarchySettingsClientUpdateResponse, error) {
+func (client *HierarchySettingsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (HierarchySettingsClientUpdateResponse, error) {
 	result := HierarchySettingsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.HierarchySettings); err != nil {
 		return HierarchySettingsClientUpdateResponse{}, err
 	}

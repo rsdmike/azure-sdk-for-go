@@ -8,16 +8,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"net/http"
-	"net/url"
-	"regexp"
-	"strconv"
-
 	azfake "github.com/Azure/azure-sdk-for-go/sdk/azcore/fake"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/fake/server"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/kubernetesconfiguration/armextensiontypes"
+	"net/http"
+	"net/url"
+	"regexp"
+	"slices"
+	"strconv"
 )
 
 // Server is a fake server for instances of the armextensiontypes.Client type.
@@ -90,9 +90,7 @@ func (s *ServerTransport) Do(req *http.Request) (*http.Response, error) {
 }
 
 func (s *ServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -122,10 +120,7 @@ func (s *ServerTransport) dispatchToMethodFake(req *http.Request, method string)
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -140,7 +135,7 @@ func (s *ServerTransport) dispatchClusterGetVersion(req *http.Request) (*http.Re
 	if s.srv.ClusterGetVersion == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ClusterGetVersion not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/(?P<clusterRp>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterResourceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<versionNumber>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/(?P<clusterRp>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterResourceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<versionNumber>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 8 {
@@ -175,7 +170,7 @@ func (s *ServerTransport) dispatchClusterGetVersion(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ExtensionTypeVersionForReleaseTrain, req)
@@ -191,7 +186,7 @@ func (s *ServerTransport) dispatchNewClusterListVersionsPager(req *http.Request)
 	}
 	newClusterListVersionsPager := s.newClusterListVersionsPager.get(req)
 	if newClusterListVersionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/(?P<clusterRp>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterResourceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/(?P<clusterRp>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterResourceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 7 {
@@ -218,21 +213,9 @@ func (s *ServerTransport) dispatchNewClusterListVersionsPager(req *http.Request)
 		if err != nil {
 			return nil, err
 		}
-		releaseTrainUnescaped, err := url.QueryUnescape(qp.Get("releaseTrain"))
-		if err != nil {
-			return nil, err
-		}
-		releaseTrainParam := getOptional(releaseTrainUnescaped)
-		majorVersionUnescaped, err := url.QueryUnescape(qp.Get("majorVersion"))
-		if err != nil {
-			return nil, err
-		}
-		majorVersionParam := getOptional(majorVersionUnescaped)
-		showLatestUnescaped, err := url.QueryUnescape(qp.Get("showLatest"))
-		if err != nil {
-			return nil, err
-		}
-		showLatestParam, err := parseOptional(showLatestUnescaped, strconv.ParseBool)
+		releaseTrainParam := getOptional(qp.Get("releaseTrain"))
+		majorVersionParam := getOptional(qp.Get("majorVersion"))
+		showLatestParam, err := parseOptional(qp.Get("showLatest"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
@@ -255,7 +238,7 @@ func (s *ServerTransport) dispatchNewClusterListVersionsPager(req *http.Request)
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newClusterListVersionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -269,7 +252,7 @@ func (s *ServerTransport) dispatchGet(req *http.Request) (*http.Response, error)
 	if s.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/(?P<clusterRp>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterResourceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/(?P<clusterRp>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterResourceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 7 {
@@ -300,7 +283,7 @@ func (s *ServerTransport) dispatchGet(req *http.Request) (*http.Response, error)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ExtensionType, req)
@@ -314,7 +297,7 @@ func (s *ServerTransport) dispatchGetVersion(req *http.Request) (*http.Response,
 	if s.srv.GetVersion == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetVersion not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<versionNumber>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<versionNumber>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -337,7 +320,7 @@ func (s *ServerTransport) dispatchGetVersion(req *http.Request) (*http.Response,
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ExtensionTypeVersionForReleaseTrain, req)
@@ -353,7 +336,7 @@ func (s *ServerTransport) dispatchNewListPager(req *http.Request) (*http.Respons
 	}
 	newListPager := s.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/(?P<clusterRp>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterResourceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/(?P<clusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/(?P<clusterRp>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterResourceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/(?P<clusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/extensionTypes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 6 {
@@ -376,26 +359,10 @@ func (s *ServerTransport) dispatchNewListPager(req *http.Request) (*http.Respons
 		if err != nil {
 			return nil, err
 		}
-		publisherIDUnescaped, err := url.QueryUnescape(qp.Get("publisherId"))
-		if err != nil {
-			return nil, err
-		}
-		publisherIDParam := getOptional(publisherIDUnescaped)
-		offerIDUnescaped, err := url.QueryUnescape(qp.Get("offerId"))
-		if err != nil {
-			return nil, err
-		}
-		offerIDParam := getOptional(offerIDUnescaped)
-		planIDUnescaped, err := url.QueryUnescape(qp.Get("planId"))
-		if err != nil {
-			return nil, err
-		}
-		planIDParam := getOptional(planIDUnescaped)
-		releaseTrainUnescaped, err := url.QueryUnescape(qp.Get("releaseTrain"))
-		if err != nil {
-			return nil, err
-		}
-		releaseTrainParam := getOptional(releaseTrainUnescaped)
+		publisherIDParam := getOptional(qp.Get("publisherId"))
+		offerIDParam := getOptional(qp.Get("offerId"))
+		planIDParam := getOptional(qp.Get("planId"))
+		releaseTrainParam := getOptional(qp.Get("releaseTrain"))
 		var options *armextensiontypes.ClientListOptions
 		if publisherIDParam != nil || offerIDParam != nil || planIDParam != nil || releaseTrainParam != nil {
 			options = &armextensiontypes.ClientListOptions{
@@ -416,7 +383,7 @@ func (s *ServerTransport) dispatchNewListPager(req *http.Request) (*http.Respons
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -432,7 +399,7 @@ func (s *ServerTransport) dispatchNewListVersionsPager(req *http.Request) (*http
 	}
 	newListVersionsPager := s.newListVersionsPager.get(req)
 	if newListVersionsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -447,26 +414,10 @@ func (s *ServerTransport) dispatchNewListVersionsPager(req *http.Request) (*http
 		if err != nil {
 			return nil, err
 		}
-		releaseTrainUnescaped, err := url.QueryUnescape(qp.Get("releaseTrain"))
-		if err != nil {
-			return nil, err
-		}
-		releaseTrainParam := getOptional(releaseTrainUnescaped)
-		clusterTypeUnescaped, err := url.QueryUnescape(qp.Get("clusterType"))
-		if err != nil {
-			return nil, err
-		}
-		clusterTypeParam := getOptional(clusterTypeUnescaped)
-		majorVersionUnescaped, err := url.QueryUnescape(qp.Get("majorVersion"))
-		if err != nil {
-			return nil, err
-		}
-		majorVersionParam := getOptional(majorVersionUnescaped)
-		showLatestUnescaped, err := url.QueryUnescape(qp.Get("showLatest"))
-		if err != nil {
-			return nil, err
-		}
-		showLatestParam, err := parseOptional(showLatestUnescaped, strconv.ParseBool)
+		releaseTrainParam := getOptional(qp.Get("releaseTrain"))
+		clusterTypeParam := getOptional(qp.Get("clusterType"))
+		majorVersionParam := getOptional(qp.Get("majorVersion"))
+		showLatestParam, err := parseOptional(qp.Get("showLatest"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
@@ -490,7 +441,7 @@ func (s *ServerTransport) dispatchNewListVersionsPager(req *http.Request) (*http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newListVersionsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -504,7 +455,7 @@ func (s *ServerTransport) dispatchLocationGet(req *http.Request) (*http.Response
 	if s.srv.LocationGet == nil {
 		return nil, &nonRetriableError{errors.New("fake for method LocationGet not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensionTypes/(?P<extensionTypeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensionTypes/(?P<extensionTypeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -523,7 +474,7 @@ func (s *ServerTransport) dispatchLocationGet(req *http.Request) (*http.Response
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ExtensionType, req)
@@ -539,7 +490,7 @@ func (s *ServerTransport) dispatchNewLocationListPager(req *http.Request) (*http
 	}
 	newLocationListPager := s.newLocationListPager.get(req)
 	if newLocationListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/extensionTypes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.KubernetesConfiguration/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/extensionTypes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -550,31 +501,11 @@ func (s *ServerTransport) dispatchNewLocationListPager(req *http.Request) (*http
 		if err != nil {
 			return nil, err
 		}
-		publisherIDUnescaped, err := url.QueryUnescape(qp.Get("publisherId"))
-		if err != nil {
-			return nil, err
-		}
-		publisherIDParam := getOptional(publisherIDUnescaped)
-		offerIDUnescaped, err := url.QueryUnescape(qp.Get("offerId"))
-		if err != nil {
-			return nil, err
-		}
-		offerIDParam := getOptional(offerIDUnescaped)
-		planIDUnescaped, err := url.QueryUnescape(qp.Get("planId"))
-		if err != nil {
-			return nil, err
-		}
-		planIDParam := getOptional(planIDUnescaped)
-		releaseTrainUnescaped, err := url.QueryUnescape(qp.Get("releaseTrain"))
-		if err != nil {
-			return nil, err
-		}
-		releaseTrainParam := getOptional(releaseTrainUnescaped)
-		clusterTypeUnescaped, err := url.QueryUnescape(qp.Get("clusterType"))
-		if err != nil {
-			return nil, err
-		}
-		clusterTypeParam := getOptional(clusterTypeUnescaped)
+		publisherIDParam := getOptional(qp.Get("publisherId"))
+		offerIDParam := getOptional(qp.Get("offerId"))
+		planIDParam := getOptional(qp.Get("planId"))
+		releaseTrainParam := getOptional(qp.Get("releaseTrain"))
+		clusterTypeParam := getOptional(qp.Get("clusterType"))
 		var options *armextensiontypes.ClientLocationListOptions
 		if publisherIDParam != nil || offerIDParam != nil || planIDParam != nil || releaseTrainParam != nil || clusterTypeParam != nil {
 			options = &armextensiontypes.ClientLocationListOptions{
@@ -596,7 +527,7 @@ func (s *ServerTransport) dispatchNewLocationListPager(req *http.Request) (*http
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newLocationListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

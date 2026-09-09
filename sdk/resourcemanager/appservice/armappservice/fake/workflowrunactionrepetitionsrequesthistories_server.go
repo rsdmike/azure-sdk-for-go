@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // WorkflowRunActionRepetitionsRequestHistoriesServer is a fake server for instances of the armappservice.WorkflowRunActionRepetitionsRequestHistoriesClient type.
@@ -58,9 +59,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) Do(req *ht
 }
 
 func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchTo
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchGe
 	if w.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostruntime/runtime/webhooks/workflow/api/management/workflows/(?P<workflowName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/runs/(?P<runName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/actions/(?P<actionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/repetitions/(?P<repetitionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/requestHistories/(?P<requestHistoryName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostruntime/runtime/webhooks/workflow/api/management/workflows/(?P<workflowName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/runs/(?P<runName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/actions/(?P<actionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/repetitions/(?P<repetitionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/requestHistories/(?P<requestHistoryName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 9 {
@@ -135,7 +131,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchGe
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).RequestHistory, req)
@@ -151,7 +147,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchNe
 	}
 	newListPager := w.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Web/sites/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/hostruntime/runtime/webhooks/workflow/api/management/workflows/(?P<workflowName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/runs/(?P<runName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/actions/(?P<actionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/repetitions/(?P<repetitionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/requestHistories`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Web/sites/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/hostruntime/runtime/webhooks/workflow/api/management/workflows/(?P<workflowName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/runs/(?P<runName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/actions/(?P<actionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/repetitions/(?P<repetitionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/requestHistories`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 8 {
@@ -192,7 +188,7 @@ func (w *WorkflowRunActionRepetitionsRequestHistoriesServerTransport) dispatchNe
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		w.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

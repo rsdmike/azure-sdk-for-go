@@ -18,6 +18,8 @@ import (
 
 // UsageDetailsClient contains the methods for the UsageDetails group.
 // Don't use this type directly, use NewUsageDetailsClient() instead.
+//
+// Generated from API version 2024-08-01
 type UsageDetailsClient struct {
 	internal *arm.Client
 }
@@ -41,8 +43,6 @@ func NewUsageDetailsClient(credential azcore.TokenCredential, options *arm.Clien
 // **Note:Microsoft will be retiring the Consumption Usage Details API at some point in the future. We do not recommend that
 // you take a new dependency on this API. Please use the Cost Details API instead. We will notify customers once a date for
 // retirement has been determined.For Learn more,see [Generate Cost Details Report - Create Operation](https://learn.microsoft.com/en-us/rest/api/cost-management/generate-cost-details-report/create-operation?tabs=HTTP)**
-//
-// Generated from API version 2024-08-01
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - UsageDetailsClientListOptions contains the optional parameters for the UsageDetailsClient.NewListPager method.
 func (client *UsageDetailsClient) NewListPager(scope string, options *UsageDetailsClientListOptions) *runtime.Pager[UsageDetailsClientListResponse] {
@@ -56,54 +56,68 @@ func (client *UsageDetailsClient) NewListPager(scope string, options *UsageDetai
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, scope, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, scope, nextLink, options)
 			if err != nil {
 				return UsageDetailsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return UsageDetailsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK, http.StatusNoContent)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *UsageDetailsClient) listCreateRequest(ctx context.Context, scope string, options *UsageDetailsClientListOptions) (*policy.Request, error) {
-	urlPath := "/{scope}/providers/Microsoft.Consumption/usageDetails"
-	if scope == "" {
-		return nil, errors.New("parameter scope cannot be empty")
+func (client *UsageDetailsClient) listCreateRequest(ctx context.Context, scope string, nextLink string, options *UsageDetailsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/{scope}/providers/Microsoft.Consumption/usageDetails"
+		if scope == "" {
+			return nil, errors.New("parameter scope cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{scope}", scope)
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{scope}", scope)
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Expand != nil {
-		reqQP.Set("$expand", *options.Expand)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Expand != nil {
+			reqQP.Set("$expand", *options.Expand)
+		}
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Skiptoken != nil {
+			reqQP.Set("$skiptoken", *options.Skiptoken)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20240801)
+		if options != nil && options.Metric != nil {
+			reqQP.Set("metric", string(*options.Metric))
+		}
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
-	}
-	if options != nil && options.Skiptoken != nil {
-		reqQP.Set("$skiptoken", *options.Skiptoken)
-	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2024-08-01")
-	if options != nil && options.Metric != nil {
-		reqQP.Set("metric", string(*options.Metric))
-	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *UsageDetailsClient) listHandleResponse(resp *http.Response) (UsageDetailsClientListResponse, error) {
+func (client *UsageDetailsClient) listHandleResponse(resp *http.Response, successCodes ...int) (UsageDetailsClientListResponse, error) {
 	result := UsageDetailsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.UsageDetailsListResult); err != nil {
 		return UsageDetailsClientListResponse{}, err
 	}

@@ -7,18 +7,19 @@ package armpurview
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // KafkaConfigurationsClient contains the methods for the KafkaConfigurations group.
 // Don't use this type directly, use NewKafkaConfigurationsClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type KafkaConfigurationsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type KafkaConfigurationsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewKafkaConfigurationsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*KafkaConfigurationsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewKafkaConfigurationsClient(subscriptionID string, credential azcore.Token
 //
 // Create or update Kafka Configuration
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - kafkaConfigurationName - Name of kafka configuration.
@@ -66,19 +68,14 @@ func (client *KafkaConfigurationsClient) CreateOrUpdate(ctx context.Context, res
 	if err != nil {
 		return KafkaConfigurationsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return KafkaConfigurationsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *KafkaConfigurationsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, kafkaConfigurationName string, kafkaConfiguration KafkaConfiguration, _ *KafkaConfigurationsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/kafkaConfigurations/{kafkaConfigurationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -98,8 +95,8 @@ func (client *KafkaConfigurationsClient) createOrUpdateCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, kafkaConfiguration); err != nil {
@@ -109,8 +106,11 @@ func (client *KafkaConfigurationsClient) createOrUpdateCreateRequest(ctx context
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *KafkaConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response) (KafkaConfigurationsClientCreateOrUpdateResponse, error) {
+func (client *KafkaConfigurationsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (KafkaConfigurationsClientCreateOrUpdateResponse, error) {
 	result := KafkaConfigurationsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KafkaConfiguration); err != nil {
 		return KafkaConfigurationsClientCreateOrUpdateResponse{}, err
 	}
@@ -121,8 +121,6 @@ func (client *KafkaConfigurationsClient) createOrUpdateHandleResponse(resp *http
 //
 // Deletes a KafkaConfiguration resource.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - kafkaConfigurationName - Name of kafka configuration.
@@ -143,8 +141,7 @@ func (client *KafkaConfigurationsClient) Delete(ctx context.Context, resourceGro
 		return KafkaConfigurationsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return KafkaConfigurationsClientDeleteResponse{}, err
+		return KafkaConfigurationsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return KafkaConfigurationsClientDeleteResponse{}, nil
 }
@@ -153,7 +150,7 @@ func (client *KafkaConfigurationsClient) Delete(ctx context.Context, resourceGro
 func (client *KafkaConfigurationsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, accountName string, kafkaConfigurationName string, _ *KafkaConfigurationsClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/kafkaConfigurations/{kafkaConfigurationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -173,8 +170,8 @@ func (client *KafkaConfigurationsClient) deleteCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -182,8 +179,6 @@ func (client *KafkaConfigurationsClient) deleteCreateRequest(ctx context.Context
 //
 // Gets the kafka configuration for the account
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - kafkaConfigurationName - Name of kafka configuration.
@@ -202,19 +197,14 @@ func (client *KafkaConfigurationsClient) Get(ctx context.Context, resourceGroupN
 	if err != nil {
 		return KafkaConfigurationsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return KafkaConfigurationsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *KafkaConfigurationsClient) getCreateRequest(ctx context.Context, resourceGroupName string, accountName string, kafkaConfigurationName string, _ *KafkaConfigurationsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/kafkaConfigurations/{kafkaConfigurationName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -234,15 +224,18 @@ func (client *KafkaConfigurationsClient) getCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *KafkaConfigurationsClient) getHandleResponse(resp *http.Response) (KafkaConfigurationsClientGetResponse, error) {
+func (client *KafkaConfigurationsClient) getHandleResponse(resp *http.Response, successCodes ...int) (KafkaConfigurationsClientGetResponse, error) {
 	result := KafkaConfigurationsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KafkaConfiguration); err != nil {
 		return KafkaConfigurationsClientGetResponse{}, err
 	}
@@ -251,9 +244,7 @@ func (client *KafkaConfigurationsClient) getHandleResponse(resp *http.Response) 
 
 // NewListByAccountPager - Gets the list of Kafka configurations for the account.
 //
-// # Lists the Kafka configurations in the Account
-//
-// Generated from API version 2024-04-01-preview
+// Lists the Kafka configurations in the Account
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - options - KafkaConfigurationsClientListByAccountOptions contains the optional parameters for the KafkaConfigurationsClient.NewListByAccountPager
@@ -269,50 +260,64 @@ func (client *KafkaConfigurationsClient) NewListByAccountPager(resourceGroupName
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, options)
-			}, nil)
+			req, err := client.listByAccountCreateRequest(ctx, resourceGroupName, accountName, nextLink, options)
 			if err != nil {
 				return KafkaConfigurationsClientListByAccountResponse{}, err
 			}
-			return client.listByAccountHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return KafkaConfigurationsClientListByAccountResponse{}, err
+			}
+			return client.listByAccountHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByAccountCreateRequest creates the ListByAccount request.
-func (client *KafkaConfigurationsClient) listByAccountCreateRequest(ctx context.Context, resourceGroupName string, accountName string, options *KafkaConfigurationsClientListByAccountOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/kafkaConfigurations"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *KafkaConfigurationsClient) listByAccountCreateRequest(ctx context.Context, resourceGroupName string, accountName string, nextLink string, options *KafkaConfigurationsClientListByAccountOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/kafkaConfigurations"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if accountName == "" {
+			return nil, errors.New("parameter accountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if accountName == "" {
-		return nil, errors.New("parameter accountName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.SkipToken != nil {
-		reqQP.Set("$skipToken", *options.SkipToken)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.SkipToken != nil {
+			reqQP.Set("$skipToken", *options.SkipToken)
+		}
+		reqQP.Set("api-version", version20240401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByAccountHandleResponse handles the ListByAccount response.
-func (client *KafkaConfigurationsClient) listByAccountHandleResponse(resp *http.Response) (KafkaConfigurationsClientListByAccountResponse, error) {
+func (client *KafkaConfigurationsClient) listByAccountHandleResponse(resp *http.Response, successCodes ...int) (KafkaConfigurationsClientListByAccountResponse, error) {
 	result := KafkaConfigurationsClientListByAccountResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.KafkaConfigurationList); err != nil {
 		return KafkaConfigurationsClientListByAccountResponse{}, err
 	}

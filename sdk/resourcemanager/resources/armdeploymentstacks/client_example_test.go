@@ -68,13 +68,13 @@ func ExampleClient_BeginCreateOrUpdateAtManagementGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientCreateOrUpdateAtManagementGroupResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -85,10 +85,10 @@ func ExampleClient_BeginCreateOrUpdateAtManagementGroup() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			Description: to.Ptr("my Description"),
@@ -174,13 +174,13 @@ func ExampleClient_BeginCreateOrUpdateAtResourceGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientCreateOrUpdateAtResourceGroupResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -191,10 +191,10 @@ func ExampleClient_BeginCreateOrUpdateAtResourceGroup() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			Description: to.Ptr("my Description"),
@@ -280,13 +280,13 @@ func ExampleClient_BeginCreateOrUpdateAtSubscription() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientCreateOrUpdateAtSubscriptionResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -297,10 +297,10 @@ func ExampleClient_BeginCreateOrUpdateAtSubscription() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			Description: to.Ptr("my Description"),
@@ -347,7 +347,7 @@ func ExampleClient_BeginDeleteAtManagementGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -373,7 +373,7 @@ func ExampleClient_BeginDeleteAtResourceGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -399,7 +399,7 @@ func ExampleClient_BeginDeleteAtSubscription() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -427,7 +427,7 @@ func ExampleClient_ExportTemplateAtManagementGroup() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientExportTemplateAtManagementGroupResponse{
-	// 	DeploymentStackTemplateDefinition: &armdeploymentstacks.DeploymentStackTemplateDefinition{
+	// 	DeploymentStackTemplateDefinition: armdeploymentstacks.DeploymentStackTemplateDefinition{
 	// 		TemplateLink: &armdeploymentstacks.TemplateLink{
 	// 			ID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/templateSpecs/templateSpec/versions/1.0"),
 	// 		},
@@ -475,7 +475,7 @@ func ExampleClient_ExportTemplateAtResourceGroup() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientExportTemplateAtResourceGroupResponse{
-	// 	DeploymentStackTemplateDefinition: &armdeploymentstacks.DeploymentStackTemplateDefinition{
+	// 	DeploymentStackTemplateDefinition: armdeploymentstacks.DeploymentStackTemplateDefinition{
 	// 		TemplateLink: &armdeploymentstacks.TemplateLink{
 	// 			ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/templateSpecs/templateSpec/versions/1.0"),
 	// 		},
@@ -523,7 +523,7 @@ func ExampleClient_ExportTemplateAtSubscription() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientExportTemplateAtSubscriptionResponse{
-	// 	DeploymentStackTemplateDefinition: &armdeploymentstacks.DeploymentStackTemplateDefinition{
+	// 	DeploymentStackTemplateDefinition: armdeploymentstacks.DeploymentStackTemplateDefinition{
 	// 		TemplateLink: &armdeploymentstacks.TemplateLink{
 	// 			ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Resources/templateSpecs/templateSpec/versions/1.0"),
 	// 		},
@@ -571,7 +571,7 @@ func ExampleClient_GetAtManagementGroup() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientGetAtManagementGroupResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -582,10 +582,10 @@ func ExampleClient_GetAtManagementGroup() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			DeploymentID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deployments/simpleDeploymentStack-20210301-3f41c"),
@@ -682,7 +682,7 @@ func ExampleClient_GetAtResourceGroup() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientGetAtResourceGroupResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -693,10 +693,10 @@ func ExampleClient_GetAtResourceGroup() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			DeploymentID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deployments/simpleDeploymentStack-20210301-3f41c"),
@@ -793,7 +793,7 @@ func ExampleClient_GetAtSubscription() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientGetAtSubscriptionResponse{
-	// 	DeploymentStack: &armdeploymentstacks.DeploymentStack{
+	// 	DeploymentStack: armdeploymentstacks.DeploymentStack{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
@@ -804,10 +804,10 @@ func ExampleClient_GetAtSubscription() {
 	// 		SystemData: &armdeploymentstacks.SystemData{
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 	// 		},
 	// 		Properties: &armdeploymentstacks.DeploymentStackProperties{
 	// 			DeploymentID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deployments/simpleDeploymentStack-20210301-3f41c"),
@@ -921,10 +921,10 @@ func ExampleClient_NewListAtManagementGroupPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					ActionOnUnmanage: &armdeploymentstacks.ActionOnUnmanage{
@@ -964,10 +964,10 @@ func ExampleClient_NewListAtManagementGroupPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					DeploymentID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deployments/simpleDeploymentStack2-20210301-3f41c"),
@@ -1052,10 +1052,10 @@ func ExampleClient_NewListAtResourceGroupPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					ActionOnUnmanage: &armdeploymentstacks.ActionOnUnmanage{
@@ -1095,10 +1095,10 @@ func ExampleClient_NewListAtResourceGroupPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					DeploymentID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deployments/simpleDeploymentStack2-20210301-3f41c"),
@@ -1183,10 +1183,10 @@ func ExampleClient_NewListAtSubscriptionPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					ActionOnUnmanage: &armdeploymentstacks.ActionOnUnmanage{
@@ -1226,10 +1226,10 @@ func ExampleClient_NewListAtSubscriptionPager() {
 		// 				SystemData: &armdeploymentstacks.SystemData{
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2020, time.February, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armdeploymentstacks.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-02-02T02:03:01.1974346Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2020, time.February, 2, 2, 3, 1, 197434600, time.UTC)),
 		// 				},
 		// 				Properties: &armdeploymentstacks.DeploymentStackProperties{
 		// 					DeploymentID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deployments/simpleDeploymentStack2-20210301-3f41c"),
@@ -1325,13 +1325,13 @@ func ExampleClient_BeginValidateStackAtManagementGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientValidateStackAtManagementGroupResponse{
-	// 	DeploymentStackValidateResult: &armdeploymentstacks.DeploymentStackValidateResult{
+	// 	DeploymentStackValidateResult: armdeploymentstacks.DeploymentStackValidateResult{
 	// 		ID: to.Ptr("/providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
@@ -1411,13 +1411,13 @@ func ExampleClient_BeginValidateStackAtResourceGroup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientValidateStackAtResourceGroupResponse{
-	// 	DeploymentStackValidateResult: &armdeploymentstacks.DeploymentStackValidateResult{
+	// 	DeploymentStackValidateResult: armdeploymentstacks.DeploymentStackValidateResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/deploymentStacksRG/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),
@@ -1501,13 +1501,13 @@ func ExampleClient_BeginValidateStackAtSubscription() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeploymentstacks.ClientValidateStackAtSubscriptionResponse{
-	// 	DeploymentStackValidateResult: &armdeploymentstacks.DeploymentStackValidateResult{
+	// 	DeploymentStackValidateResult: armdeploymentstacks.DeploymentStackValidateResult{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Resources/deploymentStacks/simpleDeploymentStack"),
 	// 		Name: to.Ptr("simpleDeploymentStack"),
 	// 		Type: to.Ptr("Microsoft.Resources/deploymentStacks"),

@@ -11,10 +11,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
+	"strings"
 )
 
 // OperationsClient contains the methods for the Operations group.
 // Don't use this type directly, use NewOperationsClient() instead.
+//
+// Generated from API version 2024-12-01-preview
 type OperationsClient struct {
 	internal *arm.Client
 }
@@ -34,8 +37,6 @@ func NewOperationsClient(credential azcore.TokenCredential, options *arm.ClientO
 }
 
 // NewGetPager - List the operations for the provider
-//
-// Generated from API version 2024-12-01-preview
 //   - options - OperationsClientGetOptions contains the optional parameters for the OperationsClient.NewGetPager method.
 func (client *OperationsClient) NewGetPager(options *OperationsClientGetOptions) *runtime.Pager[OperationsClientGetResponse] {
 	return runtime.NewPager(runtime.PagingHandler[OperationsClientGetResponse]{
@@ -48,35 +49,49 @@ func (client *OperationsClient) NewGetPager(options *OperationsClientGetOptions)
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.getCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return OperationsClientGetResponse{}, err
 			}
-			return client.getHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return OperationsClientGetResponse{}, err
+			}
+			return client.getHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getCreateRequest creates the Get request.
-func (client *OperationsClient) getCreateRequest(ctx context.Context, _ *OperationsClientGetOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.Kubernetes/operations"
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+func (client *OperationsClient) getCreateRequest(ctx context.Context, nextLink string, _ *OperationsClientGetOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.Kubernetes/operations"
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
+	}
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-12-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241201Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *OperationsClient) getHandleResponse(resp *http.Response) (OperationsClientGetResponse, error) {
+func (client *OperationsClient) getHandleResponse(resp *http.Response, successCodes ...int) (OperationsClientGetResponse, error) {
 	result := OperationsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.OperationList); err != nil {
 		return OperationsClientGetResponse{}, err
 	}

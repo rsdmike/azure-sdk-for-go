@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2024-04-01-preview/ExtendedZones_Get.json
+// Generated from example definition: 2026-10-01/ExtendedZones_Get.json
 func ExampleExtendedZonesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -30,7 +30,7 @@ func ExampleExtendedZonesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armedgezones.ExtendedZonesClientGetResponse{
-	// 	ExtendedZone: &armedgezones.ExtendedZone{
+	// 	ExtendedZone: armedgezones.ExtendedZone{
 	// 		ID: to.Ptr("/subscriptions/a1ffc958-d2c7-493e-9f1e-125a0477f536/providers/Microsoft.EdgeZones/extendedZones/losangeles"),
 	// 		Name: to.Ptr("losangeles"),
 	// 		Type: to.Ptr("Microsoft.EdgeZones/extendedZones"),
@@ -51,7 +51,7 @@ func ExampleExtendedZonesClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2024-04-01-preview/ExtendedZones_ListBySubscription.json
+// Generated from example definition: 2026-10-01/ExtendedZones_ListBySubscription.json
 func ExampleExtendedZonesClient_NewListBySubscriptionPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -118,7 +118,7 @@ func ExampleExtendedZonesClient_NewListBySubscriptionPager() {
 	}
 }
 
-// Generated from example definition: 2024-04-01-preview/ExtendedZones_Register.json
+// Generated from example definition: 2026-10-01/ExtendedZones_Register.json
 func ExampleExtendedZonesClient_Register() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -137,7 +137,7 @@ func ExampleExtendedZonesClient_Register() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armedgezones.ExtendedZonesClientRegisterResponse{
-	// 	ExtendedZone: &armedgezones.ExtendedZone{
+	// 	ExtendedZone: armedgezones.ExtendedZone{
 	// 		ID: to.Ptr("/subscriptions/a1ffc958-d2c7-493e-9f1e-125a0477f536/providers/Microsoft.EdgeZones/extendedZones/losangeles"),
 	// 		Name: to.Ptr("losangeles"),
 	// 		Type: to.Ptr("Microsoft.EdgeZones/extendedZones"),
@@ -158,7 +158,7 @@ func ExampleExtendedZonesClient_Register() {
 	// }
 }
 
-// Generated from example definition: 2024-04-01-preview/ExtendedZones_Unregister.json
+// Generated from example definition: 2026-10-01/ExtendedZones_Unregister.json
 func ExampleExtendedZonesClient_Unregister() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -177,7 +177,7 @@ func ExampleExtendedZonesClient_Unregister() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armedgezones.ExtendedZonesClientUnregisterResponse{
-	// 	ExtendedZone: &armedgezones.ExtendedZone{
+	// 	ExtendedZone: armedgezones.ExtendedZone{
 	// 		ID: to.Ptr("/subscriptions/a1ffc958-d2c7-493e-9f1e-125a0477f536/providers/Microsoft.EdgeZones/extendedZones/losangeles"),
 	// 		Name: to.Ptr("losangeles"),
 	// 		Type: to.Ptr("Microsoft.EdgeZones/extendedZones"),

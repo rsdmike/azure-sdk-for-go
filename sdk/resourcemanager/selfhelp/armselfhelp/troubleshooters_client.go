@@ -18,6 +18,8 @@ import (
 
 // TroubleshootersClient contains the methods for the Troubleshooters group.
 // Don't use this type directly, use NewTroubleshootersClient() instead.
+//
+// Generated from API version 2024-03-01-preview
 type TroubleshootersClient struct {
 	internal *arm.Client
 }
@@ -40,8 +42,6 @@ func NewTroubleshootersClient(credential azcore.TokenCredential, options *arm.Cl
 // resource name. <br/>Continue API is used to provide inputs that are required for the specific troubleshooter to progress
 // into the next step in the process. This API is used after the Troubleshooter has been created using the Create API.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - troubleshooterName - Troubleshooter resource Name.
 //   - options - TroubleshootersClientContinueOptions contains the optional parameters for the TroubleshootersClient.Continue
@@ -60,12 +60,7 @@ func (client *TroubleshootersClient) Continue(ctx context.Context, scope string,
 	if err != nil {
 		return TroubleshootersClientContinueResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return TroubleshootersClientContinueResponse{}, err
-	}
-	resp, err := client.continueHandleResponse(httpResp)
-	return resp, err
+	return client.continueHandleResponse(httpResp, http.StatusNoContent)
 }
 
 // continueCreateRequest creates the Continue request.
@@ -84,8 +79,8 @@ func (client *TroubleshootersClient) continueCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	if options != nil && options.ContinueRequestBody != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
 		if err := runtime.MarshalAsJSON(req, *options.ContinueRequestBody); err != nil {
@@ -97,9 +92,12 @@ func (client *TroubleshootersClient) continueCreateRequest(ctx context.Context, 
 }
 
 // continueHandleResponse handles the Continue response.
-func (client *TroubleshootersClient) continueHandleResponse(resp *http.Response) (TroubleshootersClientContinueResponse, error) {
+func (client *TroubleshootersClient) continueHandleResponse(resp *http.Response, successCodes ...int) (TroubleshootersClientContinueResponse, error) {
 	result := TroubleshootersClientContinueResponse{}
-	if val := resp.Header.Get("location"); val != "" {
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
+	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
 	return result, nil
@@ -113,8 +111,6 @@ func (client *TroubleshootersClient) continueHandleResponse(resp *http.Response)
 // raised by customers. Troubleshooters terminate at a well curated solution based off of resource backend signals and customer
 // manual selections.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - troubleshooterName - Troubleshooter resource Name.
 //   - createTroubleshooterRequestBody - The required request body for this Troubleshooter resource creation.
@@ -133,12 +129,7 @@ func (client *TroubleshootersClient) Create(ctx context.Context, scope string, t
 	if err != nil {
 		return TroubleshootersClientCreateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return TroubleshootersClientCreateResponse{}, err
-	}
-	resp, err := client.createHandleResponse(httpResp)
-	return resp, err
+	return client.createHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createCreateRequest creates the Create request.
@@ -157,8 +148,8 @@ func (client *TroubleshootersClient) createCreateRequest(ctx context.Context, sc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, createTroubleshooterRequestBody); err != nil {
@@ -168,8 +159,11 @@ func (client *TroubleshootersClient) createCreateRequest(ctx context.Context, sc
 }
 
 // createHandleResponse handles the Create response.
-func (client *TroubleshootersClient) createHandleResponse(resp *http.Response) (TroubleshootersClientCreateResponse, error) {
+func (client *TroubleshootersClient) createHandleResponse(resp *http.Response, successCodes ...int) (TroubleshootersClientCreateResponse, error) {
 	result := TroubleshootersClientCreateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TroubleshooterResource); err != nil {
 		return TroubleshootersClientCreateResponse{}, err
 	}
@@ -178,8 +172,6 @@ func (client *TroubleshootersClient) createHandleResponse(resp *http.Response) (
 
 // End - Ends the troubleshooter action
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - troubleshooterName - Troubleshooter resource Name.
 //   - options - TroubleshootersClientEndOptions contains the optional parameters for the TroubleshootersClient.End method.
@@ -197,12 +189,7 @@ func (client *TroubleshootersClient) End(ctx context.Context, scope string, trou
 	if err != nil {
 		return TroubleshootersClientEndResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return TroubleshootersClientEndResponse{}, err
-	}
-	resp, err := client.endHandleResponse(httpResp)
-	return resp, err
+	return client.endHandleResponse(httpResp, http.StatusNoContent)
 }
 
 // endCreateRequest creates the End request.
@@ -221,15 +208,18 @@ func (client *TroubleshootersClient) endCreateRequest(ctx context.Context, scope
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // endHandleResponse handles the End response.
-func (client *TroubleshootersClient) endHandleResponse(resp *http.Response) (TroubleshootersClientEndResponse, error) {
+func (client *TroubleshootersClient) endHandleResponse(resp *http.Response, successCodes ...int) (TroubleshootersClientEndResponse, error) {
 	result := TroubleshootersClientEndResponse{}
-	if val := resp.Header.Get("location"); val != "" {
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
+	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
 	return result, nil
@@ -240,8 +230,6 @@ func (client *TroubleshootersClient) endHandleResponse(resp *http.Response) (Tro
 // and result of each step in the Troubleshooter workflow. This API requires the Troubleshooter resource name that was created
 // using the Create API.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - troubleshooterName - Troubleshooter resource Name.
 //   - options - TroubleshootersClientGetOptions contains the optional parameters for the TroubleshootersClient.Get method.
@@ -259,12 +247,7 @@ func (client *TroubleshootersClient) Get(ctx context.Context, scope string, trou
 	if err != nil {
 		return TroubleshootersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TroubleshootersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -283,15 +266,18 @@ func (client *TroubleshootersClient) getCreateRequest(ctx context.Context, scope
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *TroubleshootersClient) getHandleResponse(resp *http.Response) (TroubleshootersClientGetResponse, error) {
+func (client *TroubleshootersClient) getHandleResponse(resp *http.Response, successCodes ...int) (TroubleshootersClientGetResponse, error) {
 	result := TroubleshootersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TroubleshooterResource); err != nil {
 		return TroubleshootersClientGetResponse{}, err
 	}
@@ -301,8 +287,6 @@ func (client *TroubleshootersClient) getHandleResponse(resp *http.Response) (Tro
 // Restart - Restarts the troubleshooter API using applicable troubleshooter resource name as the input.<br/> It returns new
 // resource name which should be used in subsequent request. The old resource name is obsolete after this API is invoked.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - troubleshooterName - Troubleshooter resource Name.
 //   - options - TroubleshootersClientRestartOptions contains the optional parameters for the TroubleshootersClient.Restart method.
@@ -320,12 +304,7 @@ func (client *TroubleshootersClient) Restart(ctx context.Context, scope string, 
 	if err != nil {
 		return TroubleshootersClientRestartResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return TroubleshootersClientRestartResponse{}, err
-	}
-	resp, err := client.restartHandleResponse(httpResp)
-	return resp, err
+	return client.restartHandleResponse(httpResp, http.StatusOK)
 }
 
 // restartCreateRequest creates the Restart request.
@@ -344,16 +323,19 @@ func (client *TroubleshootersClient) restartCreateRequest(ctx context.Context, s
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // restartHandleResponse handles the Restart response.
-func (client *TroubleshootersClient) restartHandleResponse(resp *http.Response) (TroubleshootersClientRestartResponse, error) {
+func (client *TroubleshootersClient) restartHandleResponse(resp *http.Response, successCodes ...int) (TroubleshootersClientRestartResponse, error) {
 	result := TroubleshootersClientRestartResponse{}
-	if val := resp.Header.Get("location"); val != "" {
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
+	if val := resp.Header.Get("Location"); val != "" {
 		result.Location = &val
 	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RestartTroubleshooterResponse); err != nil {

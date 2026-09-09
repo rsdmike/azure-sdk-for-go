@@ -12,7 +12,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/fake/server"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
-	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/computeschedule/armcomputeschedule"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/computeschedule/armcomputeschedule/v2"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -79,47 +79,51 @@ type ScheduledActionsServer struct {
 
 	// VirtualMachinesCancelOperations is the fake for method ScheduledActionsClient.VirtualMachinesCancelOperations
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesCancelOperations func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.CancelOperationsContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesCancelOperationsOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesCancelOperationsResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesCancelOperations func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.CancelOperationsRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesCancelOperationsOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesCancelOperationsResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesExecuteCreate is the fake for method ScheduledActionsClient.VirtualMachinesExecuteCreate
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesExecuteCreate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteCreateContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesExecuteCreate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteCreateRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateResponse], errResp azfake.ErrorResponder)
+
+	// VirtualMachinesExecuteCreateFlex is the fake for method ScheduledActionsClient.VirtualMachinesExecuteCreateFlex
+	// HTTP status codes to indicate success: http.StatusOK
+	VirtualMachinesExecuteCreateFlex func(ctx context.Context, locationparameter string, body armcomputeschedule.ExecuteCreateFlexRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateFlexOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteCreateFlexResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesExecuteDeallocate is the fake for method ScheduledActionsClient.VirtualMachinesExecuteDeallocate
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesExecuteDeallocate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteDeallocateContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeallocateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeallocateResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesExecuteDeallocate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteDeallocateRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeallocateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeallocateResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesExecuteDelete is the fake for method ScheduledActionsClient.VirtualMachinesExecuteDelete
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesExecuteDelete func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteDeleteContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeleteOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeleteResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesExecuteDelete func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteDeleteRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeleteOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteDeleteResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesExecuteHibernate is the fake for method ScheduledActionsClient.VirtualMachinesExecuteHibernate
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesExecuteHibernate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteHibernateContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteHibernateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteHibernateResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesExecuteHibernate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteHibernateRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteHibernateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteHibernateResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesExecuteStart is the fake for method ScheduledActionsClient.VirtualMachinesExecuteStart
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesExecuteStart func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteStartContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteStartOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteStartResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesExecuteStart func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.ExecuteStartRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteStartOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesExecuteStartResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesGetOperationErrors is the fake for method ScheduledActionsClient.VirtualMachinesGetOperationErrors
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesGetOperationErrors func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.GetOperationErrorsContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationErrorsOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationErrorsResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesGetOperationErrors func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.GetOperationErrorsRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationErrorsOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationErrorsResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesGetOperationStatus is the fake for method ScheduledActionsClient.VirtualMachinesGetOperationStatus
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesGetOperationStatus func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.GetOperationStatusContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationStatusOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationStatusResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesGetOperationStatus func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.GetOperationStatusRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationStatusOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesGetOperationStatusResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesSubmitDeallocate is the fake for method ScheduledActionsClient.VirtualMachinesSubmitDeallocate
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesSubmitDeallocate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitDeallocateContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitDeallocateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitDeallocateResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesSubmitDeallocate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitDeallocateRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitDeallocateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitDeallocateResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesSubmitHibernate is the fake for method ScheduledActionsClient.VirtualMachinesSubmitHibernate
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesSubmitHibernate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitHibernateContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitHibernateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitHibernateResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesSubmitHibernate func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitHibernateRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitHibernateOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitHibernateResponse], errResp azfake.ErrorResponder)
 
 	// VirtualMachinesSubmitStart is the fake for method ScheduledActionsClient.VirtualMachinesSubmitStart
 	// HTTP status codes to indicate success: http.StatusOK
-	VirtualMachinesSubmitStart func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitStartContent, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitStartOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitStartResponse], errResp azfake.ErrorResponder)
+	VirtualMachinesSubmitStart func(ctx context.Context, locationparameter string, requestBody armcomputeschedule.SubmitStartRequest, options *armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitStartOptions) (resp azfake.Responder[armcomputeschedule.ScheduledActionsClientVirtualMachinesSubmitStartResponse], errResp azfake.ErrorResponder)
 }
 
 // NewScheduledActionsServerTransport creates a new instance of ScheduledActionsServerTransport with the provided implementation.
@@ -200,6 +204,8 @@ func (s *ScheduledActionsServerTransport) dispatchToMethodFake(req *http.Request
 				res.resp, res.err = s.dispatchVirtualMachinesCancelOperations(req)
 			case "ScheduledActionsClient.VirtualMachinesExecuteCreate":
 				res.resp, res.err = s.dispatchVirtualMachinesExecuteCreate(req)
+			case "ScheduledActionsClient.VirtualMachinesExecuteCreateFlex":
+				res.resp, res.err = s.dispatchVirtualMachinesExecuteCreateFlex(req)
 			case "ScheduledActionsClient.VirtualMachinesExecuteDeallocate":
 				res.resp, res.err = s.dispatchVirtualMachinesExecuteDeallocate(req)
 			case "ScheduledActionsClient.VirtualMachinesExecuteDelete":
@@ -238,7 +244,7 @@ func (s *ScheduledActionsServerTransport) dispatchAttachResources(req *http.Requ
 	if s.srv.AttachResources == nil {
 		return nil, &nonRetriableError{errors.New("fake for method AttachResources not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/attachResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/attachResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -275,7 +281,7 @@ func (s *ScheduledActionsServerTransport) dispatchCancelNextOccurrence(req *http
 	if s.srv.CancelNextOccurrence == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CancelNextOccurrence not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/cancelNextOccurrence`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/cancelNextOccurrence`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -314,7 +320,7 @@ func (s *ScheduledActionsServerTransport) dispatchBeginCreateOrUpdate(req *http.
 	}
 	beginCreateOrUpdate := s.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -362,7 +368,7 @@ func (s *ScheduledActionsServerTransport) dispatchBeginDelete(req *http.Request)
 	}
 	beginDelete := s.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -404,7 +410,7 @@ func (s *ScheduledActionsServerTransport) dispatchDetachResources(req *http.Requ
 	if s.srv.DetachResources == nil {
 		return nil, &nonRetriableError{errors.New("fake for method DetachResources not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/detachResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/detachResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -441,7 +447,7 @@ func (s *ScheduledActionsServerTransport) dispatchDisable(req *http.Request) (*h
 	if s.srv.Disable == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Disable not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/disable`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/disable`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -474,7 +480,7 @@ func (s *ScheduledActionsServerTransport) dispatchEnable(req *http.Request) (*ht
 	if s.srv.Enable == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Enable not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/enable`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/enable`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -507,7 +513,7 @@ func (s *ScheduledActionsServerTransport) dispatchGet(req *http.Request) (*http.
 	if s.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -542,7 +548,7 @@ func (s *ScheduledActionsServerTransport) dispatchNewListByResourceGroupPager(re
 	}
 	newListByResourceGroupPager := s.newListByResourceGroupPager.get(req)
 	if newListByResourceGroupPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -579,7 +585,7 @@ func (s *ScheduledActionsServerTransport) dispatchNewListBySubscriptionPager(req
 	}
 	newListBySubscriptionPager := s.newListBySubscriptionPager.get(req)
 	if newListBySubscriptionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -612,7 +618,7 @@ func (s *ScheduledActionsServerTransport) dispatchNewListResourcesPager(req *htt
 	}
 	newListResourcesPager := s.newListResourcesPager.get(req)
 	if newListResourcesPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resources`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resources`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -651,7 +657,7 @@ func (s *ScheduledActionsServerTransport) dispatchPatchResources(req *http.Reque
 	if s.srv.PatchResources == nil {
 		return nil, &nonRetriableError{errors.New("fake for method PatchResources not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/patchResources`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/patchResources`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -688,7 +694,7 @@ func (s *ScheduledActionsServerTransport) dispatchTriggerManualOccurrence(req *h
 	if s.srv.TriggerManualOccurrence == nil {
 		return nil, &nonRetriableError{errors.New("fake for method TriggerManualOccurrence not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/triggerManualOccurrence`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/triggerManualOccurrence`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -721,7 +727,7 @@ func (s *ScheduledActionsServerTransport) dispatchUpdate(req *http.Request) (*ht
 	if s.srv.Update == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Update not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/scheduledActions/(?P<scheduledActionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -758,13 +764,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesCancelOperation
 	if s.srv.VirtualMachinesCancelOperations == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesCancelOperations not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesCancelOperations`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesCancelOperations`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.CancelOperationsContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.CancelOperationsRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -791,13 +797,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteCreate(r
 	if s.srv.VirtualMachinesExecuteCreate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteCreate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesExecuteCreate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteCreate`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteCreateContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteCreateRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -820,17 +826,50 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteCreate(r
 	return resp, nil
 }
 
-func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteDeallocate(req *http.Request) (*http.Response, error) {
-	if s.srv.VirtualMachinesExecuteDeallocate == nil {
-		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteDeallocate not implemented")}
+func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteCreateFlex(req *http.Request) (*http.Response, error) {
+	if s.srv.VirtualMachinesExecuteCreateFlex == nil {
+		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteCreateFlex not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesExecuteDeallocate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteCreateFlex`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteDeallocateContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteCreateFlexRequest](req)
+	if err != nil {
+		return nil, err
+	}
+	locationparameterParam, err := url.PathUnescape(matches[regex.SubexpIndex("locationparameter")])
+	if err != nil {
+		return nil, err
+	}
+	respr, errRespr := s.srv.VirtualMachinesExecuteCreateFlex(req.Context(), locationparameterParam, body, nil)
+	if respErr := server.GetError(errRespr, req); respErr != nil {
+		return nil, respErr
+	}
+	respContent := server.GetResponseContent(respr)
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
+	}
+	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).CreateFlexResourceOperationResponse, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteDeallocate(req *http.Request) (*http.Response, error) {
+	if s.srv.VirtualMachinesExecuteDeallocate == nil {
+		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteDeallocate not implemented")}
+	}
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteDeallocate`
+	regex := regexp.MustCompile(regexStr)
+	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
+	if len(matches) < 3 {
+		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
+	}
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteDeallocateRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -857,13 +896,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteDelete(r
 	if s.srv.VirtualMachinesExecuteDelete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteDelete not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesExecuteDelete`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteDelete`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteDeleteContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteDeleteRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -890,13 +929,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteHibernat
 	if s.srv.VirtualMachinesExecuteHibernate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteHibernate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesExecuteHibernate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteHibernate`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteHibernateContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteHibernateRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -923,13 +962,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesExecuteStart(re
 	if s.srv.VirtualMachinesExecuteStart == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesExecuteStart not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesExecuteStart`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesExecuteStart`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteStartContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.ExecuteStartRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -956,13 +995,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesGetOperationErr
 	if s.srv.VirtualMachinesGetOperationErrors == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesGetOperationErrors not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesGetOperationErrors`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesGetOperationErrors`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.GetOperationErrorsContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.GetOperationErrorsRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -989,13 +1028,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesGetOperationSta
 	if s.srv.VirtualMachinesGetOperationStatus == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesGetOperationStatus not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesGetOperationStatus`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesGetOperationStatus`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.GetOperationStatusContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.GetOperationStatusRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -1022,13 +1061,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesSubmitDeallocat
 	if s.srv.VirtualMachinesSubmitDeallocate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesSubmitDeallocate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesSubmitDeallocate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesSubmitDeallocate`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitDeallocateContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitDeallocateRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -1055,13 +1094,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesSubmitHibernate
 	if s.srv.VirtualMachinesSubmitHibernate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesSubmitHibernate not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesSubmitHibernate`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesSubmitHibernate`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitHibernateContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitHibernateRequest](req)
 	if err != nil {
 		return nil, err
 	}
@@ -1088,13 +1127,13 @@ func (s *ScheduledActionsServerTransport) dispatchVirtualMachinesSubmitStart(req
 	if s.srv.VirtualMachinesSubmitStart == nil {
 		return nil, &nonRetriableError{errors.New("fake for method VirtualMachinesSubmitStart not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/virtualMachinesSubmitStart`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.ComputeSchedule/locations/(?P<locationparameter>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/virtualMachinesSubmitStart`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
 		return nil, fmt.Errorf("failed to parse path %s", req.URL.Path)
 	}
-	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitStartContent](req)
+	body, err := server.UnmarshalRequestAsJSON[armcomputeschedule.SubmitStartRequest](req)
 	if err != nil {
 		return nil, err
 	}

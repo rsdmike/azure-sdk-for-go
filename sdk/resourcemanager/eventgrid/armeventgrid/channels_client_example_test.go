@@ -6,12 +6,11 @@ package armeventgrid_test
 
 import (
 	"context"
-	"log"
-	"time"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/eventgrid/armeventgrid/v2"
+	"log"
+	"time"
 )
 
 // Generated from example definition: 2025-07-15-preview/Channels_CreateOrUpdate.json
@@ -28,7 +27,7 @@ func ExampleChannelsClient_CreateOrUpdate() {
 	res, err := clientFactory.NewChannelsClient().CreateOrUpdate(ctx, "examplerg", "examplePartnerNamespaceName1", "exampleChannelName1", armeventgrid.Channel{
 		Properties: &armeventgrid.ChannelProperties{
 			ChannelType:                     to.Ptr(armeventgrid.ChannelTypePartnerTopic),
-			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-10-21T22:50:25.410433Z"); return t }()),
+			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2021, time.October, 21, 22, 50, 25, 410433000, time.UTC)),
 			MessageForActivation:            to.Ptr("Example message to approver"),
 			PartnerTopicInfo: &armeventgrid.PartnerTopicInfo{
 				Name:                to.Ptr("examplePartnerTopic1"),
@@ -45,13 +44,13 @@ func ExampleChannelsClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.ChannelsClientCreateOrUpdateResponse{
-	// 	Channel: &armeventgrid.Channel{
+	// 	Channel: armeventgrid.Channel{
 	// 		Name: to.Ptr("exampleChannelName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerNamespaces/channels"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerNamespaces/examplePartnerNamespaceName1/changes/exampleChannelName1"),
 	// 		Properties: &armeventgrid.ChannelProperties{
 	// 			ChannelType: to.Ptr(armeventgrid.ChannelTypePartnerTopic),
-	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-10-21T22:50:25.410433Z"); return t}()),
+	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2021, time.October, 21, 22, 50, 25, 410433000, time.UTC)),
 	// 			MessageForActivation: to.Ptr("Example message to approver"),
 	// 			PartnerTopicInfo: &armeventgrid.PartnerTopicInfo{
 	// 				Name: to.Ptr("examplePartnerTopic1"),
@@ -81,7 +80,7 @@ func ExampleChannelsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -109,13 +108,13 @@ func ExampleChannelsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.ChannelsClientGetResponse{
-	// 	Channel: &armeventgrid.Channel{
+	// 	Channel: armeventgrid.Channel{
 	// 		Name: to.Ptr("exampleChannelName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/partnerNamespaces/channels"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerNamespaces/examplePartnerNamespaceName1/changes/exampleChannelName1"),
 	// 		Properties: &armeventgrid.ChannelProperties{
 	// 			ChannelType: to.Ptr(armeventgrid.ChannelTypePartnerTopic),
-	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-10-21T22:50:25.410433Z"); return t}()),
+	// 			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2021, time.October, 21, 22, 50, 25, 410433000, time.UTC)),
 	// 			MessageForActivation: to.Ptr("Example message to approver"),
 	// 			PartnerTopicInfo: &armeventgrid.PartnerTopicInfo{
 	// 				Name: to.Ptr("examplePartnerTopic1"),
@@ -149,7 +148,7 @@ func ExampleChannelsClient_GetFullURL() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.ChannelsClientGetFullURLResponse{
-	// 	EventSubscriptionFullURL: &armeventgrid.EventSubscriptionFullURL{
+	// 	EventSubscriptionFullURL: armeventgrid.EventSubscriptionFullURL{
 	// 		EndpointURL: to.Ptr("https://requestb.in/15ksip71"),
 	// 	},
 	// }
@@ -186,7 +185,7 @@ func ExampleChannelsClient_NewListByPartnerNamespacePager() {
 		// 				ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/partnerNamespaces/examplePartnerNamespaceName1/changes/exampleChannelName1"),
 		// 				Properties: &armeventgrid.ChannelProperties{
 		// 					ChannelType: to.Ptr(armeventgrid.ChannelTypePartnerTopic),
-		// 					ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-10-21T22:50:25.410433Z"); return t}()),
+		// 					ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2021, time.October, 21, 22, 50, 25, 410433000, time.UTC)),
 		// 					MessageForActivation: to.Ptr("Example message to approver"),
 		// 					PartnerTopicInfo: &armeventgrid.PartnerTopicInfo{
 		// 						Name: to.Ptr("examplePartnerTopic1"),
@@ -217,7 +216,7 @@ func ExampleChannelsClient_Update() {
 	}
 	res, err := clientFactory.NewChannelsClient().Update(ctx, "examplerg", "examplePartnerNamespaceName1", "exampleChannelName1", armeventgrid.ChannelUpdateParameters{
 		Properties: &armeventgrid.ChannelUpdateParametersProperties{
-			ExpirationTimeIfNotActivatedUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-03-23T23:06:11.785Z"); return t }()),
+			ExpirationTimeIfNotActivatedUTC: to.Ptr(time.Date(2022, time.March, 23, 23, 6, 11, 785000000, time.UTC)),
 		},
 	}, nil)
 	if err != nil {

@@ -17,6 +17,8 @@ import (
 
 // CheckNameAvailabilityClient contains the methods for the CheckNameAvailability group.
 // Don't use this type directly, use NewCheckNameAvailabilityClient() instead.
+//
+// Generated from API version 2024-03-01-preview
 type CheckNameAvailabilityClient struct {
 	internal *arm.Client
 }
@@ -38,8 +40,6 @@ func NewCheckNameAvailabilityClient(credential azcore.TokenCredential, options *
 // CheckAvailability - This API is used to check the uniqueness of a resource name used for a diagnostic, troubleshooter or
 // solutions
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - options - CheckNameAvailabilityClientCheckAvailabilityOptions contains the optional parameters for the CheckNameAvailabilityClient.CheckAvailability
 //     method.
@@ -57,12 +57,7 @@ func (client *CheckNameAvailabilityClient) CheckAvailability(ctx context.Context
 	if err != nil {
 		return CheckNameAvailabilityClientCheckAvailabilityResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CheckNameAvailabilityClientCheckAvailabilityResponse{}, err
-	}
-	resp, err := client.checkAvailabilityHandleResponse(httpResp)
-	return resp, err
+	return client.checkAvailabilityHandleResponse(httpResp, http.StatusOK)
 }
 
 // checkAvailabilityCreateRequest creates the CheckAvailability request.
@@ -77,8 +72,8 @@ func (client *CheckNameAvailabilityClient) checkAvailabilityCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.CheckNameAvailabilityRequest != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -91,8 +86,11 @@ func (client *CheckNameAvailabilityClient) checkAvailabilityCreateRequest(ctx co
 }
 
 // checkAvailabilityHandleResponse handles the CheckAvailability response.
-func (client *CheckNameAvailabilityClient) checkAvailabilityHandleResponse(resp *http.Response) (CheckNameAvailabilityClientCheckAvailabilityResponse, error) {
+func (client *CheckNameAvailabilityClient) checkAvailabilityHandleResponse(resp *http.Response, successCodes ...int) (CheckNameAvailabilityClientCheckAvailabilityResponse, error) {
 	result := CheckNameAvailabilityClientCheckAvailabilityResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CheckNameAvailabilityResponse); err != nil {
 		return CheckNameAvailabilityClientCheckAvailabilityResponse{}, err
 	}

@@ -6,11 +6,10 @@ package armeventgrid_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/eventgrid/armeventgrid/v2"
+	"log"
 )
 
 // Generated from example definition: 2025-07-15-preview/CaCertificates_CreateOrUpdate.json
@@ -35,21 +34,21 @@ func ExampleCaCertificatesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.CaCertificatesClientCreateOrUpdateResponse{
-	// 	CaCertificate: &armeventgrid.CaCertificate{
+	// 	CaCertificate: armeventgrid.CaCertificate{
 	// 		Name: to.Ptr("exampleCACertificateName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/namespaces/caCertificates"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/namespaces/exampleNamespaceName1/caCertificates/exampleCACertificateName1"),
 	// 		Properties: &armeventgrid.CaCertificateProperties{
 	// 			Description: to.Ptr("This is a test Root certificate"),
 	// 			EncodedCertificate: to.Ptr("base64EncodePemFormattedCertificateString"),
-	// 			ExpiryTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-10-12T23:06:43+00:00"); return t}()),
-	// 			IssueTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-12T23:06:43+00:00"); return t}()),
+	// 			ExpiryTimeInUTC: to.Ptr(time.Date(2022, time.October, 12, 23, 6, 43, 0, time.UTC)),
+	// 			IssueTimeInUTC: to.Ptr(time.Date(2022, time.September, 12, 23, 6, 43, 0, time.UTC)),
 	// 			ProvisioningState: to.Ptr(armeventgrid.CaCertificateProvisioningStateSucceeded),
 	// 		},
 	// 	},
@@ -73,7 +72,7 @@ func ExampleCaCertificatesClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -101,15 +100,15 @@ func ExampleCaCertificatesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armeventgrid.CaCertificatesClientGetResponse{
-	// 	CaCertificate: &armeventgrid.CaCertificate{
+	// 	CaCertificate: armeventgrid.CaCertificate{
 	// 		Name: to.Ptr("exampleCACertificateName1"),
 	// 		Type: to.Ptr("Microsoft.EventGrid/namespaces/caCertificates"),
 	// 		ID: to.Ptr("/subscriptions/8f6b6269-84f2-4d09-9e31-1127efcd1e40/resourceGroups/examplerg/providers/Microsoft.EventGrid/namespaces/exampleNamespaceName1/caCertificates/exampleCACertificateName1"),
 	// 		Properties: &armeventgrid.CaCertificateProperties{
 	// 			Description: to.Ptr("This is a test Root certificate"),
 	// 			EncodedCertificate: to.Ptr("base64EncodePemFormattedCertificateString"),
-	// 			ExpiryTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-10-12T23:06:43+00:00"); return t}()),
-	// 			IssueTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-12T23:06:43+00:00"); return t}()),
+	// 			ExpiryTimeInUTC: to.Ptr(time.Date(2022, time.October, 12, 23, 6, 43, 0, time.UTC)),
+	// 			IssueTimeInUTC: to.Ptr(time.Date(2022, time.September, 12, 23, 6, 43, 0, time.UTC)),
 	// 			ProvisioningState: to.Ptr(armeventgrid.CaCertificateProvisioningStateSucceeded),
 	// 		},
 	// 	},
@@ -149,8 +148,8 @@ func ExampleCaCertificatesClient_NewListByNamespacePager() {
 		// 				Properties: &armeventgrid.CaCertificateProperties{
 		// 					Description: to.Ptr("This is a test Root certificate"),
 		// 					EncodedCertificate: to.Ptr("base64EncodePemFormattedCertificateString"),
-		// 					ExpiryTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-10-12T23:06:43+00:00"); return t}()),
-		// 					IssueTimeInUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-09-12T23:06:43+00:00"); return t}()),
+		// 					ExpiryTimeInUTC: to.Ptr(time.Date(2022, time.October, 12, 23, 6, 43, 0, time.UTC)),
+		// 					IssueTimeInUTC: to.Ptr(time.Date(2022, time.September, 12, 23, 6, 43, 0, time.UTC)),
 		// 					ProvisioningState: to.Ptr(armeventgrid.CaCertificateProvisioningStateSucceeded),
 		// 				},
 		// 			},

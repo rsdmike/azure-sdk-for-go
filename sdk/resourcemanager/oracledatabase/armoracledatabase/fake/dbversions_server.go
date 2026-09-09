@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -59,9 +60,7 @@ func (d *DbVersionsServerTransport) Do(req *http.Request) (*http.Response, error
 }
 
 func (d *DbVersionsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -79,10 +78,7 @@ func (d *DbVersionsServerTransport) dispatchToMethodFake(req *http.Request, meth
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -97,7 +93,7 @@ func (d *DbVersionsServerTransport) dispatchGet(req *http.Request) (*http.Respon
 	if d.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbSystemDbVersions/(?P<dbversionsname>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbSystemDbVersions/(?P<dbversionsname>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -116,7 +112,7 @@ func (d *DbVersionsServerTransport) dispatchGet(req *http.Request) (*http.Respon
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DbVersion, req)
@@ -132,7 +128,7 @@ func (d *DbVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 	}
 	newListByLocationPager := d.newListByLocationPager.get(req)
 	if newListByLocationPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/locations/(?P<location>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbSystemDbVersions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/locations/(?P<location>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbSystemDbVersions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -143,42 +139,18 @@ func (d *DbVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 		if err != nil {
 			return nil, err
 		}
-		dbSystemShapeUnescaped, err := url.QueryUnescape(qp.Get("dbSystemShape"))
+		dbSystemShapeParam := getOptional(armoracledatabase.BaseDbSystemShapes(qp.Get("dbSystemShape")))
+		dbSystemIDParam := getOptional(qp.Get("dbSystemId"))
+		storageManagementParam := getOptional(armoracledatabase.StorageManagementType(qp.Get("storageManagement")))
+		isUpgradeSupportedParam, err := parseOptional(qp.Get("isUpgradeSupported"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
-		dbSystemShapeParam := getOptional(armoracledatabase.BaseDbSystemShapes(dbSystemShapeUnescaped))
-		dbSystemIDUnescaped, err := url.QueryUnescape(qp.Get("dbSystemId"))
+		isDatabaseSoftwareImageSupportedParam, err := parseOptional(qp.Get("isDatabaseSoftwareImageSupported"), strconv.ParseBool)
 		if err != nil {
 			return nil, err
 		}
-		dbSystemIDParam := getOptional(dbSystemIDUnescaped)
-		storageManagementUnescaped, err := url.QueryUnescape(qp.Get("storageManagement"))
-		if err != nil {
-			return nil, err
-		}
-		storageManagementParam := getOptional(armoracledatabase.StorageManagementType(storageManagementUnescaped))
-		isUpgradeSupportedUnescaped, err := url.QueryUnescape(qp.Get("isUpgradeSupported"))
-		if err != nil {
-			return nil, err
-		}
-		isUpgradeSupportedParam, err := parseOptional(isUpgradeSupportedUnescaped, strconv.ParseBool)
-		if err != nil {
-			return nil, err
-		}
-		isDatabaseSoftwareImageSupportedUnescaped, err := url.QueryUnescape(qp.Get("isDatabaseSoftwareImageSupported"))
-		if err != nil {
-			return nil, err
-		}
-		isDatabaseSoftwareImageSupportedParam, err := parseOptional(isDatabaseSoftwareImageSupportedUnescaped, strconv.ParseBool)
-		if err != nil {
-			return nil, err
-		}
-		shapeFamilyUnescaped, err := url.QueryUnescape(qp.Get("shapeFamily"))
-		if err != nil {
-			return nil, err
-		}
-		shapeFamilyParam := getOptional(armoracledatabase.ShapeFamilyType(shapeFamilyUnescaped))
+		shapeFamilyParam := getOptional(armoracledatabase.ShapeFamilyType(qp.Get("shapeFamily")))
 		var options *armoracledatabase.DbVersionsClientListByLocationOptions
 		if dbSystemShapeParam != nil || dbSystemIDParam != nil || storageManagementParam != nil || isUpgradeSupportedParam != nil || isDatabaseSoftwareImageSupportedParam != nil || shapeFamilyParam != nil {
 			options = &armoracledatabase.DbVersionsClientListByLocationOptions{
@@ -201,7 +173,7 @@ func (d *DbVersionsServerTransport) dispatchNewListByLocationPager(req *http.Req
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		d.newListByLocationPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

@@ -69,7 +69,7 @@ func ExampleClient_PreviewAlertRule() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armpreviewalertrule.ClientPreviewAlertRuleResponse{
-	// 	Response: &armpreviewalertrule.Response{
+	// 	Response: armpreviewalertrule.Response{
 	// 		RulePreviewResults: []*armpreviewalertrule.RulePreviewResult{
 	// 			{
 	// 				DimensionCombination: []*armpreviewalertrule.DimensionNameAndValue{
@@ -87,17 +87,17 @@ func ExampleClient_PreviewAlertRule() {
 	// 								LowThreshold: to.Ptr[float64](20),
 	// 								MetricValue: to.Ptr[float64](85),
 	// 								ThresholdMet: to.Ptr(true),
-	// 								Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T09:00:00Z"); return t}()),
+	// 								Timestamp: to.Ptr(time.Date(2025, time.February, 15, 9, 0, 0, 0, time.UTC)),
 	// 							},
 	// 							{
 	// 								HighThreshold: to.Ptr[float64](80),
 	// 								LowThreshold: to.Ptr[float64](20),
 	// 								MetricValue: to.Ptr[float64](75),
 	// 								ThresholdMet: to.Ptr(false),
-	// 								Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T08:00:00Z"); return t}()),
+	// 								Timestamp: to.Ptr(time.Date(2025, time.February, 15, 8, 0, 0, 0, time.UTC)),
 	// 							},
 	// 						},
-	// 						EvaluationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T10:00:00Z"); return t}()),
+	// 						EvaluationTime: to.Ptr(time.Date(2025, time.February, 15, 10, 0, 0, 0, time.UTC)),
 	// 						ThresholdMet: to.Ptr(true),
 	// 					},
 	// 					{
@@ -108,17 +108,17 @@ func ExampleClient_PreviewAlertRule() {
 	// 								LowThreshold: to.Ptr[float64](20),
 	// 								MetricValue: to.Ptr[float64](65),
 	// 								ThresholdMet: to.Ptr(false),
-	// 								Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T10:00:00Z"); return t}()),
+	// 								Timestamp: to.Ptr(time.Date(2025, time.February, 15, 10, 0, 0, 0, time.UTC)),
 	// 							},
 	// 							{
 	// 								HighThreshold: to.Ptr[float64](80),
 	// 								LowThreshold: to.Ptr[float64](20),
 	// 								MetricValue: to.Ptr[float64](85),
 	// 								ThresholdMet: to.Ptr(true),
-	// 								Timestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T09:00:00Z"); return t}()),
+	// 								Timestamp: to.Ptr(time.Date(2025, time.February, 15, 9, 0, 0, 0, time.UTC)),
 	// 							},
 	// 						},
-	// 						EvaluationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-02-15T11:00:00Z"); return t}()),
+	// 						EvaluationTime: to.Ptr(time.Date(2025, time.February, 15, 11, 0, 0, 0, time.UTC)),
 	// 						ThresholdMet: to.Ptr(false),
 	// 					},
 	// 				},

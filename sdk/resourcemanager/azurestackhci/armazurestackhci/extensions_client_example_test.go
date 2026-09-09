@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-04-01-preview/PutExtension.json
+// Generated from example definition: 2026-04-30/PutExtension.json
 func ExampleExtensionsClient_BeginCreate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -44,13 +44,13 @@ func ExampleExtensionsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ExtensionsClientCreateResponse{
-	// 	Extension: &armazurestackhci.Extension{
+	// 	Extension: armazurestackhci.Extension{
 	// 		Name: to.Ptr("MicrosoftMonitoringAgent"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings/extensions"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default/extensions/MicrosoftMonitoringAgent"),
@@ -79,7 +79,7 @@ func ExampleExtensionsClient_BeginCreate() {
 	// 							DisplayStatus: to.Ptr("Provisioning succeeded"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypes("Information")),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.0"),
 	// 					},
@@ -97,7 +97,7 @@ func ExampleExtensionsClient_BeginCreate() {
 	// 							DisplayStatus: to.Ptr("Provisioning failed"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypesError),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.3"),
 	// 					},
@@ -108,10 +108,10 @@ func ExampleExtensionsClient_BeginCreate() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -119,7 +119,7 @@ func ExampleExtensionsClient_BeginCreate() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/DeleteExtension.json
+// Generated from example definition: 2026-04-30/DeleteExtension.json
 func ExampleExtensionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -136,7 +136,7 @@ func ExampleExtensionsClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -145,7 +145,7 @@ func ExampleExtensionsClient_BeginDelete() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/GetExtension.json
+// Generated from example definition: 2026-04-30/GetExtension.json
 func ExampleExtensionsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -164,7 +164,7 @@ func ExampleExtensionsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ExtensionsClientGetResponse{
-	// 	Extension: &armazurestackhci.Extension{
+	// 	Extension: armazurestackhci.Extension{
 	// 		Name: to.Ptr("MicrosoftMonitoringAgent"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings/extensions"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default/extensions/MicrosoftMonitoringAgent"),
@@ -193,7 +193,7 @@ func ExampleExtensionsClient_Get() {
 	// 							DisplayStatus: to.Ptr("Provisioning succeeded"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypes("Information")),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.0"),
 	// 					},
@@ -211,7 +211,7 @@ func ExampleExtensionsClient_Get() {
 	// 							DisplayStatus: to.Ptr("Provisioning failed"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypesError),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.3"),
 	// 					},
@@ -222,10 +222,10 @@ func ExampleExtensionsClient_Get() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -233,7 +233,7 @@ func ExampleExtensionsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/ListExtensionsByArcSetting.json
+// Generated from example definition: 2026-04-30/ListExtensionsByArcSetting.json
 func ExampleExtensionsClient_NewListByArcSettingPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -289,10 +289,10 @@ func ExampleExtensionsClient_NewListByArcSettingPager() {
 		// 					ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armazurestackhci.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 		// 				},
@@ -328,10 +328,10 @@ func ExampleExtensionsClient_NewListByArcSettingPager() {
 		// 					ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 		// 				},
 		// 				SystemData: &armazurestackhci.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 		// 				},
@@ -342,7 +342,7 @@ func ExampleExtensionsClient_NewListByArcSettingPager() {
 	}
 }
 
-// Generated from example definition: 2026-04-01-preview/PatchExtension.json
+// Generated from example definition: 2026-04-30/PatchExtension.json
 func ExampleExtensionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -372,13 +372,13 @@ func ExampleExtensionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.ExtensionsClientUpdateResponse{
-	// 	Extension: &armazurestackhci.Extension{
+	// 	Extension: armazurestackhci.Extension{
 	// 		Name: to.Ptr("MicrosoftMonitoringAgent"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/arcSettings/extensions"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/arcSettings/default/extensions/MicrosoftMonitoringAgent"),
@@ -407,7 +407,7 @@ func ExampleExtensionsClient_BeginUpdate() {
 	// 							DisplayStatus: to.Ptr("Provisioning succeeded"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypes("Information")),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.0"),
 	// 					},
@@ -425,7 +425,7 @@ func ExampleExtensionsClient_BeginUpdate() {
 	// 							DisplayStatus: to.Ptr("Provisioning failed"),
 	// 							Level: to.Ptr(armazurestackhci.StatusLevelTypesError),
 	// 							Message: to.Ptr("Finished executing command, StdOut: , StdErr:"),
-	// 							Time: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2019-08-08T20:42:10.999Z"); return t}()),
+	// 							Time: to.Ptr(time.Date(2019, time.August, 8, 20, 42, 10, 999000000, time.UTC)),
 	// 						},
 	// 						TypeHandlerVersion: to.Ptr("1.10.3"),
 	// 					},
@@ -436,10 +436,10 @@ func ExampleExtensionsClient_BeginUpdate() {
 	// 			ProvisioningState: to.Ptr(armazurestackhci.ProvisioningStateSucceeded),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -447,7 +447,7 @@ func ExampleExtensionsClient_BeginUpdate() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/Extensions_Upgrade.json
+// Generated from example definition: 2026-04-30/Extensions_Upgrade.json
 func ExampleExtensionsClient_BeginUpgrade() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -466,6 +466,6 @@ func ExampleExtensionsClient_BeginUpgrade() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }

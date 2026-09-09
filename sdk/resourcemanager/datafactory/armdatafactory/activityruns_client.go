@@ -18,6 +18,8 @@ import (
 
 // ActivityRunsClient contains the methods for the ActivityRuns group.
 // Don't use this type directly, use NewActivityRunsClient() instead.
+//
+// Generated from API version 2018-06-01
 type ActivityRunsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type ActivityRunsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewActivityRunsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ActivityRunsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewActivityRunsClient(subscriptionID string, credential azcore.TokenCredent
 
 // QueryByPipelineRun - Query activity runs based on input filter conditions.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2018-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - runID - The pipeline run identifier.
 //   - filterParameters - Parameters to filter the activity runs.
@@ -62,19 +65,14 @@ func (client *ActivityRunsClient) QueryByPipelineRun(ctx context.Context, resour
 	if err != nil {
 		return ActivityRunsClientQueryByPipelineRunResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ActivityRunsClientQueryByPipelineRunResponse{}, err
-	}
-	resp, err := client.queryByPipelineRunHandleResponse(httpResp)
-	return resp, err
+	return client.queryByPipelineRunHandleResponse(httpResp, http.StatusOK)
 }
 
 // queryByPipelineRunCreateRequest creates the QueryByPipelineRun request.
 func (client *ActivityRunsClient) queryByPipelineRunCreateRequest(ctx context.Context, resourceGroupName string, factoryName string, runID string, filterParameters RunFilterParameters, _ *ActivityRunsClientQueryByPipelineRunOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/pipelineruns/{runId}/queryActivityruns"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *ActivityRunsClient) queryByPipelineRunCreateRequest(ctx context.Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2018-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20180601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, filterParameters); err != nil {
@@ -105,8 +103,11 @@ func (client *ActivityRunsClient) queryByPipelineRunCreateRequest(ctx context.Co
 }
 
 // queryByPipelineRunHandleResponse handles the QueryByPipelineRun response.
-func (client *ActivityRunsClient) queryByPipelineRunHandleResponse(resp *http.Response) (ActivityRunsClientQueryByPipelineRunResponse, error) {
+func (client *ActivityRunsClient) queryByPipelineRunHandleResponse(resp *http.Response, successCodes ...int) (ActivityRunsClientQueryByPipelineRunResponse, error) {
 	result := ActivityRunsClientQueryByPipelineRunResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ActivityRunsQueryResponse); err != nil {
 		return ActivityRunsClientQueryByPipelineRunResponse{}, err
 	}

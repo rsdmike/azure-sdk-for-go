@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ProblemClassificationsServer is a fake server for instances of the armsupport.ProblemClassificationsClient type.
@@ -58,9 +59,7 @@ func (p *ProblemClassificationsServerTransport) Do(req *http.Request) (*http.Res
 }
 
 func (p *ProblemClassificationsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -78,10 +77,7 @@ func (p *ProblemClassificationsServerTransport) dispatchToMethodFake(req *http.R
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -96,7 +92,7 @@ func (p *ProblemClassificationsServerTransport) dispatchGet(req *http.Request) (
 	if p.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/providers/Microsoft\.Support/services/(?P<serviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/problemClassifications/(?P<problemClassificationName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/Microsoft\.Support/services/(?P<serviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/problemClassifications/(?P<problemClassificationName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -115,7 +111,7 @@ func (p *ProblemClassificationsServerTransport) dispatchGet(req *http.Request) (
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ProblemClassification, req)
@@ -131,7 +127,7 @@ func (p *ProblemClassificationsServerTransport) dispatchNewListPager(req *http.R
 	}
 	newListPager := p.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/providers/Microsoft\.Support/services/(?P<serviceName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/problemClassifications`
+		const regexStr = `/providers/Microsoft\.Support/services/(?P<serviceName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/problemClassifications`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -152,7 +148,7 @@ func (p *ProblemClassificationsServerTransport) dispatchNewListPager(req *http.R
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		p.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

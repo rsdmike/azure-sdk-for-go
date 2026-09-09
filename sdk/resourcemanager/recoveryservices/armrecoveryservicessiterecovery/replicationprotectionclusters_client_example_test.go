@@ -6,11 +6,10 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/ReplicationProtectionClusters_ApplyRecoveryPoint.json
@@ -40,13 +39,13 @@ func ExampleReplicationProtectionClustersClient_BeginApplyRecoveryPoint() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientApplyRecoveryPointResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster"),
@@ -91,12 +90,12 @@ func ExampleReplicationProtectionClustersClient_BeginApplyRecoveryPoint() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			HealthErrors: []*armrecoveryservicessiterecovery.HealthError{
 	// 			},
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:31:13.1605059Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:08:01.7440966Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 9, 31, 13, 160505900, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 6, 8, 1, 744096600, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("klncksan"),
 	// 			PolicyID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/klncksan"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("East US"),
@@ -113,7 +112,7 @@ func ExampleReplicationProtectionClustersClient_BeginApplyRecoveryPoint() {
 	// 				InitialRecoveryFabricLocation: to.Ptr("westus"),
 	// 				InitialRecoveryZone: to.Ptr(""),
 	// 				InstanceType: to.Ptr("A2A"),
-	// 				LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T10:19:11.0490433Z"); return t}()),
+	// 				LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 10, 19, 11, 49043300, time.UTC)),
 	// 				LifecycleID: to.Ptr("3d523ab9-8c6d-40af-850d-ccee06513dc6"),
 	// 				MultiVMGroupCreateOption: to.Ptr(armrecoveryservicessiterecovery.MultiVMGroupCreateOptionUserSpecified),
 	// 				MultiVMGroupID: to.Ptr("a7ef77cb-ae59-545f-a32a-bf30575ab1c6"),
@@ -138,7 +137,7 @@ func ExampleReplicationProtectionClustersClient_BeginApplyRecoveryPoint() {
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					FailoverRecoveryPointID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster/recoveryPoints/cc48b7f3-b267-432b-ad76-45528974dc62"),
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:20:35.9303505Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 9, 20, 35, 930350500, time.UTC)),
 	// 					ManagementID: to.Ptr("a24d47b2-a80b-4553-9c16-499c30c3be07"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -202,13 +201,13 @@ func ExampleReplicationProtectionClustersClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientCreateResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("cluster12"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/eastus/replicationProtectionContainers/eastus-container/replicationProtectionClusters/cluster12"),
@@ -289,13 +288,13 @@ func ExampleReplicationProtectionClustersClient_BeginFailoverCommit() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientFailoverCommitResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster"),
@@ -338,12 +337,12 @@ func ExampleReplicationProtectionClustersClient_BeginFailoverCommit() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			HealthErrors: []*armrecoveryservicessiterecovery.HealthError{
 	// 			},
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:31:13.1605059Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:08:01.7440966Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 9, 31, 13, 160505900, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 6, 8, 1, 744096600, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("klncksan"),
 	// 			PolicyID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/klncksan"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("East US"),
@@ -360,7 +359,7 @@ func ExampleReplicationProtectionClustersClient_BeginFailoverCommit() {
 	// 				InitialRecoveryFabricLocation: to.Ptr("westus"),
 	// 				InitialRecoveryZone: to.Ptr(""),
 	// 				InstanceType: to.Ptr("A2A"),
-	// 				LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-24T04:47:24.3271066Z"); return t}()),
+	// 				LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 24, 4, 47, 24, 327106600, time.UTC)),
 	// 				LifecycleID: to.Ptr("3d523ab9-8c6d-40af-850d-ccee06513dc6"),
 	// 				MultiVMGroupCreateOption: to.Ptr(armrecoveryservicessiterecovery.MultiVMGroupCreateOptionUserSpecified),
 	// 				MultiVMGroupID: to.Ptr("a7ef77cb-ae59-545f-a32a-bf30575ab1c6"),
@@ -385,7 +384,7 @@ func ExampleReplicationProtectionClustersClient_BeginFailoverCommit() {
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					FailoverRecoveryPointID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster/recoveryPoints/cc48b7f3-b267-432b-ad76-45528974dc62"),
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:20:35.9303505Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 9, 20, 35, 930350500, time.UTC)),
 	// 					ManagementID: to.Ptr("a24d47b2-a80b-4553-9c16-499c30c3be07"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -443,7 +442,7 @@ func ExampleReplicationProtectionClustersClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientGetResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("cluster1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/eastus/replicationProtectionContainers/eastus-container/replicationProtectionClusters/cluster1"),
@@ -508,7 +507,7 @@ func ExampleReplicationProtectionClustersClient_Get() {
 	// 				ReplicationHealth: to.Ptr("Normal"),
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-11T07:34:58.856Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2022, time.November, 11, 7, 34, 58, 856000000, time.UTC)),
 	// 					ManagementID: to.Ptr("1ed32804-ae51-4752-9448-9f686ae27d7b"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -572,7 +571,7 @@ func ExampleReplicationProtectionClustersClient_GetOperationResults() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientGetOperationResultsResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("cluster12"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/eastus/replicationProtectionContainers/eastus-container/replicationProtectionClusters/cluster12"),
@@ -727,7 +726,7 @@ func ExampleReplicationProtectionClustersClient_NewListPager() {
 		// 						ReplicationHealth: to.Ptr("Normal"),
 		// 						SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 		// 							InstanceType: to.Ptr("A2A"),
-		// 							LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-11T07:34:58.856Z"); return t}()),
+		// 							LastRpoCalculatedTime: to.Ptr(time.Date(2022, time.November, 11, 7, 34, 58, 856000000, time.UTC)),
 		// 							ManagementID: to.Ptr("1ed32804-ae51-4752-9448-9f686ae27d7b"),
 		// 							PrimaryFabricLocation: to.Ptr("eastus"),
 		// 							RecoveryFabricLocation: to.Ptr("centraluseuap"),
@@ -832,7 +831,7 @@ func ExampleReplicationProtectionClustersClient_NewListByReplicationProtectionCo
 		// 						ReplicationHealth: to.Ptr("Normal"),
 		// 						SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 		// 							InstanceType: to.Ptr("A2A"),
-		// 							LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-11T07:34:58.856Z"); return t}()),
+		// 							LastRpoCalculatedTime: to.Ptr(time.Date(2022, time.November, 11, 7, 34, 58, 856000000, time.UTC)),
 		// 							ManagementID: to.Ptr("1ed32804-ae51-4752-9448-9f686ae27d7b"),
 		// 							PrimaryFabricLocation: to.Ptr("eastus"),
 		// 							RecoveryFabricLocation: to.Ptr("centraluseuap"),
@@ -864,7 +863,7 @@ func ExampleReplicationProtectionClustersClient_BeginPurge() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -885,13 +884,13 @@ func ExampleReplicationProtectionClustersClient_BeginRepairReplication() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientRepairReplicationResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("cluster1"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/eastus/replicationProtectionContainers/eastus-container/replicationProtectionClusters/cluster1"),
@@ -956,7 +955,7 @@ func ExampleReplicationProtectionClustersClient_BeginRepairReplication() {
 	// 				ReplicationHealth: to.Ptr("Normal"),
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-11-11T07:34:58.856Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2022, time.November, 11, 7, 34, 58, 856000000, time.UTC)),
 	// 					ManagementID: to.Ptr("1ed32804-ae51-4752-9448-9f686ae27d7b"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -1031,13 +1030,13 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientTestFailoverResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster"),
@@ -1081,11 +1080,11 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			HealthErrors: []*armrecoveryservicessiterecovery.HealthError{
 	// 			},
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:08:01.7440966Z"); return t}()),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 6, 8, 1, 744096600, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("klncksan"),
 	// 			PolicyID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/klncksan"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("East US"),
@@ -1101,7 +1100,7 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailover() {
 	// 				InitialRecoveryFabricLocation: to.Ptr("westus"),
 	// 				InitialRecoveryZone: to.Ptr(""),
 	// 				InstanceType: to.Ptr("A2A"),
-	// 				LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:12:49.8370065Z"); return t}()),
+	// 				LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 6, 12, 49, 837006500, time.UTC)),
 	// 				LifecycleID: to.Ptr("3d523ab9-8c6d-40af-850d-ccee06513dc6"),
 	// 				MultiVMGroupCreateOption: to.Ptr(armrecoveryservicessiterecovery.MultiVMGroupCreateOptionUserSpecified),
 	// 				MultiVMGroupID: to.Ptr("a7ef77cb-ae59-545f-a32a-bf30575ab1c6"),
@@ -1125,7 +1124,7 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailover() {
 	// 				ReplicationHealth: to.Ptr("Normal"),
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:12:52.499131Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 6, 12, 52, 499131000, time.UTC)),
 	// 					ManagementID: to.Ptr("a24d47b2-a80b-4553-9c16-499c30c3be07"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -1184,13 +1183,13 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailoverCleanup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientTestFailoverCleanupResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster"),
@@ -1235,11 +1234,11 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailoverCleanup() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			HealthErrors: []*armrecoveryservicessiterecovery.HealthError{
 	// 			},
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:08:01.7440966Z"); return t}()),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 6, 8, 1, 744096600, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("klncksan"),
 	// 			PolicyID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/klncksan"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("East US"),
@@ -1255,7 +1254,7 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailoverCleanup() {
 	// 				InitialRecoveryFabricLocation: to.Ptr("westus"),
 	// 				InitialRecoveryZone: to.Ptr(""),
 	// 				InstanceType: to.Ptr("A2A"),
-	// 				LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:14:51.8546369Z"); return t}()),
+	// 				LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 9, 14, 51, 854636900, time.UTC)),
 	// 				LifecycleID: to.Ptr("3d523ab9-8c6d-40af-850d-ccee06513dc6"),
 	// 				MultiVMGroupCreateOption: to.Ptr(armrecoveryservicessiterecovery.MultiVMGroupCreateOptionUserSpecified),
 	// 				MultiVMGroupID: to.Ptr("a7ef77cb-ae59-545f-a32a-bf30575ab1c6"),
@@ -1279,7 +1278,7 @@ func ExampleReplicationProtectionClustersClient_BeginTestFailoverCleanup() {
 	// 				ReplicationHealth: to.Ptr("Normal"),
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:13:33.52001Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 9, 13, 33, 520010000, time.UTC)),
 	// 					ManagementID: to.Ptr("a24d47b2-a80b-4553-9c16-499c30c3be07"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{
@@ -1346,13 +1345,13 @@ func ExampleReplicationProtectionClustersClient_BeginUnplannedFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectionClustersClientUnplannedFailoverResponse{
-	// 	ReplicationProtectionCluster: &armrecoveryservicessiterecovery.ReplicationProtectionCluster{
+	// 	ReplicationProtectionCluster: armrecoveryservicessiterecovery.ReplicationProtectionCluster{
 	// 		Name: to.Ptr("testcluster"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectionClusters"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster"),
@@ -1397,12 +1396,12 @@ func ExampleReplicationProtectionClustersClient_BeginUnplannedFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			HealthErrors: []*armrecoveryservicessiterecovery.HealthError{
 	// 			},
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:31:13.1605059Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T06:08:01.7440966Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 9, 31, 13, 160505900, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2024, time.January, 22, 6, 8, 1, 744096600, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("klncksan"),
 	// 			PolicyID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/klncksan"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("East US"),
@@ -1419,7 +1418,7 @@ func ExampleReplicationProtectionClustersClient_BeginUnplannedFailover() {
 	// 				InitialRecoveryFabricLocation: to.Ptr("westus"),
 	// 				InitialRecoveryZone: to.Ptr(""),
 	// 				InstanceType: to.Ptr("A2A"),
-	// 				LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T10:19:11.0490433Z"); return t}()),
+	// 				LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 10, 19, 11, 49043300, time.UTC)),
 	// 				LifecycleID: to.Ptr("3d523ab9-8c6d-40af-850d-ccee06513dc6"),
 	// 				MultiVMGroupCreateOption: to.Ptr(armrecoveryservicessiterecovery.MultiVMGroupCreateOptionUserSpecified),
 	// 				MultiVMGroupID: to.Ptr("a7ef77cb-ae59-545f-a32a-bf30575ab1c6"),
@@ -1444,7 +1443,7 @@ func ExampleReplicationProtectionClustersClient_BeginUnplannedFailover() {
 	// 				SharedDiskProviderSpecificDetails: &armrecoveryservicessiterecovery.A2ASharedDiskReplicationDetails{
 	// 					FailoverRecoveryPointID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/fabric-pri-eastus/replicationProtectionContainers/pri-cloud-eastus/replicationProtectionClusters/testcluster/recoveryPoints/cc48b7f3-b267-432b-ad76-45528974dc62"),
 	// 					InstanceType: to.Ptr("A2A"),
-	// 					LastRpoCalculatedTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-22T09:20:35.9303505Z"); return t}()),
+	// 					LastRpoCalculatedTime: to.Ptr(time.Date(2024, time.January, 22, 9, 20, 35, 930350500, time.UTC)),
 	// 					ManagementID: to.Ptr("a24d47b2-a80b-4553-9c16-499c30c3be07"),
 	// 					PrimaryFabricLocation: to.Ptr("eastus"),
 	// 					ProtectedManagedDisks: []*armrecoveryservicessiterecovery.A2AProtectedManagedDiskDetails{

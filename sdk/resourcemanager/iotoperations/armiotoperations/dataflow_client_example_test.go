@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_ComplexContextualization.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_ComplexContextualization.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexContextualization() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -87,13 +87,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexCont
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -158,16 +158,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexCont
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_ComplexEventHub.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_ComplexEventHub.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexEventHub() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -275,13 +275,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexEven
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -346,16 +346,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateComplexEven
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_FilterToTopic.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_FilterToTopic.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateFilterToTopic() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -426,13 +426,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateFilterToTop
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -493,16 +493,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateFilterToTop
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_MaximumSet_Gen.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -583,13 +583,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			RequestDiskPersistence: to.Ptr(armiotoperations.OperationalModeDisabled),
@@ -660,16 +660,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdate() {
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_SimpleEventGrid.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_SimpleEventGrid.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleEventGrid() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -714,13 +714,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleEvent
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -755,16 +755,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleEvent
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_CreateOrUpdate_SimpleFabric.json
+// Generated from example definition: 2026-07-01/Dataflow_CreateOrUpdate_SimpleFabric.json
 func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleFabric() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -816,13 +816,13 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleFabri
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientCreateOrUpdateResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -864,16 +864,16 @@ func ExampleDataflowClient_BeginCreateOrUpdate_dataflowCreateOrUpdateSimpleFabri
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_Delete_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/Dataflow_Delete_MaximumSet_Gen.json
 func ExampleDataflowClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -890,11 +890,11 @@ func ExampleDataflowClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_Get_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/Dataflow_Get_MaximumSet_Gen.json
 func ExampleDataflowClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -913,7 +913,7 @@ func ExampleDataflowClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armiotoperations.DataflowClientGetResponse{
-	// 	DataflowResource: &armiotoperations.DataflowResource{
+	// 	DataflowResource: armiotoperations.DataflowResource{
 	// 		Properties: &armiotoperations.DataflowProperties{
 	// 			Mode: to.Ptr(armiotoperations.OperationalModeEnabled),
 	// 			Operations: []*armiotoperations.DataflowOperation{
@@ -983,16 +983,16 @@ func ExampleDataflowClient_Get() {
 	// 		SystemData: &armiotoperations.SystemData{
 	// 			CreatedBy: to.Ptr("contosouser"),
 	// 			CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("contosouser"),
 	// 			LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
 }
 
-// Generated from example definition: 2026-03-01/Dataflow_ListByProfileResource_MaximumSet_Gen.json
+// Generated from example definition: 2026-07-01/Dataflow_ListByProfileResource_MaximumSet_Gen.json
 func ExampleDataflowClient_NewListByResourceGroupPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -1087,10 +1087,10 @@ func ExampleDataflowClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armiotoperations.SystemData{
 		// 					CreatedBy: to.Ptr("contosouser"),
 		// 					CreatedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("contosouser"),
 		// 					LastModifiedByType: to.Ptr(armiotoperations.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-08-09T18:13:29.389Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.August, 9, 18, 13, 29, 389000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},

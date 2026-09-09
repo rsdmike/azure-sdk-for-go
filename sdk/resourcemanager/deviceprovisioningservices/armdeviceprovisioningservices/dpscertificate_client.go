@@ -12,15 +12,17 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime/datetime"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 )
 
 // DpsCertificateClient contains the methods for the DpsCertificate group.
 // Don't use this type directly, use NewDpsCertificateClient() instead.
+//
+// Generated from API version 2026-08-31
 type DpsCertificateClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -31,6 +33,9 @@ type DpsCertificateClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDpsCertificateClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DpsCertificateClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +49,6 @@ func NewDpsCertificateClient(subscriptionID string, credential azcore.TokenCrede
 
 // CreateOrUpdate - Add new certificate or update an existing certificate.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - provisioningServiceName - Name of the provisioning service to retrieve.
 //   - certificateName - Name of the certificate to retrieve.
@@ -66,19 +69,14 @@ func (client *DpsCertificateClient) CreateOrUpdate(ctx context.Context, resource
 	if err != nil {
 		return DpsCertificateClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *DpsCertificateClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, provisioningServiceName string, certificateName string, certificateDescription CertificateResponse, options *DpsCertificateClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates/{certificateName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -98,8 +96,8 @@ func (client *DpsCertificateClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -112,8 +110,11 @@ func (client *DpsCertificateClient) createOrUpdateCreateRequest(ctx context.Cont
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *DpsCertificateClient) createOrUpdateHandleResponse(resp *http.Response) (DpsCertificateClientCreateOrUpdateResponse, error) {
+func (client *DpsCertificateClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (DpsCertificateClientCreateOrUpdateResponse, error) {
 	result := DpsCertificateClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientCreateOrUpdateResponse{}, err
 	}
@@ -122,8 +123,6 @@ func (client *DpsCertificateClient) createOrUpdateHandleResponse(resp *http.Resp
 
 // Delete - Deletes the specified certificate associated with the Provisioning Service
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DpsCertificateClientDeleteOptions contains the optional parameters for the DpsCertificateClient.Delete method.
 func (client *DpsCertificateClient) Delete(ctx context.Context, resourceGroupName string, ifMatch string, provisioningServiceName string, certificateName string, options *DpsCertificateClientDeleteOptions) (DpsCertificateClientDeleteResponse, error) {
@@ -141,8 +140,7 @@ func (client *DpsCertificateClient) Delete(ctx context.Context, resourceGroupNam
 		return DpsCertificateClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientDeleteResponse{}, err
+		return DpsCertificateClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return DpsCertificateClientDeleteResponse{}, nil
 }
@@ -151,7 +149,7 @@ func (client *DpsCertificateClient) Delete(ctx context.Context, resourceGroupNam
 func (client *DpsCertificateClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, ifMatch string, provisioningServiceName string, certificateName string, options *DpsCertificateClientDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates/{certificateName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -171,9 +169,9 @@ func (client *DpsCertificateClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
+	reqQP.Set("api-version", version20260831)
 	if options != nil && options.CertificateCreated != nil {
-		reqQP.Set("certificate.created", options.CertificateCreated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.created", datetime.RFC3339((*options.CertificateCreated).UTC()).String())
 	}
 	if options != nil && options.CertificateHasPrivateKey != nil {
 		reqQP.Set("certificate.hasPrivateKey", strconv.FormatBool(*options.CertificateHasPrivateKey))
@@ -182,7 +180,7 @@ func (client *DpsCertificateClient) deleteCreateRequest(ctx context.Context, res
 		reqQP.Set("certificate.isVerified", strconv.FormatBool(*options.CertificateIsVerified))
 	}
 	if options != nil && options.CertificateLastUpdated != nil {
-		reqQP.Set("certificate.lastUpdated", options.CertificateLastUpdated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.lastUpdated", datetime.RFC3339((*options.CertificateLastUpdated).UTC()).String())
 	}
 	if options != nil && options.CertificateName1 != nil {
 		reqQP.Set("certificate.name", *options.CertificateName1)
@@ -196,15 +194,13 @@ func (client *DpsCertificateClient) deleteCreateRequest(ctx context.Context, res
 	if options != nil && options.CertificateRawBytes != nil {
 		reqQP.Set("certificate.rawBytes", base64.StdEncoding.EncodeToString(options.CertificateRawBytes))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["If-Match"] = []string{ifMatch}
 	return req, nil
 }
 
 // GenerateVerificationCode - Generate verification code for Proof of Possession.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DpsCertificateClientGenerateVerificationCodeOptions contains the optional parameters for the DpsCertificateClient.GenerateVerificationCode
 //     method.
@@ -222,19 +218,14 @@ func (client *DpsCertificateClient) GenerateVerificationCode(ctx context.Context
 	if err != nil {
 		return DpsCertificateClientGenerateVerificationCodeResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientGenerateVerificationCodeResponse{}, err
-	}
-	resp, err := client.generateVerificationCodeHandleResponse(httpResp)
-	return resp, err
+	return client.generateVerificationCodeHandleResponse(httpResp, http.StatusOK)
 }
 
 // generateVerificationCodeCreateRequest creates the GenerateVerificationCode request.
 func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx context.Context, certificateName string, ifMatch string, resourceGroupName string, provisioningServiceName string, options *DpsCertificateClientGenerateVerificationCodeOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates/{certificateName}/generateVerificationCode"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if certificateName == "" {
@@ -254,9 +245,9 @@ func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
+	reqQP.Set("api-version", version20260831)
 	if options != nil && options.CertificateCreated != nil {
-		reqQP.Set("certificate.created", options.CertificateCreated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.created", datetime.RFC3339((*options.CertificateCreated).UTC()).String())
 	}
 	if options != nil && options.CertificateHasPrivateKey != nil {
 		reqQP.Set("certificate.hasPrivateKey", strconv.FormatBool(*options.CertificateHasPrivateKey))
@@ -265,7 +256,7 @@ func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx co
 		reqQP.Set("certificate.isVerified", strconv.FormatBool(*options.CertificateIsVerified))
 	}
 	if options != nil && options.CertificateLastUpdated != nil {
-		reqQP.Set("certificate.lastUpdated", options.CertificateLastUpdated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.lastUpdated", datetime.RFC3339((*options.CertificateLastUpdated).UTC()).String())
 	}
 	if options != nil && options.CertificateName1 != nil {
 		reqQP.Set("certificate.name", *options.CertificateName1)
@@ -279,15 +270,18 @@ func (client *DpsCertificateClient) generateVerificationCodeCreateRequest(ctx co
 	if options != nil && options.CertificateRawBytes != nil {
 		reqQP.Set("certificate.rawBytes", base64.StdEncoding.EncodeToString(options.CertificateRawBytes))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["If-Match"] = []string{ifMatch}
 	return req, nil
 }
 
 // generateVerificationCodeHandleResponse handles the GenerateVerificationCode response.
-func (client *DpsCertificateClient) generateVerificationCodeHandleResponse(resp *http.Response) (DpsCertificateClientGenerateVerificationCodeResponse, error) {
+func (client *DpsCertificateClient) generateVerificationCodeHandleResponse(resp *http.Response, successCodes ...int) (DpsCertificateClientGenerateVerificationCodeResponse, error) {
 	result := DpsCertificateClientGenerateVerificationCodeResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VerificationCodeResponse); err != nil {
 		return DpsCertificateClientGenerateVerificationCodeResponse{}, err
 	}
@@ -296,8 +290,6 @@ func (client *DpsCertificateClient) generateVerificationCodeHandleResponse(resp 
 
 // Get - Get the certificate from the provisioning service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DpsCertificateClientGetOptions contains the optional parameters for the DpsCertificateClient.Get method.
 func (client *DpsCertificateClient) Get(ctx context.Context, certificateName string, resourceGroupName string, provisioningServiceName string, options *DpsCertificateClientGetOptions) (DpsCertificateClientGetResponse, error) {
@@ -314,19 +306,14 @@ func (client *DpsCertificateClient) Get(ctx context.Context, certificateName str
 	if err != nil {
 		return DpsCertificateClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DpsCertificateClient) getCreateRequest(ctx context.Context, certificateName string, resourceGroupName string, provisioningServiceName string, options *DpsCertificateClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates/{certificateName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if certificateName == "" {
@@ -346,8 +333,8 @@ func (client *DpsCertificateClient) getCreateRequest(ctx context.Context, certif
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.IfMatch != nil {
 		req.Raw().Header["If-Match"] = []string{*options.IfMatch}
@@ -356,8 +343,11 @@ func (client *DpsCertificateClient) getCreateRequest(ctx context.Context, certif
 }
 
 // getHandleResponse handles the Get response.
-func (client *DpsCertificateClient) getHandleResponse(resp *http.Response) (DpsCertificateClientGetResponse, error) {
+func (client *DpsCertificateClient) getHandleResponse(resp *http.Response, successCodes ...int) (DpsCertificateClientGetResponse, error) {
 	result := DpsCertificateClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientGetResponse{}, err
 	}
@@ -366,8 +356,6 @@ func (client *DpsCertificateClient) getHandleResponse(resp *http.Response) (DpsC
 
 // List - Get all the certificates tied to the provisioning service.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - provisioningServiceName - Name of the provisioning service to retrieve.
 //   - options - DpsCertificateClientListOptions contains the optional parameters for the DpsCertificateClient.List method.
@@ -385,19 +373,14 @@ func (client *DpsCertificateClient) List(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return DpsCertificateClientListResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientListResponse{}, err
-	}
-	resp, err := client.listHandleResponse(httpResp)
-	return resp, err
+	return client.listHandleResponse(httpResp, http.StatusOK)
 }
 
 // listCreateRequest creates the List request.
 func (client *DpsCertificateClient) listCreateRequest(ctx context.Context, resourceGroupName string, provisioningServiceName string, _ *DpsCertificateClientListOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -413,15 +396,18 @@ func (client *DpsCertificateClient) listCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260831)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DpsCertificateClient) listHandleResponse(resp *http.Response) (DpsCertificateClientListResponse, error) {
+func (client *DpsCertificateClient) listHandleResponse(resp *http.Response, successCodes ...int) (DpsCertificateClientListResponse, error) {
 	result := DpsCertificateClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateListDescription); err != nil {
 		return DpsCertificateClientListResponse{}, err
 	}
@@ -431,8 +417,6 @@ func (client *DpsCertificateClient) listHandleResponse(resp *http.Response) (Dps
 // VerifyCertificate - Verifies the certificate's private key possession by providing the leaf cert issued by the verifying
 // pre uploaded certificate.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-02-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DpsCertificateClientVerifyCertificateOptions contains the optional parameters for the DpsCertificateClient.VerifyCertificate
 //     method.
@@ -450,19 +434,14 @@ func (client *DpsCertificateClient) VerifyCertificate(ctx context.Context, certi
 	if err != nil {
 		return DpsCertificateClientVerifyCertificateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DpsCertificateClientVerifyCertificateResponse{}, err
-	}
-	resp, err := client.verifyCertificateHandleResponse(httpResp)
-	return resp, err
+	return client.verifyCertificateHandleResponse(httpResp, http.StatusOK)
 }
 
 // verifyCertificateCreateRequest creates the VerifyCertificate request.
 func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.Context, certificateName string, ifMatch string, resourceGroupName string, provisioningServiceName string, request VerificationCodeRequest, options *DpsCertificateClientVerifyCertificateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices/provisioningServices/{provisioningServiceName}/certificates/{certificateName}/verify"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if certificateName == "" {
@@ -482,9 +461,9 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-02-01-preview")
+	reqQP.Set("api-version", version20260831)
 	if options != nil && options.CertificateCreated != nil {
-		reqQP.Set("certificate.created", options.CertificateCreated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.created", datetime.RFC3339((*options.CertificateCreated).UTC()).String())
 	}
 	if options != nil && options.CertificateHasPrivateKey != nil {
 		reqQP.Set("certificate.hasPrivateKey", strconv.FormatBool(*options.CertificateHasPrivateKey))
@@ -493,7 +472,7 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 		reqQP.Set("certificate.isVerified", strconv.FormatBool(*options.CertificateIsVerified))
 	}
 	if options != nil && options.CertificateLastUpdated != nil {
-		reqQP.Set("certificate.lastUpdated", options.CertificateLastUpdated.Format(time.RFC3339Nano))
+		reqQP.Set("certificate.lastUpdated", datetime.RFC3339((*options.CertificateLastUpdated).UTC()).String())
 	}
 	if options != nil && options.CertificateName1 != nil {
 		reqQP.Set("certificate.name", *options.CertificateName1)
@@ -507,7 +486,7 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 	if options != nil && options.CertificateRawBytes != nil {
 		reqQP.Set("certificate.rawBytes", base64.StdEncoding.EncodeToString(options.CertificateRawBytes))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["If-Match"] = []string{ifMatch}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -518,8 +497,11 @@ func (client *DpsCertificateClient) verifyCertificateCreateRequest(ctx context.C
 }
 
 // verifyCertificateHandleResponse handles the VerifyCertificate response.
-func (client *DpsCertificateClient) verifyCertificateHandleResponse(resp *http.Response) (DpsCertificateClientVerifyCertificateResponse, error) {
+func (client *DpsCertificateClient) verifyCertificateHandleResponse(resp *http.Response, successCodes ...int) (DpsCertificateClientVerifyCertificateResponse, error) {
 	result := DpsCertificateClientVerifyCertificateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CertificateResponse); err != nil {
 		return DpsCertificateClientVerifyCertificateResponse{}, err
 	}

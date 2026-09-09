@@ -27,6 +27,7 @@ func ExampleBudgetsClient_CreateOrUpdate() {
 	res, err := clientFactory.NewBudgetsClient().CreateOrUpdate(ctx, "subscriptions/00000000-0000-0000-0000-000000000000", "TestBudget", armconsumption.Budget{
 		ETag: to.Ptr("\"1d34d016a593709\""),
 		Properties: &armconsumption.BudgetProperties{
+			Amount:   to.Ptr[float64](100.65),
 			Category: to.Ptr(armconsumption.CategoryTypeCost),
 			Filter: &armconsumption.BudgetFilter{
 				And: []*armconsumption.BudgetFilterProperties{
@@ -78,13 +79,14 @@ func ExampleBudgetsClient_CreateOrUpdate() {
 					Enabled:       to.Ptr(true),
 					Locale:        to.Ptr(armconsumption.CultureCodeEnUs),
 					Operator:      to.Ptr(armconsumption.OperatorTypeGreaterThan),
+					Threshold:     to.Ptr[float64](80),
 					ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 				},
 			},
 			TimeGrain: to.Ptr(armconsumption.TimeGrainTypeMonthly),
 			TimePeriod: &armconsumption.BudgetTimePeriod{
-				EndDate:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-31T00:00:00Z"); return t }()),
-				StartDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-10-01T00:00:00Z"); return t }()),
+				EndDate:   to.Ptr(time.Date(2018, time.October, 31, 0, 0, 0, 0, time.UTC)),
+				StartDate: to.Ptr(time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)),
 			},
 		},
 	}, nil)
@@ -95,14 +97,16 @@ func ExampleBudgetsClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armconsumption.BudgetsClientCreateOrUpdateResponse{
-	// 	Budget: &armconsumption.Budget{
+	// 	Budget: armconsumption.Budget{
 	// 		Name: to.Ptr("TestBudget"),
 	// 		Type: to.Ptr("Microsoft.Consumption/budgets"),
 	// 		ETag: to.Ptr("\"1d34d012214157f\""),
 	// 		ID: to.Ptr("subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Consumption/budgets/TestBudget"),
 	// 		Properties: &armconsumption.BudgetProperties{
+	// 			Amount: to.Ptr[float64](100.65),
 	// 			Category: to.Ptr(armconsumption.CategoryTypeCost),
 	// 			CurrentSpend: &armconsumption.CurrentSpend{
+	// 				Amount: to.Ptr[float64](80.89),
 	// 				Unit: to.Ptr("USD"),
 	// 			},
 	// 			Filter: &armconsumption.BudgetFilter{
@@ -155,13 +159,14 @@ func ExampleBudgetsClient_CreateOrUpdate() {
 	// 					Enabled: to.Ptr(true),
 	// 					Locale: to.Ptr(armconsumption.CultureCodeEnUs),
 	// 					Operator: to.Ptr(armconsumption.OperatorTypeGreaterThan),
+	// 					Threshold: to.Ptr[float64](80),
 	// 					ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 	// 				},
 	// 			},
 	// 			TimeGrain: to.Ptr(armconsumption.TimeGrainTypeMonthly),
 	// 			TimePeriod: &armconsumption.BudgetTimePeriod{
-	// 				EndDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-31T00:00:00Z"); return t}()),
-	// 				StartDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-10-01T00:00:00Z"); return t}()),
+	// 				EndDate: to.Ptr(time.Date(2018, time.October, 31, 0, 0, 0, 0, time.UTC)),
+	// 				StartDate: to.Ptr(time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)),
 	// 			},
 	// 		},
 	// 	},
@@ -209,14 +214,16 @@ func ExampleBudgetsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armconsumption.BudgetsClientGetResponse{
-	// 	Budget: &armconsumption.Budget{
+	// 	Budget: armconsumption.Budget{
 	// 		Name: to.Ptr("TestBudget"),
 	// 		Type: to.Ptr("Microsoft.Consumption/budgets"),
 	// 		ETag: to.Ptr("\"1d34d012214157f\""),
 	// 		ID: to.Ptr("subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/MYDEVTESTRG/providers/Microsoft.Consumption/budgets/TestBudget"),
 	// 		Properties: &armconsumption.BudgetProperties{
+	// 			Amount: to.Ptr[float64](100.65),
 	// 			Category: to.Ptr(armconsumption.CategoryTypeCost),
 	// 			CurrentSpend: &armconsumption.CurrentSpend{
+	// 				Amount: to.Ptr[float64](80.89),
 	// 				Unit: to.Ptr("USD"),
 	// 			},
 	// 			Filter: &armconsumption.BudgetFilter{
@@ -268,13 +275,14 @@ func ExampleBudgetsClient_Get() {
 	// 					},
 	// 					Enabled: to.Ptr(true),
 	// 					Operator: to.Ptr(armconsumption.OperatorTypeGreaterThan),
+	// 					Threshold: to.Ptr[float64](80),
 	// 					ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 	// 				},
 	// 			},
 	// 			TimeGrain: to.Ptr(armconsumption.TimeGrainTypeMonthly),
 	// 			TimePeriod: &armconsumption.BudgetTimePeriod{
-	// 				EndDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-31T00:00:00Z"); return t}()),
-	// 				StartDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-10-01T00:00:00Z"); return t}()),
+	// 				EndDate: to.Ptr(time.Date(2018, time.October, 31, 0, 0, 0, 0, time.UTC)),
+	// 				StartDate: to.Ptr(time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)),
 	// 			},
 	// 		},
 	// 	},
@@ -312,8 +320,10 @@ func ExampleBudgetsClient_NewListPager() {
 		// 				ETag: to.Ptr("\"1d34d012214157f\""),
 		// 				ID: to.Ptr("subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/MYDEVTESTRG/providers/Microsoft.Consumption/budgets/TestBudget"),
 		// 				Properties: &armconsumption.BudgetProperties{
+		// 					Amount: to.Ptr[float64](100.65),
 		// 					Category: to.Ptr(armconsumption.CategoryTypeCost),
 		// 					CurrentSpend: &armconsumption.CurrentSpend{
+		// 						Amount: to.Ptr[float64](80.89),
 		// 						Unit: to.Ptr("USD"),
 		// 					},
 		// 					Filter: &armconsumption.BudgetFilter{
@@ -365,6 +375,7 @@ func ExampleBudgetsClient_NewListPager() {
 		// 							},
 		// 							Enabled: to.Ptr(true),
 		// 							Operator: to.Ptr(armconsumption.OperatorTypeGreaterThanOrEqualTo),
+		// 							Threshold: to.Ptr[float64](90),
 		// 							ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 		// 						},
 		// 						"Actual_GreaterThan_80_Percent": &armconsumption.Notification{
@@ -378,13 +389,14 @@ func ExampleBudgetsClient_NewListPager() {
 		// 							},
 		// 							Enabled: to.Ptr(true),
 		// 							Operator: to.Ptr(armconsumption.OperatorTypeGreaterThan),
+		// 							Threshold: to.Ptr[float64](80),
 		// 							ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 		// 						},
 		// 					},
 		// 					TimeGrain: to.Ptr(armconsumption.TimeGrainTypeMonthly),
 		// 					TimePeriod: &armconsumption.BudgetTimePeriod{
-		// 						EndDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-31T00:00:00Z"); return t}()),
-		// 						StartDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-10-01T00:00:00Z"); return t}()),
+		// 						EndDate: to.Ptr(time.Date(2018, time.October, 31, 0, 0, 0, 0, time.UTC)),
+		// 						StartDate: to.Ptr(time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)),
 		// 					},
 		// 				},
 		// 			},
@@ -394,8 +406,10 @@ func ExampleBudgetsClient_NewListPager() {
 		// 				ETag: to.Ptr("\"1d34d012214157f\""),
 		// 				ID: to.Ptr("subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Consumption/budgets/TestBudget"),
 		// 				Properties: &armconsumption.BudgetProperties{
+		// 					Amount: to.Ptr[float64](600.65),
 		// 					Category: to.Ptr(armconsumption.CategoryTypeCost),
 		// 					CurrentSpend: &armconsumption.CurrentSpend{
+		// 						Amount: to.Ptr[float64](120.89),
 		// 						Unit: to.Ptr("USD"),
 		// 					},
 		// 					Filter: &armconsumption.BudgetFilter{
@@ -447,6 +461,7 @@ func ExampleBudgetsClient_NewListPager() {
 		// 							},
 		// 							Enabled: to.Ptr(true),
 		// 							Operator: to.Ptr(armconsumption.OperatorTypeGreaterThanOrEqualTo),
+		// 							Threshold: to.Ptr[float64](60),
 		// 							ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 		// 						},
 		// 						"Actual_GreaterThan_40_Percent": &armconsumption.Notification{
@@ -460,13 +475,14 @@ func ExampleBudgetsClient_NewListPager() {
 		// 							},
 		// 							Enabled: to.Ptr(true),
 		// 							Operator: to.Ptr(armconsumption.OperatorTypeGreaterThan),
+		// 							Threshold: to.Ptr[float64](40),
 		// 							ThresholdType: to.Ptr(armconsumption.ThresholdTypeActual),
 		// 						},
 		// 					},
 		// 					TimeGrain: to.Ptr(armconsumption.TimeGrainTypeMonthly),
 		// 					TimePeriod: &armconsumption.BudgetTimePeriod{
-		// 						EndDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2018-10-31T00:00:00Z"); return t}()),
-		// 						StartDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-10-01T00:00:00Z"); return t}()),
+		// 						EndDate: to.Ptr(time.Date(2018, time.October, 31, 0, 0, 0, 0, time.UTC)),
+		// 						StartDate: to.Ptr(time.Date(2017, time.October, 1, 0, 0, 0, 0, time.UTC)),
 		// 					},
 		// 				},
 		// 			},

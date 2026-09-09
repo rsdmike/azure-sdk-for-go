@@ -7,18 +7,19 @@ package armrecoveryservicessiterecovery
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // ReplicationRecoveryServicesProvidersClient contains the methods for the ReplicationRecoveryServicesProviders group.
 // Don't use this type directly, use NewReplicationRecoveryServicesProvidersClient() instead.
+//
+// Generated from API version 2025-08-01
 type ReplicationRecoveryServicesProvidersClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type ReplicationRecoveryServicesProvidersClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewReplicationRecoveryServicesProvidersClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ReplicationRecoveryServicesProvidersClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +48,6 @@ func NewReplicationRecoveryServicesProvidersClient(subscriptionID string, creden
 //
 // The operation to add a recovery services provider.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -74,8 +76,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) BeginCreate(ctx contex
 //
 // The operation to add a recovery services provider.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryServicesProvidersClient) create(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, addProviderInput AddRecoveryServicesProviderInput, options *ReplicationRecoveryServicesProvidersClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryServicesProvidersClient.BeginCreate"
@@ -91,8 +91,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) create(ctx context.Con
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -101,7 +100,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) create(ctx context.Con
 func (client *ReplicationRecoveryServicesProvidersClient) createCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, addProviderInput AddRecoveryServicesProviderInput, _ *ReplicationRecoveryServicesProvidersClientBeginCreateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -125,8 +124,8 @@ func (client *ReplicationRecoveryServicesProvidersClient) createCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, addProviderInput); err != nil {
@@ -141,8 +140,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) createCreateRequest(ct
 //
 // The operation to removes/delete(unregister) a recovery services provider from the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -172,8 +169,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) BeginDelete(ctx contex
 //
 // The operation to removes/delete(unregister) a recovery services provider from the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryServicesProvidersClient) deleteOperation(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, options *ReplicationRecoveryServicesProvidersClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryServicesProvidersClient.BeginDelete"
@@ -189,8 +184,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) deleteOperation(ctx co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -199,7 +193,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) deleteOperation(ctx co
 func (client *ReplicationRecoveryServicesProvidersClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, _ *ReplicationRecoveryServicesProvidersClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}/remove"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -223,8 +217,8 @@ func (client *ReplicationRecoveryServicesProvidersClient) deleteCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -232,8 +226,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) deleteCreateRequest(ct
 //
 // Gets the details of registered recovery services provider.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -254,19 +246,14 @@ func (client *ReplicationRecoveryServicesProvidersClient) Get(ctx context.Contex
 	if err != nil {
 		return ReplicationRecoveryServicesProvidersClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ReplicationRecoveryServicesProvidersClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ReplicationRecoveryServicesProvidersClient) getCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, _ *ReplicationRecoveryServicesProvidersClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -290,15 +277,18 @@ func (client *ReplicationRecoveryServicesProvidersClient) getCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ReplicationRecoveryServicesProvidersClient) getHandleResponse(resp *http.Response) (ReplicationRecoveryServicesProvidersClientGetResponse, error) {
+func (client *ReplicationRecoveryServicesProvidersClient) getHandleResponse(resp *http.Response, successCodes ...int) (ReplicationRecoveryServicesProvidersClientGetResponse, error) {
 	result := ReplicationRecoveryServicesProvidersClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryServicesProvider); err != nil {
 		return ReplicationRecoveryServicesProvidersClientGetResponse{}, err
 	}
@@ -308,8 +298,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) getHandleResponse(resp
 // NewListPager - Gets the list of registered recovery services providers in the vault. This is a view only api.
 //
 // Lists the registered recovery services providers in the vault.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the recovery services vault.
 //   - options - ReplicationRecoveryServicesProvidersClientListOptions contains the optional parameters for the ReplicationRecoveryServicesProvidersClient.NewListPager
@@ -325,47 +313,61 @@ func (client *ReplicationRecoveryServicesProvidersClient) NewListPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, resourceName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, resourceName, nextLink, options)
 			if err != nil {
 				return ReplicationRecoveryServicesProvidersClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ReplicationRecoveryServicesProvidersClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *ReplicationRecoveryServicesProvidersClient) listCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, _ *ReplicationRecoveryServicesProvidersClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryServicesProviders"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ReplicationRecoveryServicesProvidersClient) listCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, nextLink string, _ *ReplicationRecoveryServicesProvidersClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationRecoveryServicesProviders"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *ReplicationRecoveryServicesProvidersClient) listHandleResponse(resp *http.Response) (ReplicationRecoveryServicesProvidersClientListResponse, error) {
+func (client *ReplicationRecoveryServicesProvidersClient) listHandleResponse(resp *http.Response, successCodes ...int) (ReplicationRecoveryServicesProvidersClientListResponse, error) {
 	result := ReplicationRecoveryServicesProvidersClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryServicesProviderCollection); err != nil {
 		return ReplicationRecoveryServicesProvidersClientListResponse{}, err
 	}
@@ -375,8 +377,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) listHandleResponse(res
 // NewListByReplicationFabricsPager - Gets the list of registered recovery services providers for the fabric.
 //
 // Lists the registered recovery services providers for the specified fabric.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -393,51 +393,65 @@ func (client *ReplicationRecoveryServicesProvidersClient) NewListByReplicationFa
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByReplicationFabricsCreateRequest(ctx, resourceGroupName, resourceName, fabricName, options)
-			}, nil)
+			req, err := client.listByReplicationFabricsCreateRequest(ctx, resourceGroupName, resourceName, fabricName, nextLink, options)
 			if err != nil {
 				return ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse{}, err
 			}
-			return client.listByReplicationFabricsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse{}, err
+			}
+			return client.listByReplicationFabricsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByReplicationFabricsCreateRequest creates the ListByReplicationFabrics request.
-func (client *ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, _ *ReplicationRecoveryServicesProvidersClientListByReplicationFabricsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, nextLink string, _ *ReplicationRecoveryServicesProvidersClientListByReplicationFabricsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if resourceName == "" {
+			return nil, errors.New("parameter resourceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
+		if fabricName == "" {
+			return nil, errors.New("parameter fabricName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{fabricName}", url.PathEscape(fabricName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if resourceName == "" {
-		return nil, errors.New("parameter resourceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceName}", url.PathEscape(resourceName))
-	if fabricName == "" {
-		return nil, errors.New("parameter fabricName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{fabricName}", url.PathEscape(fabricName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250801)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByReplicationFabricsHandleResponse handles the ListByReplicationFabrics response.
-func (client *ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsHandleResponse(resp *http.Response) (ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse, error) {
+func (client *ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsHandleResponse(resp *http.Response, successCodes ...int) (ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse, error) {
 	result := ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RecoveryServicesProviderCollection); err != nil {
 		return ReplicationRecoveryServicesProvidersClientListByReplicationFabricsResponse{}, err
 	}
@@ -448,8 +462,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) listByReplicationFabri
 //
 // The operation to purge(force delete) a recovery services provider from the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -477,8 +489,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) BeginPurge(ctx context
 //
 // The operation to purge(force delete) a recovery services provider from the vault.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryServicesProvidersClient) purge(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, options *ReplicationRecoveryServicesProvidersClientBeginPurgeOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryServicesProvidersClient.BeginPurge"
@@ -494,8 +504,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) purge(ctx context.Cont
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -504,7 +513,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) purge(ctx context.Cont
 func (client *ReplicationRecoveryServicesProvidersClient) purgeCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, _ *ReplicationRecoveryServicesProvidersClientBeginPurgeOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -528,8 +537,8 @@ func (client *ReplicationRecoveryServicesProvidersClient) purgeCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -537,8 +546,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) purgeCreateRequest(ctx
 //
 // The operation to refresh the information from the recovery services provider.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - resourceName - The name of the Vault
 //   - fabricName - Fabric name.
@@ -566,8 +573,6 @@ func (client *ReplicationRecoveryServicesProvidersClient) BeginRefreshProvider(c
 //
 // The operation to refresh the information from the recovery services provider.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-08-01
 func (client *ReplicationRecoveryServicesProvidersClient) refreshProvider(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, options *ReplicationRecoveryServicesProvidersClientBeginRefreshProviderOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ReplicationRecoveryServicesProvidersClient.BeginRefreshProvider"
@@ -583,8 +588,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) refreshProvider(ctx co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -593,7 +597,7 @@ func (client *ReplicationRecoveryServicesProvidersClient) refreshProvider(ctx co
 func (client *ReplicationRecoveryServicesProvidersClient) refreshProviderCreateRequest(ctx context.Context, resourceGroupName string, resourceName string, fabricName string, providerName string, _ *ReplicationRecoveryServicesProvidersClientBeginRefreshProviderOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}/refreshProvider"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -617,8 +621,8 @@ func (client *ReplicationRecoveryServicesProvidersClient) refreshProviderCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-08-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250801)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }

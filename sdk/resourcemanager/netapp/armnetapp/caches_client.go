@@ -18,6 +18,8 @@ import (
 
 // CachesClient contains the methods for the Caches group.
 // Don't use this type directly, use NewCachesClient() instead.
+//
+// Generated from API version 2026-06-15-preview
 type CachesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CachesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCachesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CachesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewCachesClient(subscriptionID string, credential azcore.TokenCredential, o
 
 // BeginCreateOrUpdate - Create or update the specified Cache within the Capacity Pool
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -69,8 +72,6 @@ func (client *CachesClient) BeginCreateOrUpdate(ctx context.Context, resourceGro
 
 // CreateOrUpdate - Create or update the specified Cache within the Capacity Pool
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *CachesClient) createOrUpdate(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body Cache, options *CachesClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CachesClient.BeginCreateOrUpdate"
@@ -86,8 +87,7 @@ func (client *CachesClient) createOrUpdate(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -96,7 +96,7 @@ func (client *CachesClient) createOrUpdate(ctx context.Context, resourceGroupNam
 func (client *CachesClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body Cache, _ *CachesClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +120,8 @@ func (client *CachesClient) createOrUpdateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -132,8 +132,6 @@ func (client *CachesClient) createOrUpdateCreateRequest(ctx context.Context, res
 
 // BeginDelete - Delete the specified cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -158,8 +156,6 @@ func (client *CachesClient) BeginDelete(ctx context.Context, resourceGroupName s
 
 // Delete - Delete the specified cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *CachesClient) deleteOperation(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, options *CachesClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CachesClient.BeginDelete"
@@ -175,8 +171,7 @@ func (client *CachesClient) deleteOperation(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -185,7 +180,7 @@ func (client *CachesClient) deleteOperation(ctx context.Context, resourceGroupNa
 func (client *CachesClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, _ *CachesClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -209,15 +204,13 @@ func (client *CachesClient) deleteCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get the details of the specified Cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -237,19 +230,14 @@ func (client *CachesClient) Get(ctx context.Context, resourceGroupName string, a
 	if err != nil {
 		return CachesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CachesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CachesClient) getCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, _ *CachesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -273,15 +261,18 @@ func (client *CachesClient) getCreateRequest(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CachesClient) getHandleResponse(resp *http.Response) (CachesClientGetResponse, error) {
+func (client *CachesClient) getHandleResponse(resp *http.Response, successCodes ...int) (CachesClientGetResponse, error) {
 	result := CachesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Cache); err != nil {
 		return CachesClientGetResponse{}, err
 	}
@@ -289,8 +280,6 @@ func (client *CachesClient) getHandleResponse(resp *http.Response) (CachesClient
 }
 
 // NewListPager - List all Caches within the Capacity Pool
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -306,51 +295,65 @@ func (client *CachesClient) NewListPager(resourceGroupName string, accountName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, poolName, nextLink, options)
 			if err != nil {
 				return CachesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CachesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *CachesClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, _ *CachesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CachesClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, nextLink string, _ *CachesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if accountName == "" {
+			return nil, errors.New("parameter accountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
+		if poolName == "" {
+			return nil, errors.New("parameter poolName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{poolName}", url.PathEscape(poolName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if accountName == "" {
-		return nil, errors.New("parameter accountName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
-	if poolName == "" {
-		return nil, errors.New("parameter poolName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{poolName}", url.PathEscape(poolName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260615Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *CachesClient) listHandleResponse(resp *http.Response) (CachesClientListResponse, error) {
+func (client *CachesClient) listHandleResponse(resp *http.Response, successCodes ...int) (CachesClientListResponse, error) {
 	result := CachesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CacheList); err != nil {
 		return CachesClientListResponse{}, err
 	}
@@ -360,8 +363,6 @@ func (client *CachesClient) listHandleResponse(resp *http.Response) (CachesClien
 // ListPeeringPassphrases - This operation will list the cluster peering command, cluster peering passphrase and the vserver
 // peering command
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -382,19 +383,14 @@ func (client *CachesClient) ListPeeringPassphrases(ctx context.Context, resource
 	if err != nil {
 		return CachesClientListPeeringPassphrasesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CachesClientListPeeringPassphrasesResponse{}, err
-	}
-	resp, err := client.listPeeringPassphrasesHandleResponse(httpResp)
-	return resp, err
+	return client.listPeeringPassphrasesHandleResponse(httpResp, http.StatusOK)
 }
 
 // listPeeringPassphrasesCreateRequest creates the ListPeeringPassphrases request.
 func (client *CachesClient) listPeeringPassphrasesCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, _ *CachesClientListPeeringPassphrasesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}/listPeeringPassphrases"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -418,15 +414,18 @@ func (client *CachesClient) listPeeringPassphrasesCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listPeeringPassphrasesHandleResponse handles the ListPeeringPassphrases response.
-func (client *CachesClient) listPeeringPassphrasesHandleResponse(resp *http.Response) (CachesClientListPeeringPassphrasesResponse, error) {
+func (client *CachesClient) listPeeringPassphrasesHandleResponse(resp *http.Response, successCodes ...int) (CachesClientListPeeringPassphrasesResponse, error) {
 	result := CachesClientListPeeringPassphrasesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PeeringPassphrases); err != nil {
 		return CachesClientListPeeringPassphrasesResponse{}, err
 	}
@@ -435,8 +434,6 @@ func (client *CachesClient) listPeeringPassphrasesHandleResponse(resp *http.Resp
 
 // BeginPoolChange - Moves Cache to another Capacity Pool
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -462,8 +459,6 @@ func (client *CachesClient) BeginPoolChange(ctx context.Context, resourceGroupNa
 
 // PoolChange - Moves Cache to another Capacity Pool
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *CachesClient) poolChange(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body PoolChangeRequest, options *CachesClientBeginPoolChangeOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CachesClient.BeginPoolChange"
@@ -479,8 +474,7 @@ func (client *CachesClient) poolChange(ctx context.Context, resourceGroupName st
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -489,7 +483,7 @@ func (client *CachesClient) poolChange(ctx context.Context, resourceGroupName st
 func (client *CachesClient) poolChangeCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body PoolChangeRequest, _ *CachesClientBeginPoolChangeOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}/poolChange"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -513,8 +507,8 @@ func (client *CachesClient) poolChangeCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -525,8 +519,6 @@ func (client *CachesClient) poolChangeCreateRequest(ctx context.Context, resourc
 
 // BeginResetSmbPassword - Resets the SMB password for the cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -552,8 +544,6 @@ func (client *CachesClient) BeginResetSmbPassword(ctx context.Context, resourceG
 
 // ResetSmbPassword - Resets the SMB password for the cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *CachesClient) resetSmbPassword(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, options *CachesClientBeginResetSmbPasswordOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CachesClient.BeginResetSmbPassword"
@@ -569,8 +559,7 @@ func (client *CachesClient) resetSmbPassword(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -579,7 +568,7 @@ func (client *CachesClient) resetSmbPassword(ctx context.Context, resourceGroupN
 func (client *CachesClient) resetSmbPasswordCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, _ *CachesClientBeginResetSmbPasswordOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}/resetSmbPassword"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -603,16 +592,14 @@ func (client *CachesClient) resetSmbPasswordCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // BeginUpdate - Patch the specified Cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the NetApp account
 //   - poolName - The name of the capacity pool
@@ -638,8 +625,6 @@ func (client *CachesClient) BeginUpdate(ctx context.Context, resourceGroupName s
 
 // Update - Patch the specified Cache
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2026-01-01
 func (client *CachesClient) update(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body CacheUpdate, options *CachesClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "CachesClient.BeginUpdate"
@@ -655,8 +640,7 @@ func (client *CachesClient) update(ctx context.Context, resourceGroupName string
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -665,7 +649,7 @@ func (client *CachesClient) update(ctx context.Context, resourceGroupName string
 func (client *CachesClient) updateCreateRequest(ctx context.Context, resourceGroupName string, accountName string, poolName string, cacheName string, body CacheUpdate, _ *CachesClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/caches/{cacheName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -689,8 +673,8 @@ func (client *CachesClient) updateCreateRequest(ctx context.Context, resourceGro
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2026-01-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260615Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {

@@ -18,6 +18,8 @@ import (
 
 // CommunityGalleryImagesClient contains the methods for the CommunityGalleryImages group.
 // Don't use this type directly, use NewCommunityGalleryImagesClient() instead.
+//
+// Generated from API version 2025-12-03
 type CommunityGalleryImagesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type CommunityGalleryImagesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewCommunityGalleryImagesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*CommunityGalleryImagesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewCommunityGalleryImagesClient(subscriptionID string, credential azcore.To
 
 // Get - Get a community gallery image.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-03-03
 //   - location - The name of the Azure region.
 //   - publicGalleryName - The public name of the community gallery.
 //   - galleryImageName - The name of the community gallery image definition.
@@ -62,19 +65,14 @@ func (client *CommunityGalleryImagesClient) Get(ctx context.Context, location st
 	if err != nil {
 		return CommunityGalleryImagesClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CommunityGalleryImagesClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *CommunityGalleryImagesClient) getCreateRequest(ctx context.Context, location string, publicGalleryName string, galleryImageName string, _ *CommunityGalleryImagesClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/locations/{location}/communityGalleries/{publicGalleryName}/images/{galleryImageName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -94,15 +92,18 @@ func (client *CommunityGalleryImagesClient) getCreateRequest(ctx context.Context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251203)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CommunityGalleryImagesClient) getHandleResponse(resp *http.Response) (CommunityGalleryImagesClientGetResponse, error) {
+func (client *CommunityGalleryImagesClient) getHandleResponse(resp *http.Response, successCodes ...int) (CommunityGalleryImagesClientGetResponse, error) {
 	result := CommunityGalleryImagesClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommunityGalleryImage); err != nil {
 		return CommunityGalleryImagesClientGetResponse{}, err
 	}
@@ -110,8 +111,6 @@ func (client *CommunityGalleryImagesClient) getHandleResponse(resp *http.Respons
 }
 
 // NewListPager - List community gallery images inside a gallery.
-//
-// Generated from API version 2025-03-03
 //   - location - The name of the Azure region.
 //   - publicGalleryName - The public name of the community gallery.
 //   - options - CommunityGalleryImagesClientListOptions contains the optional parameters for the CommunityGalleryImagesClient.NewListPager
@@ -127,47 +126,61 @@ func (client *CommunityGalleryImagesClient) NewListPager(location string, public
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, location, publicGalleryName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, location, publicGalleryName, nextLink, options)
 			if err != nil {
 				return CommunityGalleryImagesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return CommunityGalleryImagesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *CommunityGalleryImagesClient) listCreateRequest(ctx context.Context, location string, publicGalleryName string, _ *CommunityGalleryImagesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/locations/{location}/communityGalleries/{publicGalleryName}/images"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *CommunityGalleryImagesClient) listCreateRequest(ctx context.Context, location string, publicGalleryName string, nextLink string, _ *CommunityGalleryImagesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/locations/{location}/communityGalleries/{publicGalleryName}/images"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if location == "" {
+			return nil, errors.New("parameter location cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
+		if publicGalleryName == "" {
+			return nil, errors.New("parameter publicGalleryName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{publicGalleryName}", url.PathEscape(publicGalleryName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if location == "" {
-		return nil, errors.New("parameter location cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{location}", url.PathEscape(location))
-	if publicGalleryName == "" {
-		return nil, errors.New("parameter publicGalleryName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{publicGalleryName}", url.PathEscape(publicGalleryName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-03-03")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20251203)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *CommunityGalleryImagesClient) listHandleResponse(resp *http.Response) (CommunityGalleryImagesClientListResponse, error) {
+func (client *CommunityGalleryImagesClient) listHandleResponse(resp *http.Response, successCodes ...int) (CommunityGalleryImagesClientListResponse, error) {
 	result := CommunityGalleryImagesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CommunityGalleryImageList); err != nil {
 		return CommunityGalleryImagesClientListResponse{}, err
 	}

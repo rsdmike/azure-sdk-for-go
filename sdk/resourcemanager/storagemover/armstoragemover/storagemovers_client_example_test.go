@@ -40,7 +40,7 @@ func ExampleStorageMoversClient_CreateOrUpdate() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragemover.StorageMoversClientCreateOrUpdateResponse{
-	// 	StorageMover: &armstoragemover.StorageMover{
+	// 	StorageMover: armstoragemover.StorageMover{
 	// 		Name: to.Ptr("examples-storageMoverName"),
 	// 		Type: to.Ptr("Microsoft.StorageMover/storageMovers"),
 	// 		ID: to.Ptr("/subscriptions/60bcfc77-6589-4da2-b7fd-f9ec9322cf95/resourceGroups/examples-rg/providers/Microsoft.StorageMover/storageMovers/examples-storageMoverName"),
@@ -49,10 +49,10 @@ func ExampleStorageMoversClient_CreateOrUpdate() {
 	// 			Description: to.Ptr("Example Storage Mover Description"),
 	// 		},
 	// 		SystemData: &armstoragemover.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 	// 		},
@@ -81,7 +81,7 @@ func ExampleStorageMoversClient_BeginDelete() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -109,7 +109,7 @@ func ExampleStorageMoversClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragemover.StorageMoversClientGetResponse{
-	// 	StorageMover: &armstoragemover.StorageMover{
+	// 	StorageMover: armstoragemover.StorageMover{
 	// 		Name: to.Ptr("examples-storageMoverName"),
 	// 		Type: to.Ptr("Microsoft.StorageMover/storageMovers"),
 	// 		ID: to.Ptr("/subscriptions/60bcfc77-6589-4da2-b7fd-f9ec9322cf95/resourceGroups/examples-rg/providers/Microsoft.StorageMover/storageMovers/examples-storageMoverName"),
@@ -118,10 +118,10 @@ func ExampleStorageMoversClient_Get() {
 	// 			Description: to.Ptr("Example Storage Mover Description"),
 	// 		},
 	// 		SystemData: &armstoragemover.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 	// 		},
@@ -168,10 +168,10 @@ func ExampleStorageMoversClient_NewListPager() {
 		// 					Description: to.Ptr("Example Storage Mover 1 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -189,10 +189,10 @@ func ExampleStorageMoversClient_NewListPager() {
 		// 					Description: to.Ptr("Example Storage Mover 2 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -210,10 +210,10 @@ func ExampleStorageMoversClient_NewListPager() {
 		// 					Description: to.Ptr("Example Storage Mover 3 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -263,10 +263,10 @@ func ExampleStorageMoversClient_NewListBySubscriptionPager() {
 		// 					Description: to.Ptr("Example Storage Mover 1 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -284,10 +284,10 @@ func ExampleStorageMoversClient_NewListBySubscriptionPager() {
 		// 					Description: to.Ptr("Example Storage Mover 2 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -305,10 +305,10 @@ func ExampleStorageMoversClient_NewListBySubscriptionPager() {
 		// 					Description: to.Ptr("Example Storage Mover 3 Description"),
 		// 				},
 		// 				SystemData: &armstoragemover.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 		// 					CreatedBy: to.Ptr("string"),
 		// 					CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("string"),
 		// 					LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 		// 				},
@@ -346,7 +346,7 @@ func ExampleStorageMoversClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armstoragemover.StorageMoversClientUpdateResponse{
-	// 	StorageMover: &armstoragemover.StorageMover{
+	// 	StorageMover: armstoragemover.StorageMover{
 	// 		Name: to.Ptr("examples-storageMoverName"),
 	// 		Type: to.Ptr("Microsoft.StorageMover/storageMovers"),
 	// 		ID: to.Ptr("/subscriptions/60bcfc77-6589-4da2-b7fd-f9ec9322cf95/resourceGroups/examples-rg/providers/Microsoft.StorageMover/storageMovers/examples-storageMoverName"),
@@ -355,10 +355,10 @@ func ExampleStorageMoversClient_Update() {
 	// 			Description: to.Ptr("Updated Storage Mover Description"),
 	// 		},
 	// 		SystemData: &armstoragemover.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T01:01:01.1075056Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.July, 1, 1, 1, 1, 107505600, time.UTC)),
 	// 			CreatedBy: to.Ptr("string"),
 	// 			CreatedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-07-01T02:01:01.1075056Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.July, 1, 2, 1, 1, 107505600, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("string"),
 	// 			LastModifiedByType: to.Ptr(armstoragemover.CreatedByTypeUser),
 	// 		},

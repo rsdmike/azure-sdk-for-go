@@ -18,6 +18,8 @@ import (
 
 // SchemaVersionsClient contains the methods for the SchemaVersions group.
 // Don't use this type directly, use NewSchemaVersionsClient() instead.
+//
+// Generated from API version 2025-06-01
 type SchemaVersionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type SchemaVersionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewSchemaVersionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*SchemaVersionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewSchemaVersionsClient(subscriptionID string, credential azcore.TokenCrede
 
 // BeginCreateOrUpdate - Create or update a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - schemaName - The name of the Schema
 //   - schemaVersionName - The name of the SchemaVersion
@@ -68,8 +71,6 @@ func (client *SchemaVersionsClient) BeginCreateOrUpdate(ctx context.Context, res
 
 // CreateOrUpdate - Create or update a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *SchemaVersionsClient) createOrUpdate(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, resource SchemaVersion, options *SchemaVersionsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SchemaVersionsClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *SchemaVersionsClient) createOrUpdate(ctx context.Context, resource
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *SchemaVersionsClient) createOrUpdate(ctx context.Context, resource
 func (client *SchemaVersionsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, resource SchemaVersion, _ *SchemaVersionsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions/{schemaVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *SchemaVersionsClient) createOrUpdateCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -127,8 +127,6 @@ func (client *SchemaVersionsClient) createOrUpdateCreateRequest(ctx context.Cont
 
 // BeginDelete - Delete a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - schemaName - The name of the Schema
 //   - schemaVersionName - The name of the SchemaVersion
@@ -153,8 +151,6 @@ func (client *SchemaVersionsClient) BeginDelete(ctx context.Context, resourceGro
 
 // Delete - Delete a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 func (client *SchemaVersionsClient) deleteOperation(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, options *SchemaVersionsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "SchemaVersionsClient.BeginDelete"
@@ -170,8 +166,7 @@ func (client *SchemaVersionsClient) deleteOperation(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -180,7 +175,7 @@ func (client *SchemaVersionsClient) deleteOperation(ctx context.Context, resourc
 func (client *SchemaVersionsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, _ *SchemaVersionsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions/{schemaVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -200,15 +195,13 @@ func (client *SchemaVersionsClient) deleteCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - schemaName - The name of the Schema
 //   - schemaVersionName - The name of the SchemaVersion
@@ -227,19 +220,14 @@ func (client *SchemaVersionsClient) Get(ctx context.Context, resourceGroupName s
 	if err != nil {
 		return SchemaVersionsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SchemaVersionsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *SchemaVersionsClient) getCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, _ *SchemaVersionsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions/{schemaVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -259,15 +247,18 @@ func (client *SchemaVersionsClient) getCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *SchemaVersionsClient) getHandleResponse(resp *http.Response) (SchemaVersionsClientGetResponse, error) {
+func (client *SchemaVersionsClient) getHandleResponse(resp *http.Response, successCodes ...int) (SchemaVersionsClientGetResponse, error) {
 	result := SchemaVersionsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaVersion); err != nil {
 		return SchemaVersionsClientGetResponse{}, err
 	}
@@ -275,8 +266,6 @@ func (client *SchemaVersionsClient) getHandleResponse(resp *http.Response) (Sche
 }
 
 // NewListBySchemaPager - List by specified resource group
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - schemaName - The name of the Schema
 //   - options - SchemaVersionsClientListBySchemaOptions contains the optional parameters for the SchemaVersionsClient.NewListBySchemaPager
@@ -292,47 +281,61 @@ func (client *SchemaVersionsClient) NewListBySchemaPager(resourceGroupName strin
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySchemaCreateRequest(ctx, resourceGroupName, schemaName, options)
-			}, nil)
+			req, err := client.listBySchemaCreateRequest(ctx, resourceGroupName, schemaName, nextLink, options)
 			if err != nil {
 				return SchemaVersionsClientListBySchemaResponse{}, err
 			}
-			return client.listBySchemaHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return SchemaVersionsClientListBySchemaResponse{}, err
+			}
+			return client.listBySchemaHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySchemaCreateRequest creates the ListBySchema request.
-func (client *SchemaVersionsClient) listBySchemaCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, _ *SchemaVersionsClientListBySchemaOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *SchemaVersionsClient) listBySchemaCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, nextLink string, _ *SchemaVersionsClientListBySchemaOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if schemaName == "" {
+			return nil, errors.New("parameter schemaName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{schemaName}", url.PathEscape(schemaName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if schemaName == "" {
-		return nil, errors.New("parameter schemaName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{schemaName}", url.PathEscape(schemaName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySchemaHandleResponse handles the ListBySchema response.
-func (client *SchemaVersionsClient) listBySchemaHandleResponse(resp *http.Response) (SchemaVersionsClientListBySchemaResponse, error) {
+func (client *SchemaVersionsClient) listBySchemaHandleResponse(resp *http.Response, successCodes ...int) (SchemaVersionsClientListBySchemaResponse, error) {
 	result := SchemaVersionsClientListBySchemaResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaVersionListResult); err != nil {
 		return SchemaVersionsClientListBySchemaResponse{}, err
 	}
@@ -341,8 +344,6 @@ func (client *SchemaVersionsClient) listBySchemaHandleResponse(resp *http.Respon
 
 // Update - update a Schema Version Resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-06-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - schemaName - The name of the Schema
 //   - schemaVersionName - The name of the SchemaVersion
@@ -362,19 +363,14 @@ func (client *SchemaVersionsClient) Update(ctx context.Context, resourceGroupNam
 	if err != nil {
 		return SchemaVersionsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return SchemaVersionsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
 func (client *SchemaVersionsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, schemaName string, schemaVersionName string, properties SchemaVersion, _ *SchemaVersionsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Edge/schemas/{schemaName}/versions/{schemaVersionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -394,8 +390,8 @@ func (client *SchemaVersionsClient) updateCreateRequest(ctx context.Context, res
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-06-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -405,8 +401,11 @@ func (client *SchemaVersionsClient) updateCreateRequest(ctx context.Context, res
 }
 
 // updateHandleResponse handles the Update response.
-func (client *SchemaVersionsClient) updateHandleResponse(resp *http.Response) (SchemaVersionsClientUpdateResponse, error) {
+func (client *SchemaVersionsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (SchemaVersionsClientUpdateResponse, error) {
 	result := SchemaVersionsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.SchemaVersion); err != nil {
 		return SchemaVersionsClientUpdateResponse{}, err
 	}

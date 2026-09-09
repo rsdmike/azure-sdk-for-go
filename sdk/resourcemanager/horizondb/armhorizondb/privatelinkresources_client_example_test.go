@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-01-20-preview/PrivateLinkResources_Get.json
+// Generated from example definition: 2026-05-01-preview/PrivateLinkResources_Get.json
 func ExamplePrivateLinkResourcesClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -30,7 +30,7 @@ func ExamplePrivateLinkResourcesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armhorizondb.PrivateLinkResourcesClientGetResponse{
-	// 	PrivateLinkResource: &armhorizondb.PrivateLinkResource{
+	// 	PrivateLinkResource: armhorizondb.PrivateLinkResource{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Microsoft.HorizonDb/clusters/privateLinkResources"),
 	// 		ID: to.Ptr("/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/exampleresourcegroup/providers/Microsoft.HorizonDb/clusters/examplecluster/privateLinkResources/default"),
@@ -48,7 +48,7 @@ func ExamplePrivateLinkResourcesClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-01-20-preview/PrivateLinkResources_List.json
+// Generated from example definition: 2026-05-01-preview/PrivateLinkResources_List.json
 func ExamplePrivateLinkResourcesClient_NewListPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {

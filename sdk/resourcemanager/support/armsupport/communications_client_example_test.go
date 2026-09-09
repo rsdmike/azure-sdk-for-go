@@ -34,7 +34,7 @@ func ExampleCommunicationsClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.CommunicationsClientCheckNameAvailabilityResponse{
-	// 	CheckNameAvailabilityOutput: &armsupport.CheckNameAvailabilityOutput{
+	// 	CheckNameAvailabilityOutput: armsupport.CheckNameAvailabilityOutput{
 	// 		Message: to.Ptr("Name not available"),
 	// 		NameAvailable: to.Ptr(false),
 	// 		Reason: to.Ptr("Name is already in use"),
@@ -65,13 +65,13 @@ func ExampleCommunicationsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.CommunicationsClientCreateResponse{
-	// 	CommunicationDetails: &armsupport.CommunicationDetails{
+	// 	CommunicationDetails: armsupport.CommunicationDetails{
 	// 		Name: to.Ptr("testcommunication"),
 	// 		Type: to.Ptr("Microsoft.Support/communications"),
 	// 		ID: to.Ptr("/subscriptions/132d901f-189d-4381-9214-fe68e27e05a1/providers/Microsoft.Support/supportTickets/testticket/communications/testcommunication"),
@@ -79,7 +79,7 @@ func ExampleCommunicationsClient_BeginCreate() {
 	// 			Body: to.Ptr("This is a test message from a customer!"),
 	// 			CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 	// 			CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-10T20:18:19Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 10, 20, 18, 19, 0, time.UTC)),
 	// 			Sender: to.Ptr("user@contoso.com"),
 	// 			Subject: to.Ptr("This is a test message from a customer!"),
 	// 		},
@@ -106,7 +106,7 @@ func ExampleCommunicationsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.CommunicationsClientGetResponse{
-	// 	CommunicationDetails: &armsupport.CommunicationDetails{
+	// 	CommunicationDetails: armsupport.CommunicationDetails{
 	// 		Name: to.Ptr("testmessage"),
 	// 		Type: to.Ptr("Microsoft.Support/communications"),
 	// 		ID: to.Ptr("/subscriptions/132d901f-189d-4381-9214-fe68e27e05a1/providers/Microsoft.Support/supportTickets/testticket/communications/testmessage"),
@@ -114,7 +114,7 @@ func ExampleCommunicationsClient_Get() {
 	// 			Body: to.Ptr("this is a test message"),
 	// 			CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 	// 			CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-10T20:18:19Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 10, 20, 18, 19, 0, time.UTC)),
 	// 			Sender: to.Ptr("user@contoso.com"),
 	// 			Subject: to.Ptr("this is a test message"),
 	// 		},
@@ -155,7 +155,7 @@ func ExampleCommunicationsClient_NewListPager_listCommunicationsForASubscription
 		// 					Body: to.Ptr("this is a test message"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-24T20:18:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 24, 20, 18, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("this is a test message"),
 		// 				},
@@ -168,7 +168,7 @@ func ExampleCommunicationsClient_NewListPager_listCommunicationsForASubscription
 		// 					Body: to.Ptr("test"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-29T10:53:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 29, 10, 53, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("test"),
 		// 				},
@@ -213,7 +213,7 @@ func ExampleCommunicationsClient_NewListPager_listWebCommunicationsForASubscript
 		// 					Body: to.Ptr("this is a test message"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-10T20:18:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 10, 20, 18, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("this is a test message"),
 		// 				},
@@ -226,7 +226,7 @@ func ExampleCommunicationsClient_NewListPager_listWebCommunicationsForASubscript
 		// 					Body: to.Ptr("test"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T10:53:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 10, 53, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("test"),
 		// 				},
@@ -271,7 +271,7 @@ func ExampleCommunicationsClient_NewListPager_listWebCommunicationCreatedOnOrAft
 		// 					Body: to.Ptr("this is a test message"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T20:18:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 20, 18, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("this is a test message"),
 		// 				},
@@ -284,7 +284,7 @@ func ExampleCommunicationsClient_NewListPager_listWebCommunicationCreatedOnOrAft
 		// 					Body: to.Ptr("test"),
 		// 					CommunicationDirection: to.Ptr(armsupport.CommunicationDirectionOutbound),
 		// 					CommunicationType: to.Ptr(armsupport.CommunicationTypeWeb),
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T10:53:19Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 12, 10, 53, 19, 0, time.UTC)),
 		// 					Sender: to.Ptr("user@contoso.com"),
 		// 					Subject: to.Ptr("test"),
 		// 				},

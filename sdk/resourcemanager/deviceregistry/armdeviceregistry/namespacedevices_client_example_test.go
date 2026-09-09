@@ -49,13 +49,13 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createOrReplaceNamespace
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientCreateOrReplaceResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/microsoft.deviceregistry/namespaces/my-namespace-1/devices/adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Name: to.Ptr("adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Type: to.Ptr("microsoft.deviceregistry/namespaces/devices"),
@@ -66,10 +66,10 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createOrReplaceNamespace
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			Endpoints: &armdeviceregistry.MessagingEndpoints{
@@ -138,13 +138,13 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientCreateOrReplaceResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/microsoft.deviceregistry/namespaces/my-namespace-1/devices/adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Name: to.Ptr("namespace-device-on-edge"),
 	// 		Type: to.Ptr("microsoft.deviceregistry/namespaces/devices"),
@@ -155,10 +155,10 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			UUID: to.Ptr("3575e690-31d7-4168-a6c9-9ff1b9eed282"),
@@ -234,13 +234,13 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientCreateOrReplaceResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/microsoft.deviceregistry/namespaces/my-namespace-1/devices/adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Name: to.Ptr("namespace-device-on-edge"),
 	// 		Type: to.Ptr("microsoft.deviceregistry/namespaces/devices"),
@@ -251,10 +251,10 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			UUID: to.Ptr("3575e690-31d7-4168-a6c9-9ff1b9eed282"),
@@ -347,13 +347,13 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientCreateOrReplaceResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/microsoft.deviceregistry/namespaces/my-namespace-1/devices/adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Name: to.Ptr("namespace-device-on-edge"),
 	// 		Type: to.Ptr("microsoft.deviceregistry/namespaces/devices"),
@@ -364,10 +364,10 @@ func ExampleNamespaceDevicesClient_BeginCreateOrReplace_createEdgeEnabledDeviceW
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			UUID: to.Ptr("3575e690-31d7-4168-a6c9-9ff1b9eed282"),
@@ -429,7 +429,7 @@ func ExampleNamespaceDevicesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -452,7 +452,7 @@ func ExampleNamespaceDevicesClient_Get_getNamespaceDevice() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientGetResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/my-namespace-1/devices/adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
 	// 		Name: to.Ptr("adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces/devices"),
@@ -464,10 +464,10 @@ func ExampleNamespaceDevicesClient_Get_getNamespaceDevice() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			ExternalDeviceID: to.Ptr("adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
@@ -502,7 +502,7 @@ func ExampleNamespaceDevicesClient_Get_getNamespaceDeviceWithEndpointErrorStatus
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientGetResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/my-namespace-1/devices/adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
 	// 		Name: to.Ptr("adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces/devices"),
@@ -518,10 +518,10 @@ func ExampleNamespaceDevicesClient_Get_getNamespaceDeviceWithEndpointErrorStatus
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			Endpoints: &armdeviceregistry.MessagingEndpoints{
@@ -543,7 +543,7 @@ func ExampleNamespaceDevicesClient_Get_getNamespaceDeviceWithEndpointErrorStatus
 	// 			Status: &armdeviceregistry.DeviceStatus{
 	// 				Config: &armdeviceregistry.StatusConfig{
 	// 					Version: to.Ptr[int64](2),
-	// 					LastTransitionTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+	// 					LastTransitionTime: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 	// 				},
 	// 				Endpoints: &armdeviceregistry.DeviceStatusEndpoints{
 	// 					Inbound: map[string]*armdeviceregistry.DeviceStatusEndpoint{
@@ -605,10 +605,10 @@ func ExampleNamespaceDevicesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T02:30:01.6394987Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 2, 30, 1, 639498700, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceDeviceProperties{
 		// 					ExternalDeviceID: to.Ptr("adr-smart-device3-f191f536-f652-4eb4-b9a0-1a9d43300cab"),
@@ -633,10 +633,10 @@ func ExampleNamespaceDevicesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:14:20.0968397Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 14, 20, 96839700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:14:20.0968397Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 14, 20, 96839700, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceDeviceProperties{
 		// 					Endpoints: &armdeviceregistry.MessagingEndpoints{
@@ -684,7 +684,7 @@ func ExampleNamespaceDevicesClient_BeginRevoke_namespaceDevicesRevoke() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -712,7 +712,7 @@ func ExampleNamespaceDevicesClient_BeginRevoke_namespaceDevicesRevokeFailure() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -757,13 +757,13 @@ func ExampleNamespaceDevicesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespaceDevicesClientUpdateResponse{
-	// 	NamespaceDevice: &armdeviceregistry.NamespaceDevice{
+	// 	NamespaceDevice: armdeviceregistry.NamespaceDevice{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/my-namespace-1/devices/adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Name: to.Ptr("adr-smart-device3-7a848b15-af47-40a7-8c06-a3f43314d44f"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces/devices"),
@@ -774,10 +774,10 @@ func ExampleNamespaceDevicesClient_BeginUpdate() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-02T20:15:21.8874648Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 2, 20, 15, 21, 887464800, time.UTC)),
 	// 		},
 	// 		Properties: &armdeviceregistry.NamespaceDeviceProperties{
 	// 			Endpoints: &armdeviceregistry.MessagingEndpoints{

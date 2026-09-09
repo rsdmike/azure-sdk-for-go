@@ -34,7 +34,7 @@ func ExampleTicketsNoSubscriptionClient_CheckNameAvailability() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientCheckNameAvailabilityResponse{
-	// 	CheckNameAvailabilityOutput: &armsupport.CheckNameAvailabilityOutput{
+	// 	CheckNameAvailabilityOutput: armsupport.CheckNameAvailabilityOutput{
 	// 		Message: to.Ptr("Name not available"),
 	// 		NameAvailable: to.Ptr(false),
 	// 		Reason: to.Ptr("Name is already in use"),
@@ -79,13 +79,13 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForBillingRelat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientCreateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -101,18 +101,18 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForBillingRelat
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Refund request"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/billing_service_guid/problemClassifications/billing_problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Billing"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/billing_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelModerate),
 	// 			Status: to.Ptr("Open"),
@@ -165,13 +165,13 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForSubscription
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientCreateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -187,18 +187,18 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForSubscription
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Transfer ownership of my subscription"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/subscription_management_problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelModerate),
 	// 			Status: to.Ptr("Open"),
@@ -258,13 +258,13 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForTechnicalIss
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientCreateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -280,9 +280,9 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForTechnicalIss
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_running_linux_service_guid/problemClassifications/problemClassification_guid"),
 	// 			ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -296,9 +296,9 @@ func ExampleTicketsNoSubscriptionClient_BeginCreate_createATicketForTechnicalIss
 	// 			ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_running_linux_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelModerate),
 	// 			Status: to.Ptr("Open"),
@@ -333,7 +333,7 @@ func ExampleTicketsNoSubscriptionClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientGetResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -349,18 +349,18 @@ func ExampleTicketsNoSubscriptionClient_Get() {
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 	// 			Status: to.Ptr("Open"),
@@ -418,9 +418,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTickets() {
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -434,9 +434,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTickets() {
 		// 					ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelModerate),
 		// 					Status: to.Ptr("Open"),
@@ -465,18 +465,18 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTickets() {
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
 		// 					ServiceDisplayName: to.Ptr("Subscription management"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 		// 					Status: to.Ptr("Open"),
@@ -538,9 +538,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 12, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -554,9 +554,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 					ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 12, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelModerate),
 		// 					Status: to.Ptr("Open"),
@@ -586,18 +586,18 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T21:36:18Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 12, 21, 36, 18, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
 		// 					ServiceDisplayName: to.Ptr("Subscription management"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 12, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 		// 					Status: to.Ptr("Open"),
@@ -659,9 +659,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 12, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -675,9 +675,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 					ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 12, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelModerate),
 		// 					Status: to.Ptr("Updating"),
@@ -707,9 +707,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T21:36:18Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 12, 21, 36, 18, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -723,9 +723,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsCreatedOn
 		// 					ServiceDisplayName: to.Ptr("Subscription management"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-12T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 12, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-11T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 11, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 		// 					Status: to.Ptr("Updating"),
@@ -787,9 +787,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInOpenSta
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -803,9 +803,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInOpenSta
 		// 					ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelModerate),
 		// 					Status: to.Ptr("Open"),
@@ -835,18 +835,18 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInOpenSta
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
 		// 					ServiceDisplayName: to.Ptr("Subscription management"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 		// 					Status: to.Ptr("Open"),
@@ -908,9 +908,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInUpdatin
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Connectivity / Cannot connect to virtual machine by using RDP or SSH"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -924,9 +924,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInUpdatin
 		// 					ServiceDisplayName: to.Ptr("Virtual Machine running Linux"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/virtual_machine_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelModerate),
 		// 					Status: to.Ptr("Updating"),
@@ -956,18 +956,18 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsInUpdatin
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
 		// 					ServiceDisplayName: to.Ptr("Subscription management"),
 		// 					ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 		// 					ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-		// 						ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+		// 						ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 		// 						SLAMinutes: to.Ptr[int32](240),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 		// 					},
 		// 					Severity: to.Ptr(armsupport.SeverityLevelMinimal),
 		// 					Status: to.Ptr("Updating"),
@@ -1029,10 +1029,10 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsWithACert
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:52:10Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 52, 10, 0, time.UTC)),
 		// 					EnrollmentID: to.Ptr(""),
 		// 					FileWorkspaceName: to.Ptr("testTicket1"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-12T23:05:19Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2022, time.May, 12, 23, 5, 19, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Compute-VM (cores-vCPUs) subscription limit increases"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/service_guid/problemClassifications/compute_vm_problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
@@ -1066,9 +1066,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsWithACert
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:38:42Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 38, 42, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("testTicket2"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:39:14Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 39, 14, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("Compute-VM (cores-vCPUs) subscription limit increases"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/service_guid/problemClassifications/compute_vm_problemClassification_guid"),
 		// 					Require24X7Response: to.Ptr(false),
@@ -1134,10 +1134,10 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsWithACert
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:52:10Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 52, 10, 0, time.UTC)),
 		// 					EnrollmentID: to.Ptr(""),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-12T23:05:19Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2022, time.May, 12, 23, 5, 19, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("problemClassification_displayName"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/vm_windows_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -1178,9 +1178,9 @@ func ExampleTicketsNoSubscriptionClient_NewListPager_listSupportTicketsWithACert
 		// 						PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 		// 						PrimaryEmailAddress: to.Ptr("abc@contoso.com"),
 		// 					},
-		// 					CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:38:42Z"); return t}()),
+		// 					CreatedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 38, 42, 0, time.UTC)),
 		// 					FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-		// 					ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2022-05-04T21:39:14Z"); return t}()),
+		// 					ModifiedDate: to.Ptr(time.Date(2022, time.May, 4, 21, 39, 14, 0, time.UTC)),
 		// 					ProblemClassificationDisplayName: to.Ptr("problemClassification_displayName"),
 		// 					ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/vm_windows_service_guid/problemClassifications/problemClassification_guid"),
 		// 					ProblemScopingQuestions: to.Ptr("{\"articleId\":\"076846c1-4c0b-4b21-91c6-1a30246b3867\",\"scopingDetails\":[{\"question\":\"When did the problem begin?\",\"controlId\":\"problem_start_time\",\"orderId\":1,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"2023-08-31T18:55:00.739Z\",\"value\":\"2023-08-31T18:55:00.739Z\",\"type\":\"datetime\"}},{\"question\":\"API Type of the Cosmos DB account\",\"controlId\":\"api_type\",\"orderId\":2,\"inputType\":\"static\",\"answer\":{\"displayValue\":\"Table\",\"value\":\"tables\",\"type\":\"string\"}},{\"question\":\"Table name\",\"controlId\":\"collection_name_table\",\"orderId\":11,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"Select Table Name\",\"value\":\"dont_know_answer\",\"type\":\"string\"}},{\"question\":\"Provide additional details about the issue you're facing\",\"controlId\":\"problem_description\",\"orderId\":12,\"inputType\":\"nonstatic\",\"answer\":{\"displayValue\":\"test ticket, please ignore and close\",\"value\":\"test ticket, please ignore and close\",\"type\":\"string\"}}]}"),
@@ -1232,7 +1232,7 @@ func ExampleTicketsNoSubscriptionClient_Update_updateAdvancedDiagnosticConsentOf
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientUpdateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -1252,18 +1252,18 @@ func ExampleTicketsNoSubscriptionClient_Update_updateAdvancedDiagnosticConsentOf
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("test.name@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelCritical),
 	// 			Status: to.Ptr("Open"),
@@ -1314,7 +1314,7 @@ func ExampleTicketsNoSubscriptionClient_Update_updateContactDetailsOfASupportTic
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientUpdateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -1335,18 +1335,18 @@ func ExampleTicketsNoSubscriptionClient_Update_updateContactDetailsOfASupportTic
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("test.name@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelCritical),
 	// 			Status: to.Ptr("Open"),
@@ -1384,7 +1384,7 @@ func ExampleTicketsNoSubscriptionClient_Update_updateSeverityOfASupportTicket() 
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientUpdateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -1404,18 +1404,18 @@ func ExampleTicketsNoSubscriptionClient_Update_updateSeverityOfASupportTicket() 
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("test.name@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelCritical),
 	// 			Status: to.Ptr("Open"),
@@ -1453,7 +1453,7 @@ func ExampleTicketsNoSubscriptionClient_Update_updateStatusOfASupportTicket() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsupport.TicketsNoSubscriptionClientUpdateResponse{
-	// 	TicketDetails: &armsupport.TicketDetails{
+	// 	TicketDetails: armsupport.TicketDetails{
 	// 		Name: to.Ptr("testticket"),
 	// 		Type: to.Ptr("Microsoft.Support/supportTickets"),
 	// 		ID: to.Ptr("/providers/Microsoft.Support/supportTickets/testticket"),
@@ -1473,18 +1473,18 @@ func ExampleTicketsNoSubscriptionClient_Update_updateStatusOfASupportTicket() {
 	// 				PreferredTimeZone: to.Ptr("Pacific Standard Time"),
 	// 				PrimaryEmailAddress: to.Ptr("test.name@contoso.com"),
 	// 			},
-	// 			CreatedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 			CreatedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			FileWorkspaceName: to.Ptr("6f16735c-1530836f-e9970f1a-2e49-47b7-96cd-9746b83aa066"),
-	// 			ModifiedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:23Z"); return t}()),
+	// 			ModifiedDate: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 23, 0, time.UTC)),
 	// 			ProblemClassificationDisplayName: to.Ptr("Add or Edit VAT, TAX ID, or PO Number"),
 	// 			ProblemClassificationID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid/problemClassifications/problemClassification_guid"),
 	// 			Require24X7Response: to.Ptr(false),
 	// 			ServiceDisplayName: to.Ptr("Subscription management"),
 	// 			ServiceID: to.Ptr("/providers/Microsoft.Support/services/subscription_management_service_guid"),
 	// 			ServiceLevelAgreement: &armsupport.ServiceLevelAgreement{
-	// 				ExpirationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-21T17:36:18Z"); return t}()),
+	// 				ExpirationTime: to.Ptr(time.Date(2020, time.March, 21, 17, 36, 18, 0, time.UTC)),
 	// 				SLAMinutes: to.Ptr[int32](240),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2020-03-20T21:36:18Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2020, time.March, 20, 21, 36, 18, 0, time.UTC)),
 	// 			},
 	// 			Severity: to.Ptr(armsupport.SeverityLevelCritical),
 	// 			Status: to.Ptr("Closed"),

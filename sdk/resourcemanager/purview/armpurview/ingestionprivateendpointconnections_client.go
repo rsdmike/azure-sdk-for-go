@@ -7,18 +7,19 @@ package armpurview
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 // IngestionPrivateEndpointConnectionsClient contains the methods for the IngestionPrivateEndpointConnections group.
 // Don't use this type directly, use NewIngestionPrivateEndpointConnectionsClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type IngestionPrivateEndpointConnectionsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +30,9 @@ type IngestionPrivateEndpointConnectionsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewIngestionPrivateEndpointConnectionsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*IngestionPrivateEndpointConnectionsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -42,9 +46,7 @@ func NewIngestionPrivateEndpointConnectionsClient(subscriptionID string, credent
 
 // NewListPager - Lists all ingestion private endpoint connections.
 //
-// # Lists all ingestion private endpoint connections
-//
-// Generated from API version 2024-04-01-preview
+// Lists all ingestion private endpoint connections
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - options - IngestionPrivateEndpointConnectionsClientListOptions contains the optional parameters for the IngestionPrivateEndpointConnectionsClient.NewListPager
@@ -60,47 +62,61 @@ func (client *IngestionPrivateEndpointConnectionsClient) NewListPager(resourceGr
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, resourceGroupName, accountName, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, resourceGroupName, accountName, nextLink, options)
 			if err != nil {
 				return IngestionPrivateEndpointConnectionsClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return IngestionPrivateEndpointConnectionsClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *IngestionPrivateEndpointConnectionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, _ *IngestionPrivateEndpointConnectionsClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/ingestionPrivateEndpointConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *IngestionPrivateEndpointConnectionsClient) listCreateRequest(ctx context.Context, resourceGroupName string, accountName string, nextLink string, _ *IngestionPrivateEndpointConnectionsClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/ingestionPrivateEndpointConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if accountName == "" {
+			return nil, errors.New("parameter accountName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if accountName == "" {
-		return nil, errors.New("parameter accountName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{accountName}", url.PathEscape(accountName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20240401Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *IngestionPrivateEndpointConnectionsClient) listHandleResponse(resp *http.Response) (IngestionPrivateEndpointConnectionsClientListResponse, error) {
+func (client *IngestionPrivateEndpointConnectionsClient) listHandleResponse(resp *http.Response, successCodes ...int) (IngestionPrivateEndpointConnectionsClientListResponse, error) {
 	result := IngestionPrivateEndpointConnectionsClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionList); err != nil {
 		return IngestionPrivateEndpointConnectionsClientListResponse{}, err
 	}
@@ -111,8 +127,6 @@ func (client *IngestionPrivateEndpointConnectionsClient) listHandleResponse(resp
 //
 // Update ingestion private endpoint connection status
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - accountName - The name of the account.
 //   - request - The ingestion private endpoint connection status update request.
@@ -132,19 +146,14 @@ func (client *IngestionPrivateEndpointConnectionsClient) UpdateStatus(ctx contex
 	if err != nil {
 		return IngestionPrivateEndpointConnectionsClientUpdateStatusResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return IngestionPrivateEndpointConnectionsClientUpdateStatusResponse{}, err
-	}
-	resp, err := client.updateStatusHandleResponse(httpResp)
-	return resp, err
+	return client.updateStatusHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateStatusCreateRequest creates the UpdateStatus request.
 func (client *IngestionPrivateEndpointConnectionsClient) updateStatusCreateRequest(ctx context.Context, resourceGroupName string, accountName string, request PrivateEndpointConnectionStatusUpdateRequest, _ *IngestionPrivateEndpointConnectionsClientUpdateStatusOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Purview/accounts/{accountName}/ingestionPrivateEndpointConnectionStatus"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -160,8 +169,8 @@ func (client *IngestionPrivateEndpointConnectionsClient) updateStatusCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, request); err != nil {
@@ -171,8 +180,11 @@ func (client *IngestionPrivateEndpointConnectionsClient) updateStatusCreateReque
 }
 
 // updateStatusHandleResponse handles the UpdateStatus response.
-func (client *IngestionPrivateEndpointConnectionsClient) updateStatusHandleResponse(resp *http.Response) (IngestionPrivateEndpointConnectionsClientUpdateStatusResponse, error) {
+func (client *IngestionPrivateEndpointConnectionsClient) updateStatusHandleResponse(resp *http.Response, successCodes ...int) (IngestionPrivateEndpointConnectionsClientUpdateStatusResponse, error) {
 	result := IngestionPrivateEndpointConnectionsClientUpdateStatusResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionStatusUpdateResponse); err != nil {
 		return IngestionPrivateEndpointConnectionsClientUpdateStatusResponse{}, err
 	}

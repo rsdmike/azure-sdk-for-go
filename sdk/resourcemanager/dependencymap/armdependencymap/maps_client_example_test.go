@@ -34,13 +34,13 @@ func ExampleMapsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdependencymap.MapsClientCreateOrUpdateResponse{
-	// 	MapsResource: &armdependencymap.MapsResource{
+	// 	MapsResource: armdependencymap.MapsResource{
 	// 		Properties: &armdependencymap.MapsResourceProperties{
 	// 			ProvisioningState: to.Ptr(armdependencymap.ProvisioningStateSucceeded),
 	// 		},
@@ -53,10 +53,10 @@ func ExampleMapsClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armdependencymap.SystemData{
 	// 			CreatedBy: to.Ptr("dgycvdwmcmlllzqi"),
 	// 			CreatedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wfntygzyylkddshm"),
 	// 			LastModifiedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -79,7 +79,7 @@ func ExampleMapsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -98,8 +98,8 @@ func ExampleMapsClient_BeginExportDependencies() {
 		FocusedMachineID: to.Ptr("qzjpilzxpurauwfwwanpiiafvz"),
 		Filters: &armdependencymap.VisualizationFilter{
 			DateTime: &armdependencymap.DateTimeFilter{
-				StartDateTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
-				EndDateTimeUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
+				StartDateTimeUTC: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
+				EndDateTimeUTC:   to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
 			},
 			ProcessNameFilter: &armdependencymap.ProcessNameFilter{
 				Operator: to.Ptr(armdependencymap.ProcessNameFilterOperatorContains),
@@ -114,18 +114,18 @@ func ExampleMapsClient_BeginExportDependencies() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdependencymap.MapsClientExportDependenciesResponse{
-	// 	ExportDependenciesOperationResult: &armdependencymap.ExportDependenciesOperationResult{
+	// 	ExportDependenciesOperationResult: armdependencymap.ExportDependenciesOperationResult{
 	// 		ID: to.Ptr("/subscriptions/D6E58BDB-45F1-41EC-A884-1FC945058848/resourceGroups/rgdependencyMap/providers/Microsoft.DependencyMap/locations/EASTUS2EUAP/operationStatuses/icttwtbaztlrahdfosqwnepbvgrk"),
 	// 		Name: to.Ptr("icttwtbaztlrahdfosqwnepbvgrk"),
 	// 		Status: to.Ptr("Succeeded"),
-	// 		StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t}()),
-	// 		EndTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t}()),
+	// 		StartTime: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
+	// 		EndTime: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
 	// 		Properties: &armdependencymap.ExportDependenciesResultProperties{
 	// 			ExportedDataSasURI: to.Ptr("https://contoso.blob.core.windows.net/export-data/file.csv?sv=..."),
 	// 			StatusCode: to.Ptr(armdependencymap.ExportDependenciesStatusCodePartialMatch),
@@ -156,7 +156,7 @@ func ExampleMapsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdependencymap.MapsClientGetResponse{
-	// 	MapsResource: &armdependencymap.MapsResource{
+	// 	MapsResource: armdependencymap.MapsResource{
 	// 		Properties: &armdependencymap.MapsResourceProperties{
 	// 			ProvisioningState: to.Ptr(armdependencymap.ProvisioningStateSucceeded),
 	// 		},
@@ -169,10 +169,10 @@ func ExampleMapsClient_Get() {
 	// 		SystemData: &armdependencymap.SystemData{
 	// 			CreatedBy: to.Ptr("dgycvdwmcmlllzqi"),
 	// 			CreatedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wfntygzyylkddshm"),
 	// 			LastModifiedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -194,8 +194,8 @@ func ExampleMapsClient_BeginGetConnectionsForProcessOnFocusedMachine() {
 		ProcessIDOnFocusedMachine: to.Ptr("yzldgsfupsfvzlztqoqpiv"),
 		Filters: &armdependencymap.VisualizationFilter{
 			DateTime: &armdependencymap.DateTimeFilter{
-				StartDateTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
-				EndDateTimeUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
+				StartDateTimeUTC: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
+				EndDateTimeUTC:   to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
 			},
 			ProcessNameFilter: &armdependencymap.ProcessNameFilter{
 				Operator: to.Ptr(armdependencymap.ProcessNameFilterOperatorContains),
@@ -210,7 +210,7 @@ func ExampleMapsClient_BeginGetConnectionsForProcessOnFocusedMachine() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -230,8 +230,8 @@ func ExampleMapsClient_BeginGetConnectionsWithConnectedMachineForFocusedMachine(
 		ConnectedMachineID: to.Ptr("enaieiloylabljxzvmyrshp"),
 		Filters: &armdependencymap.VisualizationFilter{
 			DateTime: &armdependencymap.DateTimeFilter{
-				StartDateTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
-				EndDateTimeUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
+				StartDateTimeUTC: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
+				EndDateTimeUTC:   to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
 			},
 			ProcessNameFilter: &armdependencymap.ProcessNameFilter{
 				Operator: to.Ptr(armdependencymap.ProcessNameFilterOperatorContains),
@@ -246,7 +246,7 @@ func ExampleMapsClient_BeginGetConnectionsWithConnectedMachineForFocusedMachine(
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -265,8 +265,8 @@ func ExampleMapsClient_BeginGetDependencyViewForFocusedMachine() {
 		FocusedMachineID: to.Ptr("imzykeisagngrnfinbqtu"),
 		Filters: &armdependencymap.VisualizationFilter{
 			DateTime: &armdependencymap.DateTimeFilter{
-				StartDateTimeUTC: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
-				EndDateTimeUTC:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:15.336Z"); return t }()),
+				StartDateTimeUTC: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
+				EndDateTimeUTC:   to.Ptr(time.Date(2024, time.March, 29, 7, 35, 15, 336000000, time.UTC)),
 			},
 			ProcessNameFilter: &armdependencymap.ProcessNameFilter{
 				Operator: to.Ptr(armdependencymap.ProcessNameFilterOperatorContains),
@@ -281,7 +281,7 @@ func ExampleMapsClient_BeginGetDependencyViewForFocusedMachine() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -323,10 +323,10 @@ func ExampleMapsClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdependencymap.SystemData{
 		// 					CreatedBy: to.Ptr("dgycvdwmcmlllzqi"),
 		// 					CreatedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("wfntygzyylkddshm"),
 		// 					LastModifiedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -374,10 +374,10 @@ func ExampleMapsClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armdependencymap.SystemData{
 		// 					CreatedBy: to.Ptr("dgycvdwmcmlllzqi"),
 		// 					CreatedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("wfntygzyylkddshm"),
 		// 					LastModifiedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -406,13 +406,13 @@ func ExampleMapsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdependencymap.MapsClientUpdateResponse{
-	// 	MapsResource: &armdependencymap.MapsResource{
+	// 	MapsResource: armdependencymap.MapsResource{
 	// 		Properties: &armdependencymap.MapsResourceProperties{
 	// 			ProvisioningState: to.Ptr(armdependencymap.ProvisioningStateSucceeded),
 	// 		},
@@ -425,10 +425,10 @@ func ExampleMapsClient_BeginUpdate() {
 	// 		SystemData: &armdependencymap.SystemData{
 	// 			CreatedBy: to.Ptr("dgycvdwmcmlllzqi"),
 	// 			CreatedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wfntygzyylkddshm"),
 	// 			LastModifiedByType: to.Ptr(armdependencymap.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-03-29T07:35:13.318Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.March, 29, 7, 35, 13, 318000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

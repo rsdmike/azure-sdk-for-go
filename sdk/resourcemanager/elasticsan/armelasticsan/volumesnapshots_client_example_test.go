@@ -35,13 +35,13 @@ func ExampleVolumeSnapshotsClient_BeginCreate_volumeSnapshotsCreateMaximumSetGen
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumeSnapshotsClientCreateResponse{
-	// 	Snapshot: &armelasticsan.Snapshot{
+	// 	Snapshot: armelasticsan.Snapshot{
 	// 		Name: to.Ptr("qukfugetqthsufp"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/snapshots"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots/{snapshotName}"),
@@ -54,10 +54,10 @@ func ExampleVolumeSnapshotsClient_BeginCreate_volumeSnapshotsCreateMaximumSetGen
 	// 			VolumeName: to.Ptr("volumename"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("f"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wifrlzeszzcckvdzdwxhvservlvarp"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -88,13 +88,13 @@ func ExampleVolumeSnapshotsClient_BeginCreate_volumeSnapshotsCreateMinimumSetGen
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumeSnapshotsClientCreateResponse{
-	// 	Snapshot: &armelasticsan.Snapshot{
+	// 	Snapshot: armelasticsan.Snapshot{
 	// 		Name: to.Ptr("qukfugetqthsufp"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/snapshots"),
 	// 		ID: to.Ptr("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ElasticSan/elasticSans/{elasticSanName}/volumegroups/{volumeGroupName}/snapshots/{snapshotName}"),
@@ -107,10 +107,10 @@ func ExampleVolumeSnapshotsClient_BeginCreate_volumeSnapshotsCreateMinimumSetGen
 	// 			VolumeName: to.Ptr("volumename"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("f"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wifrlzeszzcckvdzdwxhvservlvarp"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -135,7 +135,7 @@ func ExampleVolumeSnapshotsClient_BeginDelete_volumeSnapshotsDeleteMaximumSetGen
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -161,7 +161,7 @@ func ExampleVolumeSnapshotsClient_BeginDelete_volumeSnapshotsDeleteMinimumSetGen
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -189,7 +189,7 @@ func ExampleVolumeSnapshotsClient_Get_volumeSnapshotsGetMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumeSnapshotsClientGetResponse{
-	// 	Snapshot: &armelasticsan.Snapshot{
+	// 	Snapshot: armelasticsan.Snapshot{
 	// 		Name: to.Ptr("qukfugetqthsufp"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/snapshots"),
 	// 		ID: to.Ptr("bbqqgzxagggqgkdgjqq"),
@@ -202,10 +202,10 @@ func ExampleVolumeSnapshotsClient_Get_volumeSnapshotsGetMaximumSetGen() {
 	// 			VolumeName: to.Ptr("volumename"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("f"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wifrlzeszzcckvdzdwxhvservlvarp"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -232,7 +232,7 @@ func ExampleVolumeSnapshotsClient_Get_volumeSnapshotsGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armelasticsan.VolumeSnapshotsClientGetResponse{
-	// 	Snapshot: &armelasticsan.Snapshot{
+	// 	Snapshot: armelasticsan.Snapshot{
 	// 		Name: to.Ptr("qukfugetqthsufp"),
 	// 		Type: to.Ptr("Microsoft.ElasticSan/elasticSans/volumeGroups/snapshots"),
 	// 		ID: to.Ptr("bbqqgzxagggqgkdgjqq"),
@@ -245,10 +245,10 @@ func ExampleVolumeSnapshotsClient_Get_volumeSnapshotsGetMinimumSetGen() {
 	// 			VolumeName: to.Ptr("volumename"),
 	// 		},
 	// 		SystemData: &armelasticsan.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("f"),
 	// 			CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("wifrlzeszzcckvdzdwxhvservlvarp"),
 	// 			LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 	// 		},
@@ -296,10 +296,10 @@ func ExampleVolumeSnapshotsClient_NewListByVolumeGroupPager_volumeSnapshotsListB
 		// 					VolumeName: to.Ptr("volumename"),
 		// 				},
 		// 				SystemData: &armelasticsan.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("f"),
 		// 					CreatedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-09-06T06:58:45.864Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.September, 6, 6, 58, 45, 864000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("wifrlzeszzcckvdzdwxhvservlvarp"),
 		// 					LastModifiedByType: to.Ptr(armelasticsan.CreatedByTypeUser),
 		// 				},

@@ -18,6 +18,8 @@ import (
 
 // DeploymentPreflightClient contains the methods for the DeploymentPreflight group.
 // Don't use this type directly, use NewDeploymentPreflightClient() instead.
+//
+// Generated from API version 2024-09-01
 type DeploymentPreflightClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DeploymentPreflightClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDeploymentPreflightClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DeploymentPreflightClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -43,8 +48,6 @@ func NewDeploymentPreflightClient(subscriptionID string, credential azcore.Token
 //
 // Performs resource deployment preflight validation.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-09-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentID - Deployment Id.
 //   - options - DeploymentPreflightClientPostOptions contains the optional parameters for the DeploymentPreflightClient.Post
@@ -63,19 +66,14 @@ func (client *DeploymentPreflightClient) Post(ctx context.Context, resourceGroup
 	if err != nil {
 		return DeploymentPreflightClientPostResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DeploymentPreflightClientPostResponse{}, err
-	}
-	resp, err := client.postHandleResponse(httpResp)
-	return resp, err
+	return client.postHandleResponse(httpResp, http.StatusOK)
 }
 
 // postCreateRequest creates the Post request.
 func (client *DeploymentPreflightClient) postCreateRequest(ctx context.Context, resourceGroupName string, deploymentID string, options *DeploymentPreflightClientPostOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataReplication/deployments/{deploymentId}/preflight"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -91,8 +89,8 @@ func (client *DeploymentPreflightClient) postCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-09-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240901)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.Body != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -105,8 +103,11 @@ func (client *DeploymentPreflightClient) postCreateRequest(ctx context.Context, 
 }
 
 // postHandleResponse handles the Post response.
-func (client *DeploymentPreflightClient) postHandleResponse(resp *http.Response) (DeploymentPreflightClientPostResponse, error) {
+func (client *DeploymentPreflightClient) postHandleResponse(resp *http.Response, successCodes ...int) (DeploymentPreflightClientPostResponse, error) {
 	result := DeploymentPreflightClientPostResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentPreflightModel); err != nil {
 		return DeploymentPreflightClientPostResponse{}, err
 	}

@@ -18,6 +18,8 @@ import (
 
 // DiagnosticsClient contains the methods for the Diagnostics group.
 // Don't use this type directly, use NewDiagnosticsClient() instead.
+//
+// Generated from API version 2024-03-01-preview
 type DiagnosticsClient struct {
 	internal *arm.Client
 }
@@ -40,8 +42,6 @@ func NewDiagnosticsClient(credential azcore.TokenCredential, options *arm.Client
 // are powerful solutions that access product resources or other relevant data and provide the root cause of the issue and
 // the steps to address the issue.<br/><br/>
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - diagnosticsResourceName - Unique resource name for insight resources
 //   - diagnosticResourceRequest - The required request body for this insightResource invocation.
@@ -67,8 +67,6 @@ func (client *DiagnosticsClient) BeginCreate(ctx context.Context, scope string, 
 // powerful solutions that access product resources or other relevant data and provide the root cause of the issue and the
 // steps to address the issue.<br/><br/>
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 func (client *DiagnosticsClient) create(ctx context.Context, scope string, diagnosticsResourceName string, diagnosticResourceRequest DiagnosticResource, options *DiagnosticsClientBeginCreateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DiagnosticsClient.BeginCreate"
@@ -84,8 +82,7 @@ func (client *DiagnosticsClient) create(ctx context.Context, scope string, diagn
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -106,8 +103,8 @@ func (client *DiagnosticsClient) createCreateRequest(ctx context.Context, scope 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, diagnosticResourceRequest); err != nil {
@@ -118,8 +115,6 @@ func (client *DiagnosticsClient) createCreateRequest(ctx context.Context, scope 
 
 // Get - Get the diagnostics using the 'diagnosticsResourceName' you chose while creating the diagnostic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-03-01-preview
 //   - scope - The fully qualified Azure Resource manager identifier of the resource.
 //   - diagnosticsResourceName - Unique resource name for insight resources
 //   - options - DiagnosticsClientGetOptions contains the optional parameters for the DiagnosticsClient.Get method.
@@ -137,12 +132,7 @@ func (client *DiagnosticsClient) Get(ctx context.Context, scope string, diagnost
 	if err != nil {
 		return DiagnosticsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DiagnosticsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -161,15 +151,18 @@ func (client *DiagnosticsClient) getCreateRequest(ctx context.Context, scope str
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-03-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240301Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DiagnosticsClient) getHandleResponse(resp *http.Response) (DiagnosticsClientGetResponse, error) {
+func (client *DiagnosticsClient) getHandleResponse(resp *http.Response, successCodes ...int) (DiagnosticsClientGetResponse, error) {
 	result := DiagnosticsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiagnosticResource); err != nil {
 		return DiagnosticsClientGetResponse{}, err
 	}

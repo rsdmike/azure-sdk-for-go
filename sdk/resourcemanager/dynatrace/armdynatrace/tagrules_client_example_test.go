@@ -60,13 +60,13 @@ func ExampleTagRulesClient_BeginCreateOrUpdate_tagRulesCreateOrUpdateMaximumSetG
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdynatrace.TagRulesClientCreateOrUpdateResponse{
-	// 	TagRule: &armdynatrace.TagRule{
+	// 	TagRule: armdynatrace.TagRule{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Dynatrace.Observability/monitors/tagRules"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Dynatrace.Observability/monitors/myMonitor/tagRules/default"),
@@ -101,10 +101,10 @@ func ExampleTagRulesClient_BeginCreateOrUpdate_tagRulesCreateOrUpdateMaximumSetG
 	// 			ProvisioningState: to.Ptr(armdynatrace.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armdynatrace.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("alice@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("alice@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
 	// 		},
@@ -131,13 +131,13 @@ func ExampleTagRulesClient_BeginCreateOrUpdate_tagRulesCreateOrUpdateMinimumSetG
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdynatrace.TagRulesClientCreateOrUpdateResponse{
-	// 	TagRule: &armdynatrace.TagRule{
+	// 	TagRule: armdynatrace.TagRule{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Dynatrace.Observability/monitors/myMonitor/tagRules/default"),
 	// 		Properties: &armdynatrace.MonitoringTagRulesProperties{
 	// 		},
@@ -162,7 +162,7 @@ func ExampleTagRulesClient_BeginDelete_tagRulesDeleteMaximumSetGen() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -183,7 +183,7 @@ func ExampleTagRulesClient_BeginDelete_tagRulesDeleteMinimumSetGen() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -206,7 +206,7 @@ func ExampleTagRulesClient_Get_tagRulesGetMaximumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdynatrace.TagRulesClientGetResponse{
-	// 	TagRule: &armdynatrace.TagRule{
+	// 	TagRule: armdynatrace.TagRule{
 	// 		Name: to.Ptr("default"),
 	// 		Type: to.Ptr("Dynatrace.Observability/monitors/tagRules"),
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Dynatrace.Observability/monitors/myMonitor/tagRules/default"),
@@ -241,10 +241,10 @@ func ExampleTagRulesClient_Get_tagRulesGetMaximumSetGen() {
 	// 			ProvisioningState: to.Ptr(armdynatrace.ProvisioningStateAccepted),
 	// 		},
 	// 		SystemData: &armdynatrace.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("alice@microsoft.com"),
 	// 			CreatedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("alice@microsoft.com"),
 	// 			LastModifiedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
 	// 		},
@@ -271,7 +271,7 @@ func ExampleTagRulesClient_Get_tagRulesGetMinimumSetGen() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdynatrace.TagRulesClientGetResponse{
-	// 	TagRule: &armdynatrace.TagRule{
+	// 	TagRule: armdynatrace.TagRule{
 	// 		ID: to.Ptr("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Dynatrace.Observability/monitors/myMonitor/tagRules/default"),
 	// 		Properties: &armdynatrace.MonitoringTagRulesProperties{
 	// 		},
@@ -340,10 +340,10 @@ func ExampleTagRulesClient_NewListPager_tagRulesListMaximumSetGen() {
 		// 					ProvisioningState: to.Ptr(armdynatrace.ProvisioningStateAccepted),
 		// 				},
 		// 				SystemData: &armdynatrace.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("alice@microsoft.com"),
 		// 					CreatedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-07-16T04:25:21.040Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.July, 16, 4, 25, 21, 40000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("alice@microsoft.com"),
 		// 					LastModifiedByType: to.Ptr(armdynatrace.CreatedByTypeUser),
 		// 				},

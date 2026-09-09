@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_Create.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_Create.json
 func ExampleGalleryScriptVersionsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -93,7 +93,7 @@ func ExampleGalleryScriptVersionsClient_BeginCreateOrUpdate() {
 					},
 				},
 				ReplicaCount:       to.Ptr[int32](2),
-				EndOfLifeDate:      to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00Z"); return t }()),
+				EndOfLifeDate:      to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 			},
 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -106,13 +106,13 @@ func ExampleGalleryScriptVersionsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryScriptVersionsClientCreateOrUpdateResponse{
-	// 	GalleryScriptVersion: &armcompute.GalleryScriptVersion{
+	// 	GalleryScriptVersion: armcompute.GalleryScriptVersion{
 	// 		Location: to.Ptr("West US"),
 	// 		Name: to.Ptr("1.0.0"),
 	// 		Type: to.Ptr("Microsoft.Compute/galleries/scripts/versions"),
@@ -185,8 +185,8 @@ func ExampleGalleryScriptVersionsClient_BeginCreateOrUpdate() {
 	// 				},
 	// 				ReplicaCount: to.Ptr[int32](2),
 	// 				ExcludeFromLatest: to.Ptr(false),
-	// 				PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-	// 				EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+	// 				PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+	// 				EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 	// 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 	// 			},
 	// 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -198,7 +198,7 @@ func ExampleGalleryScriptVersionsClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_Delete.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_Delete.json
 func ExampleGalleryScriptVersionsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -215,11 +215,11 @@ func ExampleGalleryScriptVersionsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_Get.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_Get.json
 func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersion() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -238,7 +238,7 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersion() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryScriptVersionsClientGetResponse{
-	// 	GalleryScriptVersion: &armcompute.GalleryScriptVersion{
+	// 	GalleryScriptVersion: armcompute.GalleryScriptVersion{
 	// 		Location: to.Ptr("West US"),
 	// 		Name: to.Ptr("1.0.0"),
 	// 		Type: to.Ptr("Microsoft.Compute/galleries/scripts/versions"),
@@ -311,8 +311,8 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersion() {
 	// 				},
 	// 				ReplicaCount: to.Ptr[int32](2),
 	// 				ExcludeFromLatest: to.Ptr(false),
-	// 				PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-	// 				EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+	// 				PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+	// 				EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 	// 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 	// 			},
 	// 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -324,7 +324,7 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersion() {
 	// }
 }
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_Get_WithReplicationStatus.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_Get_WithReplicationStatus.json
 func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersionWithReplicationStatus() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -343,7 +343,7 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersionWithReplicat
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryScriptVersionsClientGetResponse{
-	// 	GalleryScriptVersion: &armcompute.GalleryScriptVersion{
+	// 	GalleryScriptVersion: armcompute.GalleryScriptVersion{
 	// 		ID: to.Ptr("/subscriptions/{subscription-id}/resourceGroups/myResourceGroupName/providers/Microsoft.Compute/galleries/myGalleryName/scripts/myGalleryScriptName/versions/1.0.0"),
 	// 		Properties: &armcompute.GalleryScriptVersionProperties{
 	// 			PublishingProfile: &armcompute.GalleryScriptVersionPublishingProfile{
@@ -413,8 +413,8 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersionWithReplicat
 	// 				},
 	// 				ReplicaCount: to.Ptr[int32](2),
 	// 				ExcludeFromLatest: to.Ptr(false),
-	// 				PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-	// 				EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+	// 				PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+	// 				EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 	// 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 	// 			},
 	// 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -439,7 +439,7 @@ func ExampleGalleryScriptVersionsClient_Get_getAGalleryScriptVersionWithReplicat
 	// }
 }
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_ListByGalleryScript.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_ListByGalleryScript.json
 func ExampleGalleryScriptVersionsClient_NewListByGalleryScriptPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -537,8 +537,8 @@ func ExampleGalleryScriptVersionsClient_NewListByGalleryScriptPager() {
 		// 						},
 		// 						ReplicaCount: to.Ptr[int32](2),
 		// 						ExcludeFromLatest: to.Ptr(false),
-		// 						PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-		// 						EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+		// 						PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+		// 						EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 		// 						StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 		// 					},
 		// 					SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -583,8 +583,8 @@ func ExampleGalleryScriptVersionsClient_NewListByGalleryScriptPager() {
 		// 						},
 		// 						ReplicaCount: to.Ptr[int32](2),
 		// 						ExcludeFromLatest: to.Ptr(false),
-		// 						PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-		// 						EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+		// 						PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+		// 						EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 		// 						StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 		// 					},
 		// 					SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -600,7 +600,7 @@ func ExampleGalleryScriptVersionsClient_NewListByGalleryScriptPager() {
 	}
 }
 
-// Generated from example definition: 2025-03-03/galleryScriptExamples/GalleryScriptVersion_Update.json
+// Generated from example definition: 2025-12-03/galleryScriptExamples/GalleryScriptVersion_Update.json
 func ExampleGalleryScriptVersionsClient_BeginUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -679,7 +679,7 @@ func ExampleGalleryScriptVersionsClient_BeginUpdate() {
 					},
 				},
 				ReplicaCount:       to.Ptr[int32](2),
-				EndOfLifeDate:      to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00Z"); return t }()),
+				EndOfLifeDate:      to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 			},
 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{
@@ -692,13 +692,13 @@ func ExampleGalleryScriptVersionsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armcompute.GalleryScriptVersionsClientUpdateResponse{
-	// 	GalleryScriptVersion: &armcompute.GalleryScriptVersion{
+	// 	GalleryScriptVersion: armcompute.GalleryScriptVersion{
 	// 		Location: to.Ptr("West US"),
 	// 		Name: to.Ptr("1.0.0"),
 	// 		Type: to.Ptr("Microsoft.Compute/galleries/scripts/versions"),
@@ -771,8 +771,8 @@ func ExampleGalleryScriptVersionsClient_BeginUpdate() {
 	// 				},
 	// 				ReplicaCount: to.Ptr[int32](2),
 	// 				ExcludeFromLatest: to.Ptr(false),
-	// 				PublishedDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2025-06-21T17:13:57.5972568+00:00"); return t}()),
-	// 				EndOfLifeDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2027-07-01T07:00:00+00:00"); return t}()),
+	// 				PublishedDate: to.Ptr(time.Date(2025, time.June, 21, 17, 13, 57, 597256800, time.UTC)),
+	// 				EndOfLifeDate: to.Ptr(time.Date(2027, time.July, 1, 7, 0, 0, 0, time.UTC)),
 	// 				StorageAccountType: to.Ptr(armcompute.StorageAccountTypeStandardLRS),
 	// 			},
 	// 			SafetyProfile: &armcompute.GalleryScriptVersionSafetyProfile{

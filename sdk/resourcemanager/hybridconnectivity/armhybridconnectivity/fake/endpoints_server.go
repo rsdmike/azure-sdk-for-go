@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 )
 
@@ -84,9 +85,7 @@ func (e *EndpointsServerTransport) Do(req *http.Request) (*http.Response, error)
 }
 
 func (e *EndpointsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -116,10 +115,7 @@ func (e *EndpointsServerTransport) dispatchToMethodFake(req *http.Request, metho
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -134,7 +130,7 @@ func (e *EndpointsServerTransport) dispatchCreateOrUpdate(req *http.Request) (*h
 	if e.srv.CreateOrUpdate == nil {
 		return nil, &nonRetriableError{errors.New("fake for method CreateOrUpdate not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -157,7 +153,7 @@ func (e *EndpointsServerTransport) dispatchCreateOrUpdate(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).EndpointResource, req)
@@ -171,7 +167,7 @@ func (e *EndpointsServerTransport) dispatchDelete(req *http.Request) (*http.Resp
 	if e.srv.Delete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Delete not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -190,7 +186,7 @@ func (e *EndpointsServerTransport) dispatchDelete(req *http.Request) (*http.Resp
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -204,7 +200,7 @@ func (e *EndpointsServerTransport) dispatchGet(req *http.Request) (*http.Respons
 	if e.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -223,7 +219,7 @@ func (e *EndpointsServerTransport) dispatchGet(req *http.Request) (*http.Respons
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).EndpointResource, req)
@@ -239,7 +235,7 @@ func (e *EndpointsServerTransport) dispatchNewListPager(req *http.Request) (*htt
 	}
 	newListPager := e.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints`
+		const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -260,7 +256,7 @@ func (e *EndpointsServerTransport) dispatchNewListPager(req *http.Request) (*htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		e.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -274,7 +270,7 @@ func (e *EndpointsServerTransport) dispatchListCredentials(req *http.Request) (*
 	if e.srv.ListCredentials == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListCredentials not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listCredentials`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/listCredentials`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -293,11 +289,7 @@ func (e *EndpointsServerTransport) dispatchListCredentials(req *http.Request) (*
 	if err != nil {
 		return nil, err
 	}
-	expiresinUnescaped, err := url.QueryUnescape(qp.Get("expiresin"))
-	if err != nil {
-		return nil, err
-	}
-	expiresinParam, err := parseOptional(expiresinUnescaped, func(v string) (int64, error) {
+	expiresinParam, err := parseOptional(qp.Get("expiresin"), func(v string) (int64, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 64)
 		if parseErr != nil {
 			return 0, parseErr
@@ -319,7 +311,7 @@ func (e *EndpointsServerTransport) dispatchListCredentials(req *http.Request) (*
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).EndpointAccessResource, req)
@@ -333,7 +325,7 @@ func (e *EndpointsServerTransport) dispatchListIngressGatewayCredentials(req *ht
 	if e.srv.ListIngressGatewayCredentials == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListIngressGatewayCredentials not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listIngressGatewayCredentials`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/listIngressGatewayCredentials`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -352,11 +344,7 @@ func (e *EndpointsServerTransport) dispatchListIngressGatewayCredentials(req *ht
 	if err != nil {
 		return nil, err
 	}
-	expiresinUnescaped, err := url.QueryUnescape(qp.Get("expiresin"))
-	if err != nil {
-		return nil, err
-	}
-	expiresinParam, err := parseOptional(expiresinUnescaped, func(v string) (int64, error) {
+	expiresinParam, err := parseOptional(qp.Get("expiresin"), func(v string) (int64, error) {
 		p, parseErr := strconv.ParseInt(v, 10, 64)
 		if parseErr != nil {
 			return 0, parseErr
@@ -378,7 +366,7 @@ func (e *EndpointsServerTransport) dispatchListIngressGatewayCredentials(req *ht
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).IngressGatewayResource, req)
@@ -392,7 +380,7 @@ func (e *EndpointsServerTransport) dispatchListManagedProxyDetails(req *http.Req
 	if e.srv.ListManagedProxyDetails == nil {
 		return nil, &nonRetriableError{errors.New("fake for method ListManagedProxyDetails not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/listManagedProxyDetails`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/listManagedProxyDetails`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -415,7 +403,7 @@ func (e *EndpointsServerTransport) dispatchListManagedProxyDetails(req *http.Req
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ManagedProxyResource, req)
@@ -429,7 +417,7 @@ func (e *EndpointsServerTransport) dispatchUpdate(req *http.Request) (*http.Resp
 	if e.srv.Update == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Update not implemented")}
 	}
-	const regexStr = `/(?P<resourceUri>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/(?P<resourceUri>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)/providers/Microsoft\.HybridConnectivity/endpoints/(?P<endpointName>[a-zA-Z0-9._~%!$&'()*+,;=:@/-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -452,7 +440,7 @@ func (e *EndpointsServerTransport) dispatchUpdate(req *http.Request) (*http.Resp
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).EndpointResource, req)

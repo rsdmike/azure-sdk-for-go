@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ExascaleDbNodesServer is a fake server for instances of the armoracledatabase.ExascaleDbNodesClient type.
@@ -64,9 +65,7 @@ func (e *ExascaleDbNodesServerTransport) Do(req *http.Request) (*http.Response, 
 }
 
 func (e *ExascaleDbNodesServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -86,10 +85,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchToMethodFake(req *http.Request,
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -106,7 +102,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchBeginAction(req *http.Request) 
 	}
 	beginAction := e.beginAction.get(req)
 	if beginAction == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes/(?P<exascaleDbNodeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/action`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes/(?P<exascaleDbNodeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/action`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -141,7 +137,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchBeginAction(req *http.Request) 
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted}, resp.StatusCode) {
 		e.beginAction.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted", resp.StatusCode)}
 	}
@@ -156,7 +152,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchGet(req *http.Request) (*http.R
 	if e.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes/(?P<exascaleDbNodeName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes/(?P<exascaleDbNodeName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -179,7 +175,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchGet(req *http.Request) (*http.R
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ExascaleDbNode, req)
@@ -195,7 +191,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchNewListByParentPager(req *http.
 	}
 	newListByParentPager := e.newListByParentPager.get(req)
 	if newListByParentPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/dbNodes`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Oracle\.Database/exadbVmClusters/(?P<exadbVmClusterName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/dbNodes`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -220,7 +216,7 @@ func (e *ExascaleDbNodesServerTransport) dispatchNewListByParentPager(req *http.
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		e.newListByParentPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

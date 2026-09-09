@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // PrefixListGlobalRulestackServer is a fake server for instances of the armpanngfw.PrefixListGlobalRulestackClient type.
@@ -70,9 +71,7 @@ func (p *PrefixListGlobalRulestackServerTransport) Do(req *http.Request) (*http.
 }
 
 func (p *PrefixListGlobalRulestackServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -94,10 +93,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchToMethodFake(req *htt
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -114,7 +110,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchBeginCreateOrUpdate(r
 	}
 	beginCreateOrUpdate := p.beginCreateOrUpdate.get(req)
 	if beginCreateOrUpdate == nil {
-		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/prefixlists/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/prefixlists/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -145,7 +141,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchBeginCreateOrUpdate(r
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, resp.StatusCode) {
 		p.beginCreateOrUpdate.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", resp.StatusCode)}
 	}
@@ -162,7 +158,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchBeginDelete(req *http
 	}
 	beginDelete := p.beginDelete.get(req)
 	if beginDelete == nil {
-		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/prefixlists/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/prefixlists/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -189,7 +185,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchBeginDelete(req *http
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		p.beginDelete.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -204,7 +200,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchGet(req *http.Request
 	if p.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/prefixlists/(?P<name>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/prefixlists/(?P<name>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 3 {
@@ -223,7 +219,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchGet(req *http.Request
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).PrefixListGlobalRulestackResource, req)
@@ -239,7 +235,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchNewListPager(req *htt
 	}
 	newListPager := p.newListPager.get(req)
 	if newListPager == nil {
-		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/prefixlists`
+		const regexStr = `/providers/PaloAltoNetworks\.Cloudngfw/globalRulestacks/(?P<globalRulestackName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/prefixlists`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -260,7 +256,7 @@ func (p *PrefixListGlobalRulestackServerTransport) dispatchNewListPager(req *htt
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		p.newListPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

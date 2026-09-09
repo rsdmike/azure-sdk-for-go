@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-// Generated from example definition: 2026-04-01-preview/PutSecuritySettings.json
+// Generated from example definition: 2026-04-30/PutSecuritySettings.json
 func ExampleSecuritySettingsClient_BeginCreateOrUpdate() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -35,13 +35,13 @@ func ExampleSecuritySettingsClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.SecuritySettingsClientCreateOrUpdateResponse{
-	// 	SecuritySetting: &armazurestackhci.SecuritySetting{
+	// 	SecuritySetting: armazurestackhci.SecuritySetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/securitySettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/securitySettings/default"),
 	// 		Properties: &armazurestackhci.SecurityProperties{
@@ -50,7 +50,7 @@ func ExampleSecuritySettingsClient_BeginCreateOrUpdate() {
 	// 			SecurityComplianceStatus: &armazurestackhci.SecurityComplianceStatus{
 	// 				DataAtRestEncrypted: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 				DataInTransitProtected: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
-	// 				LastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-11-14T07:09:44.771Z"); return t}()),
+	// 				LastUpdated: to.Ptr(time.Date(2023, time.November, 14, 7, 9, 44, 771000000, time.UTC)),
 	// 				SecuredCoreCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 				WdacCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 			},
@@ -58,10 +58,10 @@ func ExampleSecuritySettingsClient_BeginCreateOrUpdate() {
 	// 			WdacComplianceAssignment: to.Ptr(armazurestackhci.ComplianceAssignmentTypeApplyAndAutoCorrect),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -69,7 +69,7 @@ func ExampleSecuritySettingsClient_BeginCreateOrUpdate() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/DeleteSecuritySettings.json
+// Generated from example definition: 2026-04-30/DeleteSecuritySettings.json
 func ExampleSecuritySettingsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -86,11 +86,11 @@ func ExampleSecuritySettingsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-04-01-preview/GetSecuritySettings.json
+// Generated from example definition: 2026-04-30/GetSecuritySettings.json
 func ExampleSecuritySettingsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -109,7 +109,7 @@ func ExampleSecuritySettingsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.SecuritySettingsClientGetResponse{
-	// 	SecuritySetting: &armazurestackhci.SecuritySetting{
+	// 	SecuritySetting: armazurestackhci.SecuritySetting{
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/clusters/securitySettings"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/test-rg/providers/Microsoft.AzureStackHCI/clusters/myCluster/securitySettings/default"),
 	// 		Properties: &armazurestackhci.SecurityProperties{
@@ -118,7 +118,7 @@ func ExampleSecuritySettingsClient_Get() {
 	// 			SecurityComplianceStatus: &armazurestackhci.SecurityComplianceStatus{
 	// 				DataAtRestEncrypted: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 				DataInTransitProtected: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
-	// 				LastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-11-14T07:09:44.771Z"); return t}()),
+	// 				LastUpdated: to.Ptr(time.Date(2023, time.November, 14, 7, 9, 44, 771000000, time.UTC)),
 	// 				SecuredCoreCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 				WdacCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 	// 			},
@@ -126,10 +126,10 @@ func ExampleSecuritySettingsClient_Get() {
 	// 			WdacComplianceAssignment: to.Ptr(armazurestackhci.ComplianceAssignmentTypeApplyAndAutoCorrect),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 	// 			CreatedBy: to.Ptr("user1"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("user2"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -137,7 +137,7 @@ func ExampleSecuritySettingsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/ListSecuritySettingsByCluster.json
+// Generated from example definition: 2026-04-30/ListSecuritySettingsByCluster.json
 func ExampleSecuritySettingsClient_NewListByClustersPager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -171,7 +171,7 @@ func ExampleSecuritySettingsClient_NewListByClustersPager() {
 		// 					SecurityComplianceStatus: &armazurestackhci.SecurityComplianceStatus{
 		// 						DataAtRestEncrypted: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 		// 						DataInTransitProtected: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
-		// 						LastUpdated: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-11-14T07:09:44.771Z"); return t}()),
+		// 						LastUpdated: to.Ptr(time.Date(2023, time.November, 14, 7, 9, 44, 771000000, time.UTC)),
 		// 						SecuredCoreCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 		// 						WdacCompliance: to.Ptr(armazurestackhci.ComplianceStatusCompliant),
 		// 					},
@@ -179,10 +179,10 @@ func ExampleSecuritySettingsClient_NewListByClustersPager() {
 		// 					WdacComplianceAssignment: to.Ptr(armazurestackhci.ComplianceAssignmentTypeApplyAndAutoCorrect),
 		// 				},
 		// 				SystemData: &armazurestackhci.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-01T17:18:19.1234567Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2021, time.January, 1, 17, 18, 19, 123456700, time.UTC)),
 		// 					CreatedBy: to.Ptr("user1"),
 		// 					CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-01-02T17:18:19.1234567Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2021, time.January, 2, 17, 18, 19, 123456700, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("user2"),
 		// 					LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 		// 				},

@@ -19,6 +19,8 @@ import (
 
 // StaticSitesClient contains the methods for the StaticSites group.
 // Don't use this type directly, use NewStaticSitesClient() instead.
+//
+// Generated from API version 2025-05-01
 type StaticSitesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type StaticSitesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewStaticSitesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*StaticSitesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +49,6 @@ func NewStaticSitesClient(subscriptionID string, credential azcore.TokenCredenti
 //
 // Description for Approves or rejects a private endpoint connection
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - privateEndpointConnectionName - Name of the private endpoint connection.
@@ -73,8 +76,6 @@ func (client *StaticSitesClient) BeginApproveOrRejectPrivateEndpointConnection(c
 //
 // Description for Approves or rejects a private endpoint connection
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper RemotePrivateEndpointConnectionARMResource, options *StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginApproveOrRejectPrivateEndpointConnection"
@@ -90,8 +91,7 @@ func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnection(ctx co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -100,7 +100,7 @@ func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnection(ctx co
 func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, privateEndpointWrapper RemotePrivateEndpointConnectionARMResource, _ *StaticSitesClientBeginApproveOrRejectPrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -120,8 +120,8 @@ func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnectionCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, privateEndpointWrapper); err != nil {
@@ -134,8 +134,6 @@ func (client *StaticSitesClient) approveOrRejectPrivateEndpointConnectionCreateR
 //
 // Description for Adds or updates basic auth for a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - basicAuthName - name of the basic auth entry.
@@ -156,19 +154,14 @@ func (client *StaticSitesClient) CreateOrUpdateBasicAuth(ctx context.Context, re
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateBasicAuthResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateBasicAuthResponse{}, err
-	}
-	resp, err := client.createOrUpdateBasicAuthHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateBasicAuthHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateBasicAuthCreateRequest creates the CreateOrUpdateBasicAuth request.
 func (client *StaticSitesClient) createOrUpdateBasicAuthCreateRequest(ctx context.Context, resourceGroupName string, name string, basicAuthName BasicAuthName, basicAuthEnvelope StaticSiteBasicAuthPropertiesARMResource, _ *StaticSitesClientCreateOrUpdateBasicAuthOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/basicAuth/{basicAuthName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -188,8 +181,8 @@ func (client *StaticSitesClient) createOrUpdateBasicAuthCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, basicAuthEnvelope); err != nil {
@@ -199,8 +192,11 @@ func (client *StaticSitesClient) createOrUpdateBasicAuthCreateRequest(ctx contex
 }
 
 // createOrUpdateBasicAuthHandleResponse handles the CreateOrUpdateBasicAuth response.
-func (client *StaticSitesClient) createOrUpdateBasicAuthHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateBasicAuthResponse, error) {
+func (client *StaticSitesClient) createOrUpdateBasicAuthHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateBasicAuthResponse, error) {
 	result := StaticSitesClientCreateOrUpdateBasicAuthResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBasicAuthPropertiesARMResource); err != nil {
 		return StaticSitesClientCreateOrUpdateBasicAuthResponse{}, err
 	}
@@ -211,8 +207,6 @@ func (client *StaticSitesClient) createOrUpdateBasicAuthHandleResponse(resp *htt
 //
 // Description for Create or update a database connection for a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -234,19 +228,14 @@ func (client *StaticSitesClient) CreateOrUpdateBuildDatabaseConnection(ctx conte
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.createOrUpdateBuildDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateBuildDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateBuildDatabaseConnectionCreateRequest creates the CreateOrUpdateBuildDatabaseConnection request.
 func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, databaseConnectionName string, databaseConnectionRequestEnvelope DatabaseConnection, _ *StaticSitesClientCreateOrUpdateBuildDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -270,8 +259,8 @@ func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionCreateRequ
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, databaseConnectionRequestEnvelope); err != nil {
@@ -281,8 +270,11 @@ func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionCreateRequ
 }
 
 // createOrUpdateBuildDatabaseConnectionHandleResponse handles the CreateOrUpdateBuildDatabaseConnection response.
-func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse, error) {
 	result := StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientCreateOrUpdateBuildDatabaseConnectionResponse{}, err
 	}
@@ -293,8 +285,6 @@ func (client *StaticSitesClient) createOrUpdateBuildDatabaseConnectionHandleResp
 //
 // Description for Create or update a database connection for a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - databaseConnectionName - Name of the database connection.
@@ -315,19 +305,14 @@ func (client *StaticSitesClient) CreateOrUpdateDatabaseConnection(ctx context.Co
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.createOrUpdateDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateDatabaseConnectionCreateRequest creates the CreateOrUpdateDatabaseConnection request.
 func (client *StaticSitesClient) createOrUpdateDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, databaseConnectionName string, databaseConnectionRequestEnvelope DatabaseConnection, _ *StaticSitesClientCreateOrUpdateDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -347,8 +332,8 @@ func (client *StaticSitesClient) createOrUpdateDatabaseConnectionCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, databaseConnectionRequestEnvelope); err != nil {
@@ -358,8 +343,11 @@ func (client *StaticSitesClient) createOrUpdateDatabaseConnectionCreateRequest(c
 }
 
 // createOrUpdateDatabaseConnectionHandleResponse handles the CreateOrUpdateDatabaseConnection response.
-func (client *StaticSitesClient) createOrUpdateDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) createOrUpdateDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateDatabaseConnectionResponse, error) {
 	result := StaticSitesClientCreateOrUpdateDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientCreateOrUpdateDatabaseConnectionResponse{}, err
 	}
@@ -371,8 +359,6 @@ func (client *StaticSitesClient) createOrUpdateDatabaseConnectionHandleResponse(
 //
 // Description for Creates a new static site in an existing resource group, or updates an existing static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - staticSiteEnvelope - A JSON representation of the staticsite properties. See example.
@@ -399,8 +385,6 @@ func (client *StaticSitesClient) BeginCreateOrUpdateStaticSite(ctx context.Conte
 //
 // Description for Creates a new static site in an existing resource group, or updates an existing static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) createOrUpdateStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteEnvelope StaticSiteARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginCreateOrUpdateStaticSite"
@@ -416,8 +400,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSite(ctx context.Context, r
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -426,7 +409,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSite(ctx context.Context, r
 func (client *StaticSitesClient) createOrUpdateStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, staticSiteEnvelope StaticSiteARMResource, _ *StaticSitesClientBeginCreateOrUpdateStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -442,8 +425,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteEnvelope); err != nil {
@@ -456,8 +439,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCreateRequest(ctx conte
 //
 // Description for Creates or updates the app settings of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - appSettings - The dictionary containing the static site app settings to update.
@@ -477,19 +458,14 @@ func (client *StaticSitesClient) CreateOrUpdateStaticSiteAppSettings(ctx context
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}, err
-	}
-	resp, err := client.createOrUpdateStaticSiteAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateStaticSiteAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateStaticSiteAppSettingsCreateRequest creates the CreateOrUpdateStaticSiteAppSettings request.
 func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, appSettings StringDictionary, _ *StaticSitesClientCreateOrUpdateStaticSiteAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/config/appsettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -505,8 +481,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsCreateReques
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, appSettings); err != nil {
@@ -516,8 +492,11 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsCreateReques
 }
 
 // createOrUpdateStaticSiteAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteAppSettings response.
-func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse, error) {
+func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse, error) {
 	result := StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteAppSettingsResponse{}, err
 	}
@@ -528,8 +507,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteAppSettingsHandleRespon
 //
 // Description for Creates or updates the app settings of a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -550,19 +527,14 @@ func (client *StaticSitesClient) CreateOrUpdateStaticSiteBuildAppSettings(ctx co
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}, err
-	}
-	resp, err := client.createOrUpdateStaticSiteBuildAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateStaticSiteBuildAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateStaticSiteBuildAppSettingsCreateRequest creates the CreateOrUpdateStaticSiteBuildAppSettings request.
 func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, appSettings StringDictionary, _ *StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/config/appsettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -582,8 +554,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsCreateR
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, appSettings); err != nil {
@@ -593,8 +565,11 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsCreateR
 }
 
 // createOrUpdateStaticSiteBuildAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteBuildAppSettings response.
-func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse, error) {
+func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse, error) {
 	result := StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildAppSettingsResponse{}, err
 	}
@@ -605,8 +580,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildAppSettingsHandleR
 //
 // Description for Creates or updates the function app settings of a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -627,19 +600,14 @@ func (client *StaticSitesClient) CreateOrUpdateStaticSiteBuildFunctionAppSetting
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}, err
-	}
-	resp, err := client.createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateStaticSiteBuildFunctionAppSettingsCreateRequest creates the CreateOrUpdateStaticSiteBuildFunctionAppSettings request.
 func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, appSettings StringDictionary, _ *StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/config/functionappsettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -659,8 +627,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSetting
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, appSettings); err != nil {
@@ -670,8 +638,11 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSetting
 }
 
 // createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteBuildFunctionAppSettings response.
-func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse, error) {
+func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse, error) {
 	result := StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
@@ -683,8 +654,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteBuildFunctionAppSetting
 //
 // Description for Creates a new static site custom domain in an existing resource group and static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - domainName - The custom domain name.
@@ -714,8 +683,6 @@ func (client *StaticSitesClient) BeginCreateOrUpdateStaticSiteCustomDomain(ctx c
 //
 // Description for Creates a new static site custom domain in an existing resource group and static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginCreateOrUpdateStaticSiteCustomDomain"
@@ -731,8 +698,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomain(ctx contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -741,7 +707,7 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomain(ctx contex
 func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomainCreateRequest(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, _ *StaticSitesClientBeginCreateOrUpdateStaticSiteCustomDomainOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -761,8 +727,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomainCreateReque
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteCustomDomainRequestPropertiesEnvelope); err != nil {
@@ -775,8 +741,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteCustomDomainCreateReque
 //
 // Description for Creates or updates the function app settings of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - appSettings - The dictionary containing the static site function app settings to update.
@@ -796,19 +760,14 @@ func (client *StaticSitesClient) CreateOrUpdateStaticSiteFunctionAppSettings(ctx
 	if err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}, err
-	}
-	resp, err := client.createOrUpdateStaticSiteFunctionAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateStaticSiteFunctionAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // createOrUpdateStaticSiteFunctionAppSettingsCreateRequest creates the CreateOrUpdateStaticSiteFunctionAppSettings request.
 func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, appSettings StringDictionary, _ *StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/config/functionappsettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -824,8 +783,8 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, appSettings); err != nil {
@@ -835,8 +794,11 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsCrea
 }
 
 // createOrUpdateStaticSiteFunctionAppSettingsHandleResponse handles the CreateOrUpdateStaticSiteFunctionAppSettings response.
-func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse, error) {
+func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse, error) {
 	result := StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientCreateOrUpdateStaticSiteFunctionAppSettingsResponse{}, err
 	}
@@ -847,8 +809,6 @@ func (client *StaticSitesClient) createOrUpdateStaticSiteFunctionAppSettingsHand
 //
 // Description for Creates an invitation link for a user with the role
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientCreateUserRolesInvitationLinkOptions contains the optional parameters for the StaticSitesClient.CreateUserRolesInvitationLink
@@ -867,19 +827,14 @@ func (client *StaticSitesClient) CreateUserRolesInvitationLink(ctx context.Conte
 	if err != nil {
 		return StaticSitesClientCreateUserRolesInvitationLinkResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientCreateUserRolesInvitationLinkResponse{}, err
-	}
-	resp, err := client.createUserRolesInvitationLinkHandleResponse(httpResp)
-	return resp, err
+	return client.createUserRolesInvitationLinkHandleResponse(httpResp, http.StatusOK)
 }
 
 // createUserRolesInvitationLinkCreateRequest creates the CreateUserRolesInvitationLink request.
 func (client *StaticSitesClient) createUserRolesInvitationLinkCreateRequest(ctx context.Context, resourceGroupName string, name string, staticSiteUserRolesInvitationEnvelope StaticSiteUserInvitationRequestResource, _ *StaticSitesClientCreateUserRolesInvitationLinkOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/createUserInvitation"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -895,8 +850,8 @@ func (client *StaticSitesClient) createUserRolesInvitationLinkCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteUserRolesInvitationEnvelope); err != nil {
@@ -906,8 +861,11 @@ func (client *StaticSitesClient) createUserRolesInvitationLinkCreateRequest(ctx 
 }
 
 // createUserRolesInvitationLinkHandleResponse handles the CreateUserRolesInvitationLink response.
-func (client *StaticSitesClient) createUserRolesInvitationLinkHandleResponse(resp *http.Response) (StaticSitesClientCreateUserRolesInvitationLinkResponse, error) {
+func (client *StaticSitesClient) createUserRolesInvitationLinkHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientCreateUserRolesInvitationLinkResponse, error) {
 	result := StaticSitesClientCreateUserRolesInvitationLinkResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserInvitationResponseResource); err != nil {
 		return StaticSitesClientCreateUserRolesInvitationLinkResponse{}, err
 	}
@@ -918,8 +876,6 @@ func (client *StaticSitesClient) createUserRolesInvitationLinkHandleResponse(res
 //
 // Description for Deploys zipped content to a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - staticSiteZipDeploymentEnvelope - A JSON representation of the StaticSiteZipDeployment properties. See example.
@@ -946,8 +902,6 @@ func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSite(ctx conte
 //
 // Description for Deploys zipped content to a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) createZipDeploymentForStaticSite(ctx context.Context, resourceGroupName string, name string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginCreateZipDeploymentForStaticSite"
@@ -963,8 +917,7 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSite(ctx context.Co
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -973,7 +926,7 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSite(ctx context.Co
 func (client *StaticSitesClient) createZipDeploymentForStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, _ *StaticSitesClientBeginCreateZipDeploymentForStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/zipdeploy"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -989,8 +942,8 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteZipDeploymentEnvelope); err != nil {
 		return nil, err
@@ -1002,8 +955,6 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteCreateRequest(c
 //
 // Description for Deploys zipped content to a specific environment of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -1031,8 +982,6 @@ func (client *StaticSitesClient) BeginCreateZipDeploymentForStaticSiteBuild(ctx 
 //
 // Description for Deploys zipped content to a specific environment of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, options *StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginCreateZipDeploymentForStaticSiteBuild"
@@ -1048,8 +997,7 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuild(ctx conte
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1058,7 +1006,7 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuild(ctx conte
 func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, staticSiteZipDeploymentEnvelope StaticSiteZipDeploymentARMResource, _ *StaticSitesClientBeginCreateZipDeploymentForStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/zipdeploy"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1078,8 +1026,8 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuildCreateRequ
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteZipDeploymentEnvelope); err != nil {
 		return nil, err
@@ -1091,8 +1039,6 @@ func (client *StaticSitesClient) createZipDeploymentForStaticSiteBuildCreateRequ
 //
 // Delete a database connection for a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -1114,8 +1060,7 @@ func (client *StaticSitesClient) DeleteBuildDatabaseConnection(ctx context.Conte
 		return StaticSitesClientDeleteBuildDatabaseConnectionResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientDeleteBuildDatabaseConnectionResponse{}, err
+		return StaticSitesClientDeleteBuildDatabaseConnectionResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientDeleteBuildDatabaseConnectionResponse{}, nil
 }
@@ -1124,7 +1069,7 @@ func (client *StaticSitesClient) DeleteBuildDatabaseConnection(ctx context.Conte
 func (client *StaticSitesClient) deleteBuildDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, databaseConnectionName string, _ *StaticSitesClientDeleteBuildDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1148,8 +1093,8 @@ func (client *StaticSitesClient) deleteBuildDatabaseConnectionCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1157,8 +1102,6 @@ func (client *StaticSitesClient) deleteBuildDatabaseConnectionCreateRequest(ctx 
 //
 // Delete a database connection for a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - databaseConnectionName - Name of the database connection.
@@ -1179,8 +1122,7 @@ func (client *StaticSitesClient) DeleteDatabaseConnection(ctx context.Context, r
 		return StaticSitesClientDeleteDatabaseConnectionResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientDeleteDatabaseConnectionResponse{}, err
+		return StaticSitesClientDeleteDatabaseConnectionResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientDeleteDatabaseConnectionResponse{}, nil
 }
@@ -1189,7 +1131,7 @@ func (client *StaticSitesClient) DeleteDatabaseConnection(ctx context.Context, r
 func (client *StaticSitesClient) deleteDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, databaseConnectionName string, _ *StaticSitesClientDeleteDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1209,8 +1151,8 @@ func (client *StaticSitesClient) deleteDatabaseConnectionCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1218,8 +1160,6 @@ func (client *StaticSitesClient) deleteDatabaseConnectionCreateRequest(ctx conte
 //
 // Description for Deletes a private endpoint connection
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - privateEndpointConnectionName - Name of the private endpoint connection.
@@ -1246,8 +1186,6 @@ func (client *StaticSitesClient) BeginDeletePrivateEndpointConnection(ctx contex
 //
 // Description for Deletes a private endpoint connection
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) deletePrivateEndpointConnection(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, options *StaticSitesClientBeginDeletePrivateEndpointConnectionOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginDeletePrivateEndpointConnection"
@@ -1263,8 +1201,7 @@ func (client *StaticSitesClient) deletePrivateEndpointConnection(ctx context.Con
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1273,7 +1210,7 @@ func (client *StaticSitesClient) deletePrivateEndpointConnection(ctx context.Con
 func (client *StaticSitesClient) deletePrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, _ *StaticSitesClientBeginDeletePrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1293,8 +1230,8 @@ func (client *StaticSitesClient) deletePrivateEndpointConnectionCreateRequest(ct
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
@@ -1303,8 +1240,6 @@ func (client *StaticSitesClient) deletePrivateEndpointConnectionCreateRequest(ct
 //
 // Description for Deletes a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientBeginDeleteStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDeleteStaticSite
@@ -1330,8 +1265,6 @@ func (client *StaticSitesClient) BeginDeleteStaticSite(ctx context.Context, reso
 //
 // Description for Deletes a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) deleteStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDeleteStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginDeleteStaticSite"
@@ -1347,8 +1280,7 @@ func (client *StaticSitesClient) deleteStaticSite(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1357,7 +1289,7 @@ func (client *StaticSitesClient) deleteStaticSite(ctx context.Context, resourceG
 func (client *StaticSitesClient) deleteStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientBeginDeleteStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1373,8 +1305,8 @@ func (client *StaticSitesClient) deleteStaticSiteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1382,8 +1314,6 @@ func (client *StaticSitesClient) deleteStaticSiteCreateRequest(ctx context.Conte
 //
 // Description for Deletes a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -1410,8 +1340,6 @@ func (client *StaticSitesClient) BeginDeleteStaticSiteBuild(ctx context.Context,
 //
 // Description for Deletes a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) deleteStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, options *StaticSitesClientBeginDeleteStaticSiteBuildOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginDeleteStaticSiteBuild"
@@ -1427,8 +1355,7 @@ func (client *StaticSitesClient) deleteStaticSiteBuild(ctx context.Context, reso
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1437,7 +1364,7 @@ func (client *StaticSitesClient) deleteStaticSiteBuild(ctx context.Context, reso
 func (client *StaticSitesClient) deleteStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientBeginDeleteStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1457,8 +1384,8 @@ func (client *StaticSitesClient) deleteStaticSiteBuildCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1466,8 +1393,6 @@ func (client *StaticSitesClient) deleteStaticSiteBuildCreateRequest(ctx context.
 //
 // Description for Deletes a custom domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - domainName - The custom domain name.
@@ -1494,8 +1419,6 @@ func (client *StaticSitesClient) BeginDeleteStaticSiteCustomDomain(ctx context.C
 //
 // Description for Deletes a custom domain.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) deleteStaticSiteCustomDomain(ctx context.Context, resourceGroupName string, name string, domainName string, options *StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginDeleteStaticSiteCustomDomain"
@@ -1511,8 +1434,7 @@ func (client *StaticSitesClient) deleteStaticSiteCustomDomain(ctx context.Contex
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1521,7 +1443,7 @@ func (client *StaticSitesClient) deleteStaticSiteCustomDomain(ctx context.Contex
 func (client *StaticSitesClient) deleteStaticSiteCustomDomainCreateRequest(ctx context.Context, resourceGroupName string, name string, domainName string, _ *StaticSitesClientBeginDeleteStaticSiteCustomDomainOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1541,8 +1463,8 @@ func (client *StaticSitesClient) deleteStaticSiteCustomDomainCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1550,8 +1472,6 @@ func (client *StaticSitesClient) deleteStaticSiteCustomDomainCreateRequest(ctx c
 //
 // Description for Deletes the user entry from the static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - StaticSitesClientDeleteStaticSiteUserOptions contains the optional parameters for the StaticSitesClient.DeleteStaticSiteUser
 //     method.
@@ -1570,17 +1490,16 @@ func (client *StaticSitesClient) DeleteStaticSiteUser(ctx context.Context, resou
 		return StaticSitesClientDeleteStaticSiteUserResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientDeleteStaticSiteUserResponse{}, err
+		return StaticSitesClientDeleteStaticSiteUserResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientDeleteStaticSiteUserResponse{}, nil
 }
 
 // deleteStaticSiteUserCreateRequest creates the DeleteStaticSiteUser request.
 func (client *StaticSitesClient) deleteStaticSiteUserCreateRequest(ctx context.Context, resourceGroupName string, name string, authprovider string, userid string, _ *StaticSitesClientDeleteStaticSiteUserOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/microsoft.Web/staticSites/{name}/authproviders/{authprovider}/users/{userid}"
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/authproviders/{authprovider}/users/{userid}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1604,8 +1523,8 @@ func (client *StaticSitesClient) deleteStaticSiteUserCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1613,8 +1532,6 @@ func (client *StaticSitesClient) deleteStaticSiteUserCreateRequest(ctx context.C
 //
 // Description for Detaches a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientBeginDetachStaticSiteOptions contains the optional parameters for the StaticSitesClient.BeginDetachStaticSite
@@ -1640,8 +1557,6 @@ func (client *StaticSitesClient) BeginDetachStaticSite(ctx context.Context, reso
 //
 // Description for Detaches a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) detachStaticSite(ctx context.Context, resourceGroupName string, name string, options *StaticSitesClientBeginDetachStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginDetachStaticSite"
@@ -1657,8 +1572,7 @@ func (client *StaticSitesClient) detachStaticSite(ctx context.Context, resourceG
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1667,7 +1581,7 @@ func (client *StaticSitesClient) detachStaticSite(ctx context.Context, resourceG
 func (client *StaticSitesClient) detachStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientBeginDetachStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/detach"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1683,8 +1597,8 @@ func (client *StaticSitesClient) detachStaticSiteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1692,8 +1606,6 @@ func (client *StaticSitesClient) detachStaticSiteCreateRequest(ctx context.Conte
 //
 // Description for Detach the user provided function app from the static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - functionAppName - Name of the function app registered with the static site.
@@ -1714,8 +1626,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSite(ctx
 		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, err
+		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteResponse{}, nil
 }
@@ -1724,7 +1635,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSite(ctx
 func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, functionAppName string, _ *StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1744,8 +1655,8 @@ func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteCrea
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1753,8 +1664,6 @@ func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteCrea
 //
 // Description for Detach the user provided function app from the static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -1776,8 +1685,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSiteBuil
 		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, err
+		return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildResponse{}, nil
 }
@@ -1786,7 +1694,7 @@ func (client *StaticSitesClient) DetachUserProvidedFunctionAppFromStaticSiteBuil
 func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, _ *StaticSitesClientDetachUserProvidedFunctionAppFromStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1810,8 +1718,8 @@ func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteBuil
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1819,8 +1727,6 @@ func (client *StaticSitesClient) detachUserProvidedFunctionAppFromStaticSiteBuil
 //
 // Description for Gets the basic auth properties for a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - basicAuthName - name of the basic auth entry.
@@ -1840,19 +1746,14 @@ func (client *StaticSitesClient) GetBasicAuth(ctx context.Context, resourceGroup
 	if err != nil {
 		return StaticSitesClientGetBasicAuthResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetBasicAuthResponse{}, err
-	}
-	resp, err := client.getBasicAuthHandleResponse(httpResp)
-	return resp, err
+	return client.getBasicAuthHandleResponse(httpResp, http.StatusOK)
 }
 
 // getBasicAuthCreateRequest creates the GetBasicAuth request.
 func (client *StaticSitesClient) getBasicAuthCreateRequest(ctx context.Context, resourceGroupName string, name string, basicAuthName BasicAuthName, _ *StaticSitesClientGetBasicAuthOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/basicAuth/{basicAuthName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1872,15 +1773,18 @@ func (client *StaticSitesClient) getBasicAuthCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getBasicAuthHandleResponse handles the GetBasicAuth response.
-func (client *StaticSitesClient) getBasicAuthHandleResponse(resp *http.Response) (StaticSitesClientGetBasicAuthResponse, error) {
+func (client *StaticSitesClient) getBasicAuthHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetBasicAuthResponse, error) {
 	result := StaticSitesClientGetBasicAuthResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBasicAuthPropertiesARMResource); err != nil {
 		return StaticSitesClientGetBasicAuthResponse{}, err
 	}
@@ -1891,8 +1795,6 @@ func (client *StaticSitesClient) getBasicAuthHandleResponse(resp *http.Response)
 //
 // Returns overview of a database connection for a static site build by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -1913,19 +1815,14 @@ func (client *StaticSitesClient) GetBuildDatabaseConnection(ctx context.Context,
 	if err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetBuildDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.getBuildDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.getBuildDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // getBuildDatabaseConnectionCreateRequest creates the GetBuildDatabaseConnection request.
 func (client *StaticSitesClient) getBuildDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, databaseConnectionName string, _ *StaticSitesClientGetBuildDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1949,15 +1846,18 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionCreateRequest(ctx con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getBuildDatabaseConnectionHandleResponse handles the GetBuildDatabaseConnection response.
-func (client *StaticSitesClient) getBuildDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientGetBuildDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) getBuildDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetBuildDatabaseConnectionResponse, error) {
 	result := StaticSitesClientGetBuildDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionResponse{}, err
 	}
@@ -1968,8 +1868,6 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionHandleResponse(resp *
 //
 // Returns details of a database connection for a static site build by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -1990,19 +1888,14 @@ func (client *StaticSitesClient) GetBuildDatabaseConnectionWithDetails(ctx conte
 	if err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse{}, err
-	}
-	resp, err := client.getBuildDatabaseConnectionWithDetailsHandleResponse(httpResp)
-	return resp, err
+	return client.getBuildDatabaseConnectionWithDetailsHandleResponse(httpResp, http.StatusOK)
 }
 
 // getBuildDatabaseConnectionWithDetailsCreateRequest creates the GetBuildDatabaseConnectionWithDetails request.
 func (client *StaticSitesClient) getBuildDatabaseConnectionWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, databaseConnectionName string, _ *StaticSitesClientGetBuildDatabaseConnectionWithDetailsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections/{databaseConnectionName}/show"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2026,15 +1919,18 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionWithDetailsCreateRequ
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getBuildDatabaseConnectionWithDetailsHandleResponse handles the GetBuildDatabaseConnectionWithDetails response.
-func (client *StaticSitesClient) getBuildDatabaseConnectionWithDetailsHandleResponse(resp *http.Response) (StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse, error) {
+func (client *StaticSitesClient) getBuildDatabaseConnectionWithDetailsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse, error) {
 	result := StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionWithDetailsResponse{}, err
 	}
@@ -2043,9 +1939,7 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionWithDetailsHandleResp
 
 // NewGetBuildDatabaseConnectionsPager - Returns overviews of database connections for a static site build
 //
-// # Returns overviews of database connections for a static site build
-//
-// Generated from API version 2025-05-01
+// Returns overviews of database connections for a static site build
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -2062,51 +1956,65 @@ func (client *StaticSitesClient) NewGetBuildDatabaseConnectionsPager(resourceGro
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getBuildDatabaseConnectionsCreateRequest(ctx, resourceGroupName, name, environmentName, options)
-			}, nil)
+			req, err := client.getBuildDatabaseConnectionsCreateRequest(ctx, resourceGroupName, name, environmentName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetBuildDatabaseConnectionsResponse{}, err
 			}
-			return client.getBuildDatabaseConnectionsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetBuildDatabaseConnectionsResponse{}, err
+			}
+			return client.getBuildDatabaseConnectionsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getBuildDatabaseConnectionsCreateRequest creates the GetBuildDatabaseConnections request.
-func (client *StaticSitesClient) getBuildDatabaseConnectionsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientGetBuildDatabaseConnectionsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getBuildDatabaseConnectionsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, nextLink string, _ *StaticSitesClientGetBuildDatabaseConnectionsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if environmentName == "" {
+			return nil, errors.New("parameter environmentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getBuildDatabaseConnectionsHandleResponse handles the GetBuildDatabaseConnections response.
-func (client *StaticSitesClient) getBuildDatabaseConnectionsHandleResponse(resp *http.Response) (StaticSitesClientGetBuildDatabaseConnectionsResponse, error) {
+func (client *StaticSitesClient) getBuildDatabaseConnectionsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetBuildDatabaseConnectionsResponse, error) {
 	result := StaticSitesClientGetBuildDatabaseConnectionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnectionCollection); err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionsResponse{}, err
 	}
@@ -2115,9 +2023,7 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionsHandleResponse(resp 
 
 // NewGetBuildDatabaseConnectionsWithDetailsPager - Returns details of database connections for a static site build
 //
-// # Returns details of database connections for a static site build
-//
-// Generated from API version 2025-05-01
+// Returns details of database connections for a static site build
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -2134,51 +2040,65 @@ func (client *StaticSitesClient) NewGetBuildDatabaseConnectionsWithDetailsPager(
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getBuildDatabaseConnectionsWithDetailsCreateRequest(ctx, resourceGroupName, name, environmentName, options)
-			}, nil)
+			req, err := client.getBuildDatabaseConnectionsWithDetailsCreateRequest(ctx, resourceGroupName, name, environmentName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse{}, err
 			}
-			return client.getBuildDatabaseConnectionsWithDetailsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse{}, err
+			}
+			return client.getBuildDatabaseConnectionsWithDetailsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getBuildDatabaseConnectionsWithDetailsCreateRequest creates the GetBuildDatabaseConnectionsWithDetails request.
-func (client *StaticSitesClient) getBuildDatabaseConnectionsWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientGetBuildDatabaseConnectionsWithDetailsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/showDatabaseConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getBuildDatabaseConnectionsWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, nextLink string, _ *StaticSitesClientGetBuildDatabaseConnectionsWithDetailsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/showDatabaseConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if environmentName == "" {
+			return nil, errors.New("parameter environmentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getBuildDatabaseConnectionsWithDetailsHandleResponse handles the GetBuildDatabaseConnectionsWithDetails response.
-func (client *StaticSitesClient) getBuildDatabaseConnectionsWithDetailsHandleResponse(resp *http.Response) (StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse, error) {
+func (client *StaticSitesClient) getBuildDatabaseConnectionsWithDetailsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse, error) {
 	result := StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnectionCollection); err != nil {
 		return StaticSitesClientGetBuildDatabaseConnectionsWithDetailsResponse{}, err
 	}
@@ -2189,8 +2109,6 @@ func (client *StaticSitesClient) getBuildDatabaseConnectionsWithDetailsHandleRes
 //
 // Returns overview of a database connection for a static site by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - databaseConnectionName - Name of the database connection.
@@ -2210,19 +2128,14 @@ func (client *StaticSitesClient) GetDatabaseConnection(ctx context.Context, reso
 	if err != nil {
 		return StaticSitesClientGetDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.getDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.getDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDatabaseConnectionCreateRequest creates the GetDatabaseConnection request.
 func (client *StaticSitesClient) getDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, databaseConnectionName string, _ *StaticSitesClientGetDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2242,15 +2155,18 @@ func (client *StaticSitesClient) getDatabaseConnectionCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDatabaseConnectionHandleResponse handles the GetDatabaseConnection response.
-func (client *StaticSitesClient) getDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientGetDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) getDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetDatabaseConnectionResponse, error) {
 	result := StaticSitesClientGetDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientGetDatabaseConnectionResponse{}, err
 	}
@@ -2261,8 +2177,6 @@ func (client *StaticSitesClient) getDatabaseConnectionHandleResponse(resp *http.
 //
 // Returns details of a database connection for a static site by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - databaseConnectionName - Name of the database connection.
@@ -2282,19 +2196,14 @@ func (client *StaticSitesClient) GetDatabaseConnectionWithDetails(ctx context.Co
 	if err != nil {
 		return StaticSitesClientGetDatabaseConnectionWithDetailsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetDatabaseConnectionWithDetailsResponse{}, err
-	}
-	resp, err := client.getDatabaseConnectionWithDetailsHandleResponse(httpResp)
-	return resp, err
+	return client.getDatabaseConnectionWithDetailsHandleResponse(httpResp, http.StatusOK)
 }
 
 // getDatabaseConnectionWithDetailsCreateRequest creates the GetDatabaseConnectionWithDetails request.
 func (client *StaticSitesClient) getDatabaseConnectionWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, databaseConnectionName string, _ *StaticSitesClientGetDatabaseConnectionWithDetailsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections/{databaseConnectionName}/show"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2314,15 +2223,18 @@ func (client *StaticSitesClient) getDatabaseConnectionWithDetailsCreateRequest(c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getDatabaseConnectionWithDetailsHandleResponse handles the GetDatabaseConnectionWithDetails response.
-func (client *StaticSitesClient) getDatabaseConnectionWithDetailsHandleResponse(resp *http.Response) (StaticSitesClientGetDatabaseConnectionWithDetailsResponse, error) {
+func (client *StaticSitesClient) getDatabaseConnectionWithDetailsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetDatabaseConnectionWithDetailsResponse, error) {
 	result := StaticSitesClientGetDatabaseConnectionWithDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientGetDatabaseConnectionWithDetailsResponse{}, err
 	}
@@ -2331,9 +2243,7 @@ func (client *StaticSitesClient) getDatabaseConnectionWithDetailsHandleResponse(
 
 // NewGetDatabaseConnectionsPager - Returns overviews of database connections for a static site
 //
-// # Returns overviews of database connections for a static site
-//
-// Generated from API version 2025-05-01
+// Returns overviews of database connections for a static site
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - options - StaticSitesClientGetDatabaseConnectionsOptions contains the optional parameters for the StaticSitesClient.NewGetDatabaseConnectionsPager
@@ -2349,47 +2259,61 @@ func (client *StaticSitesClient) NewGetDatabaseConnectionsPager(resourceGroupNam
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getDatabaseConnectionsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getDatabaseConnectionsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetDatabaseConnectionsResponse{}, err
 			}
-			return client.getDatabaseConnectionsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetDatabaseConnectionsResponse{}, err
+			}
+			return client.getDatabaseConnectionsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getDatabaseConnectionsCreateRequest creates the GetDatabaseConnections request.
-func (client *StaticSitesClient) getDatabaseConnectionsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetDatabaseConnectionsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getDatabaseConnectionsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetDatabaseConnectionsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getDatabaseConnectionsHandleResponse handles the GetDatabaseConnections response.
-func (client *StaticSitesClient) getDatabaseConnectionsHandleResponse(resp *http.Response) (StaticSitesClientGetDatabaseConnectionsResponse, error) {
+func (client *StaticSitesClient) getDatabaseConnectionsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetDatabaseConnectionsResponse, error) {
 	result := StaticSitesClientGetDatabaseConnectionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnectionCollection); err != nil {
 		return StaticSitesClientGetDatabaseConnectionsResponse{}, err
 	}
@@ -2398,9 +2322,7 @@ func (client *StaticSitesClient) getDatabaseConnectionsHandleResponse(resp *http
 
 // NewGetDatabaseConnectionsWithDetailsPager - Returns details of database connections for a static site
 //
-// # Returns details of database connections for a static site
-//
-// Generated from API version 2025-05-01
+// Returns details of database connections for a static site
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetDatabaseConnectionsWithDetailsOptions contains the optional parameters for the StaticSitesClient.NewGetDatabaseConnectionsWithDetailsPager
@@ -2416,47 +2338,61 @@ func (client *StaticSitesClient) NewGetDatabaseConnectionsWithDetailsPager(resou
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getDatabaseConnectionsWithDetailsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getDatabaseConnectionsWithDetailsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetDatabaseConnectionsWithDetailsResponse{}, err
 			}
-			return client.getDatabaseConnectionsWithDetailsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetDatabaseConnectionsWithDetailsResponse{}, err
+			}
+			return client.getDatabaseConnectionsWithDetailsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getDatabaseConnectionsWithDetailsCreateRequest creates the GetDatabaseConnectionsWithDetails request.
-func (client *StaticSitesClient) getDatabaseConnectionsWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetDatabaseConnectionsWithDetailsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/showDatabaseConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getDatabaseConnectionsWithDetailsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetDatabaseConnectionsWithDetailsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/showDatabaseConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getDatabaseConnectionsWithDetailsHandleResponse handles the GetDatabaseConnectionsWithDetails response.
-func (client *StaticSitesClient) getDatabaseConnectionsWithDetailsHandleResponse(resp *http.Response) (StaticSitesClientGetDatabaseConnectionsWithDetailsResponse, error) {
+func (client *StaticSitesClient) getDatabaseConnectionsWithDetailsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetDatabaseConnectionsWithDetailsResponse, error) {
 	result := StaticSitesClientGetDatabaseConnectionsWithDetailsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnectionCollection); err != nil {
 		return StaticSitesClientGetDatabaseConnectionsWithDetailsResponse{}, err
 	}
@@ -2467,8 +2403,6 @@ func (client *StaticSitesClient) getDatabaseConnectionsWithDetailsHandleResponse
 //
 // Returns the details of a linked backend linked to a static site by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - linkedBackendName - Name of the linked backend that should be retrieved
@@ -2488,19 +2422,14 @@ func (client *StaticSitesClient) GetLinkedBackend(ctx context.Context, resourceG
 	if err != nil {
 		return StaticSitesClientGetLinkedBackendResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetLinkedBackendResponse{}, err
-	}
-	resp, err := client.getLinkedBackendHandleResponse(httpResp)
-	return resp, err
+	return client.getLinkedBackendHandleResponse(httpResp, http.StatusOK)
 }
 
 // getLinkedBackendCreateRequest creates the GetLinkedBackend request.
 func (client *StaticSitesClient) getLinkedBackendCreateRequest(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, _ *StaticSitesClientGetLinkedBackendOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2520,15 +2449,18 @@ func (client *StaticSitesClient) getLinkedBackendCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getLinkedBackendHandleResponse handles the GetLinkedBackend response.
-func (client *StaticSitesClient) getLinkedBackendHandleResponse(resp *http.Response) (StaticSitesClientGetLinkedBackendResponse, error) {
+func (client *StaticSitesClient) getLinkedBackendHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetLinkedBackendResponse, error) {
 	result := StaticSitesClientGetLinkedBackendResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteLinkedBackendARMResource); err != nil {
 		return StaticSitesClientGetLinkedBackendResponse{}, err
 	}
@@ -2539,8 +2471,6 @@ func (client *StaticSitesClient) getLinkedBackendHandleResponse(resp *http.Respo
 //
 // Returns the details of a linked backend linked to a static site build by name
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier
@@ -2561,19 +2491,14 @@ func (client *StaticSitesClient) GetLinkedBackendForBuild(ctx context.Context, r
 	if err != nil {
 		return StaticSitesClientGetLinkedBackendForBuildResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetLinkedBackendForBuildResponse{}, err
-	}
-	resp, err := client.getLinkedBackendForBuildHandleResponse(httpResp)
-	return resp, err
+	return client.getLinkedBackendForBuildHandleResponse(httpResp, http.StatusOK)
 }
 
 // getLinkedBackendForBuildCreateRequest creates the GetLinkedBackendForBuild request.
 func (client *StaticSitesClient) getLinkedBackendForBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, _ *StaticSitesClientGetLinkedBackendForBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2597,15 +2522,18 @@ func (client *StaticSitesClient) getLinkedBackendForBuildCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getLinkedBackendForBuildHandleResponse handles the GetLinkedBackendForBuild response.
-func (client *StaticSitesClient) getLinkedBackendForBuildHandleResponse(resp *http.Response) (StaticSitesClientGetLinkedBackendForBuildResponse, error) {
+func (client *StaticSitesClient) getLinkedBackendForBuildHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetLinkedBackendForBuildResponse, error) {
 	result := StaticSitesClientGetLinkedBackendForBuildResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteLinkedBackendARMResource); err != nil {
 		return StaticSitesClientGetLinkedBackendForBuildResponse{}, err
 	}
@@ -2614,9 +2542,7 @@ func (client *StaticSitesClient) getLinkedBackendForBuildHandleResponse(resp *ht
 
 // NewGetLinkedBackendsPager - Returns details of all backends linked to a static site
 //
-// # Returns details of all backends linked to a static site
-//
-// Generated from API version 2025-05-01
+// Returns details of all backends linked to a static site
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - options - StaticSitesClientGetLinkedBackendsOptions contains the optional parameters for the StaticSitesClient.NewGetLinkedBackendsPager
@@ -2632,47 +2558,61 @@ func (client *StaticSitesClient) NewGetLinkedBackendsPager(resourceGroupName str
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getLinkedBackendsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getLinkedBackendsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetLinkedBackendsResponse{}, err
 			}
-			return client.getLinkedBackendsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetLinkedBackendsResponse{}, err
+			}
+			return client.getLinkedBackendsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getLinkedBackendsCreateRequest creates the GetLinkedBackends request.
-func (client *StaticSitesClient) getLinkedBackendsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetLinkedBackendsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getLinkedBackendsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetLinkedBackendsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getLinkedBackendsHandleResponse handles the GetLinkedBackends response.
-func (client *StaticSitesClient) getLinkedBackendsHandleResponse(resp *http.Response) (StaticSitesClientGetLinkedBackendsResponse, error) {
+func (client *StaticSitesClient) getLinkedBackendsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetLinkedBackendsResponse, error) {
 	result := StaticSitesClientGetLinkedBackendsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteLinkedBackendsCollection); err != nil {
 		return StaticSitesClientGetLinkedBackendsResponse{}, err
 	}
@@ -2681,9 +2621,7 @@ func (client *StaticSitesClient) getLinkedBackendsHandleResponse(resp *http.Resp
 
 // NewGetLinkedBackendsForBuildPager - Returns details of all backends linked to a static site build
 //
-// # Returns details of all backends linked to a static site build
-//
-// Generated from API version 2025-05-01
+// Returns details of all backends linked to a static site build
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier
@@ -2700,51 +2638,65 @@ func (client *StaticSitesClient) NewGetLinkedBackendsForBuildPager(resourceGroup
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getLinkedBackendsForBuildCreateRequest(ctx, resourceGroupName, name, environmentName, options)
-			}, nil)
+			req, err := client.getLinkedBackendsForBuildCreateRequest(ctx, resourceGroupName, name, environmentName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetLinkedBackendsForBuildResponse{}, err
 			}
-			return client.getLinkedBackendsForBuildHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetLinkedBackendsForBuildResponse{}, err
+			}
+			return client.getLinkedBackendsForBuildHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getLinkedBackendsForBuildCreateRequest creates the GetLinkedBackendsForBuild request.
-func (client *StaticSitesClient) getLinkedBackendsForBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientGetLinkedBackendsForBuildOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getLinkedBackendsForBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, nextLink string, _ *StaticSitesClientGetLinkedBackendsForBuildOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if environmentName == "" {
+			return nil, errors.New("parameter environmentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getLinkedBackendsForBuildHandleResponse handles the GetLinkedBackendsForBuild response.
-func (client *StaticSitesClient) getLinkedBackendsForBuildHandleResponse(resp *http.Response) (StaticSitesClientGetLinkedBackendsForBuildResponse, error) {
+func (client *StaticSitesClient) getLinkedBackendsForBuildHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetLinkedBackendsForBuildResponse, error) {
 	result := StaticSitesClientGetLinkedBackendsForBuildResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteLinkedBackendsCollection); err != nil {
 		return StaticSitesClientGetLinkedBackendsForBuildResponse{}, err
 	}
@@ -2755,8 +2707,6 @@ func (client *StaticSitesClient) getLinkedBackendsForBuildHandleResponse(resp *h
 //
 // Description for Gets a private endpoint connection
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - privateEndpointConnectionName - Name of the private endpoint connection.
@@ -2776,19 +2726,14 @@ func (client *StaticSitesClient) GetPrivateEndpointConnection(ctx context.Contex
 	if err != nil {
 		return StaticSitesClientGetPrivateEndpointConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetPrivateEndpointConnectionResponse{}, err
-	}
-	resp, err := client.getPrivateEndpointConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.getPrivateEndpointConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // getPrivateEndpointConnectionCreateRequest creates the GetPrivateEndpointConnection request.
 func (client *StaticSitesClient) getPrivateEndpointConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, privateEndpointConnectionName string, _ *StaticSitesClientGetPrivateEndpointConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateEndpointConnections/{privateEndpointConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2808,15 +2753,18 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionCreateRequest(ctx c
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getPrivateEndpointConnectionHandleResponse handles the GetPrivateEndpointConnection response.
-func (client *StaticSitesClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateEndpointConnectionResponse, error) {
+func (client *StaticSitesClient) getPrivateEndpointConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetPrivateEndpointConnectionResponse, error) {
 	result := StaticSitesClientGetPrivateEndpointConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.RemotePrivateEndpointConnectionARMResource); err != nil {
 		return StaticSitesClientGetPrivateEndpointConnectionResponse{}, err
 	}
@@ -2825,9 +2773,7 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionHandleResponse(resp
 
 // NewGetPrivateEndpointConnectionListPager - Gets the list of private endpoint connections associated with a static site
 //
-// # Description for Gets the list of private endpoint connections associated with a static site
-//
-// Generated from API version 2025-05-01
+// Description for Gets the list of private endpoint connections associated with a static site
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetPrivateEndpointConnectionListOptions contains the optional parameters for the StaticSitesClient.NewGetPrivateEndpointConnectionListPager
@@ -2843,47 +2789,61 @@ func (client *StaticSitesClient) NewGetPrivateEndpointConnectionListPager(resour
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getPrivateEndpointConnectionListCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
 			}
-			return client.getPrivateEndpointConnectionListHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
+			}
+			return client.getPrivateEndpointConnectionListHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getPrivateEndpointConnectionListCreateRequest creates the GetPrivateEndpointConnectionList request.
-func (client *StaticSitesClient) getPrivateEndpointConnectionListCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetPrivateEndpointConnectionListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateEndpointConnections"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getPrivateEndpointConnectionListCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetPrivateEndpointConnectionListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateEndpointConnections"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getPrivateEndpointConnectionListHandleResponse handles the GetPrivateEndpointConnectionList response.
-func (client *StaticSitesClient) getPrivateEndpointConnectionListHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateEndpointConnectionListResponse, error) {
+func (client *StaticSitesClient) getPrivateEndpointConnectionListHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetPrivateEndpointConnectionListResponse, error) {
 	result := StaticSitesClientGetPrivateEndpointConnectionListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateEndpointConnectionCollection); err != nil {
 		return StaticSitesClientGetPrivateEndpointConnectionListResponse{}, err
 	}
@@ -2894,8 +2854,6 @@ func (client *StaticSitesClient) getPrivateEndpointConnectionListHandleResponse(
 //
 // Description for Gets the private link resources
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetPrivateLinkResourcesOptions contains the optional parameters for the StaticSitesClient.GetPrivateLinkResources
@@ -2914,19 +2872,14 @@ func (client *StaticSitesClient) GetPrivateLinkResources(ctx context.Context, re
 	if err != nil {
 		return StaticSitesClientGetPrivateLinkResourcesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetPrivateLinkResourcesResponse{}, err
-	}
-	resp, err := client.getPrivateLinkResourcesHandleResponse(httpResp)
-	return resp, err
+	return client.getPrivateLinkResourcesHandleResponse(httpResp, http.StatusOK)
 }
 
 // getPrivateLinkResourcesCreateRequest creates the GetPrivateLinkResources request.
 func (client *StaticSitesClient) getPrivateLinkResourcesCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetPrivateLinkResourcesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/privateLinkResources"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -2942,15 +2895,18 @@ func (client *StaticSitesClient) getPrivateLinkResourcesCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getPrivateLinkResourcesHandleResponse handles the GetPrivateLinkResources response.
-func (client *StaticSitesClient) getPrivateLinkResourcesHandleResponse(resp *http.Response) (StaticSitesClientGetPrivateLinkResourcesResponse, error) {
+func (client *StaticSitesClient) getPrivateLinkResourcesHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetPrivateLinkResourcesResponse, error) {
 	result := StaticSitesClientGetPrivateLinkResourcesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.PrivateLinkResourcesWrapper); err != nil {
 		return StaticSitesClientGetPrivateLinkResourcesResponse{}, err
 	}
@@ -2961,8 +2917,6 @@ func (client *StaticSitesClient) getPrivateLinkResourcesHandleResponse(resp *htt
 //
 // Description for Gets the details of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetStaticSiteOptions contains the optional parameters for the StaticSitesClient.GetStaticSite
@@ -2981,19 +2935,14 @@ func (client *StaticSitesClient) GetStaticSite(ctx context.Context, resourceGrou
 	if err != nil {
 		return StaticSitesClientGetStaticSiteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetStaticSiteResponse{}, err
-	}
-	resp, err := client.getStaticSiteHandleResponse(httpResp)
-	return resp, err
+	return client.getStaticSiteHandleResponse(httpResp, http.StatusOK)
 }
 
 // getStaticSiteCreateRequest creates the GetStaticSite request.
 func (client *StaticSitesClient) getStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3009,15 +2958,18 @@ func (client *StaticSitesClient) getStaticSiteCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getStaticSiteHandleResponse handles the GetStaticSite response.
-func (client *StaticSitesClient) getStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteResponse, error) {
+func (client *StaticSitesClient) getStaticSiteHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetStaticSiteResponse, error) {
 	result := StaticSitesClientGetStaticSiteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteResponse{}, err
 	}
@@ -3028,8 +2980,6 @@ func (client *StaticSitesClient) getStaticSiteHandleResponse(resp *http.Response
 //
 // Description for Gets the details of a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -3049,19 +2999,14 @@ func (client *StaticSitesClient) GetStaticSiteBuild(ctx context.Context, resourc
 	if err != nil {
 		return StaticSitesClientGetStaticSiteBuildResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetStaticSiteBuildResponse{}, err
-	}
-	resp, err := client.getStaticSiteBuildHandleResponse(httpResp)
-	return resp, err
+	return client.getStaticSiteBuildHandleResponse(httpResp, http.StatusOK)
 }
 
 // getStaticSiteBuildCreateRequest creates the GetStaticSiteBuild request.
 func (client *StaticSitesClient) getStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientGetStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3081,15 +3026,18 @@ func (client *StaticSitesClient) getStaticSiteBuildCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getStaticSiteBuildHandleResponse handles the GetStaticSiteBuild response.
-func (client *StaticSitesClient) getStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteBuildResponse, error) {
+func (client *StaticSitesClient) getStaticSiteBuildHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetStaticSiteBuildResponse, error) {
 	result := StaticSitesClientGetStaticSiteBuildResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBuildARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteBuildResponse{}, err
 	}
@@ -3099,8 +3047,6 @@ func (client *StaticSitesClient) getStaticSiteBuildHandleResponse(resp *http.Res
 // NewGetStaticSiteBuildsPager - Gets all static site builds for a particular static site.
 //
 // Description for Gets all static site builds for a particular static site.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetStaticSiteBuildsOptions contains the optional parameters for the StaticSitesClient.NewGetStaticSiteBuildsPager
@@ -3116,47 +3062,61 @@ func (client *StaticSitesClient) NewGetStaticSiteBuildsPager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getStaticSiteBuildsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getStaticSiteBuildsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetStaticSiteBuildsResponse{}, err
 			}
-			return client.getStaticSiteBuildsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetStaticSiteBuildsResponse{}, err
+			}
+			return client.getStaticSiteBuildsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getStaticSiteBuildsCreateRequest creates the GetStaticSiteBuilds request.
-func (client *StaticSitesClient) getStaticSiteBuildsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetStaticSiteBuildsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getStaticSiteBuildsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetStaticSiteBuildsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getStaticSiteBuildsHandleResponse handles the GetStaticSiteBuilds response.
-func (client *StaticSitesClient) getStaticSiteBuildsHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteBuildsResponse, error) {
+func (client *StaticSitesClient) getStaticSiteBuildsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetStaticSiteBuildsResponse, error) {
 	result := StaticSitesClientGetStaticSiteBuildsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBuildCollection); err != nil {
 		return StaticSitesClientGetStaticSiteBuildsResponse{}, err
 	}
@@ -3167,8 +3127,6 @@ func (client *StaticSitesClient) getStaticSiteBuildsHandleResponse(resp *http.Re
 //
 // Description for Gets an existing custom domain for a particular static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - domainName - The custom domain name.
@@ -3188,19 +3146,14 @@ func (client *StaticSitesClient) GetStaticSiteCustomDomain(ctx context.Context, 
 	if err != nil {
 		return StaticSitesClientGetStaticSiteCustomDomainResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetStaticSiteCustomDomainResponse{}, err
-	}
-	resp, err := client.getStaticSiteCustomDomainHandleResponse(httpResp)
-	return resp, err
+	return client.getStaticSiteCustomDomainHandleResponse(httpResp, http.StatusOK)
 }
 
 // getStaticSiteCustomDomainCreateRequest creates the GetStaticSiteCustomDomain request.
 func (client *StaticSitesClient) getStaticSiteCustomDomainCreateRequest(ctx context.Context, resourceGroupName string, name string, domainName string, _ *StaticSitesClientGetStaticSiteCustomDomainOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains/{domainName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3220,15 +3173,18 @@ func (client *StaticSitesClient) getStaticSiteCustomDomainCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getStaticSiteCustomDomainHandleResponse handles the GetStaticSiteCustomDomain response.
-func (client *StaticSitesClient) getStaticSiteCustomDomainHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSiteCustomDomainResponse, error) {
+func (client *StaticSitesClient) getStaticSiteCustomDomainHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetStaticSiteCustomDomainResponse, error) {
 	result := StaticSitesClientGetStaticSiteCustomDomainResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCustomDomainOverviewARMResource); err != nil {
 		return StaticSitesClientGetStaticSiteCustomDomainResponse{}, err
 	}
@@ -3238,8 +3194,6 @@ func (client *StaticSitesClient) getStaticSiteCustomDomainHandleResponse(resp *h
 // NewGetStaticSitesByResourceGroupPager - Gets all static sites in the specified resource group.
 //
 // Description for Gets all static sites in the specified resource group.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - StaticSitesClientGetStaticSitesByResourceGroupOptions contains the optional parameters for the StaticSitesClient.NewGetStaticSitesByResourceGroupPager
 //     method.
@@ -3254,43 +3208,57 @@ func (client *StaticSitesClient) NewGetStaticSitesByResourceGroupPager(resourceG
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getStaticSitesByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.getStaticSitesByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
 			}
-			return client.getStaticSitesByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
+			}
+			return client.getStaticSitesByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getStaticSitesByResourceGroupCreateRequest creates the GetStaticSitesByResourceGroup request.
-func (client *StaticSitesClient) getStaticSitesByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *StaticSitesClientGetStaticSitesByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getStaticSitesByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *StaticSitesClientGetStaticSitesByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getStaticSitesByResourceGroupHandleResponse handles the GetStaticSitesByResourceGroup response.
-func (client *StaticSitesClient) getStaticSitesByResourceGroupHandleResponse(resp *http.Response) (StaticSitesClientGetStaticSitesByResourceGroupResponse, error) {
+func (client *StaticSitesClient) getStaticSitesByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetStaticSitesByResourceGroupResponse, error) {
 	result := StaticSitesClientGetStaticSitesByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCollection); err != nil {
 		return StaticSitesClientGetStaticSitesByResourceGroupResponse{}, err
 	}
@@ -3301,8 +3269,6 @@ func (client *StaticSitesClient) getStaticSitesByResourceGroupHandleResponse(res
 //
 // Description for Gets the details of the user provided function app registered with a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - functionAppName - Name of the function app registered with the static site.
@@ -3322,19 +3288,14 @@ func (client *StaticSitesClient) GetUserProvidedFunctionAppForStaticSite(ctx con
 	if err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}, err
-	}
-	resp, err := client.getUserProvidedFunctionAppForStaticSiteHandleResponse(httpResp)
-	return resp, err
+	return client.getUserProvidedFunctionAppForStaticSiteHandleResponse(httpResp, http.StatusOK)
 }
 
 // getUserProvidedFunctionAppForStaticSiteCreateRequest creates the GetUserProvidedFunctionAppForStaticSite request.
 func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, functionAppName string, _ *StaticSitesClientGetUserProvidedFunctionAppForStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3354,15 +3315,18 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteCreateRe
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getUserProvidedFunctionAppForStaticSiteHandleResponse handles the GetUserProvidedFunctionAppForStaticSite response.
-func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse, error) {
+func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse, error) {
 	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppARMResource); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteResponse{}, err
 	}
@@ -3374,8 +3338,6 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteHandleRe
 //
 // Description for Gets the details of the user provided function app registered with a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -3396,19 +3358,14 @@ func (client *StaticSitesClient) GetUserProvidedFunctionAppForStaticSiteBuild(ct
 	if err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}, err
-	}
-	resp, err := client.getUserProvidedFunctionAppForStaticSiteBuildHandleResponse(httpResp)
-	return resp, err
+	return client.getUserProvidedFunctionAppForStaticSiteBuildHandleResponse(httpResp, http.StatusOK)
 }
 
 // getUserProvidedFunctionAppForStaticSiteBuildCreateRequest creates the GetUserProvidedFunctionAppForStaticSiteBuild request.
 func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, _ *StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3432,15 +3389,18 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildCre
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getUserProvidedFunctionAppForStaticSiteBuildHandleResponse handles the GetUserProvidedFunctionAppForStaticSiteBuild response.
-func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse, error) {
+func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse, error) {
 	result := StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppARMResource); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppForStaticSiteBuildResponse{}, err
 	}
@@ -3450,9 +3410,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppForStaticSiteBuildHan
 // NewGetUserProvidedFunctionAppsForStaticSitePager - Gets the details of the user provided function apps registered with
 // a static site
 //
-// # Description for Gets the details of the user provided function apps registered with a static site
-//
-// Generated from API version 2025-05-01
+// Description for Gets the details of the user provided function apps registered with a static site
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions contains the optional parameters for the StaticSitesClient.NewGetUserProvidedFunctionAppsForStaticSitePager
@@ -3468,47 +3426,61 @@ func (client *StaticSitesClient) NewGetUserProvidedFunctionAppsForStaticSitePage
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
 			}
-			return client.getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
+			}
+			return client.getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getUserProvidedFunctionAppsForStaticSiteCreateRequest creates the GetUserProvidedFunctionAppsForStaticSite request.
-func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/userProvidedFunctionApps"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/userProvidedFunctionApps"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getUserProvidedFunctionAppsForStaticSiteHandleResponse handles the GetUserProvidedFunctionAppsForStaticSite response.
-func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse, error) {
+func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse, error) {
 	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppsCollection); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteResponse{}, err
 	}
@@ -3518,9 +3490,7 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteHandleR
 // NewGetUserProvidedFunctionAppsForStaticSiteBuildPager - Gets the details of the user provided function apps registered
 // with a static site build
 //
-// # Description for Gets the details of the user provided function apps registered with a static site build
-//
-// Generated from API version 2025-05-01
+// Description for Gets the details of the user provided function apps registered with a static site build
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -3537,51 +3507,65 @@ func (client *StaticSitesClient) NewGetUserProvidedFunctionAppsForStaticSiteBuil
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx, resourceGroupName, name, environmentName, options)
-			}, nil)
+			req, err := client.getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx, resourceGroupName, name, environmentName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
 			}
-			return client.getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
+			}
+			return client.getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest creates the GetUserProvidedFunctionAppsForStaticSiteBuild request.
-func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/userProvidedFunctionApps"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, nextLink string, _ *StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/userProvidedFunctionApps"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if environmentName == "" {
+			return nil, errors.New("parameter environmentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse handles the GetUserProvidedFunctionAppsForStaticSiteBuild response.
-func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp *http.Response) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse, error) {
+func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse, error) {
 	result := StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserProvidedFunctionAppsCollection); err != nil {
 		return StaticSitesClientGetUserProvidedFunctionAppsForStaticSiteBuildResponse{}, err
 	}
@@ -3592,8 +3576,6 @@ func (client *StaticSitesClient) getUserProvidedFunctionAppsForStaticSiteBuildHa
 //
 // Link backend to a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - linkedBackendName - Name of the linked backend that should be retrieved
@@ -3621,8 +3603,6 @@ func (client *StaticSitesClient) BeginLinkBackend(ctx context.Context, resourceG
 //
 // Link backend to a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) linkBackend(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, options *StaticSitesClientBeginLinkBackendOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginLinkBackend"
@@ -3638,8 +3618,7 @@ func (client *StaticSitesClient) linkBackend(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -3648,7 +3627,7 @@ func (client *StaticSitesClient) linkBackend(ctx context.Context, resourceGroupN
 func (client *StaticSitesClient) linkBackendCreateRequest(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, _ *StaticSitesClientBeginLinkBackendOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3668,8 +3647,8 @@ func (client *StaticSitesClient) linkBackendCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteLinkedBackendEnvelope); err != nil {
@@ -3682,8 +3661,6 @@ func (client *StaticSitesClient) linkBackendCreateRequest(ctx context.Context, r
 //
 // Link backend to a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier
@@ -3712,8 +3689,6 @@ func (client *StaticSitesClient) BeginLinkBackendToBuild(ctx context.Context, re
 //
 // Link backend to a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) linkBackendToBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, options *StaticSitesClientBeginLinkBackendToBuildOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginLinkBackendToBuild"
@@ -3729,8 +3704,7 @@ func (client *StaticSitesClient) linkBackendToBuild(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -3739,7 +3713,7 @@ func (client *StaticSitesClient) linkBackendToBuild(ctx context.Context, resourc
 func (client *StaticSitesClient) linkBackendToBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, _ *StaticSitesClientBeginLinkBackendToBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3763,8 +3737,8 @@ func (client *StaticSitesClient) linkBackendToBuildCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteLinkedBackendEnvelope); err != nil {
@@ -3776,8 +3750,6 @@ func (client *StaticSitesClient) linkBackendToBuildCreateRequest(ctx context.Con
 // NewListPager - Get all Static Sites for a subscription.
 //
 // Description for Get all Static Sites for a subscription.
-//
-// Generated from API version 2025-05-01
 //   - options - StaticSitesClientListOptions contains the optional parameters for the StaticSitesClient.NewListPager method.
 func (client *StaticSitesClient) NewListPager(options *StaticSitesClientListOptions) *runtime.Pager[StaticSitesClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[StaticSitesClientListResponse]{
@@ -3790,39 +3762,53 @@ func (client *StaticSitesClient) NewListPager(options *StaticSitesClientListOpti
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *StaticSitesClient) listCreateRequest(ctx context.Context, _ *StaticSitesClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/staticSites"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listCreateRequest(ctx context.Context, nextLink string, _ *StaticSitesClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/staticSites"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *StaticSitesClient) listHandleResponse(resp *http.Response) (StaticSitesClientListResponse, error) {
+func (client *StaticSitesClient) listHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListResponse, error) {
 	result := StaticSitesClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCollection); err != nil {
 		return StaticSitesClientListResponse{}, err
 	}
@@ -3832,8 +3818,6 @@ func (client *StaticSitesClient) listHandleResponse(resp *http.Response) (Static
 // NewListBasicAuthPager - Gets the basic auth properties for a static site as a collection.
 //
 // Description for Gets the basic auth properties for a static site as a collection.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListBasicAuthOptions contains the optional parameters for the StaticSitesClient.NewListBasicAuthPager
@@ -3849,47 +3833,61 @@ func (client *StaticSitesClient) NewListBasicAuthPager(resourceGroupName string,
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBasicAuthCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.listBasicAuthCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListBasicAuthResponse{}, err
 			}
-			return client.listBasicAuthHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListBasicAuthResponse{}, err
+			}
+			return client.listBasicAuthHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBasicAuthCreateRequest creates the ListBasicAuth request.
-func (client *StaticSitesClient) listBasicAuthCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListBasicAuthOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/basicAuth"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listBasicAuthCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientListBasicAuthOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/basicAuth"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBasicAuthHandleResponse handles the ListBasicAuth response.
-func (client *StaticSitesClient) listBasicAuthHandleResponse(resp *http.Response) (StaticSitesClientListBasicAuthResponse, error) {
+func (client *StaticSitesClient) listBasicAuthHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListBasicAuthResponse, error) {
 	result := StaticSitesClientListBasicAuthResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteBasicAuthPropertiesCollection); err != nil {
 		return StaticSitesClientListBasicAuthResponse{}, err
 	}
@@ -3900,8 +3898,6 @@ func (client *StaticSitesClient) listBasicAuthHandleResponse(resp *http.Response
 //
 // Description for Gets the application settings of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteAppSettingsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteAppSettings
@@ -3920,19 +3916,14 @@ func (client *StaticSitesClient) ListStaticSiteAppSettings(ctx context.Context, 
 	if err != nil {
 		return StaticSitesClientListStaticSiteAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteAppSettingsResponse{}, err
-	}
-	resp, err := client.listStaticSiteAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteAppSettingsCreateRequest creates the ListStaticSiteAppSettings request.
 func (client *StaticSitesClient) listStaticSiteAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/listAppSettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -3948,15 +3939,18 @@ func (client *StaticSitesClient) listStaticSiteAppSettingsCreateRequest(ctx cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteAppSettingsHandleResponse handles the ListStaticSiteAppSettings response.
-func (client *StaticSitesClient) listStaticSiteAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteAppSettingsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteAppSettingsResponse, error) {
 	result := StaticSitesClientListStaticSiteAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteAppSettingsResponse{}, err
 	}
@@ -3967,8 +3961,6 @@ func (client *StaticSitesClient) listStaticSiteAppSettingsHandleResponse(resp *h
 //
 // Description for Gets the application settings of a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -3988,19 +3980,14 @@ func (client *StaticSitesClient) ListStaticSiteBuildAppSettings(ctx context.Cont
 	if err != nil {
 		return StaticSitesClientListStaticSiteBuildAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteBuildAppSettingsResponse{}, err
-	}
-	resp, err := client.listStaticSiteBuildAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteBuildAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteBuildAppSettingsCreateRequest creates the ListStaticSiteBuildAppSettings request.
 func (client *StaticSitesClient) listStaticSiteBuildAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientListStaticSiteBuildAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/listAppSettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4020,15 +4007,18 @@ func (client *StaticSitesClient) listStaticSiteBuildAppSettingsCreateRequest(ctx
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteBuildAppSettingsHandleResponse handles the ListStaticSiteBuildAppSettings response.
-func (client *StaticSitesClient) listStaticSiteBuildAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildAppSettingsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteBuildAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteBuildAppSettingsResponse, error) {
 	result := StaticSitesClientListStaticSiteBuildAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteBuildAppSettingsResponse{}, err
 	}
@@ -4039,8 +4029,6 @@ func (client *StaticSitesClient) listStaticSiteBuildAppSettingsHandleResponse(re
 //
 // Description for Gets the application settings of a static site build.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -4060,19 +4048,14 @@ func (client *StaticSitesClient) ListStaticSiteBuildFunctionAppSettings(ctx cont
 	if err != nil {
 		return StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}, err
-	}
-	resp, err := client.listStaticSiteBuildFunctionAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteBuildFunctionAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteBuildFunctionAppSettingsCreateRequest creates the ListStaticSiteBuildFunctionAppSettings request.
 func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientListStaticSiteBuildFunctionAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/listFunctionAppSettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4092,15 +4075,18 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsCreateReq
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteBuildFunctionAppSettingsHandleResponse handles the ListStaticSiteBuildFunctionAppSettings response.
-func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse, error) {
 	result := StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteBuildFunctionAppSettingsResponse{}, err
 	}
@@ -4110,8 +4096,6 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionAppSettingsHandleRes
 // NewListStaticSiteBuildFunctionsPager - Gets the functions of a particular static site build.
 //
 // Description for Gets the functions of a particular static site build.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -4128,51 +4112,65 @@ func (client *StaticSitesClient) NewListStaticSiteBuildFunctionsPager(resourceGr
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listStaticSiteBuildFunctionsCreateRequest(ctx, resourceGroupName, name, environmentName, options)
-			}, nil)
+			req, err := client.listStaticSiteBuildFunctionsCreateRequest(ctx, resourceGroupName, name, environmentName, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
 			}
-			return client.listStaticSiteBuildFunctionsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
+			}
+			return client.listStaticSiteBuildFunctionsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listStaticSiteBuildFunctionsCreateRequest creates the ListStaticSiteBuildFunctions request.
-func (client *StaticSitesClient) listStaticSiteBuildFunctionsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, _ *StaticSitesClientListStaticSiteBuildFunctionsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/functions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listStaticSiteBuildFunctionsCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, nextLink string, _ *StaticSitesClientListStaticSiteBuildFunctionsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/functions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if environmentName == "" {
+			return nil, errors.New("parameter environmentName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if environmentName == "" {
-		return nil, errors.New("parameter environmentName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{environmentName}", url.PathEscape(environmentName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listStaticSiteBuildFunctionsHandleResponse handles the ListStaticSiteBuildFunctions response.
-func (client *StaticSitesClient) listStaticSiteBuildFunctionsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteBuildFunctionsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteBuildFunctionsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteBuildFunctionsResponse, error) {
 	result := StaticSitesClientListStaticSiteBuildFunctionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteFunctionOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteBuildFunctionsResponse{}, err
 	}
@@ -4183,8 +4181,6 @@ func (client *StaticSitesClient) listStaticSiteBuildFunctionsHandleResponse(resp
 //
 // Description for Lists the roles configured for the static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteConfiguredRolesOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteConfiguredRoles
@@ -4203,19 +4199,14 @@ func (client *StaticSitesClient) ListStaticSiteConfiguredRoles(ctx context.Conte
 	if err != nil {
 		return StaticSitesClientListStaticSiteConfiguredRolesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteConfiguredRolesResponse{}, err
-	}
-	resp, err := client.listStaticSiteConfiguredRolesHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteConfiguredRolesHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteConfiguredRolesCreateRequest creates the ListStaticSiteConfiguredRoles request.
 func (client *StaticSitesClient) listStaticSiteConfiguredRolesCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteConfiguredRolesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/listConfiguredRoles"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4231,15 +4222,18 @@ func (client *StaticSitesClient) listStaticSiteConfiguredRolesCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteConfiguredRolesHandleResponse handles the ListStaticSiteConfiguredRoles response.
-func (client *StaticSitesClient) listStaticSiteConfiguredRolesHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteConfiguredRolesResponse, error) {
+func (client *StaticSitesClient) listStaticSiteConfiguredRolesHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteConfiguredRolesResponse, error) {
 	result := StaticSitesClientListStaticSiteConfiguredRolesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringList); err != nil {
 		return StaticSitesClientListStaticSiteConfiguredRolesResponse{}, err
 	}
@@ -4249,8 +4243,6 @@ func (client *StaticSitesClient) listStaticSiteConfiguredRolesHandleResponse(res
 // NewListStaticSiteCustomDomainsPager - Gets all static site custom domains for a particular static site.
 //
 // Description for Gets all static site custom domains for a particular static site.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteCustomDomainsOptions contains the optional parameters for the StaticSitesClient.NewListStaticSiteCustomDomainsPager
@@ -4266,47 +4258,61 @@ func (client *StaticSitesClient) NewListStaticSiteCustomDomainsPager(resourceGro
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listStaticSiteCustomDomainsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.listStaticSiteCustomDomainsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
 			}
-			return client.listStaticSiteCustomDomainsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
+			}
+			return client.listStaticSiteCustomDomainsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listStaticSiteCustomDomainsCreateRequest creates the ListStaticSiteCustomDomains request.
-func (client *StaticSitesClient) listStaticSiteCustomDomainsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteCustomDomainsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listStaticSiteCustomDomainsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientListStaticSiteCustomDomainsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listStaticSiteCustomDomainsHandleResponse handles the ListStaticSiteCustomDomains response.
-func (client *StaticSitesClient) listStaticSiteCustomDomainsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteCustomDomainsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteCustomDomainsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteCustomDomainsResponse, error) {
 	result := StaticSitesClientListStaticSiteCustomDomainsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteCustomDomainOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteCustomDomainsResponse{}, err
 	}
@@ -4317,8 +4323,6 @@ func (client *StaticSitesClient) listStaticSiteCustomDomainsHandleResponse(resp 
 //
 // Description for Gets the application settings of a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteFunctionAppSettingsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteFunctionAppSettings
@@ -4337,19 +4341,14 @@ func (client *StaticSitesClient) ListStaticSiteFunctionAppSettings(ctx context.C
 	if err != nil {
 		return StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}, err
-	}
-	resp, err := client.listStaticSiteFunctionAppSettingsHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteFunctionAppSettingsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteFunctionAppSettingsCreateRequest creates the ListStaticSiteFunctionAppSettings request.
 func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteFunctionAppSettingsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/listFunctionAppSettings"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4365,15 +4364,18 @@ func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsCreateRequest(
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteFunctionAppSettingsHandleResponse handles the ListStaticSiteFunctionAppSettings response.
-func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteFunctionAppSettingsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteFunctionAppSettingsResponse, error) {
 	result := StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteFunctionAppSettingsResponse{}, err
 	}
@@ -4383,8 +4385,6 @@ func (client *StaticSitesClient) listStaticSiteFunctionAppSettingsHandleResponse
 // NewListStaticSiteFunctionsPager - Gets the functions of a static site.
 //
 // Description for Gets the functions of a static site.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteFunctionsOptions contains the optional parameters for the StaticSitesClient.NewListStaticSiteFunctionsPager
@@ -4400,47 +4400,61 @@ func (client *StaticSitesClient) NewListStaticSiteFunctionsPager(resourceGroupNa
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listStaticSiteFunctionsCreateRequest(ctx, resourceGroupName, name, options)
-			}, nil)
+			req, err := client.listStaticSiteFunctionsCreateRequest(ctx, resourceGroupName, name, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListStaticSiteFunctionsResponse{}, err
 			}
-			return client.listStaticSiteFunctionsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteFunctionsResponse{}, err
+			}
+			return client.listStaticSiteFunctionsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listStaticSiteFunctionsCreateRequest creates the ListStaticSiteFunctions request.
-func (client *StaticSitesClient) listStaticSiteFunctionsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteFunctionsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/functions"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listStaticSiteFunctionsCreateRequest(ctx context.Context, resourceGroupName string, name string, nextLink string, _ *StaticSitesClientListStaticSiteFunctionsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/functions"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listStaticSiteFunctionsHandleResponse handles the ListStaticSiteFunctions response.
-func (client *StaticSitesClient) listStaticSiteFunctionsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteFunctionsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteFunctionsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteFunctionsResponse, error) {
 	result := StaticSitesClientListStaticSiteFunctionsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteFunctionOverviewCollection); err != nil {
 		return StaticSitesClientListStaticSiteFunctionsResponse{}, err
 	}
@@ -4451,8 +4465,6 @@ func (client *StaticSitesClient) listStaticSiteFunctionsHandleResponse(resp *htt
 //
 // Description for Lists the secrets for an existing static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientListStaticSiteSecretsOptions contains the optional parameters for the StaticSitesClient.ListStaticSiteSecrets
@@ -4471,19 +4483,14 @@ func (client *StaticSitesClient) ListStaticSiteSecrets(ctx context.Context, reso
 	if err != nil {
 		return StaticSitesClientListStaticSiteSecretsResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientListStaticSiteSecretsResponse{}, err
-	}
-	resp, err := client.listStaticSiteSecretsHandleResponse(httpResp)
-	return resp, err
+	return client.listStaticSiteSecretsHandleResponse(httpResp, http.StatusOK)
 }
 
 // listStaticSiteSecretsCreateRequest creates the ListStaticSiteSecrets request.
 func (client *StaticSitesClient) listStaticSiteSecretsCreateRequest(ctx context.Context, resourceGroupName string, name string, _ *StaticSitesClientListStaticSiteSecretsOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/listSecrets"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4499,15 +4506,18 @@ func (client *StaticSitesClient) listStaticSiteSecretsCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listStaticSiteSecretsHandleResponse handles the ListStaticSiteSecrets response.
-func (client *StaticSitesClient) listStaticSiteSecretsHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteSecretsResponse, error) {
+func (client *StaticSitesClient) listStaticSiteSecretsHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteSecretsResponse, error) {
 	result := StaticSitesClientListStaticSiteSecretsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StringDictionary); err != nil {
 		return StaticSitesClientListStaticSiteSecretsResponse{}, err
 	}
@@ -4517,8 +4527,6 @@ func (client *StaticSitesClient) listStaticSiteSecretsHandleResponse(resp *http.
 // NewListStaticSiteUsersPager - Gets the list of users of a static site.
 //
 // Description for Gets the list of users of a static site.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - authprovider - The auth provider for the users.
 //   - options - StaticSitesClientListStaticSiteUsersOptions contains the optional parameters for the StaticSitesClient.NewListStaticSiteUsersPager
@@ -4534,51 +4542,65 @@ func (client *StaticSitesClient) NewListStaticSiteUsersPager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listStaticSiteUsersCreateRequest(ctx, resourceGroupName, name, authprovider, options)
-			}, nil)
+			req, err := client.listStaticSiteUsersCreateRequest(ctx, resourceGroupName, name, authprovider, nextLink, options)
 			if err != nil {
 				return StaticSitesClientListStaticSiteUsersResponse{}, err
 			}
-			return client.listStaticSiteUsersHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return StaticSitesClientListStaticSiteUsersResponse{}, err
+			}
+			return client.listStaticSiteUsersHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listStaticSiteUsersCreateRequest creates the ListStaticSiteUsers request.
-func (client *StaticSitesClient) listStaticSiteUsersCreateRequest(ctx context.Context, resourceGroupName string, name string, authprovider string, _ *StaticSitesClientListStaticSiteUsersOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/microsoft.Web/staticSites/{name}/authproviders/{authprovider}/listUsers"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *StaticSitesClient) listStaticSiteUsersCreateRequest(ctx context.Context, resourceGroupName string, name string, authprovider string, nextLink string, _ *StaticSitesClientListStaticSiteUsersOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/authproviders/{authprovider}/listUsers"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if name == "" {
+			return nil, errors.New("parameter name cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
+		if authprovider == "" {
+			return nil, errors.New("parameter authprovider cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{authprovider}", url.PathEscape(authprovider))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if name == "" {
-		return nil, errors.New("parameter name cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{name}", url.PathEscape(name))
-	if authprovider == "" {
-		return nil, errors.New("parameter authprovider cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{authprovider}", url.PathEscape(authprovider))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20250501)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listStaticSiteUsersHandleResponse handles the ListStaticSiteUsers response.
-func (client *StaticSitesClient) listStaticSiteUsersHandleResponse(resp *http.Response) (StaticSitesClientListStaticSiteUsersResponse, error) {
+func (client *StaticSitesClient) listStaticSiteUsersHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientListStaticSiteUsersResponse, error) {
 	result := StaticSitesClientListStaticSiteUsersResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserCollection); err != nil {
 		return StaticSitesClientListStaticSiteUsersResponse{}, err
 	}
@@ -4589,8 +4611,6 @@ func (client *StaticSitesClient) listStaticSiteUsersHandleResponse(resp *http.Re
 //
 // Description for Generates a preview workflow file for the static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - location - The location name.
 //   - staticSitesWorkflowPreviewRequest - The request body
 //   - options - StaticSitesClientPreviewWorkflowOptions contains the optional parameters for the StaticSitesClient.PreviewWorkflow
@@ -4609,19 +4629,14 @@ func (client *StaticSitesClient) PreviewWorkflow(ctx context.Context, location s
 	if err != nil {
 		return StaticSitesClientPreviewWorkflowResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientPreviewWorkflowResponse{}, err
-	}
-	resp, err := client.previewWorkflowHandleResponse(httpResp)
-	return resp, err
+	return client.previewWorkflowHandleResponse(httpResp, http.StatusOK)
 }
 
 // previewWorkflowCreateRequest creates the PreviewWorkflow request.
 func (client *StaticSitesClient) previewWorkflowCreateRequest(ctx context.Context, location string, staticSitesWorkflowPreviewRequest StaticSitesWorkflowPreviewRequest, _ *StaticSitesClientPreviewWorkflowOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Web/locations/{location}/previewStaticSiteWorkflowFile"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if location == "" {
@@ -4633,8 +4648,8 @@ func (client *StaticSitesClient) previewWorkflowCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSitesWorkflowPreviewRequest); err != nil {
@@ -4644,8 +4659,11 @@ func (client *StaticSitesClient) previewWorkflowCreateRequest(ctx context.Contex
 }
 
 // previewWorkflowHandleResponse handles the PreviewWorkflow response.
-func (client *StaticSitesClient) previewWorkflowHandleResponse(resp *http.Response) (StaticSitesClientPreviewWorkflowResponse, error) {
+func (client *StaticSitesClient) previewWorkflowHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientPreviewWorkflowResponse, error) {
 	result := StaticSitesClientPreviewWorkflowResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSitesWorkflowPreview); err != nil {
 		return StaticSitesClientPreviewWorkflowResponse{}, err
 	}
@@ -4656,8 +4674,6 @@ func (client *StaticSitesClient) previewWorkflowHandleResponse(resp *http.Respon
 //
 // Description for Register a user provided function app with a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - functionAppName - Name of the function app registered with the static site.
@@ -4685,8 +4701,6 @@ func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticS
 //
 // Description for Register a user provided function app with a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSite(ctx context.Context, resourceGroupName string, name string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginRegisterUserProvidedFunctionAppWithStaticSite"
@@ -4702,8 +4716,7 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSite(c
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -4712,7 +4725,7 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSite(c
 func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4732,11 +4745,11 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteCr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
+	reqQP.Set("api-version", version20250501)
 	if options != nil && options.IsForced != nil {
 		reqQP.Set("isForced", strconv.FormatBool(*options.IsForced))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteUserProvidedFunctionEnvelope); err != nil {
@@ -4749,8 +4762,6 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteCr
 //
 // Description for Register a user provided function app with a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - environmentName - The stage site identifier.
@@ -4779,8 +4790,6 @@ func (client *StaticSitesClient) BeginRegisterUserProvidedFunctionAppWithStaticS
 //
 // Description for Register a user provided function app with a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginRegisterUserProvidedFunctionAppWithStaticSiteBuild"
@@ -4796,8 +4805,7 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBu
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -4806,7 +4814,7 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBu
 func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, functionAppName string, staticSiteUserProvidedFunctionEnvelope StaticSiteUserProvidedFunctionAppARMResource, options *StaticSitesClientBeginRegisterUserProvidedFunctionAppWithStaticSiteBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/userProvidedFunctionApps/{functionAppName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4830,11 +4838,11 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBu
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
+	reqQP.Set("api-version", version20250501)
 	if options != nil && options.IsForced != nil {
 		reqQP.Set("isForced", strconv.FormatBool(*options.IsForced))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteUserProvidedFunctionEnvelope); err != nil {
@@ -4847,8 +4855,6 @@ func (client *StaticSitesClient) registerUserProvidedFunctionAppWithStaticSiteBu
 //
 // Description for Resets the api key for an existing static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - options - StaticSitesClientResetStaticSiteAPIKeyOptions contains the optional parameters for the StaticSitesClient.ResetStaticSiteAPIKey
@@ -4868,8 +4874,7 @@ func (client *StaticSitesClient) ResetStaticSiteAPIKey(ctx context.Context, reso
 		return StaticSitesClientResetStaticSiteAPIKeyResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientResetStaticSiteAPIKeyResponse{}, err
+		return StaticSitesClientResetStaticSiteAPIKeyResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientResetStaticSiteAPIKeyResponse{}, nil
 }
@@ -4878,7 +4883,7 @@ func (client *StaticSitesClient) ResetStaticSiteAPIKey(ctx context.Context, reso
 func (client *StaticSitesClient) resetStaticSiteAPIKeyCreateRequest(ctx context.Context, resourceGroupName string, name string, resetPropertiesEnvelope StaticSiteResetPropertiesARMResource, _ *StaticSitesClientResetStaticSiteAPIKeyOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/resetapikey"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4894,8 +4899,8 @@ func (client *StaticSitesClient) resetStaticSiteAPIKeyCreateRequest(ctx context.
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resetPropertiesEnvelope); err != nil {
 		return nil, err
@@ -4907,8 +4912,6 @@ func (client *StaticSitesClient) resetStaticSiteAPIKeyCreateRequest(ctx context.
 //
 // Unlink a backend from a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - linkedBackendName - Name of the linked backend that should be retrieved
@@ -4929,8 +4932,7 @@ func (client *StaticSitesClient) UnlinkBackend(ctx context.Context, resourceGrou
 		return StaticSitesClientUnlinkBackendResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUnlinkBackendResponse{}, err
+		return StaticSitesClientUnlinkBackendResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientUnlinkBackendResponse{}, nil
 }
@@ -4939,7 +4941,7 @@ func (client *StaticSitesClient) UnlinkBackend(ctx context.Context, resourceGrou
 func (client *StaticSitesClient) unlinkBackendCreateRequest(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, options *StaticSitesClientUnlinkBackendOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -4959,11 +4961,11 @@ func (client *StaticSitesClient) unlinkBackendCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
+	reqQP.Set("api-version", version20250501)
 	if options != nil && options.IsCleaningAuthConfig != nil {
 		reqQP.Set("isCleaningAuthConfig", strconv.FormatBool(*options.IsCleaningAuthConfig))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -4971,8 +4973,6 @@ func (client *StaticSitesClient) unlinkBackendCreateRequest(ctx context.Context,
 //
 // Unlink a backend from a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier
@@ -4994,8 +4994,7 @@ func (client *StaticSitesClient) UnlinkBackendFromBuild(ctx context.Context, res
 		return StaticSitesClientUnlinkBackendFromBuildResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUnlinkBackendFromBuildResponse{}, err
+		return StaticSitesClientUnlinkBackendFromBuildResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return StaticSitesClientUnlinkBackendFromBuildResponse{}, nil
 }
@@ -5004,7 +5003,7 @@ func (client *StaticSitesClient) UnlinkBackendFromBuild(ctx context.Context, res
 func (client *StaticSitesClient) unlinkBackendFromBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, options *StaticSitesClientUnlinkBackendFromBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends/{linkedBackendName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5028,11 +5027,11 @@ func (client *StaticSitesClient) unlinkBackendFromBuildCreateRequest(ctx context
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
+	reqQP.Set("api-version", version20250501)
 	if options != nil && options.IsCleaningAuthConfig != nil {
 		reqQP.Set("isCleaningAuthConfig", strconv.FormatBool(*options.IsCleaningAuthConfig))
 	}
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -5040,8 +5039,6 @@ func (client *StaticSitesClient) unlinkBackendFromBuildCreateRequest(ctx context
 //
 // Description for Create or update a database connection for a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier.
@@ -5063,19 +5060,14 @@ func (client *StaticSitesClient) UpdateBuildDatabaseConnection(ctx context.Conte
 	if err != nil {
 		return StaticSitesClientUpdateBuildDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUpdateBuildDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.updateBuildDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.updateBuildDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateBuildDatabaseConnectionCreateRequest creates the UpdateBuildDatabaseConnection request.
 func (client *StaticSitesClient) updateBuildDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, databaseConnectionName string, databaseConnectionRequestEnvelope DatabaseConnectionPatchRequest, _ *StaticSitesClientUpdateBuildDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5099,8 +5091,8 @@ func (client *StaticSitesClient) updateBuildDatabaseConnectionCreateRequest(ctx 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, databaseConnectionRequestEnvelope); err != nil {
@@ -5110,8 +5102,11 @@ func (client *StaticSitesClient) updateBuildDatabaseConnectionCreateRequest(ctx 
 }
 
 // updateBuildDatabaseConnectionHandleResponse handles the UpdateBuildDatabaseConnection response.
-func (client *StaticSitesClient) updateBuildDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientUpdateBuildDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) updateBuildDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientUpdateBuildDatabaseConnectionResponse, error) {
 	result := StaticSitesClientUpdateBuildDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientUpdateBuildDatabaseConnectionResponse{}, err
 	}
@@ -5122,8 +5117,6 @@ func (client *StaticSitesClient) updateBuildDatabaseConnectionHandleResponse(res
 //
 // Description for Create or update a database connection for a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - databaseConnectionName - Name of the database connection.
@@ -5144,19 +5137,14 @@ func (client *StaticSitesClient) UpdateDatabaseConnection(ctx context.Context, r
 	if err != nil {
 		return StaticSitesClientUpdateDatabaseConnectionResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUpdateDatabaseConnectionResponse{}, err
-	}
-	resp, err := client.updateDatabaseConnectionHandleResponse(httpResp)
-	return resp, err
+	return client.updateDatabaseConnectionHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateDatabaseConnectionCreateRequest creates the UpdateDatabaseConnection request.
 func (client *StaticSitesClient) updateDatabaseConnectionCreateRequest(ctx context.Context, resourceGroupName string, name string, databaseConnectionName string, databaseConnectionRequestEnvelope DatabaseConnectionPatchRequest, _ *StaticSitesClientUpdateDatabaseConnectionOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/databaseConnections/{databaseConnectionName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5176,8 +5164,8 @@ func (client *StaticSitesClient) updateDatabaseConnectionCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, databaseConnectionRequestEnvelope); err != nil {
@@ -5187,8 +5175,11 @@ func (client *StaticSitesClient) updateDatabaseConnectionCreateRequest(ctx conte
 }
 
 // updateDatabaseConnectionHandleResponse handles the UpdateDatabaseConnection response.
-func (client *StaticSitesClient) updateDatabaseConnectionHandleResponse(resp *http.Response) (StaticSitesClientUpdateDatabaseConnectionResponse, error) {
+func (client *StaticSitesClient) updateDatabaseConnectionHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientUpdateDatabaseConnectionResponse, error) {
 	result := StaticSitesClientUpdateDatabaseConnectionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DatabaseConnection); err != nil {
 		return StaticSitesClientUpdateDatabaseConnectionResponse{}, err
 	}
@@ -5199,8 +5190,6 @@ func (client *StaticSitesClient) updateDatabaseConnectionHandleResponse(resp *ht
 //
 // Description for Creates a new static site in an existing resource group, or updates an existing static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - staticSiteEnvelope - A JSON representation of the staticsite properties. See example.
@@ -5220,19 +5209,14 @@ func (client *StaticSitesClient) UpdateStaticSite(ctx context.Context, resourceG
 	if err != nil {
 		return StaticSitesClientUpdateStaticSiteResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUpdateStaticSiteResponse{}, err
-	}
-	resp, err := client.updateStaticSiteHandleResponse(httpResp)
-	return resp, err
+	return client.updateStaticSiteHandleResponse(httpResp, http.StatusOK, http.StatusAccepted)
 }
 
 // updateStaticSiteCreateRequest creates the UpdateStaticSite request.
 func (client *StaticSitesClient) updateStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, staticSiteEnvelope StaticSitePatchResource, _ *StaticSitesClientUpdateStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5248,8 +5232,8 @@ func (client *StaticSitesClient) updateStaticSiteCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteEnvelope); err != nil {
@@ -5259,8 +5243,11 @@ func (client *StaticSitesClient) updateStaticSiteCreateRequest(ctx context.Conte
 }
 
 // updateStaticSiteHandleResponse handles the UpdateStaticSite response.
-func (client *StaticSitesClient) updateStaticSiteHandleResponse(resp *http.Response) (StaticSitesClientUpdateStaticSiteResponse, error) {
+func (client *StaticSitesClient) updateStaticSiteHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientUpdateStaticSiteResponse, error) {
 	result := StaticSitesClientUpdateStaticSiteResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteARMResource); err != nil {
 		return StaticSitesClientUpdateStaticSiteResponse{}, err
 	}
@@ -5271,8 +5258,6 @@ func (client *StaticSitesClient) updateStaticSiteHandleResponse(resp *http.Respo
 //
 // Description for Updates a user entry with the listed roles
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - staticSiteUserEnvelope - A JSON representation of the StaticSiteUser properties. See example.
 //   - options - StaticSitesClientUpdateStaticSiteUserOptions contains the optional parameters for the StaticSitesClient.UpdateStaticSiteUser
@@ -5291,19 +5276,14 @@ func (client *StaticSitesClient) UpdateStaticSiteUser(ctx context.Context, resou
 	if err != nil {
 		return StaticSitesClientUpdateStaticSiteUserResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return StaticSitesClientUpdateStaticSiteUserResponse{}, err
-	}
-	resp, err := client.updateStaticSiteUserHandleResponse(httpResp)
-	return resp, err
+	return client.updateStaticSiteUserHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateStaticSiteUserCreateRequest creates the UpdateStaticSiteUser request.
 func (client *StaticSitesClient) updateStaticSiteUserCreateRequest(ctx context.Context, resourceGroupName string, name string, authprovider string, userid string, staticSiteUserEnvelope StaticSiteUserARMResource, _ *StaticSitesClientUpdateStaticSiteUserOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/microsoft.Web/staticSites/{name}/authproviders/{authprovider}/users/{userid}"
+	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/authproviders/{authprovider}/users/{userid}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5327,8 +5307,8 @@ func (client *StaticSitesClient) updateStaticSiteUserCreateRequest(ctx context.C
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteUserEnvelope); err != nil {
@@ -5338,8 +5318,11 @@ func (client *StaticSitesClient) updateStaticSiteUserCreateRequest(ctx context.C
 }
 
 // updateStaticSiteUserHandleResponse handles the UpdateStaticSiteUser response.
-func (client *StaticSitesClient) updateStaticSiteUserHandleResponse(resp *http.Response) (StaticSitesClientUpdateStaticSiteUserResponse, error) {
+func (client *StaticSitesClient) updateStaticSiteUserHandleResponse(resp *http.Response, successCodes ...int) (StaticSitesClientUpdateStaticSiteUserResponse, error) {
 	result := StaticSitesClientUpdateStaticSiteUserResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.StaticSiteUserARMResource); err != nil {
 		return StaticSitesClientUpdateStaticSiteUserResponse{}, err
 	}
@@ -5350,8 +5333,6 @@ func (client *StaticSitesClient) updateStaticSiteUserHandleResponse(resp *http.R
 //
 // Validates that a backend can be linked to a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - linkedBackendName - Name of the linked backend that should be retrieved
@@ -5379,8 +5360,6 @@ func (client *StaticSitesClient) BeginValidateBackend(ctx context.Context, resou
 //
 // Validates that a backend can be linked to a static site
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) validateBackend(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, options *StaticSitesClientBeginValidateBackendOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginValidateBackend"
@@ -5396,8 +5375,7 @@ func (client *StaticSitesClient) validateBackend(ctx context.Context, resourceGr
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -5406,7 +5384,7 @@ func (client *StaticSitesClient) validateBackend(ctx context.Context, resourceGr
 func (client *StaticSitesClient) validateBackendCreateRequest(ctx context.Context, resourceGroupName string, name string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, _ *StaticSitesClientBeginValidateBackendOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/linkedBackends/{linkedBackendName}/validate"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5426,8 +5404,8 @@ func (client *StaticSitesClient) validateBackendCreateRequest(ctx context.Contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteLinkedBackendEnvelope); err != nil {
 		return nil, err
@@ -5439,8 +5417,6 @@ func (client *StaticSitesClient) validateBackendCreateRequest(ctx context.Contex
 //
 // Validates that a backend can be linked to a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site
 //   - environmentName - The stage site identifier
@@ -5469,8 +5445,6 @@ func (client *StaticSitesClient) BeginValidateBackendForBuild(ctx context.Contex
 //
 // Validates that a backend can be linked to a static site build
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) validateBackendForBuild(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, options *StaticSitesClientBeginValidateBackendForBuildOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginValidateBackendForBuild"
@@ -5486,8 +5460,7 @@ func (client *StaticSitesClient) validateBackendForBuild(ctx context.Context, re
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -5496,7 +5469,7 @@ func (client *StaticSitesClient) validateBackendForBuild(ctx context.Context, re
 func (client *StaticSitesClient) validateBackendForBuildCreateRequest(ctx context.Context, resourceGroupName string, name string, environmentName string, linkedBackendName string, staticSiteLinkedBackendEnvelope StaticSiteLinkedBackendARMResource, _ *StaticSitesClientBeginValidateBackendForBuildOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/builds/{environmentName}/linkedBackends/{linkedBackendName}/validate"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5520,8 +5493,8 @@ func (client *StaticSitesClient) validateBackendForBuildCreateRequest(ctx contex
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteLinkedBackendEnvelope); err != nil {
 		return nil, err
@@ -5533,8 +5506,6 @@ func (client *StaticSitesClient) validateBackendForBuildCreateRequest(ctx contex
 //
 // Description for Validates a particular custom domain can be added to a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - name - Name of the static site.
 //   - domainName - The custom domain name.
@@ -5563,8 +5534,6 @@ func (client *StaticSitesClient) BeginValidateCustomDomainCanBeAddedToStaticSite
 //
 // Description for Validates a particular custom domain can be added to a static site.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01
 func (client *StaticSitesClient) validateCustomDomainCanBeAddedToStaticSite(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, options *StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "StaticSitesClient.BeginValidateCustomDomainCanBeAddedToStaticSite"
@@ -5580,8 +5549,7 @@ func (client *StaticSitesClient) validateCustomDomainCanBeAddedToStaticSite(ctx 
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -5590,7 +5558,7 @@ func (client *StaticSitesClient) validateCustomDomainCanBeAddedToStaticSite(ctx 
 func (client *StaticSitesClient) validateCustomDomainCanBeAddedToStaticSiteCreateRequest(ctx context.Context, resourceGroupName string, name string, domainName string, staticSiteCustomDomainRequestPropertiesEnvelope StaticSiteCustomDomainRequestPropertiesARMResource, _ *StaticSitesClientBeginValidateCustomDomainCanBeAddedToStaticSiteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/staticSites/{name}/customDomains/{domainName}/validate"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -5610,8 +5578,8 @@ func (client *StaticSitesClient) validateCustomDomainCanBeAddedToStaticSiteCreat
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250501)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, staticSiteCustomDomainRequestPropertiesEnvelope); err != nil {
 		return nil, err

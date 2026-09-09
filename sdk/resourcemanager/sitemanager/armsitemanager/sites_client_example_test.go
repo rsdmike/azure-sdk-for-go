@@ -45,13 +45,13 @@ func ExampleSitesClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsitemanager.SitesClientCreateOrUpdateResponse{
-	// 	Site: &armsitemanager.Site{
+	// 	Site: armsitemanager.Site{
 	// 		Properties: &armsitemanager.SiteProperties{
 	// 			DisplayName: to.Ptr("string"),
 	// 			Labels: map[string]*string{
@@ -74,10 +74,10 @@ func ExampleSitesClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armsitemanager.SystemData{
 	// 			CreatedBy: to.Ptr("julxbiyjzi"),
 	// 			CreatedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bceneuzzvzqmiocbrfef"),
 	// 			LastModifiedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -124,7 +124,7 @@ func ExampleSitesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsitemanager.SitesClientGetResponse{
-	// 	Site: &armsitemanager.Site{
+	// 	Site: armsitemanager.Site{
 	// 		Properties: &armsitemanager.SiteProperties{
 	// 			DisplayName: to.Ptr("string"),
 	// 			Labels: map[string]*string{
@@ -147,10 +147,10 @@ func ExampleSitesClient_Get() {
 	// 		SystemData: &armsitemanager.SystemData{
 	// 			CreatedBy: to.Ptr("julxbiyjzi"),
 	// 			CreatedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bceneuzzvzqmiocbrfef"),
 	// 			LastModifiedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -204,10 +204,10 @@ func ExampleSitesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armsitemanager.SystemData{
 		// 					CreatedBy: to.Ptr("julxbiyjzi"),
 		// 					CreatedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("bceneuzzvzqmiocbrfef"),
 		// 					LastModifiedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -252,7 +252,7 @@ func ExampleSitesClient_Update() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armsitemanager.SitesClientUpdateResponse{
-	// 	Site: &armsitemanager.Site{
+	// 	Site: armsitemanager.Site{
 	// 		Properties: &armsitemanager.SiteProperties{
 	// 			DisplayName: to.Ptr("string"),
 	// 			Labels: map[string]*string{
@@ -275,10 +275,10 @@ func ExampleSitesClient_Update() {
 	// 		SystemData: &armsitemanager.SystemData{
 	// 			CreatedBy: to.Ptr("julxbiyjzi"),
 	// 			CreatedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("bceneuzzvzqmiocbrfef"),
 	// 			LastModifiedByType: to.Ptr(armsitemanager.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-30T07:53:03.972Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 30, 7, 53, 3, 972000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

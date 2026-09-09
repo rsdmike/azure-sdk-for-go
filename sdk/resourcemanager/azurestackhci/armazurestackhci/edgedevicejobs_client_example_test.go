@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Generated from example definition: 2026-04-01-preview/EdgeDeviceJobs_CreateOrUpdate_CollectLog.json
+// Generated from example definition: 2026-04-30/EdgeDeviceJobs_CreateOrUpdate_CollectLog.json
 func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdateCollectLog() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -27,9 +27,9 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	poller, err := clientFactory.NewEdgeDeviceJobsClient().BeginCreateOrUpdate(ctx, "subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/ArcInstance-rg/providers/Microsoft.HybridCompute/machines/Node-1", "default", "collectLog", &armazurestackhci.HciEdgeDeviceJob{
 		Kind: to.Ptr(armazurestackhci.EdgeDeviceKindHCI),
 		Properties: &armazurestackhci.HciCollectLogJobProperties{
-			FromDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t }()),
+			FromDate: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 			JobType:  to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeCollectLog),
-			ToDate:   to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t }()),
+			ToDate:   to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 		},
 	}, nil)
 	if err != nil {
@@ -37,27 +37,27 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.EdgeDeviceJobsClientCreateOrUpdateResponse{
-	// 	HciEdgeDeviceJob: &armazurestackhci.HciEdgeDeviceJob{
+	// 	EdgeDeviceJobClassification: &armazurestackhci.HciEdgeDeviceJob{
 	// 		Name: to.Ptr("collectLog"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/edgeDevices/jobs"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/ArcInstance-rg/providers/Microsoft.HybridCompute/machines/Node-1/providers/Microsoft.AzureStackHCI/edgeDevices/default/jobs/collectLog"),
 	// 		Kind: to.Ptr(armazurestackhci.EdgeDeviceKindHCI),
 	// 		Properties: &armazurestackhci.HciCollectLogJobProperties{
-	// 			FromDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t}()),
+	// 			FromDate: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 	// 			JobType: to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeCollectLog),
-	// 			ToDate: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t}()),
+	// 			ToDate: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("zsnvvvbj"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("qxlrx"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -65,7 +65,7 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/EdgeDeviceJobs_CreateOrUpdate_RemoteSupport.json
+// Generated from example definition: 2026-04-30/EdgeDeviceJobs_CreateOrUpdate_RemoteSupport.json
 func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdateRemoteSupport() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -81,7 +81,7 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 		Properties: &armazurestackhci.HciRemoteSupportJobProperties{
 			Type:                to.Ptr(armazurestackhci.RemoteSupportTypeEnable),
 			AccessLevel:         to.Ptr(armazurestackhci.RemoteSupportAccessLevelDiagnostics),
-			ExpirationTimestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t }()),
+			ExpirationTimestamp: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 			JobType:             to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeRemoteSupport),
 		},
 	}, nil)
@@ -90,13 +90,13 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.EdgeDeviceJobsClientCreateOrUpdateResponse{
-	// 	HciEdgeDeviceJob: &armazurestackhci.HciEdgeDeviceJob{
+	// 	EdgeDeviceJobClassification: &armazurestackhci.HciEdgeDeviceJob{
 	// 		Name: to.Ptr("collectLog"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/edgeDevices/jobs"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/ArcInstance-rg/providers/Microsoft.HybridCompute/machines/Node-1/providers/Microsoft.AzureStackHCI/edgeDevices/default/jobs/remoteSupport"),
@@ -104,14 +104,14 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	// 		Properties: &armazurestackhci.HciRemoteSupportJobProperties{
 	// 			Type: to.Ptr(armazurestackhci.RemoteSupportTypeEnable),
 	// 			AccessLevel: to.Ptr(armazurestackhci.RemoteSupportAccessLevelDiagnostics),
-	// 			ExpirationTimestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t}()),
+	// 			ExpirationTimestamp: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 	// 			JobType: to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeRemoteSupport),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("zsnvvvbj"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("qxlrx"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -119,7 +119,7 @@ func ExampleEdgeDeviceJobsClient_BeginCreateOrUpdate_edgeDeviceJobsCreateOrUpdat
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/EdgeDeviceJobs_Delete.json
+// Generated from example definition: 2026-04-30/EdgeDeviceJobs_Delete.json
 func ExampleEdgeDeviceJobsClient_BeginDelete() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -136,11 +136,11 @@ func ExampleEdgeDeviceJobsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
-// Generated from example definition: 2026-04-01-preview/EdgeDeviceJobs_Get_RemoteSupport.json
+// Generated from example definition: 2026-04-30/EdgeDeviceJobs_Get_RemoteSupport.json
 func ExampleEdgeDeviceJobsClient_Get() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -159,7 +159,7 @@ func ExampleEdgeDeviceJobsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armazurestackhci.EdgeDeviceJobsClientGetResponse{
-	// 	HciEdgeDeviceJob: &armazurestackhci.HciEdgeDeviceJob{
+	// 	EdgeDeviceJobClassification: &armazurestackhci.HciEdgeDeviceJob{
 	// 		Name: to.Ptr("collectLog"),
 	// 		Type: to.Ptr("Microsoft.AzureStackHCI/edgeDevices/jobs"),
 	// 		ID: to.Ptr("/subscriptions/fd3c3665-1729-4b7b-9a38-238e83b0f98b/resourceGroups/ArcInstance-rg/providers/Microsoft.HybridCompute/machines/Node-1/providers/Microsoft.AzureStackHCI/edgeDevices/default/jobs/RemoteSupport"),
@@ -167,14 +167,14 @@ func ExampleEdgeDeviceJobsClient_Get() {
 	// 		Properties: &armazurestackhci.HciRemoteSupportJobProperties{
 	// 			Type: to.Ptr(armazurestackhci.RemoteSupportTypeEnable),
 	// 			AccessLevel: to.Ptr(armazurestackhci.RemoteSupportAccessLevelDiagnostics),
-	// 			ExpirationTimestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t}()),
+	// 			ExpirationTimestamp: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 	// 			JobType: to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeRemoteSupport),
 	// 		},
 	// 		SystemData: &armazurestackhci.SystemData{
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			CreatedBy: to.Ptr("zsnvvvbj"),
 	// 			CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("qxlrx"),
 	// 			LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 	// 		},
@@ -182,7 +182,7 @@ func ExampleEdgeDeviceJobsClient_Get() {
 	// }
 }
 
-// Generated from example definition: 2026-04-01-preview/EdgeDeviceJobs_ListByEdgeDevice.json
+// Generated from example definition: 2026-04-30/EdgeDeviceJobs_ListByEdgeDevice.json
 func ExampleEdgeDeviceJobsClient_NewListByEdgeDevicePager() {
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
@@ -216,14 +216,14 @@ func ExampleEdgeDeviceJobsClient_NewListByEdgeDevicePager() {
 		// 				Properties: &armazurestackhci.HciRemoteSupportJobProperties{
 		// 					Type: to.Ptr(armazurestackhci.RemoteSupportTypeEnable),
 		// 					AccessLevel: to.Ptr(armazurestackhci.RemoteSupportAccessLevelDiagnostics),
-		// 					ExpirationTimestamp: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-01-29T10:43:27.9471574Z"); return t}()),
+		// 					ExpirationTimestamp: to.Ptr(time.Date(2024, time.January, 29, 10, 43, 27, 947157400, time.UTC)),
 		// 					JobType: to.Ptr(armazurestackhci.HciEdgeDeviceJobTypeRemoteSupport),
 		// 				},
 		// 				SystemData: &armazurestackhci.SystemData{
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 		// 					CreatedBy: to.Ptr("zsnvvvbj"),
 		// 					CreatedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-07-01T17:02:21.168Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.July, 1, 17, 2, 21, 168000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("qxlrx"),
 		// 					LastModifiedByType: to.Ptr(armazurestackhci.CreatedByTypeUser),
 		// 				},

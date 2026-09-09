@@ -43,13 +43,13 @@ func ExampleSchedulersClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientCreateOrUpdateResponse{
-	// 	Scheduler: &armdurabletask.Scheduler{
+	// 	Scheduler: armdurabletask.Scheduler{
 	// 		Location: to.Ptr("northcentralus"),
 	// 		Properties: &armdurabletask.SchedulerProperties{
 	// 			ProvisioningState: to.Ptr(armdurabletask.ProvisioningStateSucceeded),
@@ -73,10 +73,10 @@ func ExampleSchedulersClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -108,13 +108,13 @@ func ExampleSchedulersClient_BeginCreateOrUpdatePrivateEndpointConnection() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientCreateOrUpdatePrivateEndpointConnectionResponse{
-	// 	PrivateEndpointConnection: &armdurabletask.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armdurabletask.PrivateEndpointConnection{
 	// 		Properties: &armdurabletask.PrivateEndpointConnectionProperties{
 	// 			PrivateEndpoint: &armdurabletask.PrivateEndpoint{
 	// 				ID: to.Ptr("vjjxatyilmgjaervqztrmlpfodvbo"),
@@ -135,10 +135,10 @@ func ExampleSchedulersClient_BeginCreateOrUpdatePrivateEndpointConnection() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -161,7 +161,7 @@ func ExampleSchedulersClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -182,7 +182,7 @@ func ExampleSchedulersClient_BeginDeletePrivateEndpointConnection() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -205,7 +205,7 @@ func ExampleSchedulersClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientGetResponse{
-	// 	Scheduler: &armdurabletask.Scheduler{
+	// 	Scheduler: armdurabletask.Scheduler{
 	// 		Location: to.Ptr("northcentralus"),
 	// 		Properties: &armdurabletask.SchedulerProperties{
 	// 			ProvisioningState: to.Ptr(armdurabletask.ProvisioningStateSucceeded),
@@ -232,10 +232,10 @@ func ExampleSchedulersClient_Get() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -260,7 +260,7 @@ func ExampleSchedulersClient_GetPrivateEndpointConnection() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientGetPrivateEndpointConnectionResponse{
-	// 	PrivateEndpointConnection: &armdurabletask.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armdurabletask.PrivateEndpointConnection{
 	// 		Properties: &armdurabletask.PrivateEndpointConnectionProperties{
 	// 			PrivateEndpoint: &armdurabletask.PrivateEndpoint{
 	// 				ID: to.Ptr("vjjxatyilmgjaervqztrmlpfodvbo"),
@@ -281,10 +281,10 @@ func ExampleSchedulersClient_GetPrivateEndpointConnection() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -309,7 +309,7 @@ func ExampleSchedulersClient_GetPrivateLink() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientGetPrivateLinkResponse{
-	// 	SchedulerPrivateLinkResource: &armdurabletask.SchedulerPrivateLinkResource{
+	// 	SchedulerPrivateLinkResource: armdurabletask.SchedulerPrivateLinkResource{
 	// 		Properties: &armdurabletask.PrivateLinkResourceProperties{
 	// 			GroupID: to.Ptr("mexetpneryldlrtmuxzxhwezfjkcvr"),
 	// 			RequiredMembers: []*string{
@@ -325,10 +325,10 @@ func ExampleSchedulersClient_GetPrivateLink() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -386,10 +386,10 @@ func ExampleSchedulersClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdurabletask.SystemData{
 		// 					CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 		// 					CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xfvdcegtj"),
 		// 					LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -451,10 +451,10 @@ func ExampleSchedulersClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armdurabletask.SystemData{
 		// 					CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 		// 					CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xfvdcegtj"),
 		// 					LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -510,10 +510,10 @@ func ExampleSchedulersClient_NewListPrivateEndpointConnectionsPager() {
 		// 				SystemData: &armdurabletask.SystemData{
 		// 					CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 		// 					CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xfvdcegtj"),
 		// 					LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -564,10 +564,10 @@ func ExampleSchedulersClient_NewListPrivateLinksPager() {
 		// 				SystemData: &armdurabletask.SystemData{
 		// 					CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 		// 					CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("xfvdcegtj"),
 		// 					LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -607,13 +607,13 @@ func ExampleSchedulersClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientUpdateResponse{
-	// 	Scheduler: &armdurabletask.Scheduler{
+	// 	Scheduler: armdurabletask.Scheduler{
 	// 		Location: to.Ptr("northcentralus"),
 	// 		Properties: &armdurabletask.SchedulerProperties{
 	// 			ProvisioningState: to.Ptr(armdurabletask.ProvisioningStateSucceeded),
@@ -638,10 +638,10 @@ func ExampleSchedulersClient_BeginUpdate() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -670,13 +670,13 @@ func ExampleSchedulersClient_BeginUpdatePrivateEndpointConnection() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdurabletask.SchedulersClientUpdatePrivateEndpointConnectionResponse{
-	// 	PrivateEndpointConnection: &armdurabletask.PrivateEndpointConnection{
+	// 	PrivateEndpointConnection: armdurabletask.PrivateEndpointConnection{
 	// 		Properties: &armdurabletask.PrivateEndpointConnectionProperties{
 	// 			PrivateEndpoint: &armdurabletask.PrivateEndpoint{
 	// 				ID: to.Ptr("vjjxatyilmgjaervqztrmlpfodvbo"),
@@ -697,10 +697,10 @@ func ExampleSchedulersClient_BeginUpdatePrivateEndpointConnection() {
 	// 		SystemData: &armdurabletask.SystemData{
 	// 			CreatedBy: to.Ptr("tenmbevaunjzikxowqexrsx"),
 	// 			CreatedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.365Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 365000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("xfvdcegtj"),
 	// 			LastModifiedByType: to.Ptr(armdurabletask.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-04-17T15:34:17.366Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.April, 17, 15, 34, 17, 366000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

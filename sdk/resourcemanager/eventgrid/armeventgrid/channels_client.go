@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // ChannelsClient contains the methods for the Channels group.
 // Don't use this type directly, use NewChannelsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type ChannelsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type ChannelsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewChannelsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*ChannelsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewChannelsClient(subscriptionID string, credential azcore.TokenCredential,
 //
 // Synchronously creates or updates a new channel with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - channelName - Name of the channel.
@@ -66,19 +68,14 @@ func (client *ChannelsClient) CreateOrUpdate(ctx context.Context, resourceGroupN
 	if err != nil {
 		return ChannelsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return ChannelsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
 func (client *ChannelsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, channelInfo Channel, _ *ChannelsClientCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels/{channelName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -98,8 +95,8 @@ func (client *ChannelsClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, channelInfo); err != nil {
@@ -109,8 +106,11 @@ func (client *ChannelsClient) createOrUpdateCreateRequest(ctx context.Context, r
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *ChannelsClient) createOrUpdateHandleResponse(resp *http.Response) (ChannelsClientCreateOrUpdateResponse, error) {
+func (client *ChannelsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (ChannelsClientCreateOrUpdateResponse, error) {
 	result := ChannelsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Channel); err != nil {
 		return ChannelsClientCreateOrUpdateResponse{}, err
 	}
@@ -121,8 +121,6 @@ func (client *ChannelsClient) createOrUpdateHandleResponse(resp *http.Response) 
 //
 // Delete an existing channel.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - channelName - Name of the channel.
@@ -148,8 +146,6 @@ func (client *ChannelsClient) BeginDelete(ctx context.Context, resourceGroupName
 //
 // Delete an existing channel.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *ChannelsClient) deleteOperation(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, options *ChannelsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "ChannelsClient.BeginDelete"
@@ -165,8 +161,7 @@ func (client *ChannelsClient) deleteOperation(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -175,7 +170,7 @@ func (client *ChannelsClient) deleteOperation(ctx context.Context, resourceGroup
 func (client *ChannelsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, _ *ChannelsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels/{channelName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -195,8 +190,8 @@ func (client *ChannelsClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -204,8 +199,6 @@ func (client *ChannelsClient) deleteCreateRequest(ctx context.Context, resourceG
 //
 // Get properties of a channel.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - channelName - Name of the channel.
@@ -224,19 +217,14 @@ func (client *ChannelsClient) Get(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return ChannelsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChannelsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *ChannelsClient) getCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, _ *ChannelsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels/{channelName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -256,15 +244,18 @@ func (client *ChannelsClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *ChannelsClient) getHandleResponse(resp *http.Response) (ChannelsClientGetResponse, error) {
+func (client *ChannelsClient) getHandleResponse(resp *http.Response, successCodes ...int) (ChannelsClientGetResponse, error) {
 	result := ChannelsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Channel); err != nil {
 		return ChannelsClientGetResponse{}, err
 	}
@@ -275,8 +266,6 @@ func (client *ChannelsClient) getHandleResponse(resp *http.Response) (ChannelsCl
 //
 // Get the full endpoint URL of a partner destination channel.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - channelName - Name of the channel.
@@ -295,19 +284,14 @@ func (client *ChannelsClient) GetFullURL(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return ChannelsClientGetFullURLResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChannelsClientGetFullURLResponse{}, err
-	}
-	resp, err := client.getFullURLHandleResponse(httpResp)
-	return resp, err
+	return client.getFullURLHandleResponse(httpResp, http.StatusOK)
 }
 
 // getFullURLCreateRequest creates the GetFullURL request.
 func (client *ChannelsClient) getFullURLCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, _ *ChannelsClientGetFullURLOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels/{channelName}/getFullUrl"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -327,15 +311,18 @@ func (client *ChannelsClient) getFullURLCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getFullURLHandleResponse handles the GetFullURL response.
-func (client *ChannelsClient) getFullURLHandleResponse(resp *http.Response) (ChannelsClientGetFullURLResponse, error) {
+func (client *ChannelsClient) getFullURLHandleResponse(resp *http.Response, successCodes ...int) (ChannelsClientGetFullURLResponse, error) {
 	result := ChannelsClientGetFullURLResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.EventSubscriptionFullURL); err != nil {
 		return ChannelsClientGetFullURLResponse{}, err
 	}
@@ -345,8 +332,6 @@ func (client *ChannelsClient) getFullURLHandleResponse(resp *http.Response) (Cha
 // NewListByPartnerNamespacePager - List channels.
 //
 // List all the channels in a partner namespace.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - options - ChannelsClientListByPartnerNamespaceOptions contains the optional parameters for the ChannelsClient.NewListByPartnerNamespacePager
@@ -362,53 +347,67 @@ func (client *ChannelsClient) NewListByPartnerNamespacePager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByPartnerNamespaceCreateRequest(ctx, resourceGroupName, partnerNamespaceName, options)
-			}, nil)
+			req, err := client.listByPartnerNamespaceCreateRequest(ctx, resourceGroupName, partnerNamespaceName, nextLink, options)
 			if err != nil {
 				return ChannelsClientListByPartnerNamespaceResponse{}, err
 			}
-			return client.listByPartnerNamespaceHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ChannelsClientListByPartnerNamespaceResponse{}, err
+			}
+			return client.listByPartnerNamespaceHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByPartnerNamespaceCreateRequest creates the ListByPartnerNamespace request.
-func (client *ChannelsClient) listByPartnerNamespaceCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, options *ChannelsClientListByPartnerNamespaceOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *ChannelsClient) listByPartnerNamespaceCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, nextLink string, options *ChannelsClientListByPartnerNamespaceOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if partnerNamespaceName == "" {
+			return nil, errors.New("parameter partnerNamespaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{partnerNamespaceName}", url.PathEscape(partnerNamespaceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if partnerNamespaceName == "" {
-		return nil, errors.New("parameter partnerNamespaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{partnerNamespaceName}", url.PathEscape(partnerNamespaceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByPartnerNamespaceHandleResponse handles the ListByPartnerNamespace response.
-func (client *ChannelsClient) listByPartnerNamespaceHandleResponse(resp *http.Response) (ChannelsClientListByPartnerNamespaceResponse, error) {
+func (client *ChannelsClient) listByPartnerNamespaceHandleResponse(resp *http.Response, successCodes ...int) (ChannelsClientListByPartnerNamespaceResponse, error) {
 	result := ChannelsClientListByPartnerNamespaceResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.ChannelsListResult); err != nil {
 		return ChannelsClientListByPartnerNamespaceResponse{}, err
 	}
@@ -419,8 +418,6 @@ func (client *ChannelsClient) listByPartnerNamespaceHandleResponse(resp *http.Re
 //
 // Synchronously updates a channel with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - partnerNamespaceName - Name of the partner namespace.
 //   - channelName - Name of the channel.
@@ -441,8 +438,7 @@ func (client *ChannelsClient) Update(ctx context.Context, resourceGroupName stri
 		return ChannelsClientUpdateResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return ChannelsClientUpdateResponse{}, err
+		return ChannelsClientUpdateResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return ChannelsClientUpdateResponse{}, nil
 }
@@ -451,7 +447,7 @@ func (client *ChannelsClient) Update(ctx context.Context, resourceGroupName stri
 func (client *ChannelsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, partnerNamespaceName string, channelName string, channelUpdateParameters ChannelUpdateParameters, _ *ChannelsClientUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/partnerNamespaces/{partnerNamespaceName}/channels/{channelName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -471,8 +467,8 @@ func (client *ChannelsClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, channelUpdateParameters); err != nil {
 		return nil, err

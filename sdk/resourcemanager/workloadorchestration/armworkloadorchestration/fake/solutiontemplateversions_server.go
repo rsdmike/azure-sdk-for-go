@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // SolutionTemplateVersionsServer is a fake server for instances of the armworkloadorchestration.SolutionTemplateVersionsClient type.
@@ -70,9 +71,7 @@ func (s *SolutionTemplateVersionsServerTransport) Do(req *http.Request) (*http.R
 }
 
 func (s *SolutionTemplateVersionsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -94,10 +93,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchToMethodFake(req *http
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -114,7 +110,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchBeginBulkDeploySolutio
 	}
 	beginBulkDeploySolution := s.beginBulkDeploySolution.get(req)
 	if beginBulkDeploySolution == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<solutionTemplateVersionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/bulkDeploySolution`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<solutionTemplateVersionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/bulkDeploySolution`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -149,7 +145,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchBeginBulkDeploySolutio
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		s.beginBulkDeploySolution.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -166,7 +162,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchBeginBulkPublishSoluti
 	}
 	beginBulkPublishSolution := s.beginBulkPublishSolution.get(req)
 	if beginBulkPublishSolution == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<solutionTemplateVersionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/bulkPublishSolution`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<solutionTemplateVersionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/bulkPublishSolution`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 5 {
@@ -201,7 +197,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchBeginBulkPublishSoluti
 		return nil, err
 	}
 
-	if !contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusAccepted, http.StatusNoContent}, resp.StatusCode) {
 		s.beginBulkPublishSolution.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusAccepted, http.StatusNoContent", resp.StatusCode)}
 	}
@@ -216,7 +212,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchGet(req *http.Request)
 	if s.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions/(?P<solutionTemplateVersionName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions/(?P<solutionTemplateVersionName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -239,7 +235,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchGet(req *http.Request)
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).SolutionTemplateVersion, req)
@@ -255,7 +251,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchNewListBySolutionTempl
 	}
 	newListBySolutionTemplatePager := s.newListBySolutionTemplatePager.get(req)
 	if newListBySolutionTemplatePager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/versions`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.Edge/solutionTemplates/(?P<solutionTemplateName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/versions`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -280,7 +276,7 @@ func (s *SolutionTemplateVersionsServerTransport) dispatchNewListBySolutionTempl
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		s.newListBySolutionTemplatePager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}

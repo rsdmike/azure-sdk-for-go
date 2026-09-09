@@ -6,11 +6,10 @@ package armrecoveryservicessiterecovery_test
 
 import (
 	"context"
-	"log"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/recoveryservices/armrecoveryservicessiterecovery/v3"
+	"log"
 )
 
 // Generated from example definition: 2025-08-01/ReplicationProtectedItems_AddDisks.json
@@ -43,13 +42,13 @@ func ExampleReplicationProtectedItemsClient_BeginAddDisks() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientAddDisksResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -64,7 +63,7 @@ func ExampleReplicationProtectedItemsClient_BeginAddDisks() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1752-12-31T19:31:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1752, time.December, 31, 19, 31, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverHealth: to.Ptr("Normal"),
 	// 			FriendlyName: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -118,13 +117,13 @@ func ExampleReplicationProtectedItemsClient_BeginApplyRecoveryPoint() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientApplyRecoveryPointResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -139,12 +138,12 @@ func ExampleReplicationProtectedItemsClient_BeginApplyRecoveryPoint() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/e4d05fe9-5dfd-47be-b50b-aad306b2802d"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T08:42:33.0996129Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 8, 42, 33, 99612900, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -194,13 +193,13 @@ func ExampleReplicationProtectedItemsClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientCreateResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -215,7 +214,7 @@ func ExampleReplicationProtectedItemsClient_BeginCreate() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("vm1"),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -265,7 +264,7 @@ func ExampleReplicationProtectedItemsClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -286,13 +285,13 @@ func ExampleReplicationProtectedItemsClient_BeginFailoverCancel() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientFailoverCancelResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -305,12 +304,12 @@ func ExampleReplicationProtectedItemsClient_BeginFailoverCancel() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-02-24T07:17:23.1358752Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2021, time.February, 24, 7, 17, 23, 135875200, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2021-02-24T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1601-01-01T00:00:00.0000000Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2021, time.February, 24, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(1601, time.January, 1, 0, 0, 0, 0, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -352,13 +351,13 @@ func ExampleReplicationProtectedItemsClient_BeginFailoverCommit() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientFailoverCommitResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -372,12 +371,12 @@ func ExampleReplicationProtectedItemsClient_BeginFailoverCommit() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -421,7 +420,7 @@ func ExampleReplicationProtectedItemsClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientGetResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -436,7 +435,7 @@ func ExampleReplicationProtectedItemsClient_Get() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("vm1"),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -503,7 +502,7 @@ func ExampleReplicationProtectedItemsClient_NewListPager() {
 		// 					CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 		// 						JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 		// 						ScenarioName: to.Ptr("None"),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 		// 					},
 		// 					FriendlyName: to.Ptr("vm1"),
 		// 					PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -573,7 +572,7 @@ func ExampleReplicationProtectedItemsClient_NewListByReplicationProtectionContai
 		// 					CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 		// 						JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 		// 						ScenarioName: to.Ptr("None"),
-		// 						StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+		// 						StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 		// 					},
 		// 					FriendlyName: to.Ptr("vm1"),
 		// 					PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -627,13 +626,13 @@ func ExampleReplicationProtectedItemsClient_BeginPlannedFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientPlannedFailoverResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -648,12 +647,12 @@ func ExampleReplicationProtectedItemsClient_BeginPlannedFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -695,7 +694,7 @@ func ExampleReplicationProtectedItemsClient_BeginPurge() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -720,13 +719,13 @@ func ExampleReplicationProtectedItemsClient_BeginReinstallMobilityService() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientReinstallMobilityServiceResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("79dd20ab-2b40-11e7-9791-0050568f387e"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/b364ed8d-4279-4bf8-8fd1-56f8fa0ae05c/resourceGroups/wcusValidations/providers/Microsoft.RecoveryServices/vaults/WCUSVault/replicationFabrics/d70b0326a201008a953505ef271dc908e5e23468bc7356862ea178696f5f15c7/replicationProtectionContainers/cloud_c6780228-83bd-4f3e-a70e-cb46b7da33a0/replicationProtectedItems/79dd20ab-2b40-11e7-9791-0050568f387e"),
@@ -740,7 +739,7 @@ func ExampleReplicationProtectedItemsClient_BeginReinstallMobilityService() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/b364ed8d-4279-4bf8-8fd1-56f8fa0ae05c/resourceGroups/wcusValidations/providers/Microsoft.RecoveryServices/vaults/WCUSVault/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("MMR-LIN-V2A-3"),
 	// 			PolicyFriendlyName: to.Ptr("MadhaviPolicyNew"),
@@ -793,13 +792,13 @@ func ExampleReplicationProtectedItemsClient_BeginRemoveDisks() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientRemoveDisksResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -814,7 +813,7 @@ func ExampleReplicationProtectedItemsClient_BeginRemoveDisks() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1752-12-31T19:31:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1752, time.December, 31, 19, 31, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverHealth: to.Ptr("Normal"),
 	// 			FriendlyName: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -861,13 +860,13 @@ func ExampleReplicationProtectedItemsClient_BeginRepairReplication() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientRepairReplicationResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -882,7 +881,7 @@ func ExampleReplicationProtectedItemsClient_BeginRepairReplication() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("vm1"),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -933,13 +932,13 @@ func ExampleReplicationProtectedItemsClient_BeginReprotect() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientReprotectResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -954,12 +953,12 @@ func ExampleReplicationProtectedItemsClient_BeginReprotect() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -1009,13 +1008,13 @@ func ExampleReplicationProtectedItemsClient_BeginResolveHealthErrors() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientResolveHealthErrorsResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1030,7 +1029,7 @@ func ExampleReplicationProtectedItemsClient_BeginResolveHealthErrors() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1752-12-31T19:31:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1752, time.December, 31, 19, 31, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverHealth: to.Ptr("Normal"),
 	// 			FriendlyName: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1087,13 +1086,13 @@ func ExampleReplicationProtectedItemsClient_BeginSwitchProvider() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientSwitchProviderResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1108,12 +1107,12 @@ func ExampleReplicationProtectedItemsClient_BeginSwitchProvider() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -1164,13 +1163,13 @@ func ExampleReplicationProtectedItemsClient_BeginTestFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientTestFailoverResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1182,7 +1181,7 @@ func ExampleReplicationProtectedItemsClient_BeginTestFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/2838f9b4-2609-4f76-a7e9-07e6387c5e98"),
 	// 				ScenarioName: to.Ptr("TestFailover"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/0689d0d0-3518-4793-8c98-c26bf94526f6"),
 	// 			FriendlyName: to.Ptr("vm1"),
@@ -1231,13 +1230,13 @@ func ExampleReplicationProtectedItemsClient_BeginTestFailoverCleanup() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientTestFailoverCleanupResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1252,12 +1251,12 @@ func ExampleReplicationProtectedItemsClient_BeginTestFailoverCleanup() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b22134ea-620c-474b-9fa5-3c1cb47708e3"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T06:37:23.1578655Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 6, 37, 23, 157865500, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -1307,13 +1306,13 @@ func ExampleReplicationProtectedItemsClient_BeginUnplannedFailover() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientUnplannedFailoverResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1328,12 +1327,12 @@ func ExampleReplicationProtectedItemsClient_BeginUnplannedFailover() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FailoverRecoveryPointID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b/recoveryPoints/b2c7b208-0999-40a4-804f-8ee1019c8f76"),
 	// 			FriendlyName: to.Ptr("vm1"),
-	// 			LastSuccessfulFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-26T08:42:33.0996129Z"); return t}()),
-	// 			LastSuccessfulTestFailoverTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2017-04-25T09:57:57.0357829Z"); return t}()),
+	// 			LastSuccessfulFailoverTime: to.Ptr(time.Date(2017, time.April, 26, 8, 42, 33, 99612900, time.UTC)),
+	// 			LastSuccessfulTestFailoverTime: to.Ptr(time.Date(2017, time.April, 25, 9, 57, 57, 35782900, time.UTC)),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
 	// 			PolicyID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationPolicies/protectionprofile1"),
 	// 			PrimaryFabricFriendlyName: to.Ptr("cloud1"),
@@ -1399,13 +1398,13 @@ func ExampleReplicationProtectedItemsClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientUpdateResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("f8491e4f-817a-40dd-a90c-af773978c75b"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationFabrics/cloud1/replicationProtectionContainers/cloud_6d224fc6-f326-5d35-96de-fbf51efb3179/replicationProtectedItems/f8491e4f-817a-40dd-a90c-af773978c75b"),
@@ -1420,7 +1419,7 @@ func ExampleReplicationProtectedItemsClient_BeginUpdate() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/c183865e-6077-46f2-a3b1-deb0f4f4650a/resourceGroups/resourceGroupPS1/providers/Microsoft.RecoveryServices/vaults/vault1/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("vm1"),
 	// 			PolicyFriendlyName: to.Ptr("protectionprofile1"),
@@ -1472,13 +1471,13 @@ func ExampleReplicationProtectedItemsClient_BeginUpdateAppliance() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientUpdateApplianceResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("idclab-vcen67_50158124-8857-3e08-0893-2ddf8ebb8c1f"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/Ayan-0106-SA-RG/providers/Microsoft.RecoveryServices/vaults/Ayan-0106-SA-Vault/replicationFabrics/Ayan-0106-SA-Vaultreplicationfabric/replicationProtectionContainers/Ayan-0106-SA-Vaultreplicationcontainer/replicationProtectedItems/idclab-vcen67_50158124-8857-3e08-0893-2ddf8ebb8c1f"),
@@ -1492,7 +1491,7 @@ func ExampleReplicationProtectedItemsClient_BeginUpdateAppliance() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/7c943c1b-5122-4097-90c8-861411bdd574/resourceGroups/Ayan-0106-SA-RG/providers/Microsoft.RecoveryServices/vaults/Ayan-0106-SA-Vault/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			EventCorrelationID: to.Ptr("fb40d161-cffd-44d9-a252-0b7978e1f73c"),
 	// 			FailoverHealth: to.Ptr("Normal"),
@@ -1544,13 +1543,13 @@ func ExampleReplicationProtectedItemsClient_BeginUpdateMobilityService() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicessiterecovery.ReplicationProtectedItemsClientUpdateMobilityServiceResponse{
-	// 	ReplicationProtectedItem: &armrecoveryservicessiterecovery.ReplicationProtectedItem{
+	// 	ReplicationProtectedItem: armrecoveryservicessiterecovery.ReplicationProtectedItem{
 	// 		Name: to.Ptr("79dd20ab-2b40-11e7-9791-0050568f387e"),
 	// 		Type: to.Ptr("Microsoft.RecoveryServices/vaults/replicationFabrics/replicationProtectionContainers/replicationProtectedItems"),
 	// 		ID: to.Ptr("/Subscriptions/b364ed8d-4279-4bf8-8fd1-56f8fa0ae05c/resourceGroups/wcusValidations/providers/Microsoft.RecoveryServices/vaults/WCUSVault/replicationFabrics/d70b0326a201008a953505ef271dc908e5e23468bc7356862ea178696f5f15c7/replicationProtectionContainers/cloud_c6780228-83bd-4f3e-a70e-cb46b7da33a0/replicationProtectedItems/79dd20ab-2b40-11e7-9791-0050568f387e"),
@@ -1564,7 +1563,7 @@ func ExampleReplicationProtectedItemsClient_BeginUpdateMobilityService() {
 	// 			CurrentScenario: &armrecoveryservicessiterecovery.CurrentScenarioDetails{
 	// 				JobID: to.Ptr("/Subscriptions/b364ed8d-4279-4bf8-8fd1-56f8fa0ae05c/resourceGroups/wcusValidations/providers/Microsoft.RecoveryServices/vaults/WCUSVault/replicationJobs/None"),
 	// 				ScenarioName: to.Ptr("None"),
-	// 				StartTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "1753-01-01T01:01:01Z"); return t}()),
+	// 				StartTime: to.Ptr(time.Date(1753, time.January, 1, 1, 1, 1, 0, time.UTC)),
 	// 			},
 	// 			FriendlyName: to.Ptr("MMR-LIN-V2A-3"),
 	// 			PolicyFriendlyName: to.Ptr("MadhaviPolicyNew"),

@@ -19,6 +19,8 @@ import (
 
 // MonitorsClient contains the methods for the Monitors group.
 // Don't use this type directly, use NewMonitorsClient() instead.
+//
+// Generated from API version 2026-06-01
 type MonitorsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -29,6 +31,9 @@ type MonitorsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewMonitorsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*MonitorsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -44,8 +49,6 @@ func NewMonitorsClient(subscriptionID string, credential azcore.TokenCredential,
 // sets up the integration between Azure and your New Relic account, enabling observability and monitoring of your Azure resources
 // through New Relic
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - resource - Resource create parameters.
@@ -72,8 +75,6 @@ func (client *MonitorsClient) BeginCreateOrUpdate(ctx context.Context, resourceG
 // up the integration between Azure and your New Relic account, enabling observability and monitoring of your Azure resources
 // through New Relic
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 func (client *MonitorsClient) createOrUpdate(ctx context.Context, resourceGroupName string, monitorName string, resource NewRelicMonitorResource, options *MonitorsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "MonitorsClient.BeginCreateOrUpdate"
@@ -89,8 +90,7 @@ func (client *MonitorsClient) createOrUpdate(ctx context.Context, resourceGroupN
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -99,7 +99,7 @@ func (client *MonitorsClient) createOrUpdate(ctx context.Context, resourceGroupN
 func (client *MonitorsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, resource NewRelicMonitorResource, _ *MonitorsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -115,8 +115,8 @@ func (client *MonitorsClient) createOrUpdateCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -128,15 +128,13 @@ func (client *MonitorsClient) createOrUpdateCreateRequest(ctx context.Context, r
 // BeginDelete - Deletes an existing New Relic monitor resource from your Azure subscription, removing the integration and
 // stopping the observability of your Azure resources through New Relic
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
-//   - monitorName - Name of the Monitors resource
 //   - userEmail - User Email.
+//   - monitorName - Name of the Monitors resource.
 //   - options - MonitorsClientBeginDeleteOptions contains the optional parameters for the MonitorsClient.BeginDelete method.
-func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, monitorName string, userEmail string, options *MonitorsClientBeginDeleteOptions) (*runtime.Poller[MonitorsClientDeleteResponse], error) {
+func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName string, userEmail string, monitorName string, options *MonitorsClientBeginDeleteOptions) (*runtime.Poller[MonitorsClientDeleteResponse], error) {
 	if options == nil || options.ResumeToken == "" {
-		resp, err := client.deleteOperation(ctx, resourceGroupName, monitorName, userEmail, options)
+		resp, err := client.deleteOperation(ctx, resourceGroupName, userEmail, monitorName, options)
 		if err != nil {
 			return nil, err
 		}
@@ -154,15 +152,13 @@ func (client *MonitorsClient) BeginDelete(ctx context.Context, resourceGroupName
 // Delete - Deletes an existing New Relic monitor resource from your Azure subscription, removing the integration and stopping
 // the observability of your Azure resources through New Relic
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
-func (client *MonitorsClient) deleteOperation(ctx context.Context, resourceGroupName string, monitorName string, userEmail string, options *MonitorsClientBeginDeleteOptions) (*http.Response, error) {
+func (client *MonitorsClient) deleteOperation(ctx context.Context, resourceGroupName string, userEmail string, monitorName string, options *MonitorsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "MonitorsClient.BeginDelete"
 	ctx = context.WithValue(ctx, runtime.CtxAPINameKey{}, operationName)
 	ctx, endSpan := runtime.StartSpan(ctx, operationName, client.internal.Tracer(), nil)
 	defer func() { endSpan(err) }()
-	req, err := client.deleteCreateRequest(ctx, resourceGroupName, monitorName, userEmail, options)
+	req, err := client.deleteCreateRequest(ctx, resourceGroupName, userEmail, monitorName, options)
 	if err != nil {
 		return nil, err
 	}
@@ -171,17 +167,16 @@ func (client *MonitorsClient) deleteOperation(ctx context.Context, resourceGroup
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
 
 // deleteCreateRequest creates the Delete request.
-func (client *MonitorsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, userEmail string, _ *MonitorsClientBeginDeleteOptions) (*policy.Request, error) {
+func (client *MonitorsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, userEmail string, monitorName string, _ *MonitorsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -197,17 +192,15 @@ func (client *MonitorsClient) deleteCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
+	reqQP.Set("api-version", version20260601)
 	reqQP.Set("userEmail", userEmail)
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Retrieves the properties and configuration details of a specific New Relic monitor resource, providing insight into
 // its setup and status
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientGetOptions contains the optional parameters for the MonitorsClient.Get method.
@@ -225,19 +218,14 @@ func (client *MonitorsClient) Get(ctx context.Context, resourceGroupName string,
 	if err != nil {
 		return MonitorsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *MonitorsClient) getCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -253,15 +241,18 @@ func (client *MonitorsClient) getCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *MonitorsClient) getHandleResponse(resp *http.Response) (MonitorsClientGetResponse, error) {
+func (client *MonitorsClient) getHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientGetResponse, error) {
 	result := MonitorsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NewRelicMonitorResource); err != nil {
 		return MonitorsClientGetResponse{}, err
 	}
@@ -270,8 +261,6 @@ func (client *MonitorsClient) getHandleResponse(resp *http.Response) (MonitorsCl
 
 // GetMetricRules - Retrieves the metric rules that are configured in the New Relic monitor resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - request - The details of the get metrics status request.
@@ -290,19 +279,14 @@ func (client *MonitorsClient) GetMetricRules(ctx context.Context, resourceGroupN
 	if err != nil {
 		return MonitorsClientGetMetricRulesResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientGetMetricRulesResponse{}, err
-	}
-	resp, err := client.getMetricRulesHandleResponse(httpResp)
-	return resp, err
+	return client.getMetricRulesHandleResponse(httpResp, http.StatusOK)
 }
 
 // getMetricRulesCreateRequest creates the GetMetricRules request.
 func (client *MonitorsClient) getMetricRulesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request MetricsRequest, _ *MonitorsClientGetMetricRulesOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/getMetricRules"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -318,8 +302,8 @@ func (client *MonitorsClient) getMetricRulesCreateRequest(ctx context.Context, r
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, request); err != nil {
@@ -329,8 +313,11 @@ func (client *MonitorsClient) getMetricRulesCreateRequest(ctx context.Context, r
 }
 
 // getMetricRulesHandleResponse handles the GetMetricRules response.
-func (client *MonitorsClient) getMetricRulesHandleResponse(resp *http.Response) (MonitorsClientGetMetricRulesResponse, error) {
+func (client *MonitorsClient) getMetricRulesHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientGetMetricRulesResponse, error) {
 	result := MonitorsClientGetMetricRulesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricRules); err != nil {
 		return MonitorsClientGetMetricRulesResponse{}, err
 	}
@@ -339,8 +326,6 @@ func (client *MonitorsClient) getMetricRulesHandleResponse(resp *http.Response) 
 
 // GetMetricStatus - Retrieves the metric status that are configured in the New Relic monitor resource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - request - The details of the get metrics status request.
@@ -360,19 +345,14 @@ func (client *MonitorsClient) GetMetricStatus(ctx context.Context, resourceGroup
 	if err != nil {
 		return MonitorsClientGetMetricStatusResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientGetMetricStatusResponse{}, err
-	}
-	resp, err := client.getMetricStatusHandleResponse(httpResp)
-	return resp, err
+	return client.getMetricStatusHandleResponse(httpResp, http.StatusOK)
 }
 
 // getMetricStatusCreateRequest creates the GetMetricStatus request.
 func (client *MonitorsClient) getMetricStatusCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request MetricsStatusRequest, _ *MonitorsClientGetMetricStatusOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/getMetricStatus"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -388,8 +368,8 @@ func (client *MonitorsClient) getMetricStatusCreateRequest(ctx context.Context, 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, request); err != nil {
@@ -399,8 +379,11 @@ func (client *MonitorsClient) getMetricStatusCreateRequest(ctx context.Context, 
 }
 
 // getMetricStatusHandleResponse handles the GetMetricStatus response.
-func (client *MonitorsClient) getMetricStatusHandleResponse(resp *http.Response) (MonitorsClientGetMetricStatusResponse, error) {
+func (client *MonitorsClient) getMetricStatusHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientGetMetricStatusResponse, error) {
 	result := MonitorsClientGetMetricStatusResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MetricsStatusResponse); err != nil {
 		return MonitorsClientGetMetricStatusResponse{}, err
 	}
@@ -409,8 +392,6 @@ func (client *MonitorsClient) getMetricStatusHandleResponse(resp *http.Response)
 
 // LatestLinkedSaaS - Returns the latest SaaS linked to the newrelic organization of the underlying monitor.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientLatestLinkedSaaSOptions contains the optional parameters for the MonitorsClient.LatestLinkedSaaS
@@ -429,19 +410,14 @@ func (client *MonitorsClient) LatestLinkedSaaS(ctx context.Context, resourceGrou
 	if err != nil {
 		return MonitorsClientLatestLinkedSaaSResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientLatestLinkedSaaSResponse{}, err
-	}
-	resp, err := client.latestLinkedSaaSHandleResponse(httpResp)
-	return resp, err
+	return client.latestLinkedSaaSHandleResponse(httpResp, http.StatusOK)
 }
 
 // latestLinkedSaaSCreateRequest creates the LatestLinkedSaaS request.
 func (client *MonitorsClient) latestLinkedSaaSCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientLatestLinkedSaaSOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/latestLinkedSaaS"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -457,15 +433,18 @@ func (client *MonitorsClient) latestLinkedSaaSCreateRequest(ctx context.Context,
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // latestLinkedSaaSHandleResponse handles the LatestLinkedSaaS response.
-func (client *MonitorsClient) latestLinkedSaaSHandleResponse(resp *http.Response) (MonitorsClientLatestLinkedSaaSResponse, error) {
+func (client *MonitorsClient) latestLinkedSaaSHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientLatestLinkedSaaSResponse, error) {
 	result := MonitorsClientLatestLinkedSaaSResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LatestLinkedSaaSResponse); err != nil {
 		return MonitorsClientLatestLinkedSaaSResponse{}, err
 	}
@@ -476,8 +455,6 @@ func (client *MonitorsClient) latestLinkedSaaSHandleResponse(resp *http.Response
 //
 // Links a new SaaS to the newrelic organization of the underlying monitor.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - body - Link SaaS body parameter
@@ -504,8 +481,6 @@ func (client *MonitorsClient) BeginLinkSaaS(ctx context.Context, resourceGroupNa
 //
 // Links a new SaaS to the newrelic organization of the underlying monitor.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 func (client *MonitorsClient) linkSaaS(ctx context.Context, resourceGroupName string, monitorName string, body SaaSData, options *MonitorsClientBeginLinkSaaSOptions) (*http.Response, error) {
 	var err error
 	const operationName = "MonitorsClient.BeginLinkSaaS"
@@ -521,8 +496,7 @@ func (client *MonitorsClient) linkSaaS(ctx context.Context, resourceGroupName st
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -531,7 +505,7 @@ func (client *MonitorsClient) linkSaaS(ctx context.Context, resourceGroupName st
 func (client *MonitorsClient) linkSaaSCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, body SaaSData, _ *MonitorsClientBeginLinkSaaSOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/linkSaaS"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -547,8 +521,8 @@ func (client *MonitorsClient) linkSaaSCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, body); err != nil {
@@ -559,8 +533,6 @@ func (client *MonitorsClient) linkSaaSCreateRequest(ctx context.Context, resourc
 
 // NewListAppServicesPager - Lists the app service resources currently being monitored by the New Relic resource, helping
 // you understand which app services are under monitoring
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - request - The details of the app services get request.
@@ -577,51 +549,65 @@ func (client *MonitorsClient) NewListAppServicesPager(resourceGroupName string, 
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listAppServicesCreateRequest(ctx, resourceGroupName, monitorName, request, options)
-			}, nil)
+			req, err := client.listAppServicesCreateRequest(ctx, resourceGroupName, monitorName, request, nextLink, options)
 			if err != nil {
 				return MonitorsClientListAppServicesResponse{}, err
 			}
-			return client.listAppServicesHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListAppServicesResponse{}, err
+			}
+			return client.listAppServicesHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listAppServicesCreateRequest creates the ListAppServices request.
-func (client *MonitorsClient) listAppServicesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request AppServicesGetRequest, _ *MonitorsClientListAppServicesOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listAppServices"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listAppServicesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request AppServicesGetRequest, nextLink string, _ *MonitorsClientListAppServicesOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listAppServices"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
-	req.Raw().Header["Content-Type"] = []string{"application/json"}
-	if err := runtime.MarshalAsJSON(req, request); err != nil {
-		return nil, err
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+		req.Raw().Header["Content-Type"] = []string{"application/json"}
+		if err := runtime.MarshalAsJSON(req, request); err != nil {
+			return nil, err
+		}
 	}
 	return req, nil
 }
 
 // listAppServicesHandleResponse handles the ListAppServices response.
-func (client *MonitorsClient) listAppServicesHandleResponse(resp *http.Response) (MonitorsClientListAppServicesResponse, error) {
+func (client *MonitorsClient) listAppServicesHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListAppServicesResponse, error) {
 	result := MonitorsClientListAppServicesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.AppServicesListResponse); err != nil {
 		return MonitorsClientListAppServicesResponse{}, err
 	}
@@ -629,8 +615,6 @@ func (client *MonitorsClient) listAppServicesHandleResponse(resp *http.Response)
 }
 
 // NewListByResourceGroupPager - Retrieves a list of all New Relic monitor resources either a specific resource group
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - MonitorsClientListByResourceGroupOptions contains the optional parameters for the MonitorsClient.NewListByResourceGroupPager
 //     method.
@@ -645,43 +629,57 @@ func (client *MonitorsClient) NewListByResourceGroupPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return MonitorsClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *MonitorsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *MonitorsClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *MonitorsClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *MonitorsClient) listByResourceGroupHandleResponse(resp *http.Response) (MonitorsClientListByResourceGroupResponse, error) {
+func (client *MonitorsClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListByResourceGroupResponse, error) {
 	result := MonitorsClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NewRelicMonitorResourceListResult); err != nil {
 		return MonitorsClientListByResourceGroupResponse{}, err
 	}
@@ -689,8 +687,6 @@ func (client *MonitorsClient) listByResourceGroupHandleResponse(resp *http.Respo
 }
 
 // NewListBySubscriptionPager - Lists all New Relic monitor resources either within a specific subscription
-//
-// Generated from API version 2025-05-01-preview
 //   - options - MonitorsClientListBySubscriptionOptions contains the optional parameters for the MonitorsClient.NewListBySubscriptionPager
 //     method.
 func (client *MonitorsClient) NewListBySubscriptionPager(options *MonitorsClientListBySubscriptionOptions) *runtime.Pager[MonitorsClientListBySubscriptionResponse] {
@@ -704,39 +700,53 @@ func (client *MonitorsClient) NewListBySubscriptionPager(options *MonitorsClient
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listBySubscriptionCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listBySubscriptionCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return MonitorsClientListBySubscriptionResponse{}, err
 			}
-			return client.listBySubscriptionHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListBySubscriptionResponse{}, err
+			}
+			return client.listBySubscriptionHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listBySubscriptionCreateRequest creates the ListBySubscription request.
-func (client *MonitorsClient) listBySubscriptionCreateRequest(ctx context.Context, _ *MonitorsClientListBySubscriptionOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/NewRelic.Observability/monitors"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listBySubscriptionCreateRequest(ctx context.Context, nextLink string, _ *MonitorsClientListBySubscriptionOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/NewRelic.Observability/monitors"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listBySubscriptionHandleResponse handles the ListBySubscription response.
-func (client *MonitorsClient) listBySubscriptionHandleResponse(resp *http.Response) (MonitorsClientListBySubscriptionResponse, error) {
+func (client *MonitorsClient) listBySubscriptionHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListBySubscriptionResponse, error) {
 	result := MonitorsClientListBySubscriptionResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NewRelicMonitorResourceListResult); err != nil {
 		return MonitorsClientListBySubscriptionResponse{}, err
 	}
@@ -745,8 +755,6 @@ func (client *MonitorsClient) listBySubscriptionHandleResponse(resp *http.Respon
 
 // NewListHostsPager - Lists all VM resources currently being monitored by the New Relic monitor resource, helping you manage
 // observability
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - request - The details of the Hosts get request.
@@ -762,51 +770,65 @@ func (client *MonitorsClient) NewListHostsPager(resourceGroupName string, monito
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listHostsCreateRequest(ctx, resourceGroupName, monitorName, request, options)
-			}, nil)
+			req, err := client.listHostsCreateRequest(ctx, resourceGroupName, monitorName, request, nextLink, options)
 			if err != nil {
 				return MonitorsClientListHostsResponse{}, err
 			}
-			return client.listHostsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListHostsResponse{}, err
+			}
+			return client.listHostsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listHostsCreateRequest creates the ListHosts request.
-func (client *MonitorsClient) listHostsCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request HostsGetRequest, _ *MonitorsClientListHostsOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listHosts"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listHostsCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request HostsGetRequest, nextLink string, _ *MonitorsClientListHostsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listHosts"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
-	req.Raw().Header["Content-Type"] = []string{"application/json"}
-	if err := runtime.MarshalAsJSON(req, request); err != nil {
-		return nil, err
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+		req.Raw().Header["Content-Type"] = []string{"application/json"}
+		if err := runtime.MarshalAsJSON(req, request); err != nil {
+			return nil, err
+		}
 	}
 	return req, nil
 }
 
 // listHostsHandleResponse handles the ListHosts response.
-func (client *MonitorsClient) listHostsHandleResponse(resp *http.Response) (MonitorsClientListHostsResponse, error) {
+func (client *MonitorsClient) listHostsHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListHostsResponse, error) {
 	result := MonitorsClientListHostsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMHostsListResponse); err != nil {
 		return MonitorsClientListHostsResponse{}, err
 	}
@@ -818,8 +840,6 @@ func (client *MonitorsClient) listHostsHandleResponse(resp *http.Response) (Moni
 //
 // Lists all Azure resources that are linked to the same New Relic organization as the specified monitor resource, helping
 // you understand the scope of integration
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientListLinkedResourcesOptions contains the optional parameters for the MonitorsClient.NewListLinkedResourcesPager
@@ -835,47 +855,61 @@ func (client *MonitorsClient) NewListLinkedResourcesPager(resourceGroupName stri
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listLinkedResourcesCreateRequest(ctx, resourceGroupName, monitorName, options)
-			}, nil)
+			req, err := client.listLinkedResourcesCreateRequest(ctx, resourceGroupName, monitorName, nextLink, options)
 			if err != nil {
 				return MonitorsClientListLinkedResourcesResponse{}, err
 			}
-			return client.listLinkedResourcesHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListLinkedResourcesResponse{}, err
+			}
+			return client.listLinkedResourcesHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listLinkedResourcesCreateRequest creates the ListLinkedResources request.
-func (client *MonitorsClient) listLinkedResourcesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientListLinkedResourcesOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listLinkedResources"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listLinkedResourcesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, nextLink string, _ *MonitorsClientListLinkedResourcesOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/listLinkedResources"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listLinkedResourcesHandleResponse handles the ListLinkedResources response.
-func (client *MonitorsClient) listLinkedResourcesHandleResponse(resp *http.Response) (MonitorsClientListLinkedResourcesResponse, error) {
+func (client *MonitorsClient) listLinkedResourcesHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListLinkedResourcesResponse, error) {
 	result := MonitorsClientListLinkedResourcesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.LinkedResourceListResponse); err != nil {
 		return MonitorsClientListLinkedResourcesResponse{}, err
 	}
@@ -884,8 +918,6 @@ func (client *MonitorsClient) listLinkedResourcesHandleResponse(resp *http.Respo
 
 // NewListMonitoredResourcesPager - Lists all Azure resources that are currently being monitored by the specified New Relic
 // monitor resource, providing insight into the coverage of your observability setup
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientListMonitoredResourcesOptions contains the optional parameters for the MonitorsClient.NewListMonitoredResourcesPager
@@ -901,47 +933,61 @@ func (client *MonitorsClient) NewListMonitoredResourcesPager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, options)
-			}, nil)
+			req, err := client.listMonitoredResourcesCreateRequest(ctx, resourceGroupName, monitorName, nextLink, options)
 			if err != nil {
 				return MonitorsClientListMonitoredResourcesResponse{}, err
 			}
-			return client.listMonitoredResourcesHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return MonitorsClientListMonitoredResourcesResponse{}, err
+			}
+			return client.listMonitoredResourcesHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listMonitoredResourcesCreateRequest creates the ListMonitoredResources request.
-func (client *MonitorsClient) listMonitoredResourcesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientListMonitoredResourcesOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/monitoredResources"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *MonitorsClient) listMonitoredResourcesCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, nextLink string, _ *MonitorsClientListMonitoredResourcesOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/monitoredResources"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if monitorName == "" {
+			return nil, errors.New("parameter monitorName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
+		req, err = runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if monitorName == "" {
-		return nil, errors.New("parameter monitorName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{monitorName}", url.PathEscape(monitorName))
-	req, err := runtime.NewRequest(ctx, http.MethodPost, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260601)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listMonitoredResourcesHandleResponse handles the ListMonitoredResources response.
-func (client *MonitorsClient) listMonitoredResourcesHandleResponse(resp *http.Response) (MonitorsClientListMonitoredResourcesResponse, error) {
+func (client *MonitorsClient) listMonitoredResourcesHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientListMonitoredResourcesResponse, error) {
 	result := MonitorsClientListMonitoredResourcesResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.MonitoredResourceListResponse); err != nil {
 		return MonitorsClientListMonitoredResourcesResponse{}, err
 	}
@@ -951,8 +997,6 @@ func (client *MonitorsClient) listMonitoredResourcesHandleResponse(resp *http.Re
 // RefreshIngestionKey - Refreshes the ingestion key for all monitors linked to the same account associated to the underlying
 // monitor.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientRefreshIngestionKeyOptions contains the optional parameters for the MonitorsClient.RefreshIngestionKey
@@ -972,8 +1016,7 @@ func (client *MonitorsClient) RefreshIngestionKey(ctx context.Context, resourceG
 		return MonitorsClientRefreshIngestionKeyResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientRefreshIngestionKeyResponse{}, err
+		return MonitorsClientRefreshIngestionKeyResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return MonitorsClientRefreshIngestionKeyResponse{}, nil
 }
@@ -982,7 +1025,7 @@ func (client *MonitorsClient) RefreshIngestionKey(ctx context.Context, resourceG
 func (client *MonitorsClient) refreshIngestionKeyCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientRefreshIngestionKeyOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/refreshIngestionKey"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -998,8 +1041,8 @@ func (client *MonitorsClient) refreshIngestionKeyCreateRequest(ctx context.Conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -1007,8 +1050,6 @@ func (client *MonitorsClient) refreshIngestionKeyCreateRequest(ctx context.Conte
 //
 // A long-running resource action.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientBeginResubscribeOptions contains the optional parameters for the MonitorsClient.BeginResubscribe
@@ -1035,8 +1076,6 @@ func (client *MonitorsClient) BeginResubscribe(ctx context.Context, resourceGrou
 //
 // A long-running resource action.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 func (client *MonitorsClient) resubscribe(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginResubscribeOptions) (*http.Response, error) {
 	var err error
 	const operationName = "MonitorsClient.BeginResubscribe"
@@ -1052,8 +1091,7 @@ func (client *MonitorsClient) resubscribe(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1062,7 +1100,7 @@ func (client *MonitorsClient) resubscribe(ctx context.Context, resourceGroupName
 func (client *MonitorsClient) resubscribeCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, options *MonitorsClientBeginResubscribeOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/resubscribe"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1078,8 +1116,8 @@ func (client *MonitorsClient) resubscribeCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.Body != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -1093,8 +1131,6 @@ func (client *MonitorsClient) resubscribeCreateRequest(ctx context.Context, reso
 
 // SwitchBilling - Switches the billing for the New Relic Monitor resource to be billed by Azure Marketplace
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - request - The details of the switch billing request.
@@ -1113,19 +1149,14 @@ func (client *MonitorsClient) SwitchBilling(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return MonitorsClientSwitchBillingResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientSwitchBillingResponse{}, err
-	}
-	resp, err := client.switchBillingHandleResponse(httpResp)
-	return resp, err
+	return client.switchBillingHandleResponse(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent)
 }
 
 // switchBillingCreateRequest creates the SwitchBilling request.
 func (client *MonitorsClient) switchBillingCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, request SwitchBillingRequest, _ *MonitorsClientSwitchBillingOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/switchBilling"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1141,8 +1172,8 @@ func (client *MonitorsClient) switchBillingCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, request); err != nil {
@@ -1152,8 +1183,11 @@ func (client *MonitorsClient) switchBillingCreateRequest(ctx context.Context, re
 }
 
 // switchBillingHandleResponse handles the SwitchBilling response.
-func (client *MonitorsClient) switchBillingHandleResponse(resp *http.Response) (MonitorsClientSwitchBillingResponse, error) {
+func (client *MonitorsClient) switchBillingHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientSwitchBillingResponse, error) {
 	result := MonitorsClientSwitchBillingResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if val := resp.Header.Get("Retry-After"); val != "" {
 		retryAfter32, err := strconv.ParseInt(val, 10, 32)
 		retryAfter := int32(retryAfter32)
@@ -1170,8 +1204,6 @@ func (client *MonitorsClient) switchBillingHandleResponse(resp *http.Response) (
 
 // BeginUpdate - Updates an existing New Relic monitor resource from your Azure subscription
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - properties - The resource properties to be updated.
@@ -1195,8 +1227,6 @@ func (client *MonitorsClient) BeginUpdate(ctx context.Context, resourceGroupName
 
 // Update - Updates an existing New Relic monitor resource from your Azure subscription
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 func (client *MonitorsClient) update(ctx context.Context, resourceGroupName string, monitorName string, properties NewRelicMonitorResourceUpdate, options *MonitorsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "MonitorsClient.BeginUpdate"
@@ -1212,8 +1242,7 @@ func (client *MonitorsClient) update(ctx context.Context, resourceGroupName stri
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -1222,7 +1251,7 @@ func (client *MonitorsClient) update(ctx context.Context, resourceGroupName stri
 func (client *MonitorsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, properties NewRelicMonitorResourceUpdate, _ *MonitorsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1238,8 +1267,8 @@ func (client *MonitorsClient) updateCreateRequest(ctx context.Context, resourceG
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -1251,8 +1280,6 @@ func (client *MonitorsClient) updateCreateRequest(ctx context.Context, resourceG
 // VMHostPayload - Returns the payload that needs to be passed in the request body for installing the New Relic agent on a
 // VM, providing the necessary configuration details
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-05-01-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - monitorName - Name of the Monitors resource
 //   - options - MonitorsClientVMHostPayloadOptions contains the optional parameters for the MonitorsClient.VMHostPayload method.
@@ -1270,19 +1297,14 @@ func (client *MonitorsClient) VMHostPayload(ctx context.Context, resourceGroupNa
 	if err != nil {
 		return MonitorsClientVMHostPayloadResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return MonitorsClientVMHostPayloadResponse{}, err
-	}
-	resp, err := client.vmHostPayloadHandleResponse(httpResp)
-	return resp, err
+	return client.vmHostPayloadHandleResponse(httpResp, http.StatusOK)
 }
 
 // vmHostPayloadCreateRequest creates the VMHostPayload request.
 func (client *MonitorsClient) vmHostPayloadCreateRequest(ctx context.Context, resourceGroupName string, monitorName string, _ *MonitorsClientVMHostPayloadOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/NewRelic.Observability/monitors/{monitorName}/vmHostPayloads"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -1298,15 +1320,18 @@ func (client *MonitorsClient) vmHostPayloadCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-05-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260601)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // vmHostPayloadHandleResponse handles the VMHostPayload response.
-func (client *MonitorsClient) vmHostPayloadHandleResponse(resp *http.Response) (MonitorsClientVMHostPayloadResponse, error) {
+func (client *MonitorsClient) vmHostPayloadHandleResponse(resp *http.Response, successCodes ...int) (MonitorsClientVMHostPayloadResponse, error) {
 	result := MonitorsClientVMHostPayloadResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.VMExtensionPayload); err != nil {
 		return MonitorsClientVMHostPayloadResponse{}, err
 	}

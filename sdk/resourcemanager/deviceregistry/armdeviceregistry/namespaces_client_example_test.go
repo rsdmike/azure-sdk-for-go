@@ -45,13 +45,13 @@ func ExampleNamespacesClient_BeginCreateOrReplace() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespacesClientCreateOrReplaceResponse{
-	// 	Namespace: &armdeviceregistry.Namespace{
+	// 	Namespace: armdeviceregistry.Namespace{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/adr-namespace-gbk0925-n01"),
 	// 		Name: to.Ptr("adr-namespace-gbk0925-n01"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces"),
@@ -59,10 +59,10 @@ func ExampleNamespacesClient_BeginCreateOrReplace() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-25T23:41:41.8591157Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.September, 25, 23, 41, 41, 859115700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-01T21:03:33.5993192Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 1, 21, 3, 33, 599319200, time.UTC)),
 	// 		},
 	// 		Identity: &armdeviceregistry.SystemAssignedServiceIdentity{
 	// 			PrincipalID: to.Ptr("00000000-0000-0000-9d20-8a5570c3eb6e"),
@@ -105,7 +105,7 @@ func ExampleNamespacesClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -128,7 +128,7 @@ func ExampleNamespacesClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespacesClientGetResponse{
-	// 	Namespace: &armdeviceregistry.Namespace{
+	// 	Namespace: armdeviceregistry.Namespace{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/adr-namespace-gbk1001-n01"),
 	// 		Name: to.Ptr("adr-namespace-gbk1001-n01"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces"),
@@ -136,10 +136,10 @@ func ExampleNamespacesClient_Get() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-01T21:39:27.7050447Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.October, 1, 21, 39, 27, 705044700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-01T21:39:27.7050447Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 1, 21, 39, 27, 705044700, time.UTC)),
 	// 		},
 	// 		Identity: &armdeviceregistry.SystemAssignedServiceIdentity{
 	// 			PrincipalID: to.Ptr("4a06b859-8c07-4d9f-822d-3348a09f72c2"),
@@ -199,10 +199,10 @@ func ExampleNamespacesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceProperties{
 		// 					ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
@@ -216,10 +216,10 @@ func ExampleNamespacesClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T20:22:49.5920101Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 20, 22, 49, 592010100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T20:22:49.5920101Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 20, 22, 49, 592010100, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceProperties{
 		// 					ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
@@ -265,10 +265,10 @@ func ExampleNamespacesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:09.5283958Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 9, 528395800, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T19:38:16.6634263Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 19, 38, 16, 663426300, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceProperties{
 		// 					ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
@@ -283,10 +283,10 @@ func ExampleNamespacesClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armdeviceregistry.SystemData{
 		// 					CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T20:22:49.5920101Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.September, 13, 20, 22, 49, 592010100, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 		// 					LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-13T20:22:49.5920101Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.September, 13, 20, 22, 49, 592010100, time.UTC)),
 		// 				},
 		// 				Properties: &armdeviceregistry.NamespaceProperties{
 		// 					ProvisioningState: to.Ptr(armdeviceregistry.ProvisioningStateSucceeded),
@@ -323,7 +323,7 @@ func ExampleNamespacesClient_BeginMigrate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
@@ -360,13 +360,13 @@ func ExampleNamespacesClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armdeviceregistry.NamespacesClientUpdateResponse{
-	// 	Namespace: &armdeviceregistry.Namespace{
+	// 	Namespace: armdeviceregistry.Namespace{
 	// 		ID: to.Ptr("/subscriptions/00000000-1366-430f-0000-cc873bcf2d27/resourceGroups/gbktestRG/providers/Microsoft.DeviceRegistry/namespaces/adr-namespace-gbk0925-n01"),
 	// 		Name: to.Ptr("adr-namespace-gbk0925-n01"),
 	// 		Type: to.Ptr("Microsoft.DeviceRegistry/namespaces"),
@@ -374,10 +374,10 @@ func ExampleNamespacesClient_BeginUpdate() {
 	// 		SystemData: &armdeviceregistry.SystemData{
 	// 			CreatedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			CreatedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-09-25T23:41:41.8591157Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.September, 25, 23, 41, 41, 859115700, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("00003442-0000-0000-0000-494059220000"),
 	// 			LastModifiedByType: to.Ptr(armdeviceregistry.CreatedByTypeApplication),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-10-01T21:03:33.5993192Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.October, 1, 21, 3, 33, 599319200, time.UTC)),
 	// 		},
 	// 		Identity: &armdeviceregistry.SystemAssignedServiceIdentity{
 	// 			PrincipalID: to.Ptr("00000000-0000-0000-9d20-8a5570c3eb6e"),

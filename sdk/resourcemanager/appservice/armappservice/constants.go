@@ -4,6 +4,10 @@
 
 package armappservice
 
+const (
+	version20250501 string = "2025-05-01"
+)
+
 // AppServicePlanRestrictions - App Service plans this offer is restricted to.
 type AppServicePlanRestrictions string
 
@@ -345,9 +349,10 @@ func PossibleCheckNameResourceTypesValues() []CheckNameResourceTypes {
 }
 
 // ClientCertMode - This composes with ClientCertEnabled setting.
-// - ClientCertEnabled: false means ClientCert is ignored.
-// - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
-// - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
+//
+//   - ClientCertEnabled: false means ClientCert is ignored.
+//   - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
+//   - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
 type ClientCertMode string
 
 const (
@@ -2047,16 +2052,20 @@ func PossibleTriggerTypesValues() []TriggerTypes {
 type TriggeredWebJobStatus string
 
 const (
+	TriggeredWebJobStatusAborted TriggeredWebJobStatus = "Aborted"
 	TriggeredWebJobStatusError   TriggeredWebJobStatus = "Error"
 	TriggeredWebJobStatusFailed  TriggeredWebJobStatus = "Failed"
+	TriggeredWebJobStatusRunning TriggeredWebJobStatus = "Running"
 	TriggeredWebJobStatusSuccess TriggeredWebJobStatus = "Success"
 )
 
 // PossibleTriggeredWebJobStatusValues returns the possible values for the TriggeredWebJobStatus const type.
 func PossibleTriggeredWebJobStatusValues() []TriggeredWebJobStatus {
 	return []TriggeredWebJobStatus{
+		TriggeredWebJobStatusAborted,
 		TriggeredWebJobStatusError,
 		TriggeredWebJobStatusFailed,
+		TriggeredWebJobStatusRunning,
 		TriggeredWebJobStatusSuccess,
 	}
 }

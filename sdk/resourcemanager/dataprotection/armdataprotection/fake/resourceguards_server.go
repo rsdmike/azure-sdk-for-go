@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 )
 
 // ResourceGuardsServer is a fake server for instances of the armdataprotection.ResourceGuardsClient type.
@@ -136,9 +137,7 @@ func (r *ResourceGuardsServerTransport) Do(req *http.Request) (*http.Response, e
 }
 
 func (r *ResourceGuardsServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -188,10 +187,7 @@ func (r *ResourceGuardsServerTransport) dispatchToMethodFake(req *http.Request, 
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -206,7 +202,7 @@ func (r *ResourceGuardsServerTransport) dispatchDelete(req *http.Request) (*http
 	if r.srv.Delete == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Delete not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -225,7 +221,7 @@ func (r *ResourceGuardsServerTransport) dispatchDelete(req *http.Request) (*http
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusNoContent}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusNoContent", respContent.HTTPStatus)}
 	}
 	resp, err := server.NewResponse(respContent, req, nil)
@@ -239,7 +235,7 @@ func (r *ResourceGuardsServerTransport) dispatchGet(req *http.Request) (*http.Re
 	if r.srv.Get == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Get not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -258,7 +254,7 @@ func (r *ResourceGuardsServerTransport) dispatchGet(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ResourceGuardResource, req)
@@ -274,7 +270,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetBackupSecurityPINRequestsO
 	}
 	newGetBackupSecurityPINRequestsObjectsPager := r.newGetBackupSecurityPINRequestsObjectsPager.get(req)
 	if newGetBackupSecurityPINRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/getBackupSecurityPINRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/getBackupSecurityPINRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -299,7 +295,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetBackupSecurityPINRequestsO
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetBackupSecurityPINRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -313,7 +309,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultBackupSecurityPINReque
 	if r.srv.GetDefaultBackupSecurityPINRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultBackupSecurityPINRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/getBackupSecurityPINRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/getBackupSecurityPINRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -336,7 +332,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultBackupSecurityPINReque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -350,7 +346,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDeleteProtectedItemReq
 	if r.srv.GetDefaultDeleteProtectedItemRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultDeleteProtectedItemRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deleteProtectedItemRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deleteProtectedItemRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -373,7 +369,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDeleteProtectedItemReq
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -387,7 +383,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDeleteResourceGuardPro
 	if r.srv.GetDefaultDeleteResourceGuardProxyRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultDeleteResourceGuardProxyRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deleteResourceGuardProxyRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deleteResourceGuardProxyRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -410,7 +406,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDeleteResourceGuardPro
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -424,7 +420,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDisableSoftDeleteReque
 	if r.srv.GetDefaultDisableSoftDeleteRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultDisableSoftDeleteRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/disableSoftDeleteRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/disableSoftDeleteRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -447,7 +443,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultDisableSoftDeleteReque
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -461,7 +457,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultUpdateProtectedItemReq
 	if r.srv.GetDefaultUpdateProtectedItemRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultUpdateProtectedItemRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/updateProtectedItemRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/updateProtectedItemRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -484,7 +480,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultUpdateProtectedItemReq
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -498,7 +494,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultUpdateProtectionPolicy
 	if r.srv.GetDefaultUpdateProtectionPolicyRequestsObject == nil {
 		return nil, &nonRetriableError{errors.New("fake for method GetDefaultUpdateProtectionPolicyRequestsObject not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/updateProtectionPolicyRequests/(?P<requestName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/updateProtectionPolicyRequests/(?P<requestName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 5 {
@@ -521,7 +517,7 @@ func (r *ResourceGuardsServerTransport) dispatchGetDefaultUpdateProtectionPolicy
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DppBaseResource, req)
@@ -537,7 +533,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDeleteProtectedItemRequest
 	}
 	newGetDeleteProtectedItemRequestsObjectsPager := r.newGetDeleteProtectedItemRequestsObjectsPager.get(req)
 	if newGetDeleteProtectedItemRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deleteProtectedItemRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deleteProtectedItemRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -562,7 +558,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDeleteProtectedItemRequest
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetDeleteProtectedItemRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -578,7 +574,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDeleteResourceGuardProxyRe
 	}
 	newGetDeleteResourceGuardProxyRequestsObjectsPager := r.newGetDeleteResourceGuardProxyRequestsObjectsPager.get(req)
 	if newGetDeleteResourceGuardProxyRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/deleteResourceGuardProxyRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/deleteResourceGuardProxyRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -603,7 +599,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDeleteResourceGuardProxyRe
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetDeleteResourceGuardProxyRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -619,7 +615,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDisableSoftDeleteRequestsO
 	}
 	newGetDisableSoftDeleteRequestsObjectsPager := r.newGetDisableSoftDeleteRequestsObjectsPager.get(req)
 	if newGetDisableSoftDeleteRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/disableSoftDeleteRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/disableSoftDeleteRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -644,7 +640,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetDisableSoftDeleteRequestsO
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetDisableSoftDeleteRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -660,7 +656,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetResourcesInResourceGroupPa
 	}
 	newGetResourcesInResourceGroupPager := r.newGetResourcesInResourceGroupPager.get(req)
 	if newGetResourcesInResourceGroupPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 3 {
@@ -681,7 +677,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetResourcesInResourceGroupPa
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetResourcesInResourceGroupPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -697,7 +693,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetResourcesInSubscriptionPag
 	}
 	newGetResourcesInSubscriptionPager := r.newGetResourcesInSubscriptionPager.get(req)
 	if newGetResourcesInSubscriptionPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 2 {
@@ -714,7 +710,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetResourcesInSubscriptionPag
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetResourcesInSubscriptionPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -730,7 +726,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetUpdateProtectedItemRequest
 	}
 	newGetUpdateProtectedItemRequestsObjectsPager := r.newGetUpdateProtectedItemRequestsObjectsPager.get(req)
 	if newGetUpdateProtectedItemRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/updateProtectedItemRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/updateProtectedItemRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -755,7 +751,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetUpdateProtectedItemRequest
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetUpdateProtectedItemRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -771,7 +767,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetUpdateProtectionPolicyRequ
 	}
 	newGetUpdateProtectionPolicyRequestsObjectsPager := r.newGetUpdateProtectionPolicyRequestsObjectsPager.get(req)
 	if newGetUpdateProtectionPolicyRequestsObjectsPager == nil {
-		const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/updateProtectionPolicyRequests`
+		const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/updateProtectionPolicyRequests`
 		regex := regexp.MustCompile(regexStr)
 		matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 		if len(matches) < 4 {
@@ -796,7 +792,7 @@ func (r *ResourceGuardsServerTransport) dispatchNewGetUpdateProtectionPolicyRequ
 	if err != nil {
 		return nil, err
 	}
-	if !contains([]int{http.StatusOK}, resp.StatusCode) {
+	if !slices.Contains([]int{http.StatusOK}, resp.StatusCode) {
 		r.newGetUpdateProtectionPolicyRequestsObjectsPager.remove(req)
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", resp.StatusCode)}
 	}
@@ -810,7 +806,7 @@ func (r *ResourceGuardsServerTransport) dispatchPatch(req *http.Request) (*http.
 	if r.srv.Patch == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Patch not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -833,7 +829,7 @@ func (r *ResourceGuardsServerTransport) dispatchPatch(req *http.Request) (*http.
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ResourceGuardResource, req)
@@ -847,7 +843,7 @@ func (r *ResourceGuardsServerTransport) dispatchPut(req *http.Request) (*http.Re
 	if r.srv.Put == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Put not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataProtection/resourceGuards/(?P<resourceGuardsName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -870,7 +866,7 @@ func (r *ResourceGuardsServerTransport) dispatchPut(req *http.Request) (*http.Re
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK, http.StatusCreated}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK, http.StatusCreated", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).ResourceGuardResource, req)

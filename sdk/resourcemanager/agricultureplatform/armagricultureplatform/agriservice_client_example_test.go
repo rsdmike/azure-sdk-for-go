@@ -67,13 +67,13 @@ func ExampleAgriServiceClient_BeginCreateOrUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armagricultureplatform.AgriServiceClientCreateOrUpdateResponse{
-	// 	AgriServiceResource: &armagricultureplatform.AgriServiceResource{
+	// 	AgriServiceResource: armagricultureplatform.AgriServiceResource{
 	// 		Properties: &armagricultureplatform.AgriServiceResourceProperties{
 	// 			ProvisioningState: to.Ptr(armagricultureplatform.ProvisioningStateSucceeded),
 	// 			Config: &armagricultureplatform.AgriServiceConfig{
@@ -137,10 +137,10 @@ func ExampleAgriServiceClient_BeginCreateOrUpdate() {
 	// 		SystemData: &armagricultureplatform.SystemData{
 	// 			CreatedBy: to.Ptr("gthxegufst"),
 	// 			CreatedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ovgqctuakdgemocstvwqmhyufe"),
 	// 			LastModifiedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -163,7 +163,7 @@ func ExampleAgriServiceClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -186,7 +186,7 @@ func ExampleAgriServiceClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armagricultureplatform.AgriServiceClientGetResponse{
-	// 	AgriServiceResource: &armagricultureplatform.AgriServiceResource{
+	// 	AgriServiceResource: armagricultureplatform.AgriServiceResource{
 	// 		Properties: &armagricultureplatform.AgriServiceResourceProperties{
 	// 			ProvisioningState: to.Ptr(armagricultureplatform.ProvisioningStateSucceeded),
 	// 			Config: &armagricultureplatform.AgriServiceConfig{
@@ -250,10 +250,10 @@ func ExampleAgriServiceClient_Get() {
 	// 		SystemData: &armagricultureplatform.SystemData{
 	// 			CreatedBy: to.Ptr("gthxegufst"),
 	// 			CreatedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ovgqctuakdgemocstvwqmhyufe"),
 	// 			LastModifiedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -278,7 +278,7 @@ func ExampleAgriServiceClient_ListAvailableSolutions() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armagricultureplatform.AgriServiceClientListAvailableSolutionsResponse{
-	// 	AvailableAgriSolutionListResult: &armagricultureplatform.AvailableAgriSolutionListResult{
+	// 	AvailableAgriSolutionListResult: armagricultureplatform.AvailableAgriSolutionListResult{
 	// 		Solutions: []*armagricultureplatform.DataManagerForAgricultureSolution{
 	// 			{
 	// 				PartnerID: to.Ptr("dugq"),
@@ -390,10 +390,10 @@ func ExampleAgriServiceClient_NewListByResourceGroupPager() {
 		// 				SystemData: &armagricultureplatform.SystemData{
 		// 					CreatedBy: to.Ptr("gthxegufst"),
 		// 					CreatedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ovgqctuakdgemocstvwqmhyufe"),
 		// 					LastModifiedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -492,10 +492,10 @@ func ExampleAgriServiceClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armagricultureplatform.SystemData{
 		// 					CreatedBy: to.Ptr("gthxegufst"),
 		// 					CreatedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("ovgqctuakdgemocstvwqmhyufe"),
 		// 					LastModifiedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 		// 				},
 		// 			},
 		// 		},
@@ -558,13 +558,13 @@ func ExampleAgriServiceClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armagricultureplatform.AgriServiceClientUpdateResponse{
-	// 	AgriServiceResource: &armagricultureplatform.AgriServiceResource{
+	// 	AgriServiceResource: armagricultureplatform.AgriServiceResource{
 	// 		Properties: &armagricultureplatform.AgriServiceResourceProperties{
 	// 			ProvisioningState: to.Ptr(armagricultureplatform.ProvisioningStateSucceeded),
 	// 			Config: &armagricultureplatform.AgriServiceConfig{
@@ -628,10 +628,10 @@ func ExampleAgriServiceClient_BeginUpdate() {
 	// 		SystemData: &armagricultureplatform.SystemData{
 	// 			CreatedBy: to.Ptr("gthxegufst"),
 	// 			CreatedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("ovgqctuakdgemocstvwqmhyufe"),
 	// 			LastModifiedByType: to.Ptr(armagricultureplatform.CreatedByTypeUser),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2024-12-16T11:47:57.784Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2024, time.December, 16, 11, 47, 57, 784000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

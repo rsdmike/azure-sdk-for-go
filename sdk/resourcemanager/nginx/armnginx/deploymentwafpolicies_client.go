@@ -18,6 +18,8 @@ import (
 
 // DeploymentWafPoliciesClient contains the methods for the DeploymentWafPolicies group.
 // Don't use this type directly, use NewDeploymentWafPoliciesClient() instead.
+//
+// Generated from API version 2025-11-01
 type DeploymentWafPoliciesClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DeploymentWafPoliciesClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDeploymentWafPoliciesClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DeploymentWafPoliciesClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewDeploymentWafPoliciesClient(subscriptionID string, credential azcore.Tok
 
 // Analysis - Analyze an Nginx Waf Policy
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-11-01
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - deploymentName - The name of targeted NGINX deployment
 //   - wafPolicyName - The name of Waf Policy
@@ -62,19 +65,14 @@ func (client *DeploymentWafPoliciesClient) Analysis(ctx context.Context, resourc
 	if err != nil {
 		return DeploymentWafPoliciesClientAnalysisResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DeploymentWafPoliciesClientAnalysisResponse{}, err
-	}
-	resp, err := client.analysisHandleResponse(httpResp)
-	return resp, err
+	return client.analysisHandleResponse(httpResp, http.StatusOK)
 }
 
 // analysisCreateRequest creates the Analysis request.
 func (client *DeploymentWafPoliciesClient) analysisCreateRequest(ctx context.Context, resourceGroupName string, deploymentName string, wafPolicyName string, options *DeploymentWafPoliciesClientAnalysisOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Nginx.NginxPlus/nginxDeployments/{deploymentName}/wafPolicies/{wafPolicyName}/analyzeWafPolicy"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -94,8 +92,8 @@ func (client *DeploymentWafPoliciesClient) analysisCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20251101)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	if options != nil && options.Body != nil {
 		req.Raw().Header["Content-Type"] = []string{"application/json"}
@@ -108,8 +106,11 @@ func (client *DeploymentWafPoliciesClient) analysisCreateRequest(ctx context.Con
 }
 
 // analysisHandleResponse handles the Analysis response.
-func (client *DeploymentWafPoliciesClient) analysisHandleResponse(resp *http.Response) (DeploymentWafPoliciesClientAnalysisResponse, error) {
+func (client *DeploymentWafPoliciesClient) analysisHandleResponse(resp *http.Response, successCodes ...int) (DeploymentWafPoliciesClientAnalysisResponse, error) {
 	result := DeploymentWafPoliciesClientAnalysisResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DeploymentWafPolicyAnalysisResponse); err != nil {
 		return DeploymentWafPoliciesClientAnalysisResponse{}, err
 	}

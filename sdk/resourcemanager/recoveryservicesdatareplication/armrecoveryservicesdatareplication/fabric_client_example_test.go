@@ -36,13 +36,13 @@ func ExampleFabricClient_BeginCreate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.FabricClientCreateResponse{
-	// 	FabricModel: &armrecoveryservicesdatareplication.FabricModel{
+	// 	FabricModel: armrecoveryservicesdatareplication.FabricModel{
 	// 		Location: to.Ptr("tqygutlpob"),
 	// 		Properties: &armrecoveryservicesdatareplication.FabricModelProperties{
 	// 			CustomProperties: &armrecoveryservicesdatareplication.AzStackHCIFabricModelCustomProperties{
@@ -65,7 +65,7 @@ func ExampleFabricClient_BeginCreate() {
 	// 							Category: to.Ptr("lcsdxrqxquke"),
 	// 							Severity: to.Ptr("wqxxiuaqjyagq"),
 	// 							Source: to.Ptr("wevvftugwydzzw"),
-	// 							CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 							CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 							IsCustomerResolvable: to.Ptr(true),
 	// 							Summary: to.Ptr("djsmgrltruljo"),
 	// 							Message: to.Ptr("sskcei"),
@@ -78,7 +78,7 @@ func ExampleFabricClient_BeginCreate() {
 	// 					Category: to.Ptr("leigw"),
 	// 					Severity: to.Ptr("vvdajssdcypewdyechilxjmuijvdd"),
 	// 					Source: to.Ptr("iy"),
-	// 					CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 					CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 					IsCustomerResolvable: to.Ptr(true),
 	// 					Summary: to.Ptr("jtooblbvaxxrvcwgscbobq"),
 	// 					Message: to.Ptr("lbywtdprdqdekl"),
@@ -95,10 +95,10 @@ func ExampleFabricClient_BeginCreate() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("ewufpudzcjrljhmmzhfnxoqdqwnya"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("zioqm")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.022Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 22000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("rx"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("tqbvuqoakaaqij")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.022Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 22000000, time.UTC)),
 	// 		},
 	// 	},
 	// }
@@ -121,7 +121,7 @@ func ExampleFabricClient_BeginDelete() {
 	}
 	_, err = poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 }
 
@@ -144,7 +144,7 @@ func ExampleFabricClient_Get() {
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.FabricClientGetResponse{
-	// 	FabricModel: &armrecoveryservicesdatareplication.FabricModel{
+	// 	FabricModel: armrecoveryservicesdatareplication.FabricModel{
 	// 		Location: to.Ptr("tqygutlpob"),
 	// 		Properties: &armrecoveryservicesdatareplication.FabricModelProperties{
 	// 			ProvisioningState: to.Ptr(armrecoveryservicesdatareplication.ProvisioningStateCanceled),
@@ -164,7 +164,7 @@ func ExampleFabricClient_Get() {
 	// 							Category: to.Ptr("lcsdxrqxquke"),
 	// 							Severity: to.Ptr("wqxxiuaqjyagq"),
 	// 							Source: to.Ptr("wevvftugwydzzw"),
-	// 							CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 							CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 							IsCustomerResolvable: to.Ptr(true),
 	// 							Summary: to.Ptr("djsmgrltruljo"),
 	// 							Message: to.Ptr("sskcei"),
@@ -177,7 +177,7 @@ func ExampleFabricClient_Get() {
 	// 					Category: to.Ptr("leigw"),
 	// 					Severity: to.Ptr("vvdajssdcypewdyechilxjmuijvdd"),
 	// 					Source: to.Ptr("iy"),
-	// 					CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 					CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 					IsCustomerResolvable: to.Ptr(true),
 	// 					Summary: to.Ptr("jtooblbvaxxrvcwgscbobq"),
 	// 					Message: to.Ptr("lbywtdprdqdekl"),
@@ -195,10 +195,10 @@ func ExampleFabricClient_Get() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("yhdmbqrsgimuucexvpas"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("brnojz")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("balecqnwu"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("ukvqlncihf")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 	// 		},
 	// 		Tags: map[string]*string{
 	// 			"key3917": to.Ptr("vgralu"),
@@ -253,7 +253,7 @@ func ExampleFabricClient_NewListPager() {
 		// 									Category: to.Ptr("lcsdxrqxquke"),
 		// 									Severity: to.Ptr("wqxxiuaqjyagq"),
 		// 									Source: to.Ptr("wevvftugwydzzw"),
-		// 									CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+		// 									CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 		// 									IsCustomerResolvable: to.Ptr(true),
 		// 									Summary: to.Ptr("djsmgrltruljo"),
 		// 									Message: to.Ptr("sskcei"),
@@ -266,7 +266,7 @@ func ExampleFabricClient_NewListPager() {
 		// 							Category: to.Ptr("leigw"),
 		// 							Severity: to.Ptr("vvdajssdcypewdyechilxjmuijvdd"),
 		// 							Source: to.Ptr("iy"),
-		// 							CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+		// 							CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 		// 							IsCustomerResolvable: to.Ptr(true),
 		// 							Summary: to.Ptr("jtooblbvaxxrvcwgscbobq"),
 		// 							Message: to.Ptr("lbywtdprdqdekl"),
@@ -284,10 +284,10 @@ func ExampleFabricClient_NewListPager() {
 		// 				SystemData: &armrecoveryservicesdatareplication.SystemData{
 		// 					CreatedBy: to.Ptr("yhdmbqrsgimuucexvpas"),
 		// 					CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("brnojz")),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("balecqnwu"),
 		// 					LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("ukvqlncihf")),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -343,7 +343,7 @@ func ExampleFabricClient_NewListBySubscriptionPager() {
 		// 									Category: to.Ptr("lcsdxrqxquke"),
 		// 									Severity: to.Ptr("wqxxiuaqjyagq"),
 		// 									Source: to.Ptr("wevvftugwydzzw"),
-		// 									CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+		// 									CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 		// 									IsCustomerResolvable: to.Ptr(true),
 		// 									Summary: to.Ptr("djsmgrltruljo"),
 		// 									Message: to.Ptr("sskcei"),
@@ -356,7 +356,7 @@ func ExampleFabricClient_NewListBySubscriptionPager() {
 		// 							Category: to.Ptr("leigw"),
 		// 							Severity: to.Ptr("vvdajssdcypewdyechilxjmuijvdd"),
 		// 							Source: to.Ptr("iy"),
-		// 							CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+		// 							CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 		// 							IsCustomerResolvable: to.Ptr(true),
 		// 							Summary: to.Ptr("jtooblbvaxxrvcwgscbobq"),
 		// 							Message: to.Ptr("lbywtdprdqdekl"),
@@ -374,10 +374,10 @@ func ExampleFabricClient_NewListBySubscriptionPager() {
 		// 				SystemData: &armrecoveryservicesdatareplication.SystemData{
 		// 					CreatedBy: to.Ptr("yhdmbqrsgimuucexvpas"),
 		// 					CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("brnojz")),
-		// 					CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+		// 					CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 		// 					LastModifiedBy: to.Ptr("balecqnwu"),
 		// 					LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("ukvqlncihf")),
-		// 					LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.716Z"); return t}()),
+		// 					LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 716000000, time.UTC)),
 		// 				},
 		// 				Tags: map[string]*string{
 		// 				},
@@ -412,13 +412,13 @@ func ExampleFabricClient_BeginUpdate() {
 	}
 	res, err := poller.PollUntilDone(ctx, nil)
 	if err != nil {
-		log.Fatalf("failed to pull the result: %v", err)
+		log.Fatalf("failed to poll the result: %v", err)
 	}
 	// You could use response here. We use blank identifier for just demo purposes.
 	_ = res
 	// If the HTTP response code is 200 as defined in example definition, your response structure would look as follows. Please pay attention that all the values in the output are fake values for just demo purposes.
 	// res = armrecoveryservicesdatareplication.FabricClientUpdateResponse{
-	// 	FabricModel: &armrecoveryservicesdatareplication.FabricModel{
+	// 	FabricModel: armrecoveryservicesdatareplication.FabricModel{
 	// 		Location: to.Ptr("tqygutlpob"),
 	// 		Properties: &armrecoveryservicesdatareplication.FabricModelProperties{
 	// 			CustomProperties: &armrecoveryservicesdatareplication.AzStackHCIFabricModelCustomProperties{
@@ -441,7 +441,7 @@ func ExampleFabricClient_BeginUpdate() {
 	// 							Category: to.Ptr("lcsdxrqxquke"),
 	// 							Severity: to.Ptr("wqxxiuaqjyagq"),
 	// 							Source: to.Ptr("wevvftugwydzzw"),
-	// 							CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 							CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 							IsCustomerResolvable: to.Ptr(true),
 	// 							Summary: to.Ptr("djsmgrltruljo"),
 	// 							Message: to.Ptr("sskcei"),
@@ -454,7 +454,7 @@ func ExampleFabricClient_BeginUpdate() {
 	// 					Category: to.Ptr("leigw"),
 	// 					Severity: to.Ptr("vvdajssdcypewdyechilxjmuijvdd"),
 	// 					Source: to.Ptr("iy"),
-	// 					CreationTime: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:52.128Z"); return t}()),
+	// 					CreationTime: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 52, 128000000, time.UTC)),
 	// 					IsCustomerResolvable: to.Ptr(true),
 	// 					Summary: to.Ptr("jtooblbvaxxrvcwgscbobq"),
 	// 					Message: to.Ptr("lbywtdprdqdekl"),
@@ -471,10 +471,10 @@ func ExampleFabricClient_BeginUpdate() {
 	// 		SystemData: &armrecoveryservicesdatareplication.SystemData{
 	// 			CreatedBy: to.Ptr("ewufpudzcjrljhmmzhfnxoqdqwnya"),
 	// 			CreatedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("zioqm")),
-	// 			CreatedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.022Z"); return t}()),
+	// 			CreatedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 22000000, time.UTC)),
 	// 			LastModifiedBy: to.Ptr("rx"),
 	// 			LastModifiedByType: to.Ptr(armrecoveryservicesdatareplication.CreatedByType("tqbvuqoakaaqij")),
-	// 			LastModifiedAt: to.Ptr(func() time.Time { t, _ := time.Parse(time.RFC3339Nano, "2023-08-25T00:28:53.022Z"); return t}()),
+	// 			LastModifiedAt: to.Ptr(time.Date(2023, time.August, 25, 0, 28, 53, 22000000, time.UTC)),
 	// 		},
 	// 	},
 	// }

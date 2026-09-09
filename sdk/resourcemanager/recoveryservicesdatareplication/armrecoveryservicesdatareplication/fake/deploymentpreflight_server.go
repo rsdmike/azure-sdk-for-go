@@ -16,6 +16,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"slices"
 )
 
 // DeploymentPreflightServer is a fake server for instances of the armrecoveryservicesdatareplication.DeploymentPreflightClient type.
@@ -50,9 +51,7 @@ func (d *DeploymentPreflightServerTransport) Do(req *http.Request) (*http.Respon
 }
 
 func (d *DeploymentPreflightServerTransport) dispatchToMethodFake(req *http.Request, method string) (*http.Response, error) {
-	resultChan := make(chan result)
-	defer close(resultChan)
-
+	resultChan := make(chan result, 1)
 	go func() {
 		var intercepted bool
 		var res result
@@ -68,10 +67,7 @@ func (d *DeploymentPreflightServerTransport) dispatchToMethodFake(req *http.Requ
 			}
 
 		}
-		select {
-		case resultChan <- res:
-		case <-req.Context().Done():
-		}
+		resultChan <- res
 	}()
 
 	select {
@@ -86,7 +82,7 @@ func (d *DeploymentPreflightServerTransport) dispatchPost(req *http.Request) (*h
 	if d.srv.Post == nil {
 		return nil, &nonRetriableError{errors.New("fake for method Post not implemented")}
 	}
-	const regexStr = `/subscriptions/(?P<subscriptionId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/resourceGroups/(?P<resourceGroupName>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/providers/Microsoft\.DataReplication/deployments/(?P<deploymentId>[!#&$-;=?-\[\]_a-zA-Z0-9~%@]+)/preflight`
+	const regexStr = `/subscriptions/(?P<subscriptionId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/resourceGroups/(?P<resourceGroupName>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/providers/Microsoft\.DataReplication/deployments/(?P<deploymentId>[a-zA-Z0-9._~%!$&'()*+,;=:@-]+)/preflight`
 	regex := regexp.MustCompile(regexStr)
 	matches := regex.FindStringSubmatch(req.URL.EscapedPath())
 	if len(matches) < 4 {
@@ -115,7 +111,7 @@ func (d *DeploymentPreflightServerTransport) dispatchPost(req *http.Request) (*h
 		return nil, respErr
 	}
 	respContent := server.GetResponseContent(respr)
-	if !contains([]int{http.StatusOK}, respContent.HTTPStatus) {
+	if !slices.Contains([]int{http.StatusOK}, respContent.HTTPStatus) {
 		return nil, &nonRetriableError{fmt.Errorf("unexpected status code %d. acceptable values are http.StatusOK", respContent.HTTPStatus)}
 	}
 	resp, err := server.MarshalResponseAsJSON(respContent, server.GetResponse(respr).DeploymentPreflightModel, req)

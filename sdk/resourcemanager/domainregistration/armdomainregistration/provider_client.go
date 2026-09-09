@@ -11,10 +11,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
+	"strings"
 )
 
 // ProviderClient contains the methods for the Provider group.
 // Don't use this type directly, use NewProviderClient() instead.
+//
+// Generated from API version 2024-11-01
 type ProviderClient struct {
 	internal *arm.Client
 }
@@ -35,9 +38,7 @@ func NewProviderClient(credential azcore.TokenCredential, options *arm.ClientOpt
 
 // NewListOperationsPager - Implements Csm operations Api to exposes the list of available Csm Apis under the resource provider
 //
-// # Description for Implements Csm operations Api to exposes the list of available Csm Apis under the resource provider
-//
-// Generated from API version 2024-11-01
+// Description for Implements Csm operations Api to exposes the list of available Csm Apis under the resource provider
 //   - options - ProviderClientListOperationsOptions contains the optional parameters for the ProviderClient.NewListOperationsPager
 //     method.
 func (client *ProviderClient) NewListOperationsPager(options *ProviderClientListOperationsOptions) *runtime.Pager[ProviderClientListOperationsResponse] {
@@ -51,35 +52,49 @@ func (client *ProviderClient) NewListOperationsPager(options *ProviderClientList
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listOperationsCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listOperationsCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return ProviderClientListOperationsResponse{}, err
 			}
-			return client.listOperationsHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return ProviderClientListOperationsResponse{}, err
+			}
+			return client.listOperationsHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listOperationsCreateRequest creates the ListOperations request.
-func (client *ProviderClient) listOperationsCreateRequest(ctx context.Context, _ *ProviderClientListOperationsOptions) (*policy.Request, error) {
-	urlPath := "/providers/Microsoft.DomainRegistration/operations"
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+func (client *ProviderClient) listOperationsCreateRequest(ctx context.Context, nextLink string, _ *ProviderClientListOperationsOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/providers/Microsoft.DomainRegistration/operations"
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
+	}
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-11-01")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20241101)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listOperationsHandleResponse handles the ListOperations response.
-func (client *ProviderClient) listOperationsHandleResponse(resp *http.Response) (ProviderClientListOperationsResponse, error) {
+func (client *ProviderClient) listOperationsHandleResponse(resp *http.Response, successCodes ...int) (ProviderClientListOperationsResponse, error) {
 	result := ProviderClientListOperationsResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CsmOperationCollection); err != nil {
 		return ProviderClientListOperationsResponse{}, err
 	}

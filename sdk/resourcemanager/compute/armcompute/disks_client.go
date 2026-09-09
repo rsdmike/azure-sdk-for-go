@@ -18,6 +18,8 @@ import (
 
 // DisksClient contains the methods for the Disks group.
 // Don't use this type directly, use NewDisksClient() instead.
+//
+// Generated from API version 2026-03-02
 type DisksClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -28,6 +30,9 @@ type DisksClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewDisksClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*DisksClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -41,8 +46,6 @@ func NewDisksClient(subscriptionID string, credential azcore.TokenCredential, op
 
 // BeginCreateOrUpdate - Creates or updates a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -68,8 +71,6 @@ func (client *DisksClient) BeginCreateOrUpdate(ctx context.Context, resourceGrou
 
 // CreateOrUpdate - Creates or updates a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 func (client *DisksClient) createOrUpdate(ctx context.Context, resourceGroupName string, diskName string, disk Disk, options *DisksClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DisksClient.BeginCreateOrUpdate"
@@ -85,8 +86,7 @@ func (client *DisksClient) createOrUpdate(ctx context.Context, resourceGroupName
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -95,7 +95,7 @@ func (client *DisksClient) createOrUpdate(ctx context.Context, resourceGroupName
 func (client *DisksClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, diskName string, disk Disk, _ *DisksClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -111,8 +111,8 @@ func (client *DisksClient) createOrUpdateCreateRequest(ctx context.Context, reso
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, disk); err != nil {
@@ -123,8 +123,6 @@ func (client *DisksClient) createOrUpdateCreateRequest(ctx context.Context, reso
 
 // BeginDelete - Deletes a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -148,8 +146,6 @@ func (client *DisksClient) BeginDelete(ctx context.Context, resourceGroupName st
 
 // Delete - Deletes a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 func (client *DisksClient) deleteOperation(ctx context.Context, resourceGroupName string, diskName string, options *DisksClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DisksClient.BeginDelete"
@@ -165,8 +161,7 @@ func (client *DisksClient) deleteOperation(ctx context.Context, resourceGroupNam
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -175,7 +170,7 @@ func (client *DisksClient) deleteOperation(ctx context.Context, resourceGroupNam
 func (client *DisksClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, diskName string, _ *DisksClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -191,15 +186,13 @@ func (client *DisksClient) deleteCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Gets information about a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -218,19 +211,14 @@ func (client *DisksClient) Get(ctx context.Context, resourceGroupName string, di
 	if err != nil {
 		return DisksClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return DisksClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *DisksClient) getCreateRequest(ctx context.Context, resourceGroupName string, diskName string, _ *DisksClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -246,15 +234,18 @@ func (client *DisksClient) getCreateRequest(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *DisksClient) getHandleResponse(resp *http.Response) (DisksClientGetResponse, error) {
+func (client *DisksClient) getHandleResponse(resp *http.Response, successCodes ...int) (DisksClientGetResponse, error) {
 	result := DisksClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.Disk); err != nil {
 		return DisksClientGetResponse{}, err
 	}
@@ -263,8 +254,6 @@ func (client *DisksClient) getHandleResponse(resp *http.Response) (DisksClientGe
 
 // BeginGrantAccess - Grants access to a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -289,8 +278,6 @@ func (client *DisksClient) BeginGrantAccess(ctx context.Context, resourceGroupNa
 
 // GrantAccess - Grants access to a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 func (client *DisksClient) grantAccess(ctx context.Context, resourceGroupName string, diskName string, grantAccessData GrantAccessData, options *DisksClientBeginGrantAccessOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DisksClient.BeginGrantAccess"
@@ -306,8 +293,7 @@ func (client *DisksClient) grantAccess(ctx context.Context, resourceGroupName st
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -316,7 +302,7 @@ func (client *DisksClient) grantAccess(ctx context.Context, resourceGroupName st
 func (client *DisksClient) grantAccessCreateRequest(ctx context.Context, resourceGroupName string, diskName string, grantAccessData GrantAccessData, _ *DisksClientBeginGrantAccessOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}/beginGetAccess"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -332,8 +318,8 @@ func (client *DisksClient) grantAccessCreateRequest(ctx context.Context, resourc
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, grantAccessData); err != nil {
@@ -343,8 +329,6 @@ func (client *DisksClient) grantAccessCreateRequest(ctx context.Context, resourc
 }
 
 // NewListPager - Lists all the disks under a subscription.
-//
-// Generated from API version 2025-01-02
 //   - options - DisksClientListOptions contains the optional parameters for the DisksClient.NewListPager method.
 func (client *DisksClient) NewListPager(options *DisksClientListOptions) *runtime.Pager[DisksClientListResponse] {
 	return runtime.NewPager(runtime.PagingHandler[DisksClientListResponse]{
@@ -357,39 +341,53 @@ func (client *DisksClient) NewListPager(options *DisksClientListOptions) *runtim
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listCreateRequest(ctx, options)
-			}, nil)
+			req, err := client.listCreateRequest(ctx, nextLink, options)
 			if err != nil {
 				return DisksClientListResponse{}, err
 			}
-			return client.listHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DisksClientListResponse{}, err
+			}
+			return client.listHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listCreateRequest creates the List request.
-func (client *DisksClient) listCreateRequest(ctx context.Context, _ *DisksClientListOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/disks"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DisksClient) listCreateRequest(ctx context.Context, nextLink string, _ *DisksClientListOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/providers/Microsoft.Compute/disks"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260302)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listHandleResponse handles the List response.
-func (client *DisksClient) listHandleResponse(resp *http.Response) (DisksClientListResponse, error) {
+func (client *DisksClient) listHandleResponse(resp *http.Response, successCodes ...int) (DisksClientListResponse, error) {
 	result := DisksClientListResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskList); err != nil {
 		return DisksClientListResponse{}, err
 	}
@@ -397,8 +395,6 @@ func (client *DisksClient) listHandleResponse(resp *http.Response) (DisksClientL
 }
 
 // NewListByResourceGroupPager - Lists all the disks under a resource group.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - options - DisksClientListByResourceGroupOptions contains the optional parameters for the DisksClient.NewListByResourceGroupPager
 //     method.
@@ -413,43 +409,57 @@ func (client *DisksClient) NewListByResourceGroupPager(resourceGroupName string,
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByResourceGroupCreateRequest(ctx, resourceGroupName, options)
-			}, nil)
+			req, err := client.listByResourceGroupCreateRequest(ctx, resourceGroupName, nextLink, options)
 			if err != nil {
 				return DisksClientListByResourceGroupResponse{}, err
 			}
-			return client.listByResourceGroupHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return DisksClientListByResourceGroupResponse{}, err
+			}
+			return client.listByResourceGroupHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByResourceGroupCreateRequest creates the ListByResourceGroup request.
-func (client *DisksClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, _ *DisksClientListByResourceGroupOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *DisksClient) listByResourceGroupCreateRequest(ctx context.Context, resourceGroupName string, nextLink string, _ *DisksClientListByResourceGroupOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		reqQP.Set("api-version", version20260302)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
+	}
 	return req, nil
 }
 
 // listByResourceGroupHandleResponse handles the ListByResourceGroup response.
-func (client *DisksClient) listByResourceGroupHandleResponse(resp *http.Response) (DisksClientListByResourceGroupResponse, error) {
+func (client *DisksClient) listByResourceGroupHandleResponse(resp *http.Response, successCodes ...int) (DisksClientListByResourceGroupResponse, error) {
 	result := DisksClientListByResourceGroupResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.DiskList); err != nil {
 		return DisksClientListByResourceGroupResponse{}, err
 	}
@@ -458,8 +468,6 @@ func (client *DisksClient) listByResourceGroupHandleResponse(resp *http.Response
 
 // BeginRevokeAccess - Revokes access to a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -483,8 +491,6 @@ func (client *DisksClient) BeginRevokeAccess(ctx context.Context, resourceGroupN
 
 // RevokeAccess - Revokes access to a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 func (client *DisksClient) revokeAccess(ctx context.Context, resourceGroupName string, diskName string, options *DisksClientBeginRevokeAccessOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DisksClient.BeginRevokeAccess"
@@ -500,8 +506,7 @@ func (client *DisksClient) revokeAccess(ctx context.Context, resourceGroupName s
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -510,7 +515,7 @@ func (client *DisksClient) revokeAccess(ctx context.Context, resourceGroupName s
 func (client *DisksClient) revokeAccessCreateRequest(ctx context.Context, resourceGroupName string, diskName string, _ *DisksClientBeginRevokeAccessOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}/endGetAccess"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -526,15 +531,13 @@ func (client *DisksClient) revokeAccessCreateRequest(ctx context.Context, resour
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // BeginUpdate - Updates (patches) a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - diskName - The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported
 //     characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
@@ -559,8 +562,6 @@ func (client *DisksClient) BeginUpdate(ctx context.Context, resourceGroupName st
 
 // Update - Updates (patches) a disk.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-01-02
 func (client *DisksClient) update(ctx context.Context, resourceGroupName string, diskName string, disk DiskUpdate, options *DisksClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "DisksClient.BeginUpdate"
@@ -576,8 +577,7 @@ func (client *DisksClient) update(ctx context.Context, resourceGroupName string,
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -586,7 +586,7 @@ func (client *DisksClient) update(ctx context.Context, resourceGroupName string,
 func (client *DisksClient) updateCreateRequest(ctx context.Context, resourceGroupName string, diskName string, disk DiskUpdate, _ *DisksClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/disks/{diskName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -602,8 +602,8 @@ func (client *DisksClient) updateCreateRequest(ctx context.Context, resourceGrou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-01-02")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20260302)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, disk); err != nil {

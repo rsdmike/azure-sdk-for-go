@@ -11,10 +11,13 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
 	"net/http"
+	"strings"
 )
 
 // CopilotSettingsClient contains the methods for the CopilotSettings group.
 // Don't use this type directly, use NewCopilotSettingsClient() instead.
+//
+// Generated from API version 2024-04-01-preview
 type CopilotSettingsClient struct {
 	internal *arm.Client
 }
@@ -35,8 +38,6 @@ func NewCopilotSettingsClient(credential azcore.TokenCredential, options *arm.Cl
 
 // CreateOrUpdate - Create a CopilotSettingsResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - resource - Resource create parameters.
 //   - options - CopilotSettingsClientCreateOrUpdateOptions contains the optional parameters for the CopilotSettingsClient.CreateOrUpdate
 //     method.
@@ -54,12 +55,7 @@ func (client *CopilotSettingsClient) CreateOrUpdate(ctx context.Context, resourc
 	if err != nil {
 		return CopilotSettingsClientCreateOrUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return CopilotSettingsClientCreateOrUpdateResponse{}, err
-	}
-	resp, err := client.createOrUpdateHandleResponse(httpResp)
-	return resp, err
+	return client.createOrUpdateHandleResponse(httpResp, http.StatusOK, http.StatusCreated)
 }
 
 // createOrUpdateCreateRequest creates the CreateOrUpdate request.
@@ -70,8 +66,8 @@ func (client *CopilotSettingsClient) createOrUpdateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, resource); err != nil {
@@ -81,8 +77,11 @@ func (client *CopilotSettingsClient) createOrUpdateCreateRequest(ctx context.Con
 }
 
 // createOrUpdateHandleResponse handles the CreateOrUpdate response.
-func (client *CopilotSettingsClient) createOrUpdateHandleResponse(resp *http.Response) (CopilotSettingsClientCreateOrUpdateResponse, error) {
+func (client *CopilotSettingsClient) createOrUpdateHandleResponse(resp *http.Response, successCodes ...int) (CopilotSettingsClientCreateOrUpdateResponse, error) {
 	result := CopilotSettingsClientCreateOrUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CopilotSettingsResource); err != nil {
 		return CopilotSettingsClientCreateOrUpdateResponse{}, err
 	}
@@ -91,8 +90,6 @@ func (client *CopilotSettingsClient) createOrUpdateHandleResponse(resp *http.Res
 
 // Delete - Delete a CopilotSettingsResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - options - CopilotSettingsClientDeleteOptions contains the optional parameters for the CopilotSettingsClient.Delete method.
 func (client *CopilotSettingsClient) Delete(ctx context.Context, options *CopilotSettingsClientDeleteOptions) (CopilotSettingsClientDeleteResponse, error) {
 	var err error
@@ -109,8 +106,7 @@ func (client *CopilotSettingsClient) Delete(ctx context.Context, options *Copilo
 		return CopilotSettingsClientDeleteResponse{}, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return CopilotSettingsClientDeleteResponse{}, err
+		return CopilotSettingsClientDeleteResponse{}, runtime.NewResponseError(httpResp)
 	}
 	return CopilotSettingsClientDeleteResponse{}, nil
 }
@@ -123,15 +119,13 @@ func (client *CopilotSettingsClient) deleteCreateRequest(ctx context.Context, _ 
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
 // Get - Get a CopilotSettingsResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - options - CopilotSettingsClientGetOptions contains the optional parameters for the CopilotSettingsClient.Get method.
 func (client *CopilotSettingsClient) Get(ctx context.Context, options *CopilotSettingsClientGetOptions) (CopilotSettingsClientGetResponse, error) {
 	var err error
@@ -147,12 +141,7 @@ func (client *CopilotSettingsClient) Get(ctx context.Context, options *CopilotSe
 	if err != nil {
 		return CopilotSettingsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CopilotSettingsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
@@ -163,15 +152,18 @@ func (client *CopilotSettingsClient) getCreateRequest(ctx context.Context, _ *Co
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *CopilotSettingsClient) getHandleResponse(resp *http.Response) (CopilotSettingsClientGetResponse, error) {
+func (client *CopilotSettingsClient) getHandleResponse(resp *http.Response, successCodes ...int) (CopilotSettingsClientGetResponse, error) {
 	result := CopilotSettingsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CopilotSettingsResource); err != nil {
 		return CopilotSettingsClientGetResponse{}, err
 	}
@@ -180,8 +172,6 @@ func (client *CopilotSettingsClient) getHandleResponse(resp *http.Response) (Cop
 
 // Update - Update a CopilotSettingsResource
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2024-04-01-preview
 //   - properties - The resource properties to be updated.
 //   - options - CopilotSettingsClientUpdateOptions contains the optional parameters for the CopilotSettingsClient.Update method.
 func (client *CopilotSettingsClient) Update(ctx context.Context, properties CopilotSettingsResourceUpdate, options *CopilotSettingsClientUpdateOptions) (CopilotSettingsClientUpdateResponse, error) {
@@ -198,12 +188,7 @@ func (client *CopilotSettingsClient) Update(ctx context.Context, properties Copi
 	if err != nil {
 		return CopilotSettingsClientUpdateResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return CopilotSettingsClientUpdateResponse{}, err
-	}
-	resp, err := client.updateHandleResponse(httpResp)
-	return resp, err
+	return client.updateHandleResponse(httpResp, http.StatusOK)
 }
 
 // updateCreateRequest creates the Update request.
@@ -214,8 +199,8 @@ func (client *CopilotSettingsClient) updateCreateRequest(ctx context.Context, pr
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2024-04-01-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20240401Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, properties); err != nil {
@@ -225,8 +210,11 @@ func (client *CopilotSettingsClient) updateCreateRequest(ctx context.Context, pr
 }
 
 // updateHandleResponse handles the Update response.
-func (client *CopilotSettingsClient) updateHandleResponse(resp *http.Response) (CopilotSettingsClientUpdateResponse, error) {
+func (client *CopilotSettingsClient) updateHandleResponse(resp *http.Response, successCodes ...int) (CopilotSettingsClientUpdateResponse, error) {
 	result := CopilotSettingsClientUpdateResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.CopilotSettingsResource); err != nil {
 		return CopilotSettingsClientUpdateResponse{}, err
 	}

@@ -7,19 +7,20 @@ package armeventgrid
 import (
 	"context"
 	"errors"
-	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
-
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/arm"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
 // NamespaceTopicsClient contains the methods for the NamespaceTopics group.
 // Don't use this type directly, use NewNamespaceTopicsClient() instead.
+//
+// Generated from API version 2025-07-15-preview
 type NamespaceTopicsClient struct {
 	internal       *arm.Client
 	subscriptionID string
@@ -30,6 +31,9 @@ type NamespaceTopicsClient struct {
 //   - credential - used to authorize requests. Usually a credential from azidentity.
 //   - options - Contains optional client configuration. Pass nil to accept the default values.
 func NewNamespaceTopicsClient(subscriptionID string, credential azcore.TokenCredential, options *arm.ClientOptions) (*NamespaceTopicsClient, error) {
+	if subscriptionID == "" {
+		return nil, errors.New("parameter subscriptionID cannot be empty")
+	}
 	cl, err := arm.NewClient(moduleName, moduleVersion, credential, options)
 	if err != nil {
 		return nil, err
@@ -45,8 +49,6 @@ func NewNamespaceTopicsClient(subscriptionID string, credential azcore.TokenCred
 //
 // Asynchronously creates a new namespace topic with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -74,8 +76,6 @@ func (client *NamespaceTopicsClient) BeginCreateOrUpdate(ctx context.Context, re
 //
 // Asynchronously creates a new namespace topic with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *NamespaceTopicsClient) createOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, namespaceTopicInfo NamespaceTopic, options *NamespaceTopicsClientBeginCreateOrUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceTopicsClient.BeginCreateOrUpdate"
@@ -91,8 +91,7 @@ func (client *NamespaceTopicsClient) createOrUpdate(ctx context.Context, resourc
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusCreated) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -101,7 +100,7 @@ func (client *NamespaceTopicsClient) createOrUpdate(ctx context.Context, resourc
 func (client *NamespaceTopicsClient) createOrUpdateCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, namespaceTopicInfo NamespaceTopic, _ *NamespaceTopicsClientBeginCreateOrUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -121,8 +120,8 @@ func (client *NamespaceTopicsClient) createOrUpdateCreateRequest(ctx context.Con
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, namespaceTopicInfo); err != nil {
@@ -135,8 +134,6 @@ func (client *NamespaceTopicsClient) createOrUpdateCreateRequest(ctx context.Con
 //
 // Delete existing namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -163,8 +160,6 @@ func (client *NamespaceTopicsClient) BeginDelete(ctx context.Context, resourceGr
 //
 // Delete existing namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *NamespaceTopicsClient) deleteOperation(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, options *NamespaceTopicsClientBeginDeleteOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceTopicsClient.BeginDelete"
@@ -180,8 +175,7 @@ func (client *NamespaceTopicsClient) deleteOperation(ctx context.Context, resour
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted, http.StatusNoContent) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -190,7 +184,7 @@ func (client *NamespaceTopicsClient) deleteOperation(ctx context.Context, resour
 func (client *NamespaceTopicsClient) deleteCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, _ *NamespaceTopicsClientBeginDeleteOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -210,8 +204,8 @@ func (client *NamespaceTopicsClient) deleteCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	return req, nil
 }
 
@@ -219,8 +213,6 @@ func (client *NamespaceTopicsClient) deleteCreateRequest(ctx context.Context, re
 //
 // Get properties of a namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -239,19 +231,14 @@ func (client *NamespaceTopicsClient) Get(ctx context.Context, resourceGroupName 
 	if err != nil {
 		return NamespaceTopicsClientGetResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return NamespaceTopicsClientGetResponse{}, err
-	}
-	resp, err := client.getHandleResponse(httpResp)
-	return resp, err
+	return client.getHandleResponse(httpResp, http.StatusOK)
 }
 
 // getCreateRequest creates the Get request.
 func (client *NamespaceTopicsClient) getCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, _ *NamespaceTopicsClientGetOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -271,15 +258,18 @@ func (client *NamespaceTopicsClient) getCreateRequest(ctx context.Context, resou
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // getHandleResponse handles the Get response.
-func (client *NamespaceTopicsClient) getHandleResponse(resp *http.Response) (NamespaceTopicsClientGetResponse, error) {
+func (client *NamespaceTopicsClient) getHandleResponse(resp *http.Response, successCodes ...int) (NamespaceTopicsClientGetResponse, error) {
 	result := NamespaceTopicsClientGetResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceTopic); err != nil {
 		return NamespaceTopicsClientGetResponse{}, err
 	}
@@ -289,8 +279,6 @@ func (client *NamespaceTopicsClient) getHandleResponse(resp *http.Response) (Nam
 // NewListByNamespacePager - List namespace topics under a namespace.
 //
 // List all the namespace topics under a namespace.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - options - NamespaceTopicsClientListByNamespaceOptions contains the optional parameters for the NamespaceTopicsClient.NewListByNamespacePager
@@ -306,53 +294,67 @@ func (client *NamespaceTopicsClient) NewListByNamespacePager(resourceGroupName s
 			if page != nil {
 				nextLink = *page.NextLink
 			}
-			resp, err := runtime.FetcherForNextLink(ctx, client.internal.Pipeline(), nextLink, func(ctx context.Context) (*policy.Request, error) {
-				return client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, options)
-			}, nil)
+			req, err := client.listByNamespaceCreateRequest(ctx, resourceGroupName, namespaceName, nextLink, options)
 			if err != nil {
 				return NamespaceTopicsClientListByNamespaceResponse{}, err
 			}
-			return client.listByNamespaceHandleResponse(resp)
+			resp, err := client.internal.Pipeline().Do(req)
+			if err != nil {
+				return NamespaceTopicsClientListByNamespaceResponse{}, err
+			}
+			return client.listByNamespaceHandleResponse(resp, http.StatusOK)
 		},
 		Tracer: client.internal.Tracer(),
 	})
 }
 
 // listByNamespaceCreateRequest creates the ListByNamespace request.
-func (client *NamespaceTopicsClient) listByNamespaceCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, options *NamespaceTopicsClientListByNamespaceOptions) (*policy.Request, error) {
-	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics"
-	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+func (client *NamespaceTopicsClient) listByNamespaceCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, nextLink string, options *NamespaceTopicsClientListByNamespaceOptions) (*policy.Request, error) {
+	firstPage := nextLink == ""
+	var req *policy.Request
+	var err error
+	if firstPage {
+		urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics"
+		if client.subscriptionID == "" {
+			return nil, errors.New("parameter subscriptionID cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
+		if resourceGroupName == "" {
+			return nil, errors.New("parameter resourceGroupName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
+		if namespaceName == "" {
+			return nil, errors.New("parameter namespaceName cannot be empty")
+		}
+		urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
+		req, err = runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
+	} else {
+		req, err = runtime.NewRequestForNextLink(ctx, http.MethodGet, client.internal.Endpoint(), nextLink)
 	}
-	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
-	if resourceGroupName == "" {
-		return nil, errors.New("parameter resourceGroupName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{resourceGroupName}", url.PathEscape(resourceGroupName))
-	if namespaceName == "" {
-		return nil, errors.New("parameter namespaceName cannot be empty")
-	}
-	urlPath = strings.ReplaceAll(urlPath, "{namespaceName}", url.PathEscape(namespaceName))
-	req, err := runtime.NewRequest(ctx, http.MethodGet, runtime.JoinPaths(client.internal.Endpoint(), urlPath))
 	if err != nil {
 		return nil, err
 	}
-	reqQP := req.Raw().URL.Query()
-	if options != nil && options.Filter != nil {
-		reqQP.Set("$filter", *options.Filter)
+	if firstPage {
+		reqQP := req.Raw().URL.Query()
+		if options != nil && options.Filter != nil {
+			reqQP.Set("$filter", *options.Filter)
+		}
+		if options != nil && options.Top != nil {
+			reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
+		}
+		reqQP.Set("api-version", version20250715Preview)
+		req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
+		req.Raw().Header["Accept"] = []string{"application/json"}
 	}
-	if options != nil && options.Top != nil {
-		reqQP.Set("$top", strconv.FormatInt(int64(*options.Top), 10))
-	}
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
-	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listByNamespaceHandleResponse handles the ListByNamespace response.
-func (client *NamespaceTopicsClient) listByNamespaceHandleResponse(resp *http.Response) (NamespaceTopicsClientListByNamespaceResponse, error) {
+func (client *NamespaceTopicsClient) listByNamespaceHandleResponse(resp *http.Response, successCodes ...int) (NamespaceTopicsClientListByNamespaceResponse, error) {
 	result := NamespaceTopicsClientListByNamespaceResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.NamespaceTopicsListResult); err != nil {
 		return NamespaceTopicsClientListByNamespaceResponse{}, err
 	}
@@ -363,8 +365,6 @@ func (client *NamespaceTopicsClient) listByNamespaceHandleResponse(resp *http.Re
 //
 // List the two keys used to publish to a namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -384,19 +384,14 @@ func (client *NamespaceTopicsClient) ListSharedAccessKeys(ctx context.Context, r
 	if err != nil {
 		return NamespaceTopicsClientListSharedAccessKeysResponse{}, err
 	}
-	if !runtime.HasStatusCode(httpResp, http.StatusOK) {
-		err = runtime.NewResponseError(httpResp)
-		return NamespaceTopicsClientListSharedAccessKeysResponse{}, err
-	}
-	resp, err := client.listSharedAccessKeysHandleResponse(httpResp)
-	return resp, err
+	return client.listSharedAccessKeysHandleResponse(httpResp, http.StatusOK)
 }
 
 // listSharedAccessKeysCreateRequest creates the ListSharedAccessKeys request.
 func (client *NamespaceTopicsClient) listSharedAccessKeysCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, _ *NamespaceTopicsClientListSharedAccessKeysOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}/listKeys"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -416,15 +411,18 @@ func (client *NamespaceTopicsClient) listSharedAccessKeysCreateRequest(ctx conte
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	return req, nil
 }
 
 // listSharedAccessKeysHandleResponse handles the ListSharedAccessKeys response.
-func (client *NamespaceTopicsClient) listSharedAccessKeysHandleResponse(resp *http.Response) (NamespaceTopicsClientListSharedAccessKeysResponse, error) {
+func (client *NamespaceTopicsClient) listSharedAccessKeysHandleResponse(resp *http.Response, successCodes ...int) (NamespaceTopicsClientListSharedAccessKeysResponse, error) {
 	result := NamespaceTopicsClientListSharedAccessKeysResponse{}
+	if !runtime.HasStatusCode(resp, successCodes...) {
+		return result, runtime.NewResponseError(resp)
+	}
 	if err := runtime.UnmarshalAsJSON(resp, &result.TopicSharedAccessKeys); err != nil {
 		return NamespaceTopicsClientListSharedAccessKeysResponse{}, err
 	}
@@ -435,8 +433,6 @@ func (client *NamespaceTopicsClient) listSharedAccessKeysHandleResponse(resp *ht
 //
 // Regenerate a shared access key for a namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -464,8 +460,6 @@ func (client *NamespaceTopicsClient) BeginRegenerateKey(ctx context.Context, res
 //
 // Regenerate a shared access key for a namespace topic.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *NamespaceTopicsClient) regenerateKey(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, regenerateKeyRequest TopicRegenerateKeyRequest, options *NamespaceTopicsClientBeginRegenerateKeyOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceTopicsClient.BeginRegenerateKey"
@@ -481,8 +475,7 @@ func (client *NamespaceTopicsClient) regenerateKey(ctx context.Context, resource
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -491,7 +484,7 @@ func (client *NamespaceTopicsClient) regenerateKey(ctx context.Context, resource
 func (client *NamespaceTopicsClient) regenerateKeyCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, regenerateKeyRequest TopicRegenerateKeyRequest, _ *NamespaceTopicsClientBeginRegenerateKeyOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}/regenerateKey"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -511,8 +504,8 @@ func (client *NamespaceTopicsClient) regenerateKeyCreateRequest(ctx context.Cont
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, regenerateKeyRequest); err != nil {
@@ -525,8 +518,6 @@ func (client *NamespaceTopicsClient) regenerateKeyCreateRequest(ctx context.Cont
 //
 // Asynchronously updates a namespace topic with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 //   - resourceGroupName - The name of the resource group. The name is case insensitive.
 //   - namespaceName - Name of the namespace.
 //   - topicName - Name of the namespace topic.
@@ -555,8 +546,6 @@ func (client *NamespaceTopicsClient) BeginUpdate(ctx context.Context, resourceGr
 //
 // Asynchronously updates a namespace topic with the specified parameters.
 // If the operation fails it returns an *azcore.ResponseError type.
-//
-// Generated from API version 2025-07-15-preview
 func (client *NamespaceTopicsClient) update(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, namespaceTopicUpdateParameters NamespaceTopicUpdateParameters, options *NamespaceTopicsClientBeginUpdateOptions) (*http.Response, error) {
 	var err error
 	const operationName = "NamespaceTopicsClient.BeginUpdate"
@@ -572,8 +561,7 @@ func (client *NamespaceTopicsClient) update(ctx context.Context, resourceGroupNa
 		return nil, err
 	}
 	if !runtime.HasStatusCode(httpResp, http.StatusOK, http.StatusAccepted) {
-		err = runtime.NewResponseError(httpResp)
-		return nil, err
+		return nil, runtime.NewResponseError(httpResp)
 	}
 	return httpResp, nil
 }
@@ -582,7 +570,7 @@ func (client *NamespaceTopicsClient) update(ctx context.Context, resourceGroupNa
 func (client *NamespaceTopicsClient) updateCreateRequest(ctx context.Context, resourceGroupName string, namespaceName string, topicName string, namespaceTopicUpdateParameters NamespaceTopicUpdateParameters, _ *NamespaceTopicsClientBeginUpdateOptions) (*policy.Request, error) {
 	urlPath := "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}"
 	if client.subscriptionID == "" {
-		return nil, errors.New("parameter client.subscriptionID cannot be empty")
+		return nil, errors.New("parameter subscriptionID cannot be empty")
 	}
 	urlPath = strings.ReplaceAll(urlPath, "{subscriptionId}", url.PathEscape(client.subscriptionID))
 	if resourceGroupName == "" {
@@ -602,8 +590,8 @@ func (client *NamespaceTopicsClient) updateCreateRequest(ctx context.Context, re
 		return nil, err
 	}
 	reqQP := req.Raw().URL.Query()
-	reqQP.Set("api-version", "2025-07-15-preview")
-	req.Raw().URL.RawQuery = reqQP.Encode()
+	reqQP.Set("api-version", version20250715Preview)
+	req.Raw().URL.RawQuery = strings.ReplaceAll(reqQP.Encode(), "+", "%20")
 	req.Raw().Header["Accept"] = []string{"application/json"}
 	req.Raw().Header["Content-Type"] = []string{"application/json"}
 	if err := runtime.MarshalAsJSON(req, namespaceTopicUpdateParameters); err != nil {
